@@ -1,0 +1,24 @@
+.evere-front-placements {
+    margin: 0 0 28px;
+    padding: 16px 0;
+    border-top: 2px solid #151515;
+    border-bottom: 1px solid #dedede;
+}
+.evere-front-placements h2 { margin: 0 0 12px; padding: 0; font-size: 18px; line-height: 24px; }
+.evere-front-placements ul { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); }
+.evere-front-placements li { min-width: 0; }
+.evere-front-placements a { font-size: 20px; font-weight: 700; overflow-wrap: anywhere; }
+.evere-front-placements p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-secondary, #555);
+}
+@media (max-width: 767px) {
+    .evere-front-placements { margin-inline: 20px; }
+}

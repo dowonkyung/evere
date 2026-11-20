@@ -75,6 +75,7 @@ details > form { margin: 16px 0; }
 }
 .profile-avatar { border-radius: 50%; object-fit: cover; background: #eee; }
 .profile-note { margin: -8px 0 0; color: #555; font-size: 14px; }
+.account-links { display: flex; align-items: center; gap: 16px; }
 @media (max-width: 640px) {
   .profile-settings { grid-template-columns: minmax(0, 1fr); }
 }
