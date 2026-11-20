@@ -3,7 +3,8 @@ const shell = header.querySelector('.yna-shell');
 const mainHeader = header.querySelector('.wrap-header02');
 const compactHeader = header.querySelector('.wrap-header21');
 const search = header.querySelector('.evere-search');
-const menu = header.querySelector('.evere-menu');
+const menu = header.querySelector('.popup-whole-home01');
+const closeMenu = menu.querySelector('[data-close-sitemap]');
 const desktop = matchMedia('(min-width: 1024px)');
 let activeHeader = mainHeader;
 
@@ -15,29 +16,63 @@ function togglePanel(panel, button, open) {
         button.dataset.a11yTxt.split(';')[open ? 0 : 1];
 }
 
+function setMenuOpen(open, section) {
+    const button = activeHeader.querySelector('button.menu01');
+    togglePanel(menu, button, open);
+    menu.classList.toggle('active', open);
+    document.documentElement.classList.toggle('evere-sitemap-open', open);
+    if (open) {
+        menu.scrollTop = 0;
+        const title = section ? menu.querySelector('#sitemap-' + section + ' strong') : null;
+        if (title) title.focus();
+        else if (desktop.matches) menu.focus();
+        else closeMenu.focus();
+    }
+}
+
 for (const container of [mainHeader, compactHeader]) {
     const searchToggle = container.querySelector('.btn-srch-switch');
-    const menuToggle = container.querySelector('.menu01');
+    const menuToggle = container.querySelector('button.menu01');
 
     searchToggle.addEventListener('click', () => {
         togglePanel(search, searchToggle, search.hidden);
-        togglePanel(menu, menuToggle, false);
+        setMenuOpen(false);
         if (!search.hidden) search.querySelector('input').focus();
     });
 
     menuToggle.addEventListener('click', () => {
-        togglePanel(menu, menuToggle, menu.hidden);
         togglePanel(search, searchToggle, false);
-        if (!menu.hidden) menu.querySelector('a')?.focus();
+        setMenuOpen(menu.hidden);
+    });
+
+    container.querySelector('.evere-news-links').addEventListener('click', (event) => {
+        const link = event.target.closest('[data-sitemap-section]');
+        if (!link || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        togglePanel(search, searchToggle, false);
+        setMenuOpen(true, link.dataset.sitemapSection);
     });
 }
 
+closeMenu.addEventListener('click', () => {
+    setMenuOpen(false);
+    activeHeader.querySelector('button.menu01').focus();
+});
+
+document.addEventListener('click', (event) => {
+    if (!menu.hidden && !event.composedPath().includes(header.host)) setMenuOpen(false);
+});
+
 header.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape' || (search.hidden && menu.hidden)) return;
-    const panel = search.hidden ? menu : search;
-    const button = activeHeader.querySelector('[aria-controls="' + panel.id + '"]');
-    togglePanel(panel, button, false);
-    button.focus();
+    if (!menu.hidden) {
+        setMenuOpen(false);
+        activeHeader.querySelector('button.menu01').focus();
+    } else {
+        const button = activeHeader.querySelector('.btn-srch-switch');
+        togglePanel(search, button, false);
+        button.focus();
+    }
 });
 
 function syncScrollHeader() {
@@ -46,7 +81,7 @@ function syncScrollHeader() {
     if (nextHeader === activeHeader) return;
 
     togglePanel(search, activeHeader.querySelector('.btn-srch-switch'), false);
-    togglePanel(menu, activeHeader.querySelector('.menu01'), false);
+    setMenuOpen(false);
     activeHeader = nextHeader;
     activeHeader.append(search, menu);
     mainHeader.inert = showCompact;

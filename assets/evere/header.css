@@ -34,9 +34,9 @@
 .gnb-menu01 .evere-news-links { grid-column: 2; }
 .gnb-menu01 .evere-partner-links { grid-column: 3; justify-self: end; }
 .gnb-menu01 li.evewiki { margin-left: 12px; }
-.yna-shell :is(.gnb-menu01, .evere-menu) li.evewiki > a { color: #3757C7; }
-.yna-shell :is(.gnb-menu01, .evere-menu) li.saevit > a { color: #13B5B1; }
-.hide01, .evere-panel[hidden] { display: none; }
+.yna-shell .gnb-menu01 li.evewiki > a { color: #3757C7; }
+.yna-shell .gnb-menu01 li.saevit > a { color: #13B5B1; }
+.hide01, .evere-panel[hidden], .popup-whole-home01[hidden] { display: none; }
 
 .evere-panel {
     position: absolute;
@@ -60,4 +60,56 @@
     .header02 { padding-inline: 0; }
     .nav-type01 .gnb-menu01 .list01 { margin-left: 0; padding-inline: 0; }
     .nav-type01 .gnb-menu01 .list01 li:first-child > a { padding-left: 0; }
+}
+
+.popup-whole-home01 .logo-yna02::before { display: none; }
+.popup-whole-home01 .logo-yna02 img { display: block; width: 91px; height: auto; }
+.popup-whole-home01 .nav-menu01 .menu01 > li > span {
+    display: block;
+    margin-top: 4px;
+    color: var(--font-color004);
+    font-size: 13px;
+    line-height: 20px;
+}
+
+@media (min-width: 1024px) {
+    .yna-shell.page-main .popup-whole-home01.active {
+        position: absolute;
+        top: 100% !important;
+        height: auto;
+        max-height: calc(100dvh - 180px) !important;
+        padding-top: 0;
+    }
+    .yna-shell.page-main.body-sticky .popup-whole-home01.active {
+        max-height: calc(100dvh - 62px) !important;
+    }
+    .popup-whole-home01 .pop-content { width: var(--evere-content-width); }
+    .popup-whole-home01 .nav-menu01 {
+        display: grid;
+        grid-template-columns: repeat(10, minmax(0, 1fr));
+        width: 100%;
+        max-height: none;
+        column-count: auto;
+    }
+    .popup-whole-home01 .nav-menu01 > li {
+        width: auto;
+        min-height: 0;
+        margin: 0;
+    }
+}
+
+@media (max-width: 1023px) {
+    .popup-whole-home01 .nav-menu01 .menu01 {
+        display: block;
+        max-height: none;
+    }
+    .popup-whole-home01 .nav-menu01 .menu01 > li {
+        width: auto;
+        margin: 0 12px 8px 0;
+    }
+    .popup-whole-home01 .nav-menu01 .menu01 > li > span { font-size: 15px; }
+}
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+    .nav-type11 .gnb-menu01 .list01 li > a { padding-inline: 3px; }
 }

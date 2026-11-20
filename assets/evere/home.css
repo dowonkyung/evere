@@ -56,3 +56,29 @@ body, main :where(button, input, select, textarea), footer :where(button, input)
     background: #dedede;
 }
 section.block aside .nl-subsc-wrap .cont-info .img { background: #dedede; }
+
+body > footer .evere-footer-sitemap { display: block; }
+body > footer .evere-footer-sitemap .menu > ul {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 28px 16px;
+}
+.evere-footer-sitemap strong { display: block; margin-bottom: 12px; }
+body > footer .evere-footer-sitemap .menu > ul > li > ul > li {
+    padding-bottom: 6px;
+    color: var(--text-description);
+    font-size: 14px;
+    line-height: 20px;
+}
+body > footer .evere-footer-sitemap .menu > ul > li > ul > li:last-child { padding-bottom: 0; }
+
+@media (max-width: 1023px) {
+    html.evere-sitemap-open { overflow: hidden; }
+}
+
+@media (max-width: 767px) {
+    body > footer .evere-footer-sitemap .wrap.menu { padding-inline: 20px; }
+    body > footer .evere-footer-sitemap .menu > ul {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
