@@ -80,6 +80,7 @@
 }
 .popup-whole-home01 .nav-other01 .evewiki a { color: #3757C7; }
 .popup-whole-home01 .nav-other01 .saevit a { color: #13B5B1; }
+.yna-shell:has(.popup-whole-home01.active) { overflow: visible; }
 .popup-whole-home01.active { overscroll-behavior: contain; }
 
 .popup-whole-home01 .nav-menu01 .menu01 > li > span {
