@@ -2,31 +2,41 @@
 .yna-shell, .yna-shell :where(a, button, input) {
     font-family: "Pretendard Variable", Pretendard, sans-serif;
 }
+.header02, .nav-type01, .nav-type11 {
+    box-sizing: border-box;
+    width: min(100%, var(--evere-content-width));
+}
 .header02 { position: relative; }
 .header02 .logo-yna01::before,
 .wrap-header21 :is(.logo-yna21, .logo-yna03)::before { display: none; }
 .header02 .logo-yna01 img { display: block; width: 218px; height: auto; }
 .wrap-header02 { position: relative; }
 .wrap-header21 :is(.logo-yna21, .logo-yna03) img { display: block; width: 79px; height: auto; }
-.wrap-header21 .gnb-menu01 .swiper-wrapper { display: flex; }
+
 
 @media (min-width: 1024px) {
-    .nav-type01 .gnb-menu01::before { background-color: #00B8B4; }
+    .nav-type11 { gap: 12px; padding-left: 48px; }
+    .nav-type11 > .logo-yna21 { position: static; transform: none; }
+    .nav-type11 .gnb-menu01 { margin: 0 auto; padding: 0; }
+    .nav-type11 .utility-zone { flex: 0 0 auto; width: auto; margin-right: 0; }
+    .nav-type11 .utility-zone .menu01 { left: -10px; }
 }
 
-@media (max-width: 1023px) {
-    .wrap-header02 { border-bottom: 2px solid #00B8B4; }
-}
-.nav-type01 .gnb-menu01 { overflow: auto hidden; scrollbar-width: none; }
+.nav-type01 .gnb-menu01 { width: 100%; overflow: auto hidden; scrollbar-width: none; }
+.nav-type01 .gnb-menu01::before { background-color: var(--ui-tag003); }
+.nav-type01 .gnb-menu01 .list01 { margin-left: 48px; }
+.nav-type11 .gnb-menu01 { min-width: 0; overflow: auto hidden; scrollbar-width: none; }
 .nav-type01 .gnb-menu01 .list01 { display: flex; width: max-content; white-space: nowrap; }
-.nav-type01 .gnb-menu01 a:hover { color: #007c79; }
+.gnb-menu01 li.evewiki { margin-left: 12px; }
+.yna-shell :is(.gnb-menu01, .evere-menu) li.evewiki > a { color: #3757C7; }
+.yna-shell :is(.gnb-menu01, .evere-menu) li.saevit > a { color: #13B5B1; }
 .hide01, .evere-panel[hidden] { display: none; }
 
 .evere-panel {
     position: absolute;
     z-index: 30;
     inset: 100% 0 auto;
-    padding: 20px max(20px, calc((100% - 1160px) / 2));
+    padding: 20px calc((100% - min(100%, var(--evere-content-width))) / 2);
     background: #fff;
     border-bottom: 2px solid #00B8B4;
     box-shadow: 0 8px 16px #0002;
@@ -41,4 +51,7 @@
 @media (max-width: 1023px) {
     .header02 .logo-yna01 img { width: 91px; }
     .header02 .lang-zone01 { display: none; }
+    .header02 { padding-inline: 0; }
+    .nav-type01 .gnb-menu01 .list01 { margin-left: 0; padding-inline: 0; }
+    .nav-type01 .gnb-menu01 .list01 li:first-child > a { padding-left: 0; }
 }

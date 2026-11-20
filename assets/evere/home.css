@@ -1,4 +1,5 @@
 :root {
+    --evere-content-width: 1216px;
     --evere-accent: #00B8B4;
     --surface-impact: var(--evere-accent);
     --surface-impact-soft: #d9f6f5;
@@ -23,6 +24,22 @@ body, main :where(button, input, select, textarea), footer :where(button, input)
 }
 
 #evere-header + main { padding-top: 0; }
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+    :root { --evere-content-width: 928px; }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    :root { --evere-content-width: 720px; }
+}
+
+@media (min-width: 768px) {
+    #evere-header + main > .wrap { max-width: var(--evere-content-width); }
+}
+
+@media (max-width: 767px) {
+    :root { --evere-content-width: calc(100% - 40px); }
+}
 .evere-footer-logo img { width: 112px; height: auto; }
 :focus-visible { outline: 2px solid var(--evere-accent); outline-offset: 3px; }
 
