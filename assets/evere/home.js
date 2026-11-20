@@ -93,6 +93,9 @@ function closeCategoryMenu() {
 
 closeMenu.addEventListener('click', closeCategoryMenu);
 menuDim.addEventListener('click', closeCategoryMenu);
+menu.addEventListener('click', (event) => {
+    if (event.target.closest('a[href]')) setMenuOpen(false);
+});
 
 document.querySelector('footer .info a[title="사이트맵"]')?.addEventListener('click', (event) => {
     event.preventDefault();
