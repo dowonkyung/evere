@@ -1,0 +1,33 @@
+.article-header-title[hidden], .article-reading-progress[hidden],
+.nav-type11 .gnb-menu01[hidden] { display: none !important; }
+.nav-type11 .article-header-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 19px;
+  font-weight: 700;
+  color: #151515;
+}
+.article-reading-progress {
+  position: absolute;
+  z-index: 212;
+  inset: 100% 0 auto;
+  height: 4px;
+  pointer-events: none;
+}
+.article-reading-progress span {
+  display: block;
+  height: 100%;
+  background: #00b8b4;
+  transform: scaleX(var(--article-progress, 0));
+  transform-origin: left;
+}
+@media (max-width: 1023px) {
+  .nav-type11 .article-header-title { margin-inline: 102px 12px; font-size: 16px; }
+}
+@media (max-width: 420px) {
+  .nav-type11 .article-header-title { margin-inline: 91px 5px; font-size: 14px; }
+}
