@@ -1,4 +1,5 @@
 import { articles, latestSeries } from './section-data.js';
+import { recentSeries, requestedSeries, seriesFor } from './series.js';
 
 const main = document.querySelector('[data-news-section]');
 const section = main.dataset.newsSection;
@@ -10,15 +11,18 @@ const recentList = main.querySelector('#recentList');
 const lead = main.querySelector('.head');
 const seriesBlock = main.querySelector('.section-series');
 const placeholder = new URL('./media-placeholder.svg', import.meta.url).href;
+const seriesFilter = requestedSeries();
 
-if (selected) {
+if (selected || seriesFilter) {
     lead?.remove();
     contents.classList.add('sub');
-    const label = tabs.find((tab) => tab.dataset.categoryTab === selected).textContent;
-    document.title = label + ' | ' + document.title;
+    if (selected) {
+        const label = tabs.find((tab) => tab.dataset.categoryTab === selected).textContent;
+        document.title = label + ' | ' + document.title;
+    }
 
     for (const row of recentList.children) {
-        if (!(row.dataset.category || '').split(' ').includes(selected)) row.hidden = true;
+        if (seriesFilter || !(row.dataset.category || '').split(' ').includes(selected)) row.hidden = true;
     }
 }
 for (const tab of tabs) {
@@ -43,7 +47,15 @@ function makePicture(source, className) {
 }
 
 const now = Date.now();
-const series = selected ? [] : latestSeries(articles, section, now);
+let series = selected || seriesFilter ? [] : latestSeries(articles, section, now);
+if (!selected && !seriesFilter) {
+    try {
+        const live = await recentSeries(section);
+        if (live.length) series = live;
+    } catch {
+        // Keep the section available when the feed is unreachable.
+    }
+}
 if (series.length) {
     const list = seriesBlock.querySelector('ul');
     for (const entry of series) {
@@ -62,11 +74,18 @@ const dateFormat = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' });
 let live = [];
 try {
     const { publishedFeed } = await import('./published-feed.js');
-    live = await publishedFeed(section, selected);
+    live = await publishedFeed(section, selected, seriesFilter);
+    if (seriesFilter) {
+        const name = (await seriesFor(section)).find(({ id }) => id === seriesFilter)?.title || '기획·연재';
+        const heading = document.createElement('h2');
+        heading.textContent = name;
+        recentList.before(heading);
+        document.title = name + ' | ' + document.title;
+    }
 } catch {
     // The saved preview stays available when the news feed is unreachable.
 }
-const published = [...live, ...articles].filter((entry) =>
+const published = [...live, ...(seriesFilter ? [] : articles)].filter((entry) =>
     entry.section === section && (!selected || entry.category === selected) &&
     Number.isFinite(Date.parse(entry.publishedAt)) && Date.parse(entry.publishedAt) <= now
 ).sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt));

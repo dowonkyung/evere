@@ -7,10 +7,10 @@
   <title>이브레 뉴스룸</title>
   <link rel="icon" href="../assets/evere/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
-  <link rel="stylesheet" href="../assets/evere/account.css?v=newsroom-2">
-  <link rel="stylesheet" href="../assets/evere/newsroom.css?v=2">
-  <script type="module" src="../assets/evere/account.js?v=newsroom-2"></script>
-  <script type="module" src="../assets/evere/newsroom.js?v=2"></script>
+  <link rel="stylesheet" href="../assets/evere/account.css?v=newsroom-3">
+  <link rel="stylesheet" href="../assets/evere/newsroom.css?v=3">
+  <script type="module" src="../assets/evere/account.js?v=newsroom-3"></script>
+  <script type="module" src="../assets/evere/newsroom.js?v=3"></script>
 </head>
 <body class="newsroom">
   <header class="newsroom-header">
@@ -48,6 +48,7 @@
         <a href="#write" data-view="write">기사 작성</a>
         <a href="#review" data-view="review">기사 목록·승인</a>
         <a href="#layout" data-view="layout" data-editor hidden>화면 편집</a>
+        <a href="#series" data-view="series" data-editor hidden>기획·연재 관리</a>
         <a href="#profile" data-view="profile">내 프로필</a>
         <a href="#members" data-view="members" data-owner hidden>회원 관리</a>
         <a href="#boards" data-view="boards" data-owner hidden>게시판 관리</a>
@@ -70,6 +71,7 @@
                 <div class="compose-section-fields">
                   <label>섹터<select name="sector" required></select></label>
                   <label>하위 분류<select name="category"></select></label>
+                  <label>기획·연재<select name="series"><option value="">선택 안 함</option></select></label>
                 </div>
                 <fieldset class="compose-byline">
                   <legend>기자명</legend>
@@ -94,11 +96,17 @@
                   <button type="button" data-command="italic" aria-label="기울임"><i>I</i></button>
                   <button type="button" data-command="underline" aria-label="밑줄"><u>U</u></button>
                   <button type="button" data-command="strikeThrough" aria-label="취소선"><s>S</s></button>
-                  <button type="button" data-command="formatBlock" data-value="p">문단</button>
-                  <button type="button" data-command="formatBlock" data-value="h2">소제목</button>
-                  <button type="button" data-command="formatBlock" data-value="blockquote">인용</button>
-                  <button type="button" data-command="insertUnorderedList">글머리 목록</button>
-                  <button type="button" data-command="insertOrderedList">번호 목록</button>
+                  <button type="button" data-command="justifyLeft">왼쪽맞춤</button>
+                  <button type="button" data-command="justifyCenter">가운데맞춤</button>
+                  <button type="button" data-command="justifyRight">오른쪽맞춤</button>
+                  <button type="button" data-command="justifyFull">양쪽맞춤</button>
+                  <label>글 색상<input type="color" data-format="foreColor" value="#151515"></label>
+                  <label>글씨 크기<select data-format="fontSize">
+                    <option value="">크기 선택</option>
+                    <option value="2">13px</option><option value="3">16px</option>
+                    <option value="4">18px</option><option value="5">24px</option>
+                    <option value="6">32px</option><option value="7">48px</option>
+                  </select></label>
                 </div>
                 <div class="compose-editor" contenteditable="true" role="textbox" aria-label="본문" aria-multiline="true" data-placeholder="기사 본문을 입력하세요"></div>
               </section>
@@ -111,6 +119,7 @@
                   <span>JPG · PNG · WebP / 최대 8장, 장당 5MB</span>
                   <input name="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple>
                 </label>
+                <p class="compose-media-help">본문에 커서를 놓고 사진의 ‘커서 위치에 삽입’을 누르세요. 같은 버튼으로 위치를 옮길 수 있습니다.</p>
                 <ul class="compose-thumbs" data-thumbs aria-label="첨부 사진"></ul>
               </section>
               <section class="newsroom-preview" aria-label="기사 미리보기">
@@ -125,6 +134,20 @@
               <p class="compose-feedback" data-compose-feedback role="status"></p>
             </aside>
           </template>
+        </section>
+        <section data-panel="series" hidden>
+          <h1>기획·연재 관리</h1>
+          <div class="series-management">
+            <form id="series-form">
+              <label>섹터<select name="sector" required></select></label>
+              <label>분류명<input name="title" maxlength="100" required placeholder="칼럼 코너명 또는 기획연재 제목"></label>
+              <button type="submit">분류 만들기</button>
+            </form>
+            <section aria-label="기획·연재 분류">
+              <h2>등록된 분류</h2>
+              <ul id="series-list"></ul>
+            </section>
+          </div>
         </section>
         <section data-panel="review" hidden>
           <h1>기사 목록·승인</h1>

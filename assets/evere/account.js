@@ -253,7 +253,7 @@ function articleCard(article) {
     const photos = element('div', '', 'article-photos');
     renderBody(copy, article);
     body.append(element('summary', '본문'), element('p', article.subtitle, 'article-subtitle'), photos, copy);
-    body.addEventListener('toggle', () => { if (body.open) void renderPhotos(photos, article.photo_paths); });
+    body.addEventListener('toggle', () => { if (body.open) void renderPhotos(photos, article.photo_paths, copy); });
     const title = element('h3');
     if (article.status === 'published') {
         const link = element('a', article.title);
@@ -286,7 +286,7 @@ function articleCard(article) {
 }
 
 async function loadArticles() {
-    let query = supabase.from('evere_articles').select('id,title,subtitle,body,body_html,sector,category,byline,byline_names,guest_byline,photo_paths,status');
+    let query = supabase.from('evere_articles').select('id,title,subtitle,body,body_html,sector,category,series_id,byline,byline_names,guest_byline,photo_paths,status');
     const status = ui('newsroom-status-filter')?.value;
     if (status) query = query.eq('status', status);
     const articles = result(await query.order('created_at', { ascending: false }).order('id').range(articleOffset, articleOffset + limit));
@@ -408,6 +408,9 @@ if (articleForm && memberForm) {
     fillOptions(articleForm.elements.sector, Object.entries(sectors));
     setCategories(articleForm);
     articleForm.elements.sector.addEventListener('change', () => setCategories(articleForm));
+    document.addEventListener('evere:series-change', ({ detail }) => {
+        if (articleForm.elements.sector.value === detail) void compose.refreshSeries();
+    });
     fillOptions(memberRole, Object.entries(roleNames).filter(([id]) => id !== 'owner'), ['citizen']);
     for (const [id, name] of Object.entries(sectors)) {
         const label = element('label', name);

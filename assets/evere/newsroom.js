@@ -1,5 +1,6 @@
 import { supabase } from './supabase.js';
 import { sectors, articleCategories } from './article-taxonomy.js';
+import { seriesFor } from './series.js';
 
 const ui = (id) => document.getElementById(id);
 const panels = [...document.querySelectorAll('[data-panel]')];
@@ -9,6 +10,7 @@ const layoutSubmit = layout.querySelector('[type="submit"]');
 const slots = [layout.elements.slot1, layout.elements.slot2, layout.elements.slot3];
 const boardForm = ui('board-form');
 const postForm = ui('board-post-form');
+const seriesForm = ui('series-form');
 let member = null;
 let boards = [];
 let editingPost = null;
@@ -62,6 +64,7 @@ function selectView() {
     }
     if (view === 'profile') ui('profile-settings').open = true;
     if (view === 'layout') loadLayout().catch(() => notify('화면 배치를 불러오지 못했습니다.', true));
+    if (view === 'series') loadSeries().catch(() => notify('기획·연재 분류를 불러오지 못했습니다.', true));
     if (view === 'boards') loadBoards().catch(() => notify('게시판을 불러오지 못했습니다.', true));
 }
 
@@ -71,10 +74,40 @@ document.addEventListener('evere:member', (event) => {
     for (const link of document.querySelectorAll('a[data-editor]')) link.hidden = allowed.length === 0;
     for (const link of document.querySelectorAll('a[data-owner]')) link.hidden = member?.role !== 'owner';
     optionList(layout.elements.page, allowed, layout.elements.page.value);
+    optionList(seriesForm.elements.sector, allowed.filter(([key]) => key !== 'home'), seriesForm.elements.sector.value);
     resetCategories();
     if (member) selectView();
 });
 window.addEventListener('hashchange', selectView);
+
+let seriesRequest = 0;
+async function loadSeries() {
+    const request = ++seriesRequest;
+    const rows = await seriesFor(seriesForm.elements.sector.value);
+    if (request !== seriesRequest) return;
+    const items = (rows.length ? rows.map(({ title }) => title) : ['등록된 분류가 없습니다.']).map((title) => {
+        const item = document.createElement('li');
+        item.textContent = title;
+        return item;
+    });
+    ui('series-list').replaceChildren(...items);
+}
+
+seriesForm.elements.sector.addEventListener('change', () => {
+    loadSeries().catch(() => notify('기획·연재 분류를 불러오지 못했습니다.', true));
+});
+seriesForm.addEventListener('submit', task(async () => {
+    const sector = seriesForm.elements.sector.value;
+    const title = seriesForm.elements.title.value.trim();
+    if (!title) { notify('기획·연재 분류명을 입력해 주세요.', true); return; }
+    const { error } = await supabase.from('evere_series').insert({ sector, title });
+    if (error?.code === '23505') { notify('이 섹터에 같은 이름의 분류가 있습니다.', true); return; }
+    if (error) throw error;
+    seriesForm.elements.title.value = '';
+    document.dispatchEvent(new CustomEvent('evere:series-change', { detail: sector }));
+    await loadSeries();
+    notify('기획·연재 분류를 만들었습니다.');
+}));
 
 function resetCategories() {
     const page = layout.elements.page.value;

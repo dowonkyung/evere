@@ -1,4 +1,5 @@
 import { renderBody, renderPhotos } from './article-content.js';
+import { seriesFor, seriesLink } from './series.js';
 import { supabase } from './supabase.js';
 import { sectors } from './article-taxonomy.js';
 
@@ -74,7 +75,7 @@ async function render() {
         ui('status').textContent = '기사를 찾을 수 없습니다.';
         return;
     }
-    const data = checked(await supabase.from('evere_articles').select('title,subtitle,body,body_html,photo_paths,sector,byline_names,published_at')
+    const data = checked(await supabase.from('evere_articles').select('title,subtitle,body,body_html,photo_paths,sector,series_id,byline_names,published_at')
         .eq('id', articleId).eq('status', 'published').maybeSingle());
     if (!data) {
         ui('status').textContent = '게시된 기사를 찾을 수 없습니다.';
@@ -85,9 +86,17 @@ async function render() {
     ui('title').textContent = data.title;
     ui('subtitle').textContent = data.subtitle;
     renderBody(ui('body'), data);
-    void renderPhotos(ui('article-photos'), data.photo_paths);
+    void renderPhotos(ui('article-photos'), data.photo_paths, ui('body'));
     ui('byline').textContent = [...data.byline_names, dateFormat.format(new Date(data.published_at))].join(' · ');
     ui('published-article').hidden = false;
+    if (data.series_id) void seriesFor(data.sector).then((rows) => {
+        const selected = rows.find(({ id }) => id === data.series_id);
+        if (!selected) return;
+        const link = document.createElement('a');
+        link.href = seriesLink(data.sector, selected.id);
+        link.textContent = selected.title;
+        ui('sector').append(' · ', link);
+    }).catch(() => {});
     ui('comments-section').hidden = false;
     await commentsAt(0);
 

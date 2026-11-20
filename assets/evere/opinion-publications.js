@@ -1,11 +1,23 @@
+import { requestedSeries, seriesFor } from './series.js';
+
 const main = document.querySelector('main');
 const category = main.dataset.opinionCategory;
 const list = main.querySelector('#recentList');
+const series = requestedSeries();
 const dateFormat = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' });
 
 try {
     const { publishedFeed } = await import('./published-feed.js');
-    const rows = await publishedFeed('opinion', category);
+    const rows = await publishedFeed('opinion', category, series);
+    if (series) {
+        const name = (await seriesFor('opinion')).find(({ id }) => id === series)?.title || '기획·연재';
+        main.querySelector('.head')?.remove();
+        const title = document.createElement('h2');
+        title.textContent = name;
+        list.before(title);
+        list.replaceChildren();
+        document.title = name + ' | ' + document.title;
+    }
     const fragment = document.createDocumentFragment();
     for (const entry of rows) {
         const row = document.createElement('li');
@@ -37,4 +49,4 @@ try {
 } catch {
     // The saved list is still available.
 }
-if (category) await import('./opinion-list.js?v=categories-1');
+if (category || series) await import('./opinion-list.js?v=categories-1');

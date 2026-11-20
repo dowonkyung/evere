@@ -1,5 +1,6 @@
-import { formattedBody, photoBucket, photoImage, renderBody } from './article-content.js';
+import { formattedBody, photoBucket, photoFigure, photoImage, placePhotoImages, renderBody } from './article-content.js';
 import { sectors } from './article-taxonomy.js';
+import { seriesFor } from './series.js';
 
 const photoTypes = new Map([['image/jpeg', 'jpg'], ['image/png', 'png'], ['image/webp', 'webp']]);
 const editors = new Set(['owner', 'director', 'department_head']);
@@ -7,7 +8,7 @@ const editors = new Set(['owner', 'director', 'department_head']);
 export function articleComposer(form, article = null) {
     form.replaceChildren(document.getElementById('compose-fields').content.cloneNode(true));
     const find = (name) => form.querySelector(name);
-    const { title, subtitle, sector, writer, guest, photos: fileInput } = form.elements;
+    const { title, subtitle, sector, series, writer, guest, photos: fileInput } = form.elements;
     const editor = find('.compose-editor');
     const toolbar = find('.compose-toolbar');
     const photoList = find('[data-thumbs]');
@@ -17,9 +18,11 @@ export function articleComposer(form, article = null) {
     let people = [];
     let byline = [...(article?.byline || [])];
     let guests = [...(article?.guest_byline || [])];
-    let photos = (article?.photo_paths || []).map((path) => ({ path }));
+    let photos = (article?.photo_paths || []).map((path) => ({ path, key: path, position: 'center', caption: '' }));
     let selection;
     let saving = false;
+    let seriesRequest = 0;
+    let selectedSeries = article?.series_id || '';
 
     title.value = article?.title || '';
     subtitle.value = article?.subtitle || '';
@@ -35,7 +38,26 @@ export function articleComposer(form, article = null) {
         find('[data-preview-subtitle]').textContent = subtitle.value.trim();
         find('[data-preview-byline]').textContent = [...byline.map(displayName), ...guests].join(', ');
         find('[data-preview-body]').replaceChildren(formattedBody(editor.innerHTML));
+        placePhotoImages(find('[data-preview-body]'), previewPhotos, new Map(photos.map((photo) => [photo.key, photo.url])));
     }
+
+    async function refreshSeries(chosen = selectedSeries) {
+        const request = ++seriesRequest;
+        const currentSector = sector.value;
+        series.disabled = true;
+        try {
+            const rows = await seriesFor(currentSector);
+            if (request !== seriesRequest) return;
+            series.replaceChildren(new Option('선택 안 함', ''), ...rows.map(({ id, title }) =>
+                new Option(title, id, false, id === chosen)));
+            selectedSeries = series.value;
+        } catch {
+            if (request === seriesRequest) notify('기획·연재 분류를 불러오지 못했습니다. 다시 시도해 주세요.');
+        } finally {
+            if (request === seriesRequest) series.disabled = false;
+        }
+    }
+    series.addEventListener('change', () => { selectedSeries = series.value; });
 
     function displayName(id) {
         return people.find((person) => person.id === id)?.display_name || '이브레 기자';
@@ -105,7 +127,12 @@ export function articleComposer(form, article = null) {
     guest.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') { event.preventDefault(); addGuest(); }
     });
-    sector.addEventListener('change', refreshWriters);
+    sector.addEventListener('change', () => {
+        refreshWriters();
+        selectedSeries = '';
+        series.replaceChildren(new Option('선택 안 함', ''));
+        void refreshSeries('');
+    });
 
     function rememberSelection() {
         const current = window.getSelection();
@@ -114,19 +141,27 @@ export function articleComposer(form, article = null) {
         }
     }
     for (const event of ['keyup', 'pointerup', 'input', 'blur']) editor.addEventListener(event, rememberSelection);
-    toolbar.addEventListener('mousedown', (event) => event.preventDefault());
-    toolbar.addEventListener('click', (event) => {
-        const control = event.target.closest('[data-command]');
-        if (!control) return;
+    function applyFormat(command, value) {
         editor.focus();
-        if (selection) {
+        if (selection && editor.contains(selection.startContainer) && editor.contains(selection.endContainer)) {
             const current = window.getSelection();
             current.removeAllRanges();
             current.addRange(selection);
         }
-        document.execCommand(control.dataset.command, false, control.dataset.value);
+        document.execCommand(command, false, value);
         rememberSelection();
         preview();
+    }
+    toolbar.addEventListener('mousedown', (event) => {
+        if (event.target.closest('button')) event.preventDefault();
+    });
+    toolbar.addEventListener('click', (event) => {
+        const control = event.target.closest('[data-command]');
+        if (control) applyFormat(control.dataset.command);
+    });
+    toolbar.addEventListener('change', (event) => {
+        const control = event.target;
+        if (control.dataset.format && control.value) applyFormat(control.dataset.format, control.value);
     });
     function insertPlainText(event, transfer) {
         event.preventDefault();
@@ -134,11 +169,60 @@ export function articleComposer(form, article = null) {
         if (plain) document.execCommand('insertText', false, plain);
     }
     editor.addEventListener('paste', (event) => insertPlainText(event, event.clipboardData));
-    editor.addEventListener('drop', (event) => insertPlainText(event, event.dataTransfer));
-    form.addEventListener('input', preview);
+    editor.addEventListener('drop', (event) => {
+        if (event.dataTransfer.files.length) {
+            event.preventDefault();
+            addPhotos(event.dataTransfer.files);
+        } else insertPlainText(event, event.dataTransfer);
+    });
+    form.addEventListener('input', (event) => {
+        if (!event.target.closest('[data-thumbs]')) preview();
+    });
+
+    function marker(photo) {
+        return [...editor.querySelectorAll('figure[data-photo]')].find((item) => item.dataset.photo === photo.key);
+    }
+
+    function locate(photo) {
+        if (!selection || !editor.contains(selection.startContainer)) {
+            notify('사진을 배치할 본문 위치에 먼저 커서를 놓아 주세요.');
+            editor.focus();
+            return;
+        }
+        const range = selection.cloneRange();
+        range.collapse(true);
+        marker(photo)?.remove();
+        const figure = photoFigure(photo.key, photo.position, photo.caption);
+        figure.contentEditable = 'false';
+        if (photo.url) figure.prepend(photoImage(photo.url, photo.caption || undefined));
+        let block = range.startContainer;
+        while (block !== editor && block.parentNode !== editor) block = block.parentNode;
+        if (block === editor || block.nodeType === Node.TEXT_NODE) {
+            range.insertNode(figure);
+        } else {
+            range.setEndAfter(block);
+            const trailing = range.extractContents();
+            block.after(figure, trailing);
+        }
+        let after = figure.nextSibling;
+        if (!after || after.nodeName === 'FIGURE') {
+            after = document.createElement('div');
+            after.append(document.createElement('br'));
+            figure.after(after);
+        }
+        range.setStart(after, 0);
+        range.collapse(true);
+        selection = range;
+        editor.focus();
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+        notify();
+        showPhotos();
+    }
 
     function discard(photo) {
         if (photo.file) URL.revokeObjectURL(photo.url);
+        marker(photo)?.remove();
         photos = photos.filter((item) => item !== photo);
         showPhotos();
     }
@@ -151,10 +235,39 @@ export function articleComposer(form, article = null) {
             const name = document.createElement('span');
             name.textContent = label;
             li.append(name, removable(label, () => discard(photo)));
+            const placement = document.createElement('div');
+            placement.className = 'photo-placement';
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.textContent = marker(photo) ? '커서 위치로 이동' : '커서 위치에 삽입';
+            button.addEventListener('click', () => locate(photo));
+            const alignment = document.createElement('select');
+            alignment.setAttribute('aria-label', label + ' 배치 정렬');
+            alignment.replaceChildren(...[['left', '왼쪽'], ['center', '가운데'], ['right', '오른쪽']]
+                .map(([value, text]) => new Option(text, value, false, value === photo.position)));
+            alignment.addEventListener('change', () => {
+                photo.position = alignment.value;
+                const figure = marker(photo);
+                if (figure) figure.dataset.position = photo.position;
+                preview();
+            });
+            const caption = document.createElement('input');
+            caption.maxLength = 500;
+            caption.placeholder = '사진 캡션';
+            caption.setAttribute('aria-label', label + ' 캡션');
+            caption.value = photo.caption;
+            caption.addEventListener('input', () => {
+                photo.caption = caption.value;
+                const figure = marker(photo);
+                if (figure) figure.querySelector('figcaption').textContent = photo.caption;
+                preview();
+            });
+            placement.append(button, alignment, caption);
+            li.append(placement);
             return li;
         });
         photoList.replaceChildren(...items);
-        previewPhotos.replaceChildren(...photos.filter(({ url }) => url).map(({ url }) => photoImage(url)));
+        preview();
     }
 
     function addPhotos(files) {
@@ -166,7 +279,7 @@ export function articleComposer(form, article = null) {
                 warning = 'JPG, PNG, WebP 형식의 5MB 이하 사진만 첨부할 수 있습니다.';
                 continue;
             }
-            photos.push({ file, url: URL.createObjectURL(file) });
+            photos.push({ file, key: 'local-' + crypto.randomUUID(), url: URL.createObjectURL(file), position: 'center', caption: '' });
         }
         notify(warning);
         showPhotos();
@@ -183,8 +296,20 @@ export function articleComposer(form, article = null) {
     });
 
     if (photos.length) {
+        for (const photo of photos) {
+            const figure = marker(photo);
+            if (figure) {
+                photo.position = figure.dataset.position;
+                photo.caption = figure.textContent;
+                figure.contentEditable = 'false';
+            }
+        }
         photoBucket.createSignedUrls(photos.map(({ path }) => path), 3600).then(({ data }) => {
-            for (const photo of photos) photo.url ||= data?.find(({ path }) => path === photo.path)?.signedUrl;
+            for (const photo of photos) {
+                photo.url ||= data?.find(({ path }) => path === photo.path)?.signedUrl;
+                const figure = marker(photo);
+                if (figure && photo.url) figure.prepend(photoImage(photo.url, photo.caption || undefined));
+            }
             showPhotos();
         });
         showPhotos();
@@ -199,28 +324,33 @@ export function articleComposer(form, article = null) {
             member = current;
             people = members;
             refreshWriters();
+            void refreshSeries();
         },
+        refreshSeries,
         reset() {
             form.reset();
             editor.replaceChildren();
             selection = null;
             byline = member ? [member.id] : [];
             guests = [];
+            selectedSeries = '';
+            series.replaceChildren(new Option('선택 안 함', ''));
             for (const photo of photos) if (photo.file) URL.revokeObjectURL(photo.url);
             photos = [];
             showPhotos();
             refreshWriters();
+            if (member) void refreshSeries('');
             notify();
         },
         async save(commit) {
-            if (saving) return false;
+            if (saving || series.disabled) return false;
             notify();
             const body = editor.innerText.trim();
             const safe = document.createElement('div');
             safe.append(formattedBody(editor.innerHTML));
             const fields = {
                 title: title.value.trim(), subtitle: subtitle.value.trim(), body, body_html: safe.innerHTML,
-                sector: sector.value, category: form.elements.category.value || null,
+                sector: sector.value, category: form.elements.category.value || null, series_id: selectedSeries || null,
                 byline: [...byline], guest_byline: [...guests], photo_paths: [],
             };
             if (!fields.title || !body || body.length > 50000 || new Blob([fields.body_html]).size > 400000) {
@@ -228,6 +358,10 @@ export function articleComposer(form, article = null) {
                 return false;
             }
             if (!byline.length && !guests.length) { notify('기자 또는 외부 기고자를 한 명 이상 추가해 주세요.'); return false; }
+            if (photos.some((photo) => (photo.file || photo.caption) && !marker(photo))) {
+                notify('첨부 사진을 본문에 배치해 주세요. 본문에 커서를 놓고 사진의 삽입 버튼을 누르면 됩니다.');
+                return false;
+            }
             if (guests.length && !canAddGuest()) { notify('이 섹터의 외부 기고자를 등록할 권한이 없습니다.'); return false; }
             if (guest.value.trim() || writer.value) { notify('입력하거나 선택한 이름은 추가 버튼을 눌러 등록해 주세요.'); return false; }
             const uploaded = [];
@@ -241,7 +375,10 @@ export function articleComposer(form, article = null) {
                     if (error) { notify('사진을 업로드하지 못했습니다. 다시 시도해 주세요.'); return false; }
                     uploaded.push(path);
                     fields.photo_paths.push(path);
+                    const figure = [...safe.querySelectorAll('figure[data-photo]')].find((item) => item.dataset.photo === photo.key);
+                    if (figure) figure.dataset.photo = path;
                 }
+                fields.body_html = safe.innerHTML;
                 await commit(fields);
                 uploaded.length = 0;
                 return true;
