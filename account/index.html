@@ -7,8 +7,8 @@
   <title>회원 계정 | 이브레</title>
   <link rel="icon" href="../assets/evere/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
-  <link rel="stylesheet" href="../assets/evere/account.css">
-  <script type="module" src="../assets/evere/account.js"></script>
+  <link rel="stylesheet" href="../assets/evere/account.css?v=profile-1">
+  <script type="module" src="../assets/evere/account.js?v=profile-1"></script>
 </head>
 <body>
   <header class="account-header">
@@ -20,24 +20,44 @@
     <section id="access" hidden>
       <h1 id="access-title">로그인</h1>
       <form id="access-form">
+        <label id="signup-name" hidden>이름<input name="displayName" maxlength="40" autocomplete="name"></label>
         <label>이메일<input name="email" type="email" autocomplete="email" required></label>
         <label>비밀번호<input name="password" type="password" autocomplete="current-password" required></label>
-        <label id="signup-name" hidden>기자명<input name="displayName" maxlength="40"></label>
         <button id="access-submit" type="submit">로그인</button>
       </form>
       <button id="switch-mode" class="text-action" type="button">회원가입</button>
       <button id="resend" class="text-action" type="button" hidden>인증 이메일 다시 보내기</button>
     </section>
     <section id="profile-setup" hidden>
-      <h1>이브레 기자명 등록</h1>
+      <h1>이브레 회원 이름 등록</h1>
       <form id="profile-form">
-        <label>기자명<input name="displayName" maxlength="40" required></label>
+        <label>이름<input name="displayName" maxlength="40" autocomplete="name" required></label>
         <button type="submit">등록</button>
       </form>
     </section>
     <section id="workspace" hidden>
       <h1>편집실</h1>
       <p id="member-summary"></p>
+      <details id="profile-settings">
+        <summary>내 프로필</summary>
+        <div class="profile-settings">
+          <form id="avatar-form">
+            <img id="profile-avatar" class="profile-avatar" width="88" height="88" alt="내 프로필 사진" hidden>
+            <label>프로필 사진<input name="avatar" type="file" accept="image/jpeg,image/png,image/webp" required></label>
+            <p class="profile-note">JPG, PNG, WebP · 3MB 이하</p>
+            <div class="article-action">
+              <button type="submit">사진 저장</button>
+              <button id="remove-avatar" type="button" hidden>사진 삭제</button>
+            </div>
+          </form>
+          <form id="profile-details-form">
+            <label>직책<input name="position" maxlength="60"></label>
+            <p class="profile-note">프로필에 사용할 직책입니다. 편집실 등급과는 별개입니다.</p>
+            <label>소개 멘트<textarea name="bio" rows="4" maxlength="500"></textarea></label>
+            <button type="submit">프로필 저장</button>
+          </form>
+        </div>
+      </details>
       <details id="membership-admin" hidden>
         <summary>회원 등급 및 섹터 관리</summary>
         <form id="members-form">

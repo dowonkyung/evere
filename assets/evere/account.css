@@ -66,3 +66,15 @@ details > form { margin: 16px 0; }
 .checkbox-grid input { width: auto; }
 .comment-list { margin: 12px 0; padding: 0; list-style: none; }
 .comment-list li { margin: 8px 0; padding: 8px 0; border-bottom: 1px solid #ddd; }
+.profile-settings {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: 24px;
+  margin-top: 16px;
+  align-items: start;
+}
+.profile-avatar { border-radius: 50%; object-fit: cover; background: #eee; }
+.profile-note { margin: -8px 0 0; color: #555; font-size: 14px; }
+@media (max-width: 640px) {
+  .profile-settings { grid-template-columns: minmax(0, 1fr); }
+}

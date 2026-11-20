@@ -12,6 +12,10 @@ const limit = 20;
 const ui = (id) => document.getElementById(id);
 const accessForm = ui('access-form');
 const articleForm = ui('article-form');
+const profileDetails = ui('profile-details-form');
+const avatarForm = ui('avatar-form');
+const avatarBucket = supabase.storage.from('evere-avatars');
+const avatarTypes = new Set(['image/jpeg', 'image/png', 'image/webp']);
 const memberForm = ui('members-form');
 const memberSelect = memberForm.elements.member;
 const memberRole = memberForm.elements.role;
@@ -73,6 +77,36 @@ function setAccessMode() {
 
 function accountUrl() {
     return new URL('./', location.href).href;
+}
+
+function avatarPath() {
+    return member.id + '/profile';
+}
+
+function showAvatar(url) {
+    const image = ui('profile-avatar');
+    image.hidden = !url;
+    ui('remove-avatar').hidden = !url;
+    if (url) image.src = url;
+    else image.removeAttribute('src');
+}
+
+async function loadProfile() {
+    const memberId = member.id;
+    const saved = result(await supabase.from('evere_member_profiles').select('position_title,bio')
+        .eq('member_id', memberId).maybeSingle());
+    if (member?.id !== memberId) return;
+    profileDetails.elements.position.value = saved?.position_title || '';
+    profileDetails.elements.bio.value = saved?.bio || '';
+
+    const entries = result(await avatarBucket.list(memberId, { limit: 2, search: 'profile' }));
+    if (member?.id !== memberId) return;
+    if (!entries.some((entry) => entry.name === 'profile')) {
+        showAvatar('');
+        return;
+    }
+    const signed = result(await avatarBucket.createSignedUrl(avatarPath(), 3600));
+    if (member?.id === memberId) showAvatar(signed.signedUrl);
 }
 
 function fillOptions(select, values, selected = []) {
@@ -291,6 +325,11 @@ async function refresh() {
     if (member) {
         await refreshMembers();
         await loadArticles();
+    } else {
+        ui('profile-settings').open = false;
+        profileDetails.reset();
+        avatarForm.reset();
+        showAvatar('');
     }
 }
 
@@ -304,11 +343,17 @@ accessForm.addEventListener('submit', handle(async () => {
     const password = accessForm.elements.password.value;
     verificationEmail = email;
     if (isSignup) {
+        const name = accessForm.elements.displayName.value.trim();
+        if (!name) {
+            message('이름을 입력해 주세요.', true);
+            accessForm.elements.displayName.focus();
+            return;
+        }
         result(await supabase.auth.signUp({
             email, password,
             options: {
                 emailRedirectTo: accountUrl(),
-                data: { evere_app: 'evere', evere_display_name: accessForm.elements.displayName.value.trim() },
+                data: { evere_app: 'evere', evere_display_name: name },
             },
         }));
         accessForm.elements.password.value = '';
@@ -339,6 +384,36 @@ ui('profile-form').addEventListener('submit', handle(async (event) => {
     result(await supabase.rpc('evere_register_member', { member_name: event.currentTarget.elements.displayName.value.trim() }));
     await refresh();
     message('이브레 회원 등록을 마쳤습니다.');
+}));
+
+ui('profile-settings').addEventListener('toggle', () => {
+    if (member && ui('profile-settings').open) loadProfile().catch((error) => message(getError(error), true));
+});
+profileDetails.addEventListener('submit', handle(async () => {
+    result(await supabase.from('evere_member_profiles').upsert({
+        member_id: member.id,
+        position_title: profileDetails.elements.position.value.trim(),
+        bio: profileDetails.elements.bio.value.trim(),
+    }));
+    message('프로필을 저장했습니다.');
+}));
+avatarForm.addEventListener('submit', handle(async () => {
+    const photo = avatarForm.elements.avatar.files[0];
+    if (!photo || !avatarTypes.has(photo.type) || photo.size === 0 || photo.size > 3 * 1024 * 1024) {
+        message('3MB 이하의 JPG, PNG 또는 WebP 사진을 선택해 주세요.', true);
+        return;
+    }
+    result(await avatarBucket.upload(avatarPath(), photo, { upsert: true, contentType: photo.type, cacheControl: '60' }));
+    avatarForm.reset();
+    const signed = result(await avatarBucket.createSignedUrl(avatarPath(), 3600));
+    showAvatar(signed.signedUrl);
+    message('프로필 사진을 저장했습니다.');
+}));
+ui('remove-avatar').addEventListener('click', handle(async () => {
+    if (!window.confirm('프로필 사진을 삭제할까요?')) return;
+    result(await avatarBucket.remove([avatarPath()]));
+    showAvatar('');
+    message('프로필 사진을 삭제했습니다.');
 }));
 
 fillOptions(articleForm.elements.sector, Object.entries(sectors));
