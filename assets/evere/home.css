@@ -40,7 +40,30 @@ body, main :where(button, input, select, textarea), footer :where(button, input)
 @media (max-width: 767px) {
     :root { --evere-content-width: calc(100% - 40px); }
 }
-.evere-footer-logo img { width: 112px; height: auto; }
+#evere-header[data-compact-only] { position: sticky; top: 0; }
+
+body > footer .wrap.info > ul {
+    display: grid;
+    grid-template-columns: 17.5% minmax(0, 1fr) auto;
+    align-items: start;
+}
+body > footer .wrap.info > ul > li:first-child,
+body > footer .wrap.info > ul > li:last-child { padding: 0; }
+body > footer .wrap.info .contact { flex-wrap: wrap; row-gap: 4px; width: auto; }
+body > footer .wrap.info .manager { flex-wrap: wrap; row-gap: 4px; }
+.evere-footer-logo { display: inline-block; }
+.evere-footer-logo img { display: block; width: 111px; height: auto; }
+
+@media (max-width: 1023px) {
+    body > footer .wrap.info > ul { grid-template-columns: 1fr; gap: 20px; }
+    body > footer .wrap.info .menu { padding-top: 0; }
+    .evere-footer-logo img { width: 95px; }
+}
+
+@media (max-width: 400px) {
+    body > footer .wrap.info .link { flex-wrap: wrap; gap: 10px; }
+    body > footer .wrap.info .manager li { border: 0; padding-left: 0; }
+}
 :focus-visible { outline: 2px solid var(--evere-accent); outline-offset: 3px; }
 
 .evere-media-placeholder {

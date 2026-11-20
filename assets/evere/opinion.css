@@ -1,0 +1,20 @@
+.opinion-title {
+    padding-top: 32px;
+    color: var(--text-primary);
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 42px;
+}
+
+.evere-opinion main .head dt { width: 100%; }
+.evere-opinion main :is(#editorial, #columns, #recent) { scroll-margin-top: 72px; }
+.evere-opinion main .child-section { overflow-x: auto; scrollbar-width: none; }
+.evere-opinion main .child-section .swiper-wrapper { width: max-content; }
+.evere-opinion main button:disabled { cursor: default; }
+
+@media (max-width: 1023px) {
+    .opinion-title { padding-top: 20px; font-size: 32px; }
+}
+@media (max-width: 767px) {
+    .opinion-title { margin-inline: 20px; }
+}

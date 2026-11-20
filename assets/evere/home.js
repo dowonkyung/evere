@@ -6,7 +6,7 @@ const search = header.querySelector('.evere-search');
 const menu = header.querySelector('.popup-whole-home01');
 const closeMenu = menu.querySelector('[data-close-sitemap]');
 const desktop = matchMedia('(min-width: 1024px)');
-let activeHeader = mainHeader;
+let activeHeader = mainHeader || compactHeader;
 
 function togglePanel(panel, button, open) {
     panel.hidden = !open;
@@ -34,7 +34,7 @@ function setMenuOpen(open, section) {
     }
 }
 
-for (const container of [mainHeader, compactHeader]) {
+for (const container of [mainHeader, compactHeader].filter(Boolean)) {
     const searchToggle = container.querySelector('.btn-srch-switch');
     const menuToggle = container.querySelector('button.menu01');
 
@@ -63,7 +63,13 @@ closeMenu.addEventListener('click', () => {
     activeHeader.querySelector('button.menu01').focus({ preventScroll: true });
 });
 
+document.querySelector('footer .info a[title="사이트맵"]')?.addEventListener('click', (event) => {
+    event.preventDefault();
+    setMenuOpen(true);
+});
+
 document.addEventListener('click', (event) => {
+    if (event.defaultPrevented) return;
     if (!menu.hidden && !event.composedPath().includes(header.host)) setMenuOpen(false);
 });
 
@@ -80,6 +86,7 @@ header.addEventListener('keydown', (event) => {
 });
 
 function syncScrollHeader() {
+    if (!mainHeader) return;
     const showCompact = desktop.matches && window.scrollY > 260;
     const nextHeader = showCompact ? compactHeader : mainHeader;
     if (nextHeader === activeHeader) return;
@@ -101,8 +108,10 @@ const date = new Intl.DateTimeFormat('ko-KR', {
     timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short',
 }).formatToParts();
 const datePart = (type) => date.find((part) => part.type === type).value;
-header.querySelector('.txt-date').textContent = ['year','month','day'].map(datePart).join('.');
-header.querySelector('.txt-week').textContent = '(' + datePart('weekday') + ')';
+const dateLabel = header.querySelector('.txt-date');
+if (dateLabel) dateLabel.textContent = ['year','month','day'].map(datePart).join('.');
+const weekLabel = header.querySelector('.txt-week');
+if (weekLabel) weekLabel.textContent = '(' + datePart('weekday') + ')';
 
 const searchForm = search.querySelector('form');
 searchForm.addEventListener('submit', (event) => {

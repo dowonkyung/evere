@@ -134,3 +134,16 @@
 @media (min-width: 1024px) and (max-width: 1279px) {
     .nav-type11 .gnb-menu01 .list01 li > a { padding-inline: 3px; }
 }
+
+:host([data-compact-only]) .yna-shell.page-main .wrap-header21 {
+    position: relative;
+    display: block !important;
+    opacity: 1;
+    z-index: 211;
+}
+
+@media (min-width: 1024px) {
+    :host([data-compact-only]) .yna-shell.page-main .popup-whole-home01.active {
+        max-height: calc(100dvh - 62px) !important;
+    }
+}
