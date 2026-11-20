@@ -64,6 +64,24 @@
 
 .popup-whole-home01 .logo-yna02::before { display: none; }
 .popup-whole-home01 .logo-yna02 img { display: block; width: 91px; height: auto; }
+.popup-whole-home01 .nav-other01 { width: 100%; padding: 16px 0; }
+.popup-whole-home01 .nav-other01 ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 12px 32px;
+    width: 100%;
+}
+.popup-whole-home01 .nav-other01 a {
+    display: block;
+    padding: 8px 0;
+    font-size: 15px;
+    font-weight: 600;
+}
+.popup-whole-home01 .nav-other01 .evewiki a { color: #3757C7; }
+.popup-whole-home01 .nav-other01 .saevit a { color: #13B5B1; }
+.popup-whole-home01.active { overscroll-behavior: contain; }
+
 .popup-whole-home01 .nav-menu01 .menu01 > li > span {
     display: block;
     margin-top: 4px;
@@ -77,7 +95,7 @@
         position: absolute;
         top: 100% !important;
         height: auto;
-        max-height: calc(100dvh - 180px) !important;
+        max-height: calc(100dvh - 160px) !important;
         padding-top: 0;
     }
     .yna-shell.page-main.body-sticky .popup-whole-home01.active {
@@ -90,6 +108,7 @@
         width: 100%;
         max-height: none;
         column-count: auto;
+        padding-block: 36px 26px;
     }
     .popup-whole-home01 .nav-menu01 > li {
         width: auto;
@@ -99,6 +118,7 @@
 }
 
 @media (max-width: 1023px) {
+    .popup-whole-home01 .nav-other01 { padding-inline: 20px; }
     .popup-whole-home01 .nav-menu01 .menu01 {
         display: block;
         max-height: none;

@@ -24,9 +24,13 @@ function setMenuOpen(open, section) {
     if (open) {
         menu.scrollTop = 0;
         const title = section ? menu.querySelector('#sitemap-' + section + ' strong') : null;
-        if (title) title.focus();
-        else if (desktop.matches) menu.focus();
-        else closeMenu.focus();
+        const focusTarget = title || (desktop.matches ? menu : closeMenu);
+        focusTarget.focus({ preventScroll: true });
+
+        if (title && !desktop.matches) {
+            const top = title.getBoundingClientRect().top - menu.getBoundingClientRect().top;
+            menu.scrollTop = Math.max(0, top - menu.querySelector('.pop-header').offsetHeight);
+        }
     }
 }
 
@@ -56,7 +60,7 @@ for (const container of [mainHeader, compactHeader]) {
 
 closeMenu.addEventListener('click', () => {
     setMenuOpen(false);
-    activeHeader.querySelector('button.menu01').focus();
+    activeHeader.querySelector('button.menu01').focus({ preventScroll: true });
 });
 
 document.addEventListener('click', (event) => {
@@ -67,7 +71,7 @@ header.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape' || (search.hidden && menu.hidden)) return;
     if (!menu.hidden) {
         setMenuOpen(false);
-        activeHeader.querySelector('button.menu01').focus();
+        activeHeader.querySelector('button.menu01').focus({ preventScroll: true });
     } else {
         const button = activeHeader.querySelector('.btn-srch-switch');
         togglePanel(search, button, false);
