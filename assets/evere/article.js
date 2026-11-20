@@ -1,4 +1,4 @@
-import { renderBody, renderPhotos } from './article-content.js';
+import { renderBody, renderPhotos } from './article-content.js?v=inline-1';
 import { seriesFor, seriesLink } from './series.js';
 import { supabase } from './supabase.js';
 import { sectors } from './article-taxonomy.js';

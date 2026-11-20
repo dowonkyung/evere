@@ -1,7 +1,7 @@
 import { supabase } from './supabase.js';
 import { sectors, articleCategories } from './article-taxonomy.js';
-import { articleComposer } from './article-composer.js';
-import { renderBody, renderPhotos } from './article-content.js';
+import { articleComposer } from './article-composer.js?v=inline-1';
+import { renderBody, renderPhotos } from './article-content.js?v=inline-1';
 const roleNames = {
     owner: '총수', director: '국장급', department_head: '부장급', reporter: '평기자', citizen: '시민기자',
 };

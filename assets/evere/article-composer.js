@@ -1,4 +1,4 @@
-import { formattedBody, photoBucket, photoFigure, photoImage, placePhotoImages, renderBody } from './article-content.js';
+import { formattedBody, photoBucket, photoFigure, photoImage, placePhotoImages, renderBody } from './article-content.js?v=inline-1';
 import { sectors } from './article-taxonomy.js';
 import { seriesFor } from './series.js';
 
