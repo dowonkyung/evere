@@ -1,6 +1,6 @@
 import { supabase } from './supabase.js';
 import { sectors, articleCategories } from './article-taxonomy.js';
-import { articleComposer } from './article-composer.js?v=inline-1';
+import { articleComposer } from './article-composer.js?v=byline-optional-1';
 import { renderBody, renderPhotos } from './article-content.js?v=inline-1';
 const roleNames = {
     owner: '총수', director: '국장급', department_head: '부장급', reporter: '평기자', citizen: '시민기자',
@@ -245,9 +245,10 @@ function commentPanel(article) {
 
 function articleCard(article) {
     const card = element('article', '', 'article');
-    const summary = element('p', sectors[article.sector] + ' · ' +
-        (article.status === 'published' ? '게시됨' : '승인 대기') + ' · ' +
-        article.byline_names.join(', '), 'article-meta');
+    const summary = element('p', [
+        sectors[article.sector], article.status === 'published' ? '게시됨' : '승인 대기',
+        article.byline_names.join(', '),
+    ].filter(Boolean).join(' · '), 'article-meta');
     const body = element('details');
     const copy = element('div', '', 'article-body');
     const photos = element('div', '', 'article-photos');

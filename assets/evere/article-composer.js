@@ -8,7 +8,7 @@ const editors = new Set(['owner', 'director', 'department_head']);
 export function articleComposer(form, article = null) {
     form.replaceChildren(document.getElementById('compose-fields').content.cloneNode(true));
     const find = (name) => form.querySelector(name);
-    const { title, subtitle, sector, series, writer, guest, photos: fileInput } = form.elements;
+    const { title, subtitle, sector, category, series, writer, guest, omitByline, photos: fileInput } = form.elements;
     const editor = find('.compose-editor');
     const toolbar = find('.compose-toolbar');
     const photoList = find('[data-thumbs]');
@@ -23,6 +23,7 @@ export function articleComposer(form, article = null) {
     let saving = false;
     let seriesRequest = 0;
     let selectedSeries = article?.series_id || '';
+    let allowsOmission = false;
 
     title.value = article?.title || '';
     subtitle.value = article?.subtitle || '';
@@ -36,7 +37,7 @@ export function articleComposer(form, article = null) {
         find('[data-preview-sector]').textContent = sectors[sector.value] || '';
         find('[data-preview-title]').textContent = title.value.trim() || '기사 제목';
         find('[data-preview-subtitle]').textContent = subtitle.value.trim();
-        find('[data-preview-byline]').textContent = [...byline.map(displayName), ...guests].join(', ');
+        find('[data-preview-byline]').textContent = omitByline.checked ? '' : [...byline.map(displayName), ...guests].join(', ');
         find('[data-preview-body]').replaceChildren(formattedBody(editor.innerHTML));
         placePhotoImages(find('[data-preview-body]'), previewPhotos, new Map(photos.map((photo) => [photo.key, photo.url])));
     }
@@ -84,9 +85,12 @@ export function articleComposer(form, article = null) {
         writer.replaceChildren(new Option('기자 선택', ''), ...available.map(({ id, display_name }) =>
             new Option(display_name, id, false, id === selected)));
         const ownOnly = !article && member.role === 'citizen';
-        find('[data-member-picker]').hidden = ownOnly;
-        find('[data-guest-picker]').hidden = !canAddGuest();
-        find('[data-byline-help]').textContent = ownOnly ? '시민기자는 본인 이름으로 송고합니다.'
+        const omitted = omitByline.checked;
+        find('[data-byline-list]').hidden = omitted;
+        find('[data-member-picker]').hidden = ownOnly || omitted;
+        find('[data-guest-picker]').hidden = omitted || !canAddGuest();
+        find('[data-byline-help]').textContent = omitted ? '기사에 기자명이 표시되지 않습니다.'
+            : ownOnly ? '시민기자는 본인 이름으로 송고합니다.'
             : member.role === 'reporter' ? '공동 기자를 추가할 수 있습니다. 본인 이름을 포함해 주세요.'
                 : canAddGuest() ? '이브레 기자를 선택하거나 외부 기고자 이름을 직접 입력하세요.' : '이브레 기자를 선택하세요.';
         const chips = document.createDocumentFragment();
@@ -127,8 +131,22 @@ export function articleComposer(form, article = null) {
     guest.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') { event.preventDefault(); addGuest(); }
     });
-    sector.addEventListener('change', () => {
+    function refreshOmission(defaultOmit = true) {
+        const eligible = (sector.value === 'opinion' && category.value === 'editorial') ||
+            (sector.value === 'health' && category.value === 'obituaries');
+        if (!eligible || !allowsOmission) omitByline.checked = eligible && defaultOmit;
+        allowsOmission = eligible;
+        find('[data-omit-byline]').hidden = !eligible;
         refreshWriters();
+    }
+
+    omitByline.addEventListener('change', () => {
+        if (!omitByline.checked && !byline.length && !guests.length && member) byline = [member.id];
+        refreshWriters();
+    });
+    category.addEventListener('change', () => refreshOmission());
+    sector.addEventListener('change', () => {
+        queueMicrotask(() => refreshOmission());
         selectedSeries = '';
         series.replaceChildren(new Option('선택 안 함', ''));
         void refreshSeries('');
@@ -323,7 +341,7 @@ export function articleComposer(form, article = null) {
             }
             member = current;
             people = members;
-            refreshWriters();
+            refreshOmission(!article || (!byline.length && !guests.length));
             void refreshSeries();
         },
         refreshSeries,
@@ -333,12 +351,13 @@ export function articleComposer(form, article = null) {
             selection = null;
             byline = member ? [member.id] : [];
             guests = [];
+            allowsOmission = false;
             selectedSeries = '';
             series.replaceChildren(new Option('선택 안 함', ''));
             for (const photo of photos) if (photo.file) URL.revokeObjectURL(photo.url);
             photos = [];
             showPhotos();
-            refreshWriters();
+            refreshOmission();
             if (member) void refreshSeries('');
             notify();
         },
@@ -351,19 +370,24 @@ export function articleComposer(form, article = null) {
             const fields = {
                 title: title.value.trim(), subtitle: subtitle.value.trim(), body, body_html: safe.innerHTML,
                 sector: sector.value, category: form.elements.category.value || null, series_id: selectedSeries || null,
-                byline: [...byline], guest_byline: [...guests], photo_paths: [],
+                byline: omitByline.checked ? [] : [...byline],
+                guest_byline: omitByline.checked ? [] : [...guests], photo_paths: [],
             };
             if (!fields.title || !body || body.length > 50000 || new Blob([fields.body_html]).size > 400000) {
                 notify('제목과 본문을 입력해 주세요. 본문은 5만 자까지 입력할 수 있습니다.');
                 return false;
             }
-            if (!byline.length && !guests.length) { notify('기자 또는 외부 기고자를 한 명 이상 추가해 주세요.'); return false; }
+            if (!allowsOmission && !byline.length && !guests.length) {
+                notify('기자 또는 외부 기고자를 한 명 이상 추가해 주세요.'); return false;
+            }
             if (photos.some((photo) => (photo.file || photo.caption) && !marker(photo))) {
                 notify('첨부 사진을 본문에 배치해 주세요. 본문에 커서를 놓고 사진의 삽입 버튼을 누르면 됩니다.');
                 return false;
             }
-            if (guests.length && !canAddGuest()) { notify('이 섹터의 외부 기고자를 등록할 권한이 없습니다.'); return false; }
-            if (guest.value.trim() || writer.value) { notify('입력하거나 선택한 이름은 추가 버튼을 눌러 등록해 주세요.'); return false; }
+            if (fields.guest_byline.length && !canAddGuest()) { notify('이 섹터의 외부 기고자를 등록할 권한이 없습니다.'); return false; }
+            if (!omitByline.checked && (guest.value.trim() || writer.value)) {
+                notify('입력하거나 선택한 이름은 추가 버튼을 눌러 등록해 주세요.'); return false;
+            }
             const uploaded = [];
             saving = true;
             form.inert = true;
