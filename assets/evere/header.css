@@ -92,7 +92,8 @@
 }
 
 @media (min-width: 1024px) {
-    .yna-shell.page-main .popup-whole-home01.active {
+    .yna-shell.page-main .popup-whole-home01.active,
+    .yna-shell.evere-compact-shell .popup-whole-home01.active {
         position: absolute;
         top: 100% !important;
         height: auto;
@@ -135,7 +136,7 @@
     .nav-type11 .gnb-menu01 .list01 li > a { padding-inline: 3px; }
 }
 
-:host([data-compact-only]) .yna-shell.page-main .wrap-header21 {
+.yna-shell.evere-compact-shell .wrap-header21 {
     position: relative;
     display: block !important;
     opacity: 1;
@@ -143,7 +144,7 @@
 }
 
 @media (min-width: 1024px) {
-    :host([data-compact-only]) .yna-shell.page-main .popup-whole-home01.active {
+    .yna-shell.evere-compact-shell .popup-whole-home01.active {
         max-height: calc(100dvh - 62px) !important;
     }
 }
