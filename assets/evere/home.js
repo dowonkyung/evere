@@ -3,9 +3,13 @@ const shell = header.querySelector('.yna-shell');
 const mainHeader = header.querySelector('.wrap-header02');
 const compactHeader = header.querySelector('.wrap-header21');
 const search = header.querySelector('.evere-search');
-const menu = header.querySelector('.popup-whole-home01');
+const menu = header.querySelector('.evere-category-popup');
+const menuDim = header.querySelector('.evere-category-dim');
 const closeMenu = menu.querySelector('[data-close-sitemap]');
 const desktop = matchMedia('(min-width: 1024px)');
+const mobileCategory = matchMedia('(max-width: 767px)');
+const categoryButtons = [...menu.querySelectorAll('[data-category-toggle]')];
+const expandCategories = menu.querySelector('[data-expand-categories]');
 let activeHeader = mainHeader || compactHeader;
 
 function togglePanel(panel, button, open) {
@@ -20,16 +24,21 @@ function setMenuOpen(open, section) {
     const button = activeHeader.querySelector('button.menu01');
     togglePanel(menu, button, open);
     menu.classList.toggle('active', open);
+    menuDim.hidden = !open;
     document.documentElement.classList.toggle('evere-sitemap-open', open);
     if (open) {
         menu.scrollTop = 0;
-        const title = section ? menu.querySelector('#sitemap-' + section + ' strong') : null;
-        const focusTarget = title || (desktop.matches ? menu : closeMenu);
+        const title = section ? menu.querySelector('#sitemap-' + section + ' dt') : null;
+        if (title && mobileCategory.matches) {
+            title.querySelector('[data-category-toggle]').setAttribute('aria-expanded', 'true');
+            updateExpandCategories();
+        }
+        const focusTarget = title || (mobileCategory.matches ? closeMenu : menu);
         focusTarget.focus({ preventScroll: true });
 
-        if (title && !desktop.matches) {
+        if (title && mobileCategory.matches) {
             const top = title.getBoundingClientRect().top - menu.getBoundingClientRect().top;
-            menu.scrollTop = Math.max(0, top - menu.querySelector('.pop-header').offsetHeight);
+            menu.scrollTop = Math.max(0, top - menu.querySelector('.title-m').offsetHeight);
         }
     }
 }
@@ -58,10 +67,32 @@ for (const container of [mainHeader, compactHeader].filter(Boolean)) {
     });
 }
 
-closeMenu.addEventListener('click', () => {
+function updateExpandCategories() {
+    const expanded = categoryButtons.every((button) => button.getAttribute('aria-expanded') === 'true');
+    expandCategories.setAttribute('aria-expanded', String(expanded));
+    expandCategories.textContent = expanded ? '메뉴 접기' : '메뉴 펼치기';
+}
+
+for (const button of categoryButtons) {
+    button.addEventListener('click', () => {
+        button.setAttribute('aria-expanded', String(button.getAttribute('aria-expanded') !== 'true'));
+        updateExpandCategories();
+    });
+}
+
+expandCategories.addEventListener('click', () => {
+    const open = expandCategories.getAttribute('aria-expanded') !== 'true';
+    for (const button of categoryButtons) button.setAttribute('aria-expanded', String(open));
+    updateExpandCategories();
+});
+
+function closeCategoryMenu() {
     setMenuOpen(false);
     activeHeader.querySelector('button.menu01').focus({ preventScroll: true });
-});
+}
+
+closeMenu.addEventListener('click', closeCategoryMenu);
+menuDim.addEventListener('click', closeCategoryMenu);
 
 document.querySelector('footer .info a[title="사이트맵"]')?.addEventListener('click', (event) => {
     event.preventDefault();

@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="./assets/khan/home.css?v=opinion-1">
 <link rel="stylesheet" href="./assets/evere/home.css">
 <script defer src="./assets/khan/swiper-bundle.min.js"></script>
-<script defer src="./assets/evere/home.js?v=opinion-1"></script>
+<script defer src="./assets/evere/home.js?v=khan-menu-1"></script>
 </head>
 <body>
 <div id="evere-header">
@@ -22,8 +22,9 @@
 <link rel="stylesheet" href="./assets/yna/common.css">
 <link rel="stylesheet" href="./assets/yna/style.css">
 <link rel="stylesheet" href="./assets/yna/layout.css">
-<link rel="stylesheet" href="./assets/evere/header.css?v=opinion-1">
+<link rel="stylesheet" href="./assets/evere/header.css?v=khan-menu-1">
 <div class="yna-shell page-main site-home-web">
+<div class="evere-category-dim" hidden></div>
 <header class="wrap-header02">
 <div class="header02">
 <a class="logo-yna01" href="./" aria-label="이브레 홈"><img src="./assets/evere/logo.svg" alt="이브레" width="218" height="56"></a>
@@ -76,49 +77,44 @@
 </div>
 <div class="hide01 a11ykey-menu02-end" tabindex="0" style="height: 0px;"></div>
 <div class="evere-panel evere-search" id="evere-search" hidden><form role="search"><input type="search" name="query" aria-label="메인 기사 검색" required><button type="submit">검색</button></form><span aria-live="polite"></span><ul></ul></div>
-<div class="popup-whole-home01" id="evere-menu" role="region" aria-label="전체 메뉴" tabindex="-1" hidden>
-<header class="pop-header">
-<a class="logo-yna02" href="./" aria-label="이브레 홈"><img src="./assets/evere/logo.svg" alt="이브레"></a>
-<button type="button" class="btn-type004 close01" data-close-sitemap><span class="ir-txt01">전체메뉴 닫기</span></button>
-</header>
-<div class="pop-content">
-<div class="mem-zone01 show">
-<div class="info-box01 login-before">
-<a href="https://join.yna.co.kr/ko/login?redirectUrl=https%3A%2F%2Fwww.yna.co.kr%2F&amp;site=header_login" class="btn-type207 arr01" rel="nofollow">로그인/회원가입</a>
+<div class="evere-category-popup" id="evere-menu" role="region" aria-label="전체 메뉴" tabindex="-1" hidden>
+<nav class="wrap category" aria-label="뉴스 사이트맵">
+<div class="title-m">
+<a href="./" aria-label="이브레 홈"><img src="./assets/evere/wordmark.svg" alt="이브레"></a>
+<button type="button" class="category-expand-all" data-expand-categories aria-expanded="false">메뉴 펼치기</button>
+<button type="button" class="category-close" data-close-sitemap aria-label="전체메뉴 닫기"></button>
 </div>
-</div>
-<nav class="nav-major01" aria-label="뉴스 사이트맵">
-<ul class="nav-menu01">
-<li id="sitemap-opinion">
-<strong tabindex="-1">오피니언</strong>
-<ul class="menu01">
-<li><span>사설</span></li>
-<li><span>칼럼</span></li>
+<ul>
+<li id="sitemap-opinion"><dl>
+<dt tabindex="-1"><a href="./opinion/">오피니언</a><button type="button" class="category-toggle" data-category-toggle aria-label="오피니언 하위 메뉴" aria-expanded="false" aria-controls="category-opinion"></button></dt>
+<dd id="category-opinion"><ul>
+<li><a href="./opinion/#editorial">사설</a></li>
+<li><a href="./opinion/#columns">칼럼</a></li>
 <li><span>기고</span></li>
-</ul>
-</li>
-<li id="sitemap-wiki">
-<strong tabindex="-1">위키</strong>
-<ul class="menu01">
+</ul></dd>
+</dl></li>
+<li id="sitemap-wiki"><dl>
+<dt tabindex="-1"><span>위키</span><button type="button" class="category-toggle" data-category-toggle aria-label="위키 하위 메뉴" aria-expanded="false" aria-controls="category-wiki"></button></dt>
+<dd id="category-wiki"><ul>
 <li><span>위키일반</span></li>
 <li><span>운영협의회</span></li>
 <li><span>비공식단체</span></li>
 <li><span>의장동정</span></li>
-</ul>
-</li>
-<li id="sitemap-virtual-nations">
-<strong tabindex="-1">가상국가</strong>
-<ul class="menu01">
+</ul></dd>
+</dl></li>
+<li id="sitemap-virtual-nations"><dl>
+<dt tabindex="-1"><span>가상국가</span><button type="button" class="category-toggle" data-category-toggle aria-label="가상국가 하위 메뉴" aria-expanded="false" aria-controls="category-virtual-nations"></button></dt>
+<dd id="category-virtual-nations"><ul>
 <li><span>가상국가일반</span></li>
 <li><span>네이션즈</span></li>
 <li><span>가상국제연합</span></li>
 <li><span>한가커·월본</span></li>
 <li><span>카국·디국·저능아</span></li>
-</ul>
-</li>
-<li id="sitemap-politics">
-<strong tabindex="-1">정치</strong>
-<ul class="menu01">
+</ul></dd>
+</dl></li>
+<li id="sitemap-politics"><dl>
+<dt tabindex="-1"><span>정치</span><button type="button" class="category-toggle" data-category-toggle aria-label="정치 하위 메뉴" aria-expanded="false" aria-controls="category-politics"></button></dt>
+<dd id="category-politics"><ul>
 <li><span>정치일반</span></li>
 <li><span>청와대</span></li>
 <li><span>국회·정당</span></li>
@@ -126,11 +122,11 @@
 <li><span>북한</span></li>
 <li><span>외교·국방</span></li>
 <li><span>행정</span></li>
-</ul>
-</li>
-<li id="sitemap-economy">
-<strong tabindex="-1">경제</strong>
-<ul class="menu01">
+</ul></dd>
+</dl></li>
+<li id="sitemap-economy"><dl>
+<dt tabindex="-1"><span>경제</span><button type="button" class="category-toggle" data-category-toggle aria-label="경제 하위 메뉴" aria-expanded="false" aria-controls="category-economy"></button></dt>
+<dd id="category-economy"><ul>
 <li><span>경제일반</span></li>
 <li><span>경제정책</span></li>
 <li><span>산업</span></li>
@@ -138,11 +134,11 @@
 <li><span>부동산</span></li>
 <li><span>IT/과학</span></li>
 <li><span>자동차</span></li>
-</ul>
-</li>
-<li id="sitemap-society">
-<strong tabindex="-1">사회</strong>
-<ul class="menu01">
+</ul></dd>
+</dl></li>
+<li id="sitemap-society"><dl>
+<dt tabindex="-1"><span>사회</span><button type="button" class="category-toggle" data-category-toggle aria-label="사회 하위 메뉴" aria-expanded="false" aria-controls="category-society"></button></dt>
+<dd id="category-society"><ul>
 <li><span>사회일반</span></li>
 <li><span>사건·사고</span></li>
 <li><span>법원·경찰</span></li>
@@ -150,11 +146,11 @@
 <li><span>노동</span></li>
 <li><span>보건·복지</span></li>
 <li><span>날씨·환경</span></li>
-</ul>
-</li>
-<li id="sitemap-international">
-<strong tabindex="-1">국제</strong>
-<ul class="menu01">
+</ul></dd>
+</dl></li>
+<li id="sitemap-international"><dl>
+<dt tabindex="-1"><span>국제</span><button type="button" class="category-toggle" data-category-toggle aria-label="국제 하위 메뉴" aria-expanded="false" aria-controls="category-international"></button></dt>
+<dd id="category-international"><ul>
 <li><span>국제일반</span></li>
 <li><span>중국</span></li>
 <li><span>일본</span></li>
@@ -162,47 +158,44 @@
 <li><span>미국·중남미</span></li>
 <li><span>유럽</span></li>
 <li><span>중동·아프리카</span></li>
-</ul>
-</li>
-<li id="sitemap-health">
-<strong tabindex="-1">건강</strong>
-<ul class="menu01">
+</ul></dd>
+</dl></li>
+<li id="sitemap-health"><dl>
+<dt tabindex="-1"><span>건강</span><button type="button" class="category-toggle" data-category-toggle aria-label="건강 하위 메뉴" aria-expanded="false" aria-controls="category-health"></button></dt>
+<dd id="category-health"><ul>
 <li><span>건강일반</span></li>
 <li><span>리빙포인트</span></li>
 <li><span>궂긴소식</span></li>
 <li><span>국짐소식</span></li>
-</ul>
-</li>
-<li id="sitemap-sports">
-<strong tabindex="-1">스포츠</strong>
-<ul class="menu01">
+</ul></dd>
+</dl></li>
+<li id="sitemap-sports"><dl>
+<dt tabindex="-1"><span>스포츠</span><button type="button" class="category-toggle" data-category-toggle aria-label="스포츠 하위 메뉴" aria-expanded="false" aria-controls="category-sports"></button></dt>
+<dd id="category-sports"><ul>
 <li><span>스포츠일반</span></li>
 <li><span>야구</span></li>
 <li><span>축구</span></li>
 <li><span>농구·배구</span></li>
 <li><span>골프</span></li>
-</ul>
-</li>
-<li id="sitemap-culture">
-<strong tabindex="-1">문화</strong>
-<ul class="menu01">
+</ul></dd>
+</dl></li>
+<li id="sitemap-culture"><dl>
+<dt tabindex="-1"><span>문화</span><button type="button" class="category-toggle" data-category-toggle aria-label="문화 하위 메뉴" aria-expanded="false" aria-controls="category-culture"></button></dt>
+<dd id="category-culture"><ul>
 <li><span>문화일반</span></li>
 <li><span>K-POP</span></li>
 <li><span>종교</span></li>
 <li><span>남광희</span></li>
 <li><span>영화·음악</span></li>
 <li><span>미술·전시·공연</span></li>
+</ul></dd>
+</dl></li>
 </ul>
-</li>
-</ul>
-</nav>
-<nav class="nav-other01" aria-label="관련 사이트">
-<ul>
+<ul class="category-partners" aria-label="관련 사이트">
 <li class="evewiki"><a href="https://evewiki.kr/">이브위키</a></li>
 <li class="saevit"><a href="https://saevit.online/">새빛지도</a></li>
 </ul>
 </nav>
-</div>
 </div>
 </header>
 <div class="wrap-header21 hide-appview">

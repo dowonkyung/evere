@@ -36,7 +36,7 @@
 .gnb-menu01 li.evewiki { margin-left: 12px; }
 .yna-shell .gnb-menu01 li.evewiki > a { color: #3757C7; }
 .yna-shell .gnb-menu01 li.saevit > a { color: #13B5B1; }
-.hide01, .evere-panel[hidden], .popup-whole-home01[hidden] { display: none; }
+.hide01, .evere-panel[hidden], .evere-category-popup[hidden], .evere-category-dim[hidden] { display: none; }
 
 .evere-panel {
     position: absolute;
@@ -62,76 +62,6 @@
     .nav-type01 .gnb-menu01 .list01 li:first-child > a { padding-left: 0; }
 }
 
-.popup-whole-home01 .logo-yna02::before { display: none; }
-.popup-whole-home01 .logo-yna02 img { display: block; width: 91px; height: auto; }
-.popup-whole-home01 .nav-other01 { width: 100%; padding: 16px 0; }
-.popup-whole-home01 .nav-other01 ul {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: 12px 32px;
-    width: 100%;
-}
-.popup-whole-home01 .nav-other01 a {
-    display: block;
-    padding: 8px 0;
-    font-size: 15px;
-    font-weight: 600;
-}
-.popup-whole-home01 .nav-other01 .evewiki a { color: #3757C7; }
-.popup-whole-home01 .nav-other01 .saevit a { color: #13B5B1; }
-.yna-shell:has(.popup-whole-home01.active) { overflow: visible; }
-.popup-whole-home01.active { overscroll-behavior: contain; }
-
-.popup-whole-home01 .nav-menu01 .menu01 > li > span {
-    display: block;
-    margin-top: 4px;
-    color: var(--font-color004);
-    font-size: 13px;
-    line-height: 20px;
-}
-
-@media (min-width: 1024px) {
-    .yna-shell.page-main .popup-whole-home01.active,
-    .yna-shell.evere-compact-shell .popup-whole-home01.active {
-        position: absolute;
-        top: 100% !important;
-        height: auto;
-        max-height: calc(100dvh - 160px) !important;
-        padding-top: 0;
-    }
-    .yna-shell.page-main.body-sticky .popup-whole-home01.active {
-        max-height: calc(100dvh - 62px) !important;
-    }
-    .popup-whole-home01 .pop-content { width: var(--evere-content-width); }
-    .popup-whole-home01 .nav-menu01 {
-        display: grid;
-        grid-template-columns: repeat(10, minmax(0, 1fr));
-        width: 100%;
-        max-height: none;
-        column-count: auto;
-        padding-block: 36px 26px;
-    }
-    .popup-whole-home01 .nav-menu01 > li {
-        width: auto;
-        min-height: 0;
-        margin: 0;
-    }
-}
-
-@media (max-width: 1023px) {
-    .popup-whole-home01 .nav-other01 { padding-inline: 20px; }
-    .popup-whole-home01 .nav-menu01 .menu01 {
-        display: block;
-        max-height: none;
-    }
-    .popup-whole-home01 .nav-menu01 .menu01 > li {
-        width: auto;
-        margin: 0 12px 8px 0;
-    }
-    .popup-whole-home01 .nav-menu01 .menu01 > li > span { font-size: 15px; }
-}
-
 @media (min-width: 1024px) and (max-width: 1279px) {
     .nav-type11 .gnb-menu01 .list01 li > a { padding-inline: 3px; }
 }
@@ -143,8 +73,144 @@
     z-index: 211;
 }
 
-@media (min-width: 1024px) {
-    .yna-shell.evere-compact-shell .popup-whole-home01.active {
-        max-height: calc(100dvh - 62px) !important;
+
+.yna-shell:has(.evere-category-popup.active) { overflow: visible; }
+
+.evere-category-dim {
+    position: fixed;
+    inset: 0;
+    z-index: 149;
+    background: var(--dim, rgba(0, 0, 0, 0.7));
+}
+
+.evere-category-popup {
+    position: absolute;
+    inset: 100% 0 auto;
+    z-index: 300;
+    max-height: calc(100dvh - 160px);
+    overflow: auto;
+    overscroll-behavior: contain;
+    background: var(--background-default, #fff);
+}
+.wrap-header21 .evere-category-popup { max-height: calc(100dvh - 62px); }
+.evere-category-popup:focus { outline: none; }
+
+.evere-category-popup .wrap.category {
+    width: min(100%, var(--evere-content-width));
+    margin: 0 auto;
+    color: var(--text-primary, #111);
+}
+.evere-category-popup .title-m,
+.evere-category-popup .category-toggle { display: none; }
+.evere-category-popup .category > ul:first-of-type {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    padding-top: 24px;
+}
+.evere-category-popup .category > ul:first-of-type > li {
+    box-sizing: border-box;
+    flex: 0 0 10%;
+    min-width: 0;
+    margin-bottom: 24px;
+    border-right: 1px solid var(--stroke-separator, #e5e5e5);
+}
+.evere-category-popup .category > ul:first-of-type > li:last-child { border-right: 0; }
+.evere-category-popup dl { padding: 0 8px 0 16px; }
+.evere-category-popup .category > ul:first-of-type > li:first-child dl { padding-left: 0; }
+.evere-category-popup dt { font-size: 15px; font-weight: 700; line-height: 22px; }
+.evere-category-popup dd { padding-top: 4px; }
+.evere-category-popup dd li { padding-top: 12px; font-size: 14px; font-weight: 500; line-height: 20px; }
+.evere-category-popup .category-partners {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+    padding: 12px 0 24px;
+    font-size: 15px;
+    font-weight: 700;
+}
+.evere-category-popup .evewiki a { color: #3757C7; }
+.evere-category-popup .saevit a { color: #13B5B1; }
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+    .evere-category-popup .category > ul:first-of-type > li { flex-basis: calc(100% / 6); }
+    .evere-category-popup .category > ul:first-of-type > li:nth-child(6) { border-right: 0; }
+    .evere-category-popup .category > ul:first-of-type > li:nth-child(7) dl { padding-left: 0; }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    .evere-category-popup { max-height: min(662px, calc(100dvh - 90px)); }
+    .wrap-header21 .evere-category-popup { max-height: min(662px, calc(100dvh - 50px)); }
+    .evere-category-popup .category > ul:first-of-type > li { flex-basis: 20%; }
+    .evere-category-popup .category > ul:first-of-type > li:nth-child(5) { border-right: 0; }
+    .evere-category-popup .category > ul:first-of-type > li:nth-child(6) dl { padding-left: 0; }
+}
+
+@media (min-width: 768px) and (max-width: 1279px) {
+    .evere-category-popup dt { font-size: 14px; line-height: 20px; }
+    .evere-category-popup dd { padding-top: 2px; }
+    .evere-category-popup dd li { padding-top: 10px; font-size: 13px; line-height: 18px; }
+}
+
+@media (max-width: 767px) {
+    .evere-category-popup, .wrap-header21 .evere-category-popup {
+        position: fixed;
+        inset: 0;
+        max-height: none;
     }
+    .evere-category-popup .title-m {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        height: 58px;
+        border-bottom: 3px solid var(--stroke-primary, #111);
+        background: var(--background-default, #fff);
+    }
+    .evere-category-popup .title-m img { display: block; width: 95px; }
+    .evere-category-popup .category-expand-all {
+        padding: 5px 9px;
+        border: 1px solid var(--stroke-framing, #ccc);
+        border-radius: 4px;
+        color: var(--text-secondary, #666);
+        font-size: 13px;
+    }
+    .evere-category-popup .category-close {
+        width: 36px;
+        height: 36px;
+        margin-left: auto;
+        background: var(--svg-gnb-menu-active) center / 24px no-repeat;
+    }
+    .evere-category-popup .category > ul:first-of-type { padding-top: 0; }
+    .evere-category-popup .category > ul:first-of-type > li {
+        flex-basis: 100%;
+        margin: 0;
+        border-right: 0;
+        border-bottom: 1px solid var(--stroke-separator, #e5e5e5);
+    }
+    .evere-category-popup dl { padding: 0; }
+    .evere-category-popup dt {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 66px;
+        font-size: 18px;
+        line-height: 24px;
+    }
+    .evere-category-popup .category-toggle {
+        display: block;
+        flex: 0 0 36px;
+        height: 36px;
+        background: var(--svg-ic-plus-24) center / 24px no-repeat;
+    }
+    .evere-category-popup .category-toggle[aria-expanded="true"] {
+        background-image: var(--svg-ic-minus-24);
+    }
+    .evere-category-popup dt:has(.category-toggle[aria-expanded="false"]) + dd { display: none; }
+    .evere-category-popup dd { padding-top: 0; }
+    .evere-category-popup dd ul { display: flex; flex-wrap: wrap; padding-bottom: 8px; }
+    .evere-category-popup dd li { flex: 0 0 50%; padding: 0 0 12px; font-size: 16px; line-height: 24px; }
+    .evere-category-popup .category-partners { padding-top: 20px; }
 }
