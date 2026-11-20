@@ -28,7 +28,9 @@ function renderList(date = '') {
         entry.hidden = Boolean(date) && entry.dataset.articleDate !== date;
         if (!entry.hidden) visible++;
     }
-    pagination.hidden = Boolean(date);
+    if (pagination) pagination.hidden = Boolean(date) || !pagination.childElementCount;
+    calendar.disabled = dates.length === 0;
+    all.disabled = dates.length === 0;
     empty.style.display = visible ? 'none' : 'block';
 
     for (const control of controls) {

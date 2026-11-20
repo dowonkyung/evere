@@ -1,0 +1,824 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#00B8B4">
+<title>정치 | 이브레</title>
+<link rel="icon" type="image/svg+xml" href="../assets/evere/favicon.svg">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
+<link rel="stylesheet" href="../assets/khan/swiper-bundle.min.css">
+<link rel="stylesheet" href="../assets/khan/common.css">
+<link rel="stylesheet" href="../assets/khan/opinion-list.css?v=opinion-1">
+<link rel="stylesheet" href="../assets/evere/home.css">
+<script defer src="../assets/khan/swiper-bundle.min.js"></script>
+<script defer src="../assets/evere/home.js?v=khan-menu-2"></script>
+<link rel="stylesheet" href="../assets/evere/opinion.css?v=categories-1">
+<script type="module" src="../assets/evere/category-section.js"></script>
+</head>
+<body class="evere-opinion-list evere-section">
+<div id="evere-header" data-compact-only>
+<template shadowrootmode="open">
+<link rel="stylesheet" href="../assets/yna/default.css">
+<link rel="stylesheet" href="../assets/yna/variables.css">
+<link rel="stylesheet" href="../assets/yna/common.css">
+<link rel="stylesheet" href="../assets/yna/style.css">
+<link rel="stylesheet" href="../assets/yna/layout.css">
+<link rel="stylesheet" href="../assets/evere/header.css?v=khan-menu-1">
+<div class="yna-shell evere-compact-shell site-home-web">
+<div class="evere-category-dim" hidden></div>
+<div class="wrap-header21 hide-appview">
+<div class="nav-type11 fixed-navigation01">
+<a class="logo-yna21" href="../" aria-label="이브레 홈"><img src="../assets/evere/wordmark.svg" alt="이브레"></a>
+<a class="logo-yna03" href="../" aria-label="이브레 홈"><img src="../assets/evere/wordmark.svg" alt="이브레"></a>
+<nav id="nav02" class="gnb-menu01" aria-label="뉴스 섹션">
+<ul class="list01 evere-news-links">
+<li><a href="../opinion/" aria-label="오피니언">오피니언</a></li>
+<li><a href="../wiki/">위키</a></li>
+<li><a href="../virtual-nations/">가상국가</a></li>
+<li><a href="../politics/">정치</a></li>
+<li><a href="../economy/">경제</a></li>
+<li><a href="../society/">사회</a></li>
+<li><a href="../international/">국제</a></li>
+<li><a href="../health/">건강</a></li>
+<li><a href="../sports/">스포츠</a></li>
+<li><a href="../culture/">문화</a></li>
+</ul>
+<ul class="list01 evere-partner-links">
+<li class="evewiki"><a href="https://evewiki.kr/">이브위키</a></li>
+<li class="saevit"><a href="https://saevit.online/">새빛지도</a></li>
+</ul>
+</nav>
+<span class="utility-zone">
+<a href="https://www.yna.co.kr/my-page/index?site=header_mypage" class="btn-type200 my01" rel="nofollow" data-stat-code="header_mypage">
+<span class="txt01">마이페이지</span>
+</a>
+<a href="https://join.yna.co.kr/ko/login?redirectUrl=https%3A%2F%2Fwww.yna.co.kr%2F&amp;site=header_login" class="btn-type004 login01 active" aria-label="로그인" rel="nofollow" data-stat-code="header_login"></a>
+<button type="button" aria-controls="evere-search" aria-expanded="false" class="btn-type004-toggle btn-srch-switch a11y-search-toggle01" data-a11y-txt="검색창 닫기;검색창 열기" data-stat-code="search_btn_toggle">
+<span class="ir-txt01">검색창 열기</span>
+<i class="pick01 ico-type01-srch01"></i>
+<i class="pick02 ico-type01-close01"></i>
+</button>
+<button type="button" aria-controls="evere-menu" aria-expanded="false" class="btn-type004-toggle menu01 a11y-wholemenu-toggle01" data-a11y-txt="메뉴 닫기;메뉴 열기" data-stat-code="wholemenu_btn_toggle">
+<span class="ir-txt01">메뉴 열기</span>
+<i class="pick01 ico-type01-menu01"></i>
+<i class="pick02 ico-type01-close02"></i>
+</button>
+</span>
+</div>
+<div class="progress-bar01" id="progressBar01">
+<div class="bar" style="width: 0%;"></div>
+</div>
+<div class="evere-panel evere-search" id="evere-search" hidden><form role="search"><input type="search" name="query" aria-label="메인 기사 검색" required><button type="submit">검색</button></form><span aria-live="polite"></span><ul></ul></div>
+<div class="evere-category-popup" id="evere-menu" role="region" aria-label="전체 메뉴" tabindex="-1" hidden>
+<nav class="wrap category" aria-label="뉴스 사이트맵">
+<div class="title-m">
+<a href="../" aria-label="이브레 홈"><img src="../assets/evere/wordmark.svg" alt="이브레"></a>
+<button type="button" class="category-expand-all" data-expand-categories aria-expanded="false">메뉴 펼치기</button>
+<button type="button" class="category-close" data-close-sitemap aria-label="전체메뉴 닫기"></button>
+</div>
+<ul>
+<li id="sitemap-opinion"><dl>
+<dt tabindex="-1"><a href="../opinion/">오피니언</a><button type="button" class="category-toggle" data-category-toggle aria-label="오피니언 하위 메뉴" aria-expanded="false" aria-controls="category-opinion"></button></dt>
+<dd id="category-opinion"><ul>
+<li><a href="../opinion/editorial/">사설</a></li>
+<li><a href="../opinion/column/">칼럼</a></li>
+<li><a href="../opinion/contributions/">기고</a></li>
+</ul></dd>
+</dl></li>
+<li id="sitemap-wiki"><dl>
+<dt tabindex="-1"><a href="../wiki/">위키</a><button type="button" class="category-toggle" data-category-toggle aria-label="위키 하위 메뉴" aria-expanded="false" aria-controls="category-wiki"></button></dt>
+<dd id="category-wiki"><ul>
+<li><a href="../wiki/?category=general">위키일반</a></li>
+<li><a href="../wiki/?category=council">운영협의회</a></li>
+<li><a href="../wiki/?category=informal-groups">비공식단체</a></li>
+<li><a href="../wiki/?category=chair">의장동정</a></li>
+</ul></dd>
+</dl></li>
+<li id="sitemap-virtual-nations"><dl>
+<dt tabindex="-1"><a href="../virtual-nations/">가상국가</a><button type="button" class="category-toggle" data-category-toggle aria-label="가상국가 하위 메뉴" aria-expanded="false" aria-controls="category-virtual-nations"></button></dt>
+<dd id="category-virtual-nations"><ul>
+<li><a href="../virtual-nations/?category=general">가상국가일반</a></li>
+<li><a href="../virtual-nations/?category=nations">네이션즈</a></li>
+<li><a href="../virtual-nations/?category=virtual-united-nations">가상국제연합</a></li>
+<li><a href="../virtual-nations/?category=hangaker-wolbon">한가커·월본</a></li>
+<li><a href="../virtual-nations/?category=kaguk-diguk">카국·디국·저능아</a></li>
+</ul></dd>
+</dl></li>
+<li id="sitemap-politics"><dl>
+<dt tabindex="-1"><a href="../politics/">정치</a><button type="button" class="category-toggle" data-category-toggle aria-label="정치 하위 메뉴" aria-expanded="false" aria-controls="category-politics"></button></dt>
+<dd id="category-politics"><ul>
+<li><a href="../politics/?category=general">정치일반</a></li>
+<li><a href="../politics/?category=president">청와대</a></li>
+<li><a href="../politics/?category=assembly">국회·정당</a></li>
+<li><a href="../politics/?category=legal">법비</a></li>
+<li><a href="../politics/?category=north-korea">북한</a></li>
+<li><a href="../politics/?category=foreign-defense">외교·국방</a></li>
+<li><a href="../politics/?category=administration">행정</a></li>
+</ul></dd>
+</dl></li>
+<li id="sitemap-economy"><dl>
+<dt tabindex="-1"><a href="../economy/">경제</a><button type="button" class="category-toggle" data-category-toggle aria-label="경제 하위 메뉴" aria-expanded="false" aria-controls="category-economy"></button></dt>
+<dd id="category-economy"><ul>
+<li><a href="../economy/?category=general">경제일반</a></li>
+<li><a href="../economy/?category=policy">경제정책</a></li>
+<li><a href="../economy/?category=industry">산업</a></li>
+<li><a href="../economy/?category=finance">금융/증권</a></li>
+<li><a href="../economy/?category=real-estate">부동산</a></li>
+<li><a href="../economy/?category=technology">IT/과학</a></li>
+<li><a href="../economy/?category=automotive">자동차</a></li>
+</ul></dd>
+</dl></li>
+<li id="sitemap-society"><dl>
+<dt tabindex="-1"><a href="../society/">사회</a><button type="button" class="category-toggle" data-category-toggle aria-label="사회 하위 메뉴" aria-expanded="false" aria-controls="category-society"></button></dt>
+<dd id="category-society"><ul>
+<li><a href="../society/?category=general">사회일반</a></li>
+<li><a href="../society/?category=incidents">사건·사고</a></li>
+<li><a href="../society/?category=justice">법원·경찰</a></li>
+<li><a href="../society/?category=education">교육</a></li>
+<li><a href="../society/?category=labor">노동</a></li>
+<li><a href="../society/?category=health-welfare">보건·복지</a></li>
+<li><a href="../society/?category=environment">날씨·환경</a></li>
+</ul></dd>
+</dl></li>
+<li id="sitemap-international"><dl>
+<dt tabindex="-1"><a href="../international/">국제</a><button type="button" class="category-toggle" data-category-toggle aria-label="국제 하위 메뉴" aria-expanded="false" aria-controls="category-international"></button></dt>
+<dd id="category-international"><ul>
+<li><a href="../international/?category=general">국제일반</a></li>
+<li><a href="../international/?category=china">중국</a></li>
+<li><a href="../international/?category=japan">일본</a></li>
+<li><a href="../international/?category=asia-oceania">아시아·호주</a></li>
+<li><a href="../international/?category=americas">미국·중남미</a></li>
+<li><a href="../international/?category=europe">유럽</a></li>
+<li><a href="../international/?category=middle-east-africa">중동·아프리카</a></li>
+</ul></dd>
+</dl></li>
+<li id="sitemap-health"><dl>
+<dt tabindex="-1"><a href="../health/">건강</a><button type="button" class="category-toggle" data-category-toggle aria-label="건강 하위 메뉴" aria-expanded="false" aria-controls="category-health"></button></dt>
+<dd id="category-health"><ul>
+<li><a href="../health/?category=general">건강일반</a></li>
+<li><a href="../health/?category=living">리빙포인트</a></li>
+<li><a href="../health/?category=obituaries">궂긴소식</a></li>
+<li><a href="../health/?category=gukjim">국짐소식</a></li>
+</ul></dd>
+</dl></li>
+<li id="sitemap-sports"><dl>
+<dt tabindex="-1"><a href="../sports/">스포츠</a><button type="button" class="category-toggle" data-category-toggle aria-label="스포츠 하위 메뉴" aria-expanded="false" aria-controls="category-sports"></button></dt>
+<dd id="category-sports"><ul>
+<li><a href="../sports/?category=general">스포츠일반</a></li>
+<li><a href="../sports/?category=baseball">야구</a></li>
+<li><a href="../sports/?category=football">축구</a></li>
+<li><a href="../sports/?category=basketball-volleyball">농구·배구</a></li>
+<li><a href="../sports/?category=golf">골프</a></li>
+</ul></dd>
+</dl></li>
+<li id="sitemap-culture"><dl>
+<dt tabindex="-1"><a href="../culture/">문화</a><button type="button" class="category-toggle" data-category-toggle aria-label="문화 하위 메뉴" aria-expanded="false" aria-controls="category-culture"></button></dt>
+<dd id="category-culture"><ul>
+<li><a href="../culture/?category=general">문화일반</a></li>
+<li><a href="../culture/?category=k-pop">K-POP</a></li>
+<li><a href="../culture/?category=religion">종교</a></li>
+<li><a href="../culture/?category=nam-gwang-hui">남광희</a></li>
+<li><a href="../culture/?category=film-music">영화·음악</a></li>
+<li><a href="../culture/?category=arts">미술·전시·공연</a></li>
+</ul></dd>
+</dl></li>
+</ul>
+<ul class="category-partners" aria-label="관련 사이트">
+<li class="evewiki"><a href="https://evewiki.kr/">이브위키</a></li>
+<li class="saevit"><a href="https://saevit.online/">새빛지도</a></li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+</template>
+</div>
+<main data-news-section="politics"><div class="wrap">
+<h1 class="opinion-title">정치</h1>
+<nav class="child-section swiper-container" aria-label="정치 분류"><ul class="swiper-wrapper">
+<li class="swiper-slide"><a data-category-tab="" href="../politics/" class="active" aria-current="page">전체</a></li>
+<li class="swiper-slide"><a data-category-tab="general" href="../politics/?category=general">정치일반</a></li>
+<li class="swiper-slide"><a data-category-tab="president" href="../politics/?category=president">청와대</a></li>
+<li class="swiper-slide"><a data-category-tab="assembly" href="../politics/?category=assembly">국회·정당</a></li>
+<li class="swiper-slide"><a data-category-tab="legal" href="../politics/?category=legal">법비</a></li>
+<li class="swiper-slide"><a data-category-tab="north-korea" href="../politics/?category=north-korea">북한</a></li>
+<li class="swiper-slide"><a data-category-tab="foreign-defense" href="../politics/?category=foreign-defense">외교·국방</a></li>
+<li class="swiper-slide"><a data-category-tab="administration" href="../politics/?category=administration">행정</a></li>
+</ul></nav>
+<section class="head">
+                <dl>
+                    <dt>
+                        <article>
+                            <picture>
+                                
+                                
+                                <img src="../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+                            </picture>
+                            <div>
+                                <a href="https://www.khan.co.kr/article/202611201532001" title="‘수능 AI 커닝’ 끝까지 쫓는다···정부 ‘수상한 신호’들 다 저장해둬 “의심사례 수사 의뢰”">‘수능 AI 커닝’ 끝까지 쫓는다···정부 ‘수상한 신호’들 다 저장해둬 “의심사례 수사 의뢰”</a>
+                                <p class="desc">한성숙 국무총리가 20일 인공지능(AI)을 활용한 대학수학능력시험 부정행위 대응과 관련해 “어제 시험 현장에서 전담 감독관이 의심되는 와이파이와 블루투스 신호를 기록하고 저장해뒀다”며 “이 기록을 분석해 부정행위가 의심되는 사례는 수사의뢰 하도록 하겠다”고 밝혔다.
+
+한 총리는 이날 정부서울청사에서 수능 부정행위 대응 태스크포스(TF) 1차 회의를 주재하고 “시험 현장에서 적발되지 않았던 부정행위도 끝까지 찾아내겠다”며 이같이 말했다.
+
+한 총리는 “권익위를 중심으로 부정행위 의심 사례에 대한 신고와 제보도 받는다”며 “신고나 제보된 사례가 실제 부정행위로 확인되면 포상금을 지급하는 절차도 차질없이 준비하고 있다”고 밝혔다.
+
+정부는 이날 교육부와 과학기술정보통신부, 행정안전부, 법무부, 경찰청, 국민권익위원회 등 관계부처가 함께 하는 수능 부정행위 대응 TF를 출범했다. 한 총리는 “수능은 끝났지만 수능의 공정성을 위한 정부의 책임은 끝나지 않았다”며 “부처 간 협력 범위를...</p>
+                            </div>
+                        </article>
+                    </dt>
+                    <dd>
+                        <ul>
+                            <li>
+                                <article>
+                                    <picture>
+                                        
+                                        
+                                        <img src="../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+                                    </picture>
+                                    <div>
+                                        <a href="https://www.khan.co.kr/article/202611201421001" title="이 대통령 “AI 부정에 맞춰 국가시험제도 전면 개편…이미 치러진 시험 부정 엄중 단죄”">이 대통령 “AI 부정에 맞춰 국가시험제도 전면 개편…이미 치러진 시험 부정 엄중 단죄”</a>
+                                    <div>
+                                </div></div></article>
+                            </li>
+                            <li>
+                                <article>
+                                    <picture>
+                                        
+                                        
+                                        <img src="../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+                                    </picture>
+                                    <div>
+                                        <a href="https://www.khan.co.kr/article/202611201734001" title="곽상언 “조희대 대법원장 탄핵 당론에 반대…국민이 어떻게 보겠느냐”">곽상언 “조희대 대법원장 탄핵 당론에 반대…국민이 어떻게 보겠느냐”</a>
+                                    <div>
+                                </div></div></article>
+                            </li>
+                            <li>
+                                <article>
+                                    <picture>
+                                        
+                                        
+                                        <img src="../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+                                    </picture>
+                                    <div>
+                                        <a href="https://www.khan.co.kr/article/202611201422001" title="[속보] 민주당, 조희대 탄핵소추 당론 채택">[속보] 민주당, 조희대 탄핵소추 당론 채택</a>
+                                    <div>
+                                </div></div></article>
+                            </li>
+                            <li>
+                                <article>
+                                    <picture>
+                                        
+                                        
+                                        <img src="../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+                                    </picture>
+                                    <div>
+                                        <a href="https://www.khan.co.kr/article/202611201025001" title="“총선 때 여당 많이 당선돼야” 37%·“야당이 많이” 47%···이 대통령 지지율은 40%[한국갤럽]">“총선 때 여당 많이 당선돼야” 37%·“야당이 많이” 47%···이 대통령 지지율은 40%[한국갤럽]</a>
+                                    <div>
+                                </div></div></article>
+                            </li>
+                        </ul>
+                    </dd>
+                </dl>
+            </section>
+<section class="contents" id="section-contents">
+                <div>
+					<div class="section-series" hidden><h3>연재</h3><div class="series"><ul class="swiper-wrapper"></ul></div></div>
+<div class="date" id="recent">
+						<div class="btn-left"><input type="date" id="opinion-date-picker" aria-label="기사 목록 날짜">
+                            <button type="button" class="btn-calendar" aria-label="날짜 선택">
+                                <span class="txt">달력</span>
+                            </button>
+                        </div>
+						<div class="date-wrap" id="cont_date">
+							<a href="#recent" class="btn-prev prev dateMove" title="이전" data-mode="prev"><span class="txt">이전</span></a>
+							<span id="selected-date" class="disabled">2026.11.20</span>
+                            
+							<a href="#recent" class="btn-next next dateMove disabled" title="다음" data-mode="next"><span class="txt">다음</span></a>
+						</div>
+						<div class="btn-right">
+                            <button class="btn-date-all " id="all" title="전체기간">전체기간</button>
+                        </div>
+						<div id="datepicker-container" style="display: none;">
+							<a class="datepicker_close"><span>닫기</span></a>
+						</div>
+					</div>
+                    <div class="list">
+                        <ul id="recentList">
+<li data-article-date="2026-11-20" data-category="general administration">
+                                <article>
+                                    <picture class="">
+                                        
+                                        
+                                        <img src="../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+                                    </picture>
+                                    <div>
+                                        <a href="https://www.khan.co.kr/article/202611201917001" title="이 대통령, 김종철 경찰청장 후보자 임명안 재가">
+                                            이 대통령, 김종철 경찰청장 후보자 임명안 재가                                        </a>
+                                        <p class="desc">이재명 대통령이 20일 김종철 경찰청장 후보자에 대한 임명안을 재가했다.강유정 청와대 수석대변인은 이날 언론공지를 내고 이 대통령이 여야 합의로 인사청문경과보고서를 채택한 김 후보자에 대한 임명안을 재가했다고 밝혔다.앞서 국회 행정안전위원회는 지난 18일 김 후보자에 대한 인사청문회를 실시하고, 여야 합의로 인사청문경과보고서를 채택했다.여당인 더불어민주당은 보고서에서 김 후보자에 대해 경찰청장으로 적격했다는 의견을 담았다. 국민의힘은 별도의 적격·부적격을 명시하는 대신 성남시 재개발구역 부동산 보유 등 후보자의 청문회 과정에 나온 각 위원들의 지적사항을 보고서에 포함했다.김 신임 청장은 지난 9월 치안정감으로 승진해 경찰청 차장에 임명된 뒤 청장 직무대행을 맡아왔다. 경찰청장직은 조지호 전 청장이 12·3 내란 당시 국회 출입 통제를 지휘했다는 이유 등으로 2024년 12월 국회에서 탄핵소추된 이후 1년 11개월 내내 직무대행 체제로 운영돼 왔다. 이 대통령이 취임...</p>
+                                        <p class="date">2시간 전</p>
+                                    </div>
+                                </article>
+                            </li>
+<li data-article-date="2026-11-20" data-category="general foreign-defense">
+                                <article>
+                                    <picture class="">
+                                        
+                                        
+                                        <img src="../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+                                    </picture>
+                                    <div>
+                                        <a href="https://www.khan.co.kr/article/202611201812001" title="정동영, 스틸·브런슨 연쇄 회담…미국·유엔사와 협력 강조">
+                                            정동영, 스틸·브런슨 연쇄 회담…미국·유엔사와 협력 강조                                        </a>
+                                        <p class="desc">정동영 통일부 장관이 20일 미셸 스틸 주한미국대사, 제네비어 브런슨 주한미군사령관 겸 유엔군사령관과 연쇄 회동을 했다. 통일부는 정 장관이 스틸 대사와 대북정책 전반에 대한 의견을 나눴고, 브런슨 사령관과는 정전협정 및 한반도 긴장 완화의 중요성을 논의했다고 밝혔다.정 장관은 이날 정부서울청사 집무실에서 취임 인사차 방문한 미셸 스틸 주한미국대사를 접견했다. 통일부에 따르면 정 장관은 스틸 대사의 부임을 환영하며 한국과 깊은 인연을 가진 대사의 부임으로 한·미 관계가 더 긴밀하게 발전할 것으로 본다는 기대감을 전했다.정 장관은 또 한반도 평화와 안정에 한·미 간 공조가 필수적이라고 언급하고, 한·미동맹을 토대로 남북 대화와 북·미 대화를 재개해 한반도에 공고한 평화를 정착시켜 나가야 한다고 말했다. 아울러 한반도의 항구적 평화체제 구축을 위한 한국 정부의 노력을 설명하며 이에 대한 미국 측의 변함없는 지지와 협력을 당부했다.이날 만남은 지난 7월 말 스틸 대사 부임 ...</p>
+                                        <p class="date">3시간 전</p>
+                                    </div>
+                                </article>
+                            </li>
+<li data-article-date="2026-11-20" data-category="general assembly">
+                                <article>
+                                    <picture class="">
+                                        
+                                        
+                                        <img src="../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+                                    </picture>
+                                    <div>
+                                        <a href="https://www.khan.co.kr/article/202611201734001" title="곽상언 “조희대 대법원장 탄핵 당론에 반대…국민이 어떻게 보겠느냐”">
+                                            곽상언 “조희대 대법원장 탄핵 당론에 반대…국민이 어떻게 보겠느냐”                                        </a>
+                                        <p class="desc">곽상언 더불어민주당 의원은 20일 당이 조희대 대법원장 탄핵소추 추진을 당론으로 추인한 것에 대해 “탄핵 당론 추진에 대해 반대한다”며 “숙고해 주시기를 거듭 간청 드린다”고 밝혔다.곽 의원은 이날 페이스북에 “당 지도부와 다수 의원께서 진정으로 탄핵에 충분한 사유가 있다고 판단하시는지 모르겠다”며 “만일 탄핵 사유가 있고 충분하다고 판단하시면 당론으로 채택하지 마시고 의원 개별 판단으로 맡겨 두시기를 간청 드린다”고 밝혔다.곽 의원은 “사법부의 법관이 판결을 했다고 해서 그 판결 내용을 문제삼아 탄핵할 수 없다”며 “사법부 판결은 그 자체로 탄핵 사유가 되지 않고 대법원장이 재판장으로 진행한 판결도 마찬가지”라고 적었다. 그는 “지금 대법원장을 탄핵하면 국민은 어제 선고된 한덕수 (전 국무총리의) 내란 사건 판결을 이유로 탄핵하는 것으로 인식하게 될 것”이라고 적었다.곽 의원은 “민주당은 국가 전체 권력 중 입법권과 행정권을 갖고 있다”며 “입법권과 행정권을 갖고 있...</p>
+                                        <p class="date">4시간 전</p>
+                                    </div>
+                                </article>
+                            </li>
+<li data-article-date="2026-11-20" data-category="general assembly">
+                                <article>
+                                    <picture class="">
+                                        
+                                        
+                                        <img src="../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+                                    </picture>
+                                    <div>
+                                        <a href="https://www.khan.co.kr/article/202611201729001" title="여당, 이 대통령 파기환송심 조희대 탄핵소추 사유에 포함…소추안 올해 안 처리할 듯">
+                                            여당, 이 대통령 파기환송심 조희대 탄핵소추 사유에 포함…소추안 올해 안 처리할 듯                                        </a>
+                                        <p class="desc">더불어민주당이 조희대 대법원장 탄핵소추 방침을 20일 당론으로 추인했다. 이재명 대통령 공직선거법 위반 혐의 사건 파기환송심 과정과 대법관 후보자 재제청 거부 등이 탄핵소추 사유로 구성될 예정이다. 민주당은 올해 안에 조 대법원장 탄핵소추안을 처리할 것으로 보인다.전은수 민주당 원내대변인은 이날 국회에서 열린 비공개 의원총회 후 브리핑에서 조 대법원장 탄핵소추 추진 안건이 당론으로 상정돼 통과됐다고 밝혔다.양부남 당 탄핵소추 추진단장은 대법원이 한덕수 전 국무총리의 내란중요임무 종사 사건을 일부 무죄 취지로 파기 환송한 것을 탄핵소추 사유로 넣을지는 “검토 중”이라고 밝혔다. 양 단장은 이날 탄핵소추 추진단 1차 회의를 마치고 기자들과 만나 “소추단에서 충분한 논쟁과 검토한 결과 검토할 필요가 있다고 판단했다”고 말했다.양 단장은 추진단 회의 전에 열린 의원총회 후 브리핑에서는 해당 판결은 탄핵소추 사유가 아니라고 한 바 있는데, 회의 후 검토로 입장이 바뀐 것이다...</p>
+                                        <p class="date">4시간 전</p>
+                                    </div>
+                                </article>
+                            </li>
+<li data-article-date="2026-11-20" data-category="general legal">
+                                <article>
+                                    <picture class="">
+                                        
+                                        
+                                        <img src="../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+                                    </picture>
+                                    <div>
+                                        <a href="https://www.khan.co.kr/article/202611201636001" title="검찰미래위원장, 조작기소 특검 출범에 “미래위는 미래위 역할 할 것”">
+                                            검찰미래위원장, 조작기소 특검 출범에 “미래위는 미래위 역할 할 것”                                        </a>
+                                        <p class="desc">과거 검찰의 검찰권 남용과 인권침해 의혹을 조사하는 법무부 검찰인권존중미래위원회(미래위) 측이 조만간 출범할 조작기소 특별검사와 조사 대상이 상당 부분 겹친다는 지적에 “미래위의 역할을 다할 것”이란 입장을 밝혔다.장주영 미래위원장은 20일 오전 10시부터 경기 과천시 법무부 청사에서 개최한 제19차 회의에 참석하기에 앞서 기자들과 만나 ‘특검과 (역할이) 병립되고 실효성이 우려된다는 지적에 어떤 의견인가’라는 물음에 이렇게 답했다.앞서 이재명 대통령은 전날 ‘윤석열 정권 검찰청, 국가정보원, 감사원 등 국가기관의 조작수사·조작기소 등 의혹의 진상규명을 위한 특별검사 임명 등에 관한 법률’을 관보에 게재해 공포했다. 미래위 조사 대상 19개 중 11건이 조작기소 특검 수사 대상과 겹친다. 특검 수사는 영장 집행 등을 통해 감찰 성격의 미래위 조사보다 폭넓게 사건을 들여다볼 수 있다. 이 때문에 미래위가 특검 수사보다 먼저 섣불리 결론을 내리기 어려울 것이란 관측이 나왔다....</p>
+                                        <p class="date">5시간 전</p>
+                                    </div>
+                                </article>
+                            </li>
+<li data-article-date="2026-11-20" data-category="general administration">
+                                <article>
+                                    <picture class="">
+                                        
+                                        
+                                        <img src="../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+                                    </picture>
+                                    <div>
+                                        <a href="https://www.khan.co.kr/article/202611201626001" title="공무원 재직시절 얻은 ‘개인정보’ 퇴직 후 무단 활용한 인천시 전 직원">
+                                            공무원 재직시절 얻은 ‘개인정보’ 퇴직 후 무단 활용한 인천시 전 직원                                        </a>
+                                        <p class="desc">공무원 재직 시절 확보한 시민들의 개인정보를 퇴직 후에도 갖고 나와 특정후보 지지 메시지를 보낸 전 인천시 공무원이 약식기소됐다.20일 법조계에 따르면 인천지방공소청은 개인정보보호법 위반 혐의로 전 인천시 공무원 A씨를 벌금 100만원에 약식기소했다. 약식기소는 정식 재판 대신 서면 심리를 통해 벌금형 등을 내려달라고 법원에 청구하는 절차다.A씨는 지난 5월 27일 시민 4명의 개인정보를 6·3 지방선거 당시 국민의힘 유정복 인천시장 후보의 선거운동에 활용한 혐의를 받고 있다.조사 결과, A씨는 2014~2016년 인천시청 팀장으로 근무하며 공약이행시민점검단 단원 60여 명의 개인정보를 관리했다.이후 퇴직한 A씨는 유 후보 선거캠프 사무실에서 일하면서 과거 확보해 둔 시민들의 연락처로 선거 관련 카카오톡 메시지를 발송했다.해당 메시지에는 당시 상대였던 더불어민주당 박찬대 후보를 비판하는 내용이 담긴 것으로 전해졌다.경찰은 A씨가 시민 4명의 개인정보를 정...</p>
+                                        <p class="date">5시간 전</p>
+                                    </div>
+                                </article>
+                            </li>
+<li data-article-date="2026-11-20" data-category="general assembly">
+                                <article>
+                                    <picture class="">
+                                        
+                                        
+                                        <img src="../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+                                    </picture>
+                                    <div>
+                                        <a href="https://www.khan.co.kr/article/202611201536001" title="민주유공자법, 여당 주도 국회 본회의 통과…박종철·이한열 열사도 유공자된다">
+                                            민주유공자법, 여당 주도 국회 본회의 통과…박종철·이한열 열사도 유공자된다                                        </a>
+                                        <p class="desc">국가가 민주화운동에 기여한 인사를 예우하고 지원하는 내용을 담은 민주유공자 예우에 관한 법률안(민주유공자법 제정안)이 20일 더불어민주당 주도로 국회 본회의를 통과했다.민주당과 조국혁신당 등 범여권은 이날 국회 본회의에서 전날 오후 시작된 국민의힘의 필리버스터(무제한 토론)를 24시간 만에 표결로 종료시키고 민주유공자법제장안을 의결했다. 재석 178명 중 찬성 178표로 통과됐고, 국민의힘은 일방 처리에 반발하며 표결에 불참했다.민주유공자법 제정안은 1964년 3월24일 이후 ‘반민주적 권위주의 통치에 항거해 기여한 인사 중 공헌이 명백하고 사회적 공감대가 형성된 사람’을 민주유공자로 등록해 예우하도록 하는 내용을 담고 있다.다만 국가보안법 위반으로 금고 이상의 실형을 선고받은 사람, 형법상 내란이나 살인, 성폭력 범죄 등의 죄를 저지른 이는 적용 대상에서 배제된다.국가보훈부에서 대상자로 인정한 민주유공자와 그 유족 등은 의료·양로 등의 지원을 받을 수 있다. 법 ...</p>
+                                        <p class="date">6시간 전</p>
+                                    </div>
+                                </article>
+                            </li>
+<li data-article-date="2026-11-20" data-category="general administration">
+                                <article>
+                                    <picture class="">
+                                        
+                                        
+                                        <img src="../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+                                    </picture>
+                                    <div>
+                                        <a href="https://www.khan.co.kr/article/202611201532001" title="‘수능 AI 커닝’ 끝까지 쫓는다···정부 ‘수상한 신호’들 다 저장해둬 “의심사례 수사 의뢰”">
+                                            ‘수능 AI 커닝’ 끝까지 쫓는다···정부 ‘수상한 신호’들 다 저장해둬 “의심사례 수사 의뢰”                                        </a>
+                                        <p class="desc">한성숙 국무총리가 20일 인공지능(AI)을 활용한 대학수학능력시험 부정행위 대응과 관련해 “어제 시험 현장에서 전담 감독관이 의심되는 와이파이와 블루투스 신호를 기록하고 저장해뒀다”며 “이 기록을 분석해 부정행위가 의심되는 사례는 수사의뢰 하도록 하겠다”고 밝혔다.한 총리는 이날 정부서울청사에서 수능 부정행위 대응 태스크포스(TF) 1차 회의를 주재하고 “시험 현장에서 적발되지 않았던 부정행위도 끝까지 찾아내겠다”며 이같이 말했다.한 총리는 “권익위를 중심으로 부정행위 의심 사례에 대한 신고와 제보도 받는다”며 “신고나 제보된 사례가 실제 부정행위로 확인되면 포상금을 지급하는 절차도 차질없이 준비하고 있다”고 밝혔다.정부는 이날 교육부와 과학기술정보통신부, 행정안전부, 법무부, 경찰청, 국민권익위원회 등 관계부처가 함께 하는 수능 부정행위 대응 TF를 출범했다. 한 총리는 “수능은 끝났지만 수능의 공정성을 위한 정부의 책임은 끝나지 않았다”며 “부처 간 협력 범위를...</p>
+                                        <p class="date">6시간 전</p>
+                                    </div>
+                                </article>
+                            </li>
+<li data-article-date="2026-11-20" data-category="general assembly">
+                                <article>
+                                    <picture class="">
+                                        
+                                        
+                                        <img src="../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+                                    </picture>
+                                    <div>
+                                        <a href="https://www.khan.co.kr/article/202611201422001" title="[속보] 민주당, 조희대 탄핵소추 당론 채택">
+                                            [속보] 민주당, 조희대 탄핵소추 당론 채택                                        </a>
+                                        <p class="desc">더불어민주당이 20일 조희대 대법원장 탄핵소추를 추진하기로 당론으로 채택했다.민주당은 이날 오후 국회에서 비공개 의원총회를 열고 이같이 결정했다고 전은수 원내대변인이 전했다.탄핵소추단장인 양부남 의원은 브리핑에서 “조 대법원장의 헌법적 법률 위반 사항이 있었다”며 “민주당에서 더이상 참을 수 없는 임계점을 넘었다”고 말했다.양 의원은 탄핵소추 사유로 내란특검에서 무혐의 처분한 12·3 불법계엄 당시 조 대법원장의 행적, 이재명 대통령 공직선거법 위반 혐의 사건 파기환송심을 전원합의체에 회부하고 심리 기간이 짧았던 점, 대법관 후보자 재제청 거부, 업무추진비 유용 의혹을 들었다.양 의원은 전날 대법원이 한덕수 전 국무총리의 내란중요임무종사 혐의 등 사건을 일부 무죄 취지로 파기환송한 것은 탄핵소추 사유가 아니라고 밝혔다. 양 의원은 “어제 판결은 탄핵 사유가 아니다”라고 말했다.</p>
+                                        <p class="date">7시간 전</p>
+                                    </div>
+                                </article>
+                            </li>
+<li data-article-date="2026-11-20" data-category="general president">
+                                <article>
+                                    <picture class="">
+                                        
+                                        
+                                        <img src="../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+                                    </picture>
+                                    <div>
+                                        <a href="https://www.khan.co.kr/article/202611201421001" title="이 대통령 “AI 부정에 맞춰 국가시험제도 전면 개편…이미 치러진 시험 부정 엄중 단죄”">
+                                            이 대통령 “AI 부정에 맞춰 국가시험제도 전면 개편…이미 치러진 시험 부정 엄중 단죄”                                        </a>
+                                        <p class="desc">이재명 대통령이 20일 인공지능(AI)을 활용한 시험 부정행위 문제와 관련해 “변화된 환경에 맞게 국가시험 제도를 A부터 Z까지 전면적으로 신속하게 개편해야겠다”고 밝혔다.이 대통령은 이날 청와대에서 수석보좌관회의를 주재하고 “기존의 통상적인 방법으로는 더 이상 인공지능과 첨단 장비를 악용한 부정행위를 효과적으로 막기 어려운 것 같다”며 이같이 말했다.이 대통령은 “공개 시험이 기회와 자원 배분에 큰 영향을 미치는 우리 대한민국에서 인공지능을 악용한 부정행위는 공정성과 신뢰성을 훼손해서 우리 사회의 기본 질서를 뒤흔들게 한다”며 “중대한 범죄 행위”라고 밝혔다.이 대통령은 “수능뿐만 아니라 공공과 민간에서 시행되는 모든 시험과 평가의 공정성 담보를 위한 과감한 대책과 협조 체제를 빈틈없이 구축해 주기 바란다”고 말했다.이 대통령은 또 “이미 진행된 시험과 평가의 부정행위에 대해서도 철저한 조사와 엄중한 단죄가 있어야겠다”며 “행정력과 예산을 아끼지 말기 바란다”고 ...</p>
+                                        <p class="date">7시간 전</p>
+                                    </div>
+                                </article>
+                            </li>
+</ul>
+                    </div>
+                    <div class="page" hidden></div>
+                    <div class="none" id="no_result" style="display: none;">
+                        <p>
+                            <span class="txt">글 없음</span>
+                            등록된 글이 없습니다.
+                            <button class="btn-reset">초기화</button>
+                        </p>
+                    </div>
+				</div>
+                
+			<aside>
+
+                    <ul class="aside-wrap">
+                        <li>
+                            <div class="banner-aside-top-middle">
+                                <div class="ad-wrapper type-pc">
+                                    <div class="ad-inner-wrap" style="width:300px;height:250px;">
+<!-- KH_View_MRD_25 -->
+                                    <!-- [pc-AD] 섹션면/기사면 우측 배너 (300x250) -->
+                                    <div id="ads21">
+                                        <!-- newscode_KSS_300250_RM 2026.07.06 ~ -->
+
+                                    </div>
+                                    <!--// [pc-AD] 섹션면/기사면 우측 배너 (300x250) -->                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+
+
+                        <li class="">
+                            
+                        <div class="area-tit">주요기사</div>
+                        <ul class="list major-art-wrap m-major"><li>
+   <article>
+       <picture>
+           
+           
+           
+           
+           
+           
+           <img src="../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+       </picture>
+       <div>
+           <a href="https://www.khan.co.kr/article/202611201402001" title="‘단추에 스티커’ 이러다 시험장 국룰 될라···28일 교사 임용시험도 수능 못잖은 ‘AI 커닝’ 방지책">
+               ‘단추에 스티커’ 이러다 시험장 국룰 될라···28일 교사 임용시험도 수능 못잖은 ‘AI 커닝’ 방지책
+           </a>
+       </div>
+   </article>
+</li>
+<li>
+   <article>
+       <picture>
+           
+           
+           
+           
+           
+           
+           <img src="../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+       </picture>
+       <div>
+           <a href="https://www.khan.co.kr/article/202611201601001" title="김건희, 도이치 주가조작 유죄에 격앙 “난 죽어도 이해 못 해···대법관들이 내 사건 봤는지 의문”">
+               김건희, 도이치 주가조작 유죄에 격앙 “난 죽어도 이해 못 해···대법관들이 내 사건 봤는지 의문”
+           </a>
+       </div>
+   </article>
+</li>
+<li>
+   <article>
+       <picture>
+           
+           
+           
+           
+           
+           
+           <img src="../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+       </picture>
+       <div>
+           <a href="https://www.khan.co.kr/article/202611202127001" title="관객이 던진 털모자 삼킨 뒤 끝내 숨진 ‘기적의 하마’ 피오나···전 세계 팬들 애도">
+               관객이 던진 털모자 삼킨 뒤 끝내 숨진 ‘기적의 하마’ 피오나···전 세계 팬들 애도
+           </a>
+       </div>
+   </article>
+</li>
+<li>
+   <article>
+       <picture>
+           
+           
+           
+           
+           
+           
+           <img src="../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+       </picture>
+       <div>
+           <a href="https://www.khan.co.kr/article/202611201212001" title="수학문제 풀이 없이 답 적고 안경 ‘만지작’···적발되자 ‘스마트안경’ 감춘 채 뿔테 안경 꺼내줘">
+               수학문제 풀이 없이 답 적고 안경 ‘만지작’···적발되자 ‘스마트안경’ 감춘 채 뿔테 안경 꺼내줘
+           </a>
+       </div>
+   </article>
+</li>
+<li>
+   <article>
+       <picture>
+           
+           
+           
+           
+           
+           
+           <img src="../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+       </picture>
+       <div>
+           <a href="https://www.khan.co.kr/article/202611201131001" title="김치·마늘 담았던 플라스틱 용기, 빡빡 닦아도 ‘윽’ 짙게 밴 냄새 없애려면">
+               김치·마늘 담았던 플라스틱 용기, 빡빡 닦아도 ‘윽’ 짙게 밴 냄새 없애려면
+           </a>
+       </div>
+   </article>
+</li>
+</ul>
+
+
+                        
+                        </li>
+                    </ul>
+
+                </aside></section>
+</div></main>
+<footer ep_page_scrollarea="{&quot;1024&quot;:7,&quot;768&quot;:9,&quot;393&quot;:9}" class="appuse">
+        <div class="expand evere-footer-sitemap">
+            <div class="wrap menu">
+                <ul>
+<li id="footer-opinion">
+<strong><a href="../opinion/">오피니언</a></strong>
+<ul>
+<li><a href="../opinion/editorial/">사설</a></li>
+<li><a href="../opinion/column/">칼럼</a></li>
+<li><a href="../opinion/contributions/">기고</a></li>
+</ul>
+</li>
+<li id="footer-wiki">
+<strong><a href="../wiki/">위키</a></strong>
+<ul>
+<li><a href="../wiki/?category=general">위키일반</a></li>
+<li><a href="../wiki/?category=council">운영협의회</a></li>
+<li><a href="../wiki/?category=informal-groups">비공식단체</a></li>
+<li><a href="../wiki/?category=chair">의장동정</a></li>
+</ul>
+</li>
+<li id="footer-virtual-nations">
+<strong><a href="../virtual-nations/">가상국가</a></strong>
+<ul>
+<li><a href="../virtual-nations/?category=general">가상국가일반</a></li>
+<li><a href="../virtual-nations/?category=nations">네이션즈</a></li>
+<li><a href="../virtual-nations/?category=virtual-united-nations">가상국제연합</a></li>
+<li><a href="../virtual-nations/?category=hangaker-wolbon">한가커·월본</a></li>
+<li><a href="../virtual-nations/?category=kaguk-diguk">카국·디국·저능아</a></li>
+</ul>
+</li>
+<li id="footer-politics">
+<strong><a href="../politics/">정치</a></strong>
+<ul>
+<li><a href="../politics/?category=general">정치일반</a></li>
+<li><a href="../politics/?category=president">청와대</a></li>
+<li><a href="../politics/?category=assembly">국회·정당</a></li>
+<li><a href="../politics/?category=legal">법비</a></li>
+<li><a href="../politics/?category=north-korea">북한</a></li>
+<li><a href="../politics/?category=foreign-defense">외교·국방</a></li>
+<li><a href="../politics/?category=administration">행정</a></li>
+</ul>
+</li>
+<li id="footer-economy">
+<strong><a href="../economy/">경제</a></strong>
+<ul>
+<li><a href="../economy/?category=general">경제일반</a></li>
+<li><a href="../economy/?category=policy">경제정책</a></li>
+<li><a href="../economy/?category=industry">산업</a></li>
+<li><a href="../economy/?category=finance">금융/증권</a></li>
+<li><a href="../economy/?category=real-estate">부동산</a></li>
+<li><a href="../economy/?category=technology">IT/과학</a></li>
+<li><a href="../economy/?category=automotive">자동차</a></li>
+</ul>
+</li>
+<li id="footer-society">
+<strong><a href="../society/">사회</a></strong>
+<ul>
+<li><a href="../society/?category=general">사회일반</a></li>
+<li><a href="../society/?category=incidents">사건·사고</a></li>
+<li><a href="../society/?category=justice">법원·경찰</a></li>
+<li><a href="../society/?category=education">교육</a></li>
+<li><a href="../society/?category=labor">노동</a></li>
+<li><a href="../society/?category=health-welfare">보건·복지</a></li>
+<li><a href="../society/?category=environment">날씨·환경</a></li>
+</ul>
+</li>
+<li id="footer-international">
+<strong><a href="../international/">국제</a></strong>
+<ul>
+<li><a href="../international/?category=general">국제일반</a></li>
+<li><a href="../international/?category=china">중국</a></li>
+<li><a href="../international/?category=japan">일본</a></li>
+<li><a href="../international/?category=asia-oceania">아시아·호주</a></li>
+<li><a href="../international/?category=americas">미국·중남미</a></li>
+<li><a href="../international/?category=europe">유럽</a></li>
+<li><a href="../international/?category=middle-east-africa">중동·아프리카</a></li>
+</ul>
+</li>
+<li id="footer-health">
+<strong><a href="../health/">건강</a></strong>
+<ul>
+<li><a href="../health/?category=general">건강일반</a></li>
+<li><a href="../health/?category=living">리빙포인트</a></li>
+<li><a href="../health/?category=obituaries">궂긴소식</a></li>
+<li><a href="../health/?category=gukjim">국짐소식</a></li>
+</ul>
+</li>
+<li id="footer-sports">
+<strong><a href="../sports/">스포츠</a></strong>
+<ul>
+<li><a href="../sports/?category=general">스포츠일반</a></li>
+<li><a href="../sports/?category=baseball">야구</a></li>
+<li><a href="../sports/?category=football">축구</a></li>
+<li><a href="../sports/?category=basketball-volleyball">농구·배구</a></li>
+<li><a href="../sports/?category=golf">골프</a></li>
+</ul>
+</li>
+<li id="footer-culture">
+<strong><a href="../culture/">문화</a></strong>
+<ul>
+<li><a href="../culture/?category=general">문화일반</a></li>
+<li><a href="../culture/?category=k-pop">K-POP</a></li>
+<li><a href="../culture/?category=religion">종교</a></li>
+<li><a href="../culture/?category=nam-gwang-hui">남광희</a></li>
+<li><a href="../culture/?category=film-music">영화·음악</a></li>
+<li><a href="../culture/?category=arts">미술·전시·공연</a></li>
+</ul>
+</li>
+                </ul>
+            </div>
+        </div>
+        <div class="expand">
+            <div class="wrap etc">
+                <ul>
+                    <li>
+                        <a href="https://company.khan.co.kr/" title="회사소개" target="_blank">회사소개</a>
+                    </li>
+                    <li>
+                        <a href="https://www.khan.co.kr/subscribe.html" title="구독신청" target="_self">구독신청</a>
+                    </li>
+                    <li>
+                        <a href="https://company.khan.co.kr/business/ads" title="온라인광고" target="_blank">온라인광고</a>
+                    </li>
+                    <li>
+                        <a href="https://company.khan.co.kr/business/partnership" title="사업제휴" target="_blank">사업제휴</a>
+                    </li>
+                    <li>
+                        <a href="https://recruit.khan.co.kr/" title="채용" target="_blank">채용</a>
+                    </li>
+                    <li>
+                        <a href="https://www.khan.co.kr/help/help_digital.html" title="저작권∙콘텐츠 사용" target="_self">저작권∙콘텐츠 사용</a>
+                    </li>
+                    <li>
+                        <a href="https://www.khan.co.kr/article/200509211710302" title="고충처리" target="_self">고충처리</a>
+                    </li>
+                    <li>
+                        <a href="https://www.khan.co.kr/help/help_agreement.html" title="HELP" target="_self">HELP</a>
+                    </li>
+                    <li>
+                        <div title="열기" class="btn-familysite">Family site</div>
+                        <ul class="familysite-list">
+                            <li>
+                                <a href="https://sports.khan.co.kr/" title="스포츠경향" target="_blank">스포츠경향</a>
+                            </li>
+                            <li>
+                                <a href="https://weekly.khan.co.kr/" title="주간경향" target="_blank">주간경향</a>
+                            </li>
+                            <li>
+                                <a href="https://lady.khan.co.kr/" title="레이디경향" target="_blank">레이디경향</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="familysite">
+            <div class="familysite-list-m">
+                <ul>
+                    <li>
+                        <a href="https://www.khan.co.kr/" title="경향신문 앱" target="_blank" class="khan-app">경향신문 앱</a>
+                    </li>
+                    <li>
+                        <a href="https://sports.khan.co.kr/" title="스포츠경향" target="_blank">스포츠경향</a>
+                    </li>
+                    <li>
+                        <a href="https://weekly.khan.co.kr/" title="주간경향" target="_blank">주간경향</a>
+                    </li>
+                    <li>
+                        <a href="https://lady.khan.co.kr/" title="레이디경향" target="_blank">레이디경향</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="expand info">
+            <div class="wrap info" ep_page_scrollarea="{&quot;1280&quot;:6}">
+                <ul>
+                    <li>
+                        <a class="evere-footer-logo" href="../"><img src="../assets/evere/wordmark.svg" alt="이브레"></a>
+                    </li>
+                    <li>
+                        <ul class="menu">
+                            <li>
+                                <a href="https://www.khan.co.kr/help/help_agreement.html" title="이용약관">이용약관</a>
+                            </li>
+                            <li>
+                                <a href="https://www.khan.co.kr/help/help_privately.html" title="개인정보처리방침">개인정보처리방침</a>
+                            </li>
+                            <li>
+                                <a href="#footer-opinion" title="사이트맵">사이트맵</a>
+                            </li>
+                        </ul>
+                        
+                        
+                        <ul class="contact">
+                            <li>강원 강릉시 관솔길 이브레신문사</li>
+                            <li>고객센터 : <a href="mailto:evewiki@gmail.com">evewiki@gmail.com</a></li>
+                        </ul>
+                        <ul class="manager">
+                            <li>발행인·편집인 : 혼종인</li>
+                            <li>청소년보호책임자 : 은혜누나</li>
+                        </ul>
+                        <p class="copy">ⓒ이브레신문, All rights reserved.</p>
+                    </li>
+                    <li>
+                        <ul class="link">
+                            <li>
+                                <a href="https://www.facebook.com/kyunghyangshinmun" title="facebook" target="_blank" class="txt btn-facebook" rel="nofollow">facebook</a>
+                            </li>
+                            <li>
+                                <a href="https://www.youtube.com/thekyunghyangtv" title="youtube" target="_blank" class="txt btn-youtube" rel="nofollow">youtube</a>
+                            </li>
+                            <li>
+                                <a href="https://x.com/kyunghyang" title="x" target="_blank" class="txt btn-x" rel="nofollow">X</a>
+                            </li>
+                            <li>
+                                <a href="https://www.instagram.com/kyunghyangshinmun/" title="instagram" target="_blank" class="txt btn-instagram" rel="nofollow">instagram</a>
+                            </li>
+                            <li>
+                                <a href="https://news.google.com/publications/CAAqJAgKIh5DQklTRUFnTWFnd0tDbXRvWVc0dVkyOHVhM0lvQUFQAQ?ceid=KR:ko&amp;oc=3&amp;hl=ko&amp;gl=KR" title="google" target="_blank" class="txt btn-google" rel="nofollow">google</a>
+                            </li>
+                            <li>
+                                <a href="https://www.khan.co.kr/help/help_rss.html" title="rss" target="_self" class="txt btn-rss" rel="nofollow">rss</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <button title="상단으로 페이지 이동" class="txt btn-top appuse">상단으로 페이지 이동</button>
+    </footer>
+</body>
+</html>

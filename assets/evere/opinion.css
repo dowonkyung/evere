@@ -29,3 +29,12 @@
     pointer-events: none;
 }
 .evere-opinion-list :is(#recentList > li, .contents .page)[hidden] { display: none; }
+
+.evere-section main .child-section { overflow-x: auto; scrollbar-width: none; }
+.evere-section main .child-section .swiper-wrapper { width: max-content; }
+.evere-section .section-series[hidden] { display: none; }
+.evere-section .section-series .series { overflow-x: auto; scrollbar-width: none; }
+.evere-section .section-series img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.evere-section .section-series .swiper-slide > a { z-index: 1; }
+.evere-section .section-series .swiper-slide > a::after { inset: auto; }
+.evere-section .contents .none { min-height: 180px; }
