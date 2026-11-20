@@ -7,10 +7,10 @@
   <title>이브레 뉴스룸</title>
   <link rel="icon" href="../assets/evere/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
-  <link rel="stylesheet" href="../assets/evere/account.css?v=newsroom-1">
-  <link rel="stylesheet" href="../assets/evere/newsroom.css">
-  <script type="module" src="../assets/evere/account.js?v=newsroom-1"></script>
-  <script type="module" src="../assets/evere/newsroom.js"></script>
+  <link rel="stylesheet" href="../assets/evere/account.css?v=newsroom-2">
+  <link rel="stylesheet" href="../assets/evere/newsroom.css?v=2">
+  <script type="module" src="../assets/evere/account.js?v=newsroom-2"></script>
+  <script type="module" src="../assets/evere/newsroom.js?v=2"></script>
 </head>
 <body class="newsroom">
   <header class="newsroom-header">
@@ -63,24 +63,68 @@
         </section>
         <section data-panel="write" hidden>
           <h1>기사 작성</h1>
-          <div class="newsroom-compose">
-            <form id="article-form">
-          <label>제목<input name="title" maxlength="200" placeholder="기사 제목을 입력하세요" required></label>
-          <label>섹터<select name="sector" required></select></label>
-          <label>하위 분류<select name="category"></select></label>
-          <label>기자명<select name="byline" multiple size="5" required></select></label>
-          <p id="byline-help"></p>
-          <label>본문<textarea name="body" rows="14" placeholder="기사 본문을 입력하세요" maxlength="50000" required></textarea></label>
-          <button type="submit">승인 요청</button>
-        </form>
-            <aside class="newsroom-preview" aria-label="기사 미리보기">
-              <h2>미리보기</h2>
-              <p id="preview-sector"></p>
-              <h3 id="preview-title">기사 제목</h3>
-              <p id="preview-byline"></p>
-              <p id="preview-body" class="article-body"></p>
+          <form id="article-form" class="newsroom-compose"></form>
+          <template id="compose-fields">
+            <div class="compose-paper">
+              <div class="compose-metadata">
+                <div class="compose-section-fields">
+                  <label>섹터<select name="sector" required></select></label>
+                  <label>하위 분류<select name="category"></select></label>
+                </div>
+                <fieldset class="compose-byline">
+                  <legend>기자명</legend>
+                  <p data-byline-help></p>
+                  <ul data-byline-list aria-label="선택된 기자"></ul>
+                  <div class="compose-add" data-member-picker>
+                    <select name="writer" aria-label="이브레 기자 선택"></select>
+                    <button type="button" data-add-member>기자 추가</button>
+                  </div>
+                  <div class="compose-add" data-guest-picker hidden>
+                    <input name="guest" maxlength="80" placeholder="외부 기고자 이름" aria-label="외부 기고자 이름">
+                    <button type="button" data-add-guest>기고자 추가</button>
+                  </div>
+                </fieldset>
+                <label>제목<input name="title" maxlength="200" placeholder="기사 제목을 입력하세요" required></label>
+                <label>부제목<textarea name="subtitle" maxlength="500" rows="2" placeholder="부제목을 입력하세요"></textarea></label>
+              </div>
+              <section class="compose-body" aria-label="본문 편집">
+                <h2>본문</h2>
+                <div class="compose-toolbar" role="group" aria-label="본문 서식">
+                  <button type="button" data-command="bold" aria-label="굵게"><b>B</b></button>
+                  <button type="button" data-command="italic" aria-label="기울임"><i>I</i></button>
+                  <button type="button" data-command="underline" aria-label="밑줄"><u>U</u></button>
+                  <button type="button" data-command="strikeThrough" aria-label="취소선"><s>S</s></button>
+                  <button type="button" data-command="formatBlock" data-value="p">문단</button>
+                  <button type="button" data-command="formatBlock" data-value="h2">소제목</button>
+                  <button type="button" data-command="formatBlock" data-value="blockquote">인용</button>
+                  <button type="button" data-command="insertUnorderedList">글머리 목록</button>
+                  <button type="button" data-command="insertOrderedList">번호 목록</button>
+                </div>
+                <div class="compose-editor" contenteditable="true" role="textbox" aria-label="본문" aria-multiline="true" data-placeholder="기사 본문을 입력하세요"></div>
+              </section>
+              <div class="compose-actions"><button type="submit">승인 요청</button></div>
+            </div>
+            <aside class="compose-side">
+              <section class="compose-media">
+                <h2>사진 첨부</h2>
+                <label class="compose-drop">사진을 선택하거나 여기로 끌어오세요
+                  <span>JPG · PNG · WebP / 최대 8장, 장당 5MB</span>
+                  <input name="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple>
+                </label>
+                <ul class="compose-thumbs" data-thumbs aria-label="첨부 사진"></ul>
+              </section>
+              <section class="newsroom-preview" aria-label="기사 미리보기">
+                <h2>미리보기</h2>
+                <p data-preview-sector></p>
+                <h3 data-preview-title>기사 제목</h3>
+                <p data-preview-subtitle class="article-subtitle"></p>
+                <p data-preview-byline class="article-meta"></p>
+                <div data-preview-photos class="article-photos"></div>
+                <div data-preview-body class="article-body"></div>
+              </section>
+              <p class="compose-feedback" data-compose-feedback role="status"></p>
             </aside>
-          </div>
+          </template>
         </section>
         <section data-panel="review" hidden>
           <h1>기사 목록·승인</h1>

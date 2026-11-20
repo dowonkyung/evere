@@ -1,3 +1,4 @@
+import { renderBody, renderPhotos } from './article-content.js';
 import { supabase } from './supabase.js';
 import { sectors } from './article-taxonomy.js';
 
@@ -73,7 +74,7 @@ async function render() {
         ui('status').textContent = '기사를 찾을 수 없습니다.';
         return;
     }
-    const data = checked(await supabase.from('evere_articles').select('title,body,sector,byline_names,published_at')
+    const data = checked(await supabase.from('evere_articles').select('title,subtitle,body,body_html,photo_paths,sector,byline_names,published_at')
         .eq('id', articleId).eq('status', 'published').maybeSingle());
     if (!data) {
         ui('status').textContent = '게시된 기사를 찾을 수 없습니다.';
@@ -82,7 +83,9 @@ async function render() {
     document.title = data.title + ' | 이브레';
     ui('sector').textContent = sectors[data.sector];
     ui('title').textContent = data.title;
-    ui('body').textContent = data.body;
+    ui('subtitle').textContent = data.subtitle;
+    renderBody(ui('body'), data);
+    void renderPhotos(ui('article-photos'), data.photo_paths);
     ui('byline').textContent = [...data.byline_names, dateFormat.format(new Date(data.published_at))].join(' · ');
     ui('published-article').hidden = false;
     ui('comments-section').hidden = false;

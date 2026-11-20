@@ -58,6 +58,12 @@ details > form { margin: 16px 0; }
 .article { border-bottom: 1px solid #ddd; padding: 14px 0; }
 .article h3 { margin: 0 0 8px; }
 .article-body, .comment-body { white-space: pre-wrap; overflow-wrap: anywhere; }
+.article-body { line-height: 1.7; }
+.article-body blockquote { margin-inline: 0; padding-inline-start: 1em; border-inline-start: 3px solid #00b8b4; }
+.article-subtitle { color: #444; white-space: pre-line; overflow-wrap: anywhere; }
+.article-subtitle:empty, .article-photos:empty { display: none; }
+.article-photos { display: grid; gap: 16px; margin-block: 16px; }
+.article-photos img { display: block; width: auto; max-width: 100%; height: auto; border-radius: 4px; }
 .article-meta, #member-summary, #byline-help, .comment-meta { color: #555; font-size: 14px; }
 .article-action { display: flex; gap: 8px; flex-wrap: wrap; }
 .pager { display: flex; gap: 8px; margin-top: 16px; }

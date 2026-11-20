@@ -30,13 +30,48 @@
 .newsroom-content { min-width: 0; padding: 28px clamp(16px, 3vw, 44px); }
 .newsroom-content > section { max-width: 1270px; margin: 0 auto; }
 .newsroom-content h1 { padding-bottom: 14px; border-bottom: 2px solid #151515; }
-.newsroom-compose { display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(240px, 1fr); gap: 18px; }
-.newsroom-compose > form, .newsroom-preview, .newsroom-content #layout-form, .newsroom-board-grid > form {
+.newsroom-compose { display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(270px, 1fr); gap: 20px; align-items: start; }
+.compose-paper, .compose-media, .newsroom-preview, .newsroom-content #layout-form, .newsroom-board-grid > form {
   background: #fff;
   border: 1px solid #e1e4e4;
   padding: 22px;
   min-width: 0;
 }
+.compose-paper { padding: 0; border-radius: 6px; }
+.compose-metadata { display: grid; gap: 20px; padding: clamp(16px, 3vw, 30px); }
+.compose-section-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.compose-byline { min-width: 0; margin: 0; padding: 14px; border: 1px solid #dfe6e6; border-radius: 6px; }
+.compose-byline legend { padding-inline: 5px; }
+[data-byline-help] { margin: 0 0 10px; color: #536262; font-size: 13px; }
+[data-byline-list] { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; padding: 0; margin: 0 0 10px; }
+[data-byline-list] li { display: flex; align-items: center; gap: 8px; background: #e8f7f6; padding: 5px 9px; border-radius: 4px; font-size: 14px; overflow-wrap: anywhere; }
+[data-byline-list] button, .compose-thumbs button { padding: 2px 5px; font-size: 12px; border: 0; color: #526362; background: transparent; text-decoration: underline; }
+.compose-add { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+.compose-add + .compose-add { margin-top: 8px; }
+.compose-add button { color: #006967; border-color: #b5d6d5; white-space: nowrap; }
+.compose-body { border-top: 1px solid #dfe6e6; }
+.compose-body h2 { margin: 0; padding: 16px clamp(16px, 3vw, 30px); font-size: 16px; }
+.compose-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; border-block: 1px solid #dfe6e6; padding: 8px 12px; background: #f4f7f7; }
+.compose-toolbar button { padding: 6px 8px; min-width: 32px; font-size: 13px; border-color: transparent; background: transparent; }
+.compose-toolbar button:hover { background: #daf3f2; color: #005d5b; }
+.compose-editor { min-height: 340px; padding: clamp(16px, 3vw, 30px); line-height: 1.75; white-space: pre-wrap; overflow-wrap: anywhere; }
+.compose-editor:focus-visible { outline: 2px solid #007b79; outline-offset: -2px; }
+.compose-editor:empty::before { content: attr(data-placeholder); color: #687575; pointer-events: none; }
+.compose-editor blockquote { margin-inline: 0; padding-inline-start: 1em; border-inline-start: 3px solid #00b8b4; }
+.compose-actions { display: flex; justify-content: flex-end; padding: 14px clamp(16px, 3vw, 30px); border-top: 1px solid #dfe6e6; }
+.compose-side { display: grid; gap: 14px; min-width: 0; }
+.compose-media, .newsroom-preview { border-radius: 6px; }
+.compose-media h2 { margin: 0 0 12px; font-size: 16px; }
+.compose-drop { background: #f1f8f8; border: 1px dashed #8ebfbe; border-radius: 6px; padding: 16px 12px; color: #254f4e; cursor: pointer; }
+.compose-drop.drag-over { background: #cef2f0; }
+.compose-drop span { font-size: 12px; font-weight: 400; }
+.compose-drop input { font-size: 13px; padding: 6px; }
+.compose-thumbs { list-style: none; margin: 0; padding: 0; }
+.compose-thumbs li { display: grid; align-items: center; grid-template-columns: 48px minmax(0, 1fr) auto; gap: 8px; padding-top: 9px; font-size: 13px; overflow-wrap: anywhere; }
+.compose-thumbs li span { grid-column: 2; }
+.compose-thumbs img { width: 48px; height: 42px; object-fit: cover; border-radius: 4px; }
+.compose-feedback { grid-row: 1; margin: 0; padding: 10px; background: #fff3f3; color: #94302e; font-size: 14px; }
+.compose-feedback:empty { display: none; }
 .newsroom-preview { align-self: start; min-height: 200px; }
 .newsroom-preview h2 { margin: 0 0 16px; font-size: 15px; color: #525959; }
 .newsroom-preview h3 { margin: 8px 0; font-size: 22px; overflow-wrap: anywhere; }

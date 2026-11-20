@@ -4,7 +4,6 @@ import { sectors, articleCategories } from './article-taxonomy.js';
 const ui = (id) => document.getElementById(id);
 const panels = [...document.querySelectorAll('[data-panel]')];
 const nav = [...document.querySelectorAll('.newsroom-nav [data-view]')];
-const compose = ui('article-form');
 const layout = ui('layout-form');
 const layoutSubmit = layout.querySelector('[type="submit"]');
 const slots = [layout.elements.slot1, layout.elements.slot2, layout.elements.slot3];
@@ -62,7 +61,6 @@ function selectView() {
         else link.removeAttribute('aria-current');
     }
     if (view === 'profile') ui('profile-settings').open = true;
-    if (view === 'write') preview();
     if (view === 'layout') loadLayout().catch(() => notify('화면 배치를 불러오지 못했습니다.', true));
     if (view === 'boards') loadBoards().catch(() => notify('게시판을 불러오지 못했습니다.', true));
 }
@@ -77,16 +75,6 @@ document.addEventListener('evere:member', (event) => {
     if (member) selectView();
 });
 window.addEventListener('hashchange', selectView);
-
-function preview() {
-    ui('preview-sector').textContent = sectors[compose.elements.sector.value] || '';
-    ui('preview-title').textContent = compose.elements.title.value.trim() || '기사 제목';
-    ui('preview-byline').textContent = [...compose.elements.byline.selectedOptions].map((option) => option.text).join(', ');
-    ui('preview-body').textContent = compose.elements.body.value.trim();
-}
-compose.addEventListener('input', preview);
-compose.addEventListener('change', preview);
-compose.addEventListener('reset', () => requestAnimationFrame(preview));
 
 function resetCategories() {
     const page = layout.elements.page.value;
