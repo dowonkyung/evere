@@ -3,9 +3,20 @@
     font-family: "Pretendard Variable", Pretendard, sans-serif;
 }
 .header02 { position: relative; }
-.header02 .logo-yna01::before { display: none; }
+.header02 .logo-yna01::before,
+.wrap-header21 :is(.logo-yna21, .logo-yna03)::before { display: none; }
 .header02 .logo-yna01 img { display: block; width: 218px; height: auto; }
-.wrap-header02 { position: relative; border-bottom: 2px solid #00B8B4; }
+.wrap-header02 { position: relative; }
+.wrap-header21 :is(.logo-yna21, .logo-yna03) img { display: block; width: 79px; height: auto; }
+.wrap-header21 .gnb-menu01 .swiper-wrapper { display: flex; }
+
+@media (min-width: 1024px) {
+    .nav-type01 .gnb-menu01::before { background-color: #00B8B4; }
+}
+
+@media (max-width: 1023px) {
+    .wrap-header02 { border-bottom: 2px solid #00B8B4; }
+}
 .nav-type01 .gnb-menu01 { overflow: auto hidden; scrollbar-width: none; }
 .nav-type01 .gnb-menu01 .list01 { display: flex; width: max-content; white-space: nowrap; }
 .nav-type01 .gnb-menu01 a:hover { color: #007c79; }

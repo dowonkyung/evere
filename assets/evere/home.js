@@ -1,8 +1,11 @@
 const header = document.querySelector('#evere-header').shadowRoot;
+const shell = header.querySelector('.yna-shell');
+const mainHeader = header.querySelector('.wrap-header02');
+const compactHeader = header.querySelector('.wrap-header21');
 const search = header.querySelector('.evere-search');
 const menu = header.querySelector('.evere-menu');
-const searchToggle = header.querySelector('.btn-srch-switch');
-const menuToggle = header.querySelector('.menu01');
+const desktop = matchMedia('(min-width: 1024px)');
+let activeHeader = mainHeader;
 
 function togglePanel(panel, button, open) {
     panel.hidden = !open;
@@ -12,26 +15,48 @@ function togglePanel(panel, button, open) {
         button.dataset.a11yTxt.split(';')[open ? 0 : 1];
 }
 
-searchToggle.addEventListener('click', () => {
-    togglePanel(search, searchToggle, search.hidden);
-    togglePanel(menu, menuToggle, false);
-    if (!search.hidden) search.querySelector('input').focus();
-});
+for (const container of [mainHeader, compactHeader]) {
+    const searchToggle = container.querySelector('.btn-srch-switch');
+    const menuToggle = container.querySelector('.menu01');
 
-menuToggle.addEventListener('click', () => {
-    togglePanel(menu, menuToggle, menu.hidden);
-    togglePanel(search, searchToggle, false);
-    if (!menu.hidden) menu.querySelector('a')?.focus();
-});
+    searchToggle.addEventListener('click', () => {
+        togglePanel(search, searchToggle, search.hidden);
+        togglePanel(menu, menuToggle, false);
+        if (!search.hidden) search.querySelector('input').focus();
+    });
+
+    menuToggle.addEventListener('click', () => {
+        togglePanel(menu, menuToggle, menu.hidden);
+        togglePanel(search, searchToggle, false);
+        if (!menu.hidden) menu.querySelector('a')?.focus();
+    });
+}
 
 header.addEventListener('keydown', (event) => {
-    if (event.key !== 'Escape') return;
-    const button = !search.hidden ? searchToggle : !menu.hidden ? menuToggle : null;
-    if (!button) return;
-    togglePanel(search, searchToggle, false);
-    togglePanel(menu, menuToggle, false);
+    if (event.key !== 'Escape' || (search.hidden && menu.hidden)) return;
+    const panel = search.hidden ? menu : search;
+    const button = activeHeader.querySelector('[aria-controls="' + panel.id + '"]');
+    togglePanel(panel, button, false);
     button.focus();
 });
+
+function syncScrollHeader() {
+    const showCompact = desktop.matches && window.scrollY > 260;
+    const nextHeader = showCompact ? compactHeader : mainHeader;
+    if (nextHeader === activeHeader) return;
+
+    togglePanel(search, activeHeader.querySelector('.btn-srch-switch'), false);
+    togglePanel(menu, activeHeader.querySelector('.menu01'), false);
+    activeHeader = nextHeader;
+    activeHeader.append(search, menu);
+    mainHeader.inert = showCompact;
+    shell.classList.toggle('body-sticky', showCompact);
+}
+
+window.addEventListener('scroll', syncScrollHeader, { passive: true });
+window.addEventListener('pageshow', syncScrollHeader);
+desktop.addEventListener('change', syncScrollHeader);
+syncScrollHeader();
 
 const date = new Intl.DateTimeFormat('ko-KR', {
     timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short',

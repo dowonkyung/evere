@@ -11,9 +11,15 @@ body, main :where(button, input, select, textarea), footer :where(button, input)
 }
 
 #evere-header {
-    position: sticky;
-    top: 0;
+    position: relative;
     z-index: 150;
+}
+
+@media (max-width: 1023px) {
+    #evere-header {
+        position: sticky;
+        top: 0;
+    }
 }
 
 #evere-header + main { padding-top: 0; }
