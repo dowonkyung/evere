@@ -1,0 +1,742 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#00B8B4">
+<title>사설 | 오피니언 | 이브레</title>
+<link rel="icon" type="image/svg+xml" href="../../assets/evere/favicon.svg">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
+<link rel="stylesheet" href="../../assets/khan/swiper-bundle.min.css">
+<link rel="stylesheet" href="../../assets/khan/common.css">
+<link rel="stylesheet" href="../../assets/khan/opinion-list.css?v=opinion-1">
+<link rel="stylesheet" href="../../assets/evere/home.css">
+<script defer src="../../assets/khan/swiper-bundle.min.js"></script>
+<script defer src="../../assets/evere/home.js?v=khan-menu-2"></script>
+<link rel="stylesheet" href="../../assets/evere/opinion.css?v=lists-1">
+<script defer src="../../assets/evere/opinion-list.js"></script>
+</head>
+<body class="evere-opinion evere-opinion-list">
+<div id="evere-header" data-compact-only>
+<template shadowrootmode="open">
+<link rel="stylesheet" href="../../assets/yna/default.css">
+<link rel="stylesheet" href="../../assets/yna/variables.css">
+<link rel="stylesheet" href="../../assets/yna/common.css">
+<link rel="stylesheet" href="../../assets/yna/style.css">
+<link rel="stylesheet" href="../../assets/yna/layout.css">
+<link rel="stylesheet" href="../../assets/evere/header.css?v=khan-menu-1">
+<div class="yna-shell evere-compact-shell site-home-web">
+<div class="evere-category-dim" hidden></div>
+<div class="wrap-header21 hide-appview">
+<div class="nav-type11 fixed-navigation01">
+<a class="logo-yna21" href="../../" aria-label="이브레 홈"><img src="../../assets/evere/wordmark.svg" alt="이브레"></a>
+<a class="logo-yna03" href="../../" aria-label="이브레 홈"><img src="../../assets/evere/wordmark.svg" alt="이브레"></a>
+<nav id="nav02" class="gnb-menu01" aria-label="뉴스 섹션">
+<ul class="list01 evere-news-links">
+<li><a href="../" aria-label="오피니언">오피니언</a></li>
+<li><a href="#footer-wiki" data-sitemap-section="wiki">위키</a></li>
+<li><a href="#footer-virtual-nations" data-sitemap-section="virtual-nations">가상국가</a></li>
+<li><a href="#footer-politics" data-sitemap-section="politics">정치</a></li>
+<li><a href="#footer-economy" data-sitemap-section="economy">경제</a></li>
+<li><a href="#footer-society" data-sitemap-section="society">사회</a></li>
+<li><a href="#footer-international" data-sitemap-section="international">국제</a></li>
+<li><a href="#footer-health" data-sitemap-section="health">건강</a></li>
+<li><a href="#footer-sports" data-sitemap-section="sports">스포츠</a></li>
+<li><a href="#footer-culture" data-sitemap-section="culture">문화</a></li>
+</ul>
+<ul class="list01 evere-partner-links">
+<li class="evewiki"><a href="https://evewiki.kr/">이브위키</a></li>
+<li class="saevit"><a href="https://saevit.online/">새빛지도</a></li>
+</ul>
+</nav>
+<span class="utility-zone">
+<a href="https://www.yna.co.kr/my-page/index?site=header_mypage" class="btn-type200 my01" rel="nofollow" data-stat-code="header_mypage">
+<span class="txt01">마이페이지</span>
+</a>
+<a href="https://join.yna.co.kr/ko/login?redirectUrl=https%3A%2F%2Fwww.yna.co.kr%2F&amp;site=header_login" class="btn-type004 login01 active" aria-label="로그인" rel="nofollow" data-stat-code="header_login"></a>
+<button type="button" aria-controls="evere-search" aria-expanded="false" class="btn-type004-toggle btn-srch-switch a11y-search-toggle01" data-a11y-txt="검색창 닫기;검색창 열기" data-stat-code="search_btn_toggle">
+<span class="ir-txt01">검색창 열기</span>
+<i class="pick01 ico-type01-srch01"></i>
+<i class="pick02 ico-type01-close01"></i>
+</button>
+<button type="button" aria-controls="evere-menu" aria-expanded="false" class="btn-type004-toggle menu01 a11y-wholemenu-toggle01" data-a11y-txt="메뉴 닫기;메뉴 열기" data-stat-code="wholemenu_btn_toggle">
+<span class="ir-txt01">메뉴 열기</span>
+<i class="pick01 ico-type01-menu01"></i>
+<i class="pick02 ico-type01-close02"></i>
+</button>
+</span>
+</div>
+<div class="progress-bar01" id="progressBar01">
+<div class="bar" style="width: 0%;"></div>
+</div>
+<div class="evere-panel evere-search" id="evere-search" hidden><form role="search"><input type="search" name="query" aria-label="메인 기사 검색" required><button type="submit">검색</button></form><span aria-live="polite"></span><ul></ul></div>
+<div class="evere-category-popup" id="evere-menu" role="region" aria-label="전체 메뉴" tabindex="-1" hidden>
+<nav class="wrap category" aria-label="뉴스 사이트맵">
+<div class="title-m">
+<a href="../../" aria-label="이브레 홈"><img src="../../assets/evere/wordmark.svg" alt="이브레"></a>
+<button type="button" class="category-expand-all" data-expand-categories aria-expanded="false">메뉴 펼치기</button>
+<button type="button" class="category-close" data-close-sitemap aria-label="전체메뉴 닫기"></button>
+</div>
+<ul>
+<li id="sitemap-opinion"><dl>
+<dt tabindex="-1"><a href="../">오피니언</a><button type="button" class="category-toggle" data-category-toggle aria-label="오피니언 하위 메뉴" aria-expanded="false" aria-controls="category-opinion"></button></dt>
+<dd id="category-opinion"><ul>
+<li><a href="../editorial/">사설</a></li>
+<li><a href="../column/">칼럼</a></li>
+<li><span>기고</span></li>
+</ul></dd>
+</dl></li>
+<li id="sitemap-wiki"><dl>
+<dt tabindex="-1"><span>위키</span><button type="button" class="category-toggle" data-category-toggle aria-label="위키 하위 메뉴" aria-expanded="false" aria-controls="category-wiki"></button></dt>
+<dd id="category-wiki"><ul>
+<li><span>위키일반</span></li>
+<li><span>운영협의회</span></li>
+<li><span>비공식단체</span></li>
+<li><span>의장동정</span></li>
+</ul></dd>
+</dl></li>
+<li id="sitemap-virtual-nations"><dl>
+<dt tabindex="-1"><span>가상국가</span><button type="button" class="category-toggle" data-category-toggle aria-label="가상국가 하위 메뉴" aria-expanded="false" aria-controls="category-virtual-nations"></button></dt>
+<dd id="category-virtual-nations"><ul>
+<li><span>가상국가일반</span></li>
+<li><span>네이션즈</span></li>
+<li><span>가상국제연합</span></li>
+<li><span>한가커·월본</span></li>
+<li><span>카국·디국·저능아</span></li>
+</ul></dd>
+</dl></li>
+<li id="sitemap-politics"><dl>
+<dt tabindex="-1"><span>정치</span><button type="button" class="category-toggle" data-category-toggle aria-label="정치 하위 메뉴" aria-expanded="false" aria-controls="category-politics"></button></dt>
+<dd id="category-politics"><ul>
+<li><span>정치일반</span></li>
+<li><span>청와대</span></li>
+<li><span>국회·정당</span></li>
+<li><span>법비</span></li>
+<li><span>북한</span></li>
+<li><span>외교·국방</span></li>
+<li><span>행정</span></li>
+</ul></dd>
+</dl></li>
+<li id="sitemap-economy"><dl>
+<dt tabindex="-1"><span>경제</span><button type="button" class="category-toggle" data-category-toggle aria-label="경제 하위 메뉴" aria-expanded="false" aria-controls="category-economy"></button></dt>
+<dd id="category-economy"><ul>
+<li><span>경제일반</span></li>
+<li><span>경제정책</span></li>
+<li><span>산업</span></li>
+<li><span>금융/증권</span></li>
+<li><span>부동산</span></li>
+<li><span>IT/과학</span></li>
+<li><span>자동차</span></li>
+</ul></dd>
+</dl></li>
+<li id="sitemap-society"><dl>
+<dt tabindex="-1"><span>사회</span><button type="button" class="category-toggle" data-category-toggle aria-label="사회 하위 메뉴" aria-expanded="false" aria-controls="category-society"></button></dt>
+<dd id="category-society"><ul>
+<li><span>사회일반</span></li>
+<li><span>사건·사고</span></li>
+<li><span>법원·경찰</span></li>
+<li><span>교육</span></li>
+<li><span>노동</span></li>
+<li><span>보건·복지</span></li>
+<li><span>날씨·환경</span></li>
+</ul></dd>
+</dl></li>
+<li id="sitemap-international"><dl>
+<dt tabindex="-1"><span>국제</span><button type="button" class="category-toggle" data-category-toggle aria-label="국제 하위 메뉴" aria-expanded="false" aria-controls="category-international"></button></dt>
+<dd id="category-international"><ul>
+<li><span>국제일반</span></li>
+<li><span>중국</span></li>
+<li><span>일본</span></li>
+<li><span>아시아·호주</span></li>
+<li><span>미국·중남미</span></li>
+<li><span>유럽</span></li>
+<li><span>중동·아프리카</span></li>
+</ul></dd>
+</dl></li>
+<li id="sitemap-health"><dl>
+<dt tabindex="-1"><span>건강</span><button type="button" class="category-toggle" data-category-toggle aria-label="건강 하위 메뉴" aria-expanded="false" aria-controls="category-health"></button></dt>
+<dd id="category-health"><ul>
+<li><span>건강일반</span></li>
+<li><span>리빙포인트</span></li>
+<li><span>궂긴소식</span></li>
+<li><span>국짐소식</span></li>
+</ul></dd>
+</dl></li>
+<li id="sitemap-sports"><dl>
+<dt tabindex="-1"><span>스포츠</span><button type="button" class="category-toggle" data-category-toggle aria-label="스포츠 하위 메뉴" aria-expanded="false" aria-controls="category-sports"></button></dt>
+<dd id="category-sports"><ul>
+<li><span>스포츠일반</span></li>
+<li><span>야구</span></li>
+<li><span>축구</span></li>
+<li><span>농구·배구</span></li>
+<li><span>골프</span></li>
+</ul></dd>
+</dl></li>
+<li id="sitemap-culture"><dl>
+<dt tabindex="-1"><span>문화</span><button type="button" class="category-toggle" data-category-toggle aria-label="문화 하위 메뉴" aria-expanded="false" aria-controls="category-culture"></button></dt>
+<dd id="category-culture"><ul>
+<li><span>문화일반</span></li>
+<li><span>K-POP</span></li>
+<li><span>종교</span></li>
+<li><span>남광희</span></li>
+<li><span>영화·음악</span></li>
+<li><span>미술·전시·공연</span></li>
+</ul></dd>
+</dl></li>
+</ul>
+<ul class="category-partners" aria-label="관련 사이트">
+<li class="evewiki"><a href="https://evewiki.kr/">이브위키</a></li>
+<li class="saevit"><a href="https://saevit.online/">새빛지도</a></li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+</template>
+</div>
+<main>
+<div class="wrap">
+<h1 class="opinion-title"><a href="../">오피니언</a></h1>
+<nav class="child-section swiper-container" aria-label="오피니언 분류">
+<ul class="swiper-wrapper">
+<li class="swiper-slide"><a href="../">전체</a></li>
+<li class="swiper-slide"><a href="../editorial/" class="active" aria-current="page">사설</a></li>
+<li class="swiper-slide"><a href="../journalist/">기자메모</a></li>
+<li class="swiper-slide"><a href="../column/">칼럼</a></li>
+<li class="swiper-slide"><a href="../readers-opinion/">독자마당</a></li>
+</ul>
+</nav>
+<section class="contents sub">
+                <div>
+					<div class="date" id="recent">
+						<div class="btn-left"><input type="date" id="opinion-date-picker" aria-label="기사 목록 날짜">
+                            <button type="button" class="btn-calendar" aria-label="날짜 선택">
+                                <span class="txt">달력</span>
+                            </button>
+                        </div>
+						<div class="date-wrap" id="cont_date">
+							<a href="#recent" class="btn-prev prev dateMove" title="이전" data-mode="prev"><span class="txt">이전</span></a>
+							<span id="selected-date" class="disabled">2026.11.20</span>
+                            
+							<a href="#recent" class="btn-next next dateMove disabled" title="다음" data-mode="next"><span class="txt">다음</span></a>
+						</div>
+						<div class="btn-right">
+                            <button class="btn-date-all " id="all" title="전체기간">전체기간</button>
+                        </div>
+						<div id="datepicker-container" style="display: none;">
+							<a class="datepicker_close"><span>닫기</span></a>
+						</div>
+					</div>
+                    <div class="list">
+                        <ul id="recentList">
+<li data-article-date="2026-11-20">
+                                <article>
+                                    <picture class="">
+                                        
+                                        
+                                        <img src="../../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+                                    </picture>
+                                    <div>
+                                        <a href="https://www.khan.co.kr/article/202611201846001" title="[사설]납득할 수 없는 대법의 ‘한덕수 파기환송’ 판결, 그렇다고 ‘조희대 탄핵’이 맞나">[사설]납득할 수 없는 대법의 ‘한덕수 파기환송’ 판결, 그렇다고 ‘조희대 탄핵’이 맞나</a>
+                                        <p class="desc">더불어민주당이 20일 조희대 대법원장 탄핵소추를 당론으로 채택했다. 대법원이 한덕수 전 국무총리의 내란 중요임무종사 혐의 상고심에서 일부 무죄 취지로 파기환송한 다음날 조 대법원장 탄핵소추를 공식화한 것이다.민주당은 이날 비상 의원총회에서 이번 판결을 “반역사적 판결”이라며 조 대법원장 탄핵소추를 당론으로 공식 채택했다. 민주당은 탄핵소추안을 연내에 발의한다는 방침이다. 김민석 대표는 탄핵 사유가 “차고 넘칠 만큼 있고, 더 이상 용인할 수 없는 단계”라고 했다. 민주당이 제시한 조 대법원장의 탄핵소추 사유는 12·3 비상계엄 당시 대법원의 대응, 대법원의 이재명 대통령 공직선거법 위반 사건 파기환송, 대법관 재제청 논란, 업무추진비 집행 의혹 등이다. 이런 사유들은 민주당이 국정조사를 통해 진상을 규명하겠다고 한 것들이다. 그런데 민주당이 탄핵소추를 공식화한 것은 한 전 총리의 내란 중요임무종사 혐의 상고심에서 일부 무죄 취지로 파기환송했기 때문일 것이다.대법원은 12·...</p>
+                                        <p class="date">3시간 전</p>
+                                    </div>
+                                </article>
+                            </li>
+<li data-article-date="2026-11-20">
+                                <article>
+                                    <picture class="">
+                                        
+                                        
+                                        <img src="../../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+                                    </picture>
+                                    <div>
+                                        <a href="https://www.khan.co.kr/article/202611201800001" title="[사설] 수출 1조달러 시대, 장미빛 수치에 가려진 위험 직시하길">[사설] 수출 1조달러 시대, 장미빛 수치에 가려진 위험 직시하길</a>
+                                        <p class="desc">산업통상부는 지난 19일 올해 누적 수출액이 1조달러(약 1330조원)를 넘어선 것으로 잠정 집계됐다고 밝혔다. 지금까지 연간 1조달러 이상 수출해본 나라는 독일과 미국, 중국 뿐이다. 오랫동안 산업 모델로 삼았던 일본조차 밟아보지 못한 고지를 세계 네 번째로 달성한 것이다. “세계 시장에서 치열하게 경쟁해온 기업과 현장 노동자, 국민이 함께 일궈낸 값진 결실”이라는 김정관 산업통상부 장관의 소감대로 고무적인 성과임은 분명하다.앞서 국제통화기금(IMF)은 최근 올해 한국의 경제성장률을 3.9%로 끌어올렸다. 한국개발연구원(KDI)은 내년에도 성장률이 3.9%에 이를 것으로 지난 18일 전망했다. 2020년대 이후 1%대 저성장 추세를 감안하면 반가운 일이다. 하지만 국내외 기관의 이같은 장미빛 전망에도 불구하고 낙관만 할 수 없는 것은 성장이 일부 업종에 편중되면서 그 온기가 산업 전반으로 확산되지 않고 있기 때문이다. 올해 늘어난 수출의 약 4분의 3이 반도체 한 품목에서 ...</p>
+                                        <p class="date">4시간 전</p>
+                                    </div>
+                                </article>
+                            </li>
+<li data-article-date="2026-11-19">
+                                <article>
+                                    <picture class="">
+                                        
+                                        
+                                        <img src="../../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+                                    </picture>
+                                    <div>
+                                        <a href="https://www.khan.co.kr/article/202611192035001" title="[사설]한덕수 파기환송, 대법원 내란 단죄 의지 의심스럽다">[사설]한덕수 파기환송, 대법원 내란 단죄 의지 의심스럽다</a>
+                                        <p class="desc">대법원이 12·3 불법계엄에 가담한 혐의로 기소된 한덕수 전 국무총리에게 징역 15년을 선고한 원심을 일부 무죄 취지로 파기환송했다. 2심에서 유죄로 본 ‘국무회의 소집 건의’에 대해 국헌문란 목적을 인정할 수 없다는 취지다. 대법원은 비상계엄 전 과정을 당시 대통령 윤석열이 지배했다면서, 내란 공범들의 내란 가담 범위를 매우 협소하게 판단했다. 한 전 총리 구속 만료 직전까지 선고를 미루더니, 결국 이런 판결을 하려고 미적거린 것인가. 대법원에 내란을 엄정히 단죄하려는 의지가 있는지 묻지 않을 수 없다.대법원 전원합의체(재판장 조희대 대법원장)는 19일 한 전 총리의 내란 중요임무종사 등 혐의 사건 상고심에서 원심의 유죄 부분을 파기하고 사건을 서울고법으로 돌려보냈다. 대법원은 계엄 선포 전후의 행위를 구분해 가담 책임을 따졌다. 다수의견에 선 9명은 계엄 선포 전 윤석열에게 국무회의 소집을 건의하고 의결정족수를 점검한 행위에 대해 국헌문란 목적을 단정하기 어렵다고 ...</p>
+                                        <p class="date">2026.11.19 20:35</p>
+                                    </div>
+                                </article>
+                            </li>
+<li data-article-date="2026-11-19">
+                                <article>
+                                    <picture class="">
+                                        
+                                        
+                                        <img src="../../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+                                    </picture>
+                                    <div>
+                                        <a href="https://www.khan.co.kr/article/202611192011001" title="[사설]미·중·러 첫 정상회담, 국제 질서는 강대국만 아니라 함께 만드는 것">[사설]미·중·러 첫 정상회담, 국제 질서는 강대국만 아니라 함께 만드는 것</a>
+                                        <p class="desc">미국·중국·러시아 정상이 19일 사상 처음으로 3자 회담을 했다. 아시아·태평양경제협력체(APEC) 정상회의가 열린 중국 선전에서 도널드 트럼프 미국 대통령, 시진핑 중국 국가주석, 블라디미르 푸틴 러시아 대통령이 만난 것이다. 회담 후 4개항의 합의문도 발표됐다. 세계 3대 핵보유국 정상이 한자리에 모여 국제 질서에 영향을 미칠 현안을 논의했다는 그 자체로 의미가 크다.트럼프 대통령은 회담에서 “세계 3대 강국이 전 지구적 문제에 대해 상호 존중하는 대화를 유지할 특별한 책임이 있다”고 했다. 시 주석과 푸틴 대통령도 “세계 평화·안정”을 위한 3국 협력 필요성을 말했다.세 정상은 회담 후 발표한 ‘평화를 향한 중·러·미 정상선언’에서 “핵전쟁은 이길 수도 없고 일어나서도 안 된다”며 핵 위험 감소와 핵무기 확산 방지를 위한 대화를 하기로 했다. ‘국제형사재판소(ICC) 등이 관할권을 남용해선 안 된다’며 국제사법기구에 대한 견제도 정상선언에 들어갔다. 우크라...</p>
+                                        <p class="date">2026.11.19 20:11</p>
+                                    </div>
+                                </article>
+                            </li>
+<li data-article-date="2026-11-19">
+                                <article>
+                                    <picture class="">
+                                        
+                                        
+                                        <img src="../../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+                                    </picture>
+                                    <div>
+                                        <a href="https://www.khan.co.kr/article/202611191851001" title="[사설]숨어서 아프지 않도록 미등록 이주민 ‘국제수가’ 적용 개선해야">[사설]숨어서 아프지 않도록 미등록 이주민 ‘국제수가’ 적용 개선해야</a>
+                                        <p class="desc">건강보험에 가입할 수 없는 미등록 이주민들이 병원에서 ‘국제수가’를 적용받는 바람에 일반 진료비보다 2~7배 높은 비용을 부담하는 일이 빈번한 것으로 나타났다. 외국인 의료관광객을 염두에 두고 마련된 국제수가가 의료취약계층인 미등록 이주민들에게 적용되는 황당한 일이 벌어지고 있는 것이다. 아파도 병원을 찾을 수 없는 미등록 이주민의 의료 접근성을 높이기 위한 법·제도 개선이 시급하다.김윤 더불어민주당 의원과 공감직업환경의학센터 등은 19일 토론회를 열고 미등록 이주민에 대한 국제수가 적용의 문제점을 짚었다. 공감직업환경의학센터가 2022년 11월부터 지난해 10월까지 진행한 미등록 이주민 의료비 지원사업을 분석한 결과, 153건 중 26건(17.0%)에 국제수가가 적용됐다. 국제수가 적용 시 진료비는 건보 적용 때보다 2~7배 높았으며, 10배 이상 차이가 나는 사례도 있었다고 한다.국제수가는 의료해외진출법에 따라 해외에서 유치된 외국인환자에게 적용하는 수가다....</p>
+                                        <p class="date">2026.11.19 18:51</p>
+                                    </div>
+                                </article>
+                            </li>
+<li data-article-date="2026-11-18">
+                                <article>
+                                    <picture class="">
+                                        
+                                        
+                                        <img src="../../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+                                    </picture>
+                                    <div>
+                                        <a href="https://www.khan.co.kr/article/202611182000011" title="[사설]미·중·러 정상회담 앞두고 한반도 평화 중요성 확인한 한·중 정상">[사설]미·중·러 정상회담 앞두고 한반도 평화 중요성 확인한 한·중 정상</a>
+                                        <p class="desc">이재명 대통령과 시진핑 중국 국가주석이 18일 아시아·태평양경제협력체(APEC) 정상회의가 열린 중국 선전에서 34분간 정상회담을 하고 역내 평화와 안정을 위한 협력을 강화하기로 했다. 지난 1월 베이징 정상회담 후 10개월 만에 마주 앉은 두 정상은 내년 수교 35주년을 계기로 경제 협력 확대 등 전략적 협력 동반자 관계를 넓히는 데도 공감대를 이뤘다. 사상 첫 미·중·러 정상회담을 하루 앞두고 한·중 정상이 먼저 만나 한반도 평화의 중요성을 확인한 것은 의미가 있다. 경색된 남북 간 대화 물꼬를 트고 북핵 문제 해결에 중국의 협력을 끌어내기 위한 양국 간 소통은 중요하다.이 대통령은 “한반도의 평화와 안정은 양국의 공동이익인 만큼 함께 노력해 한반도 평화공존을 열어나가기를 바란다”며 중국의 적극적인 역할을 당부했다. 시 주석은 “북·미 대화 등 한반도 긴장 완화를 위한 한국 정부의 다양한 노력을 지지한다”고 답했다. 그러면서도 시 주석은 “한·중이 전략적...</p>
+                                        <p class="date">2026.11.18 20:00</p>
+                                    </div>
+                                </article>
+                            </li>
+<li data-article-date="2026-11-18">
+                                <article>
+                                    <picture class="">
+                                        
+                                        
+                                        <img src="../../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+                                    </picture>
+                                    <div>
+                                        <a href="https://www.khan.co.kr/article/202611181815001" title="[사설]시험부정 대비 ‘무사안일’했던 당국, 수능 끝나도 반드시 책임 물어야">[사설]시험부정 대비 ‘무사안일’했던 당국, 수능 끝나도 반드시 책임 물어야</a>
+                                        <p class="desc">2027학년도 대학수학능력시험이 19일 전국 고사장에서 일제히 치러진다. 올해 수능은 인공지능(AI) 부정행위 논란으로 여느 때보다 어수선한 분위기 속에 치러지게 됐다. 시험 연기론에 정부가 시험 전날까지 잇따라 새 대책을 내놓은 탓에 수험생과 시험 현장의 중압감이 이만저만이 아닐 것이다. 고사장에선 AI 부정행위를 막기 위한 ‘안경 전수조사’와 ‘단추에 스티커 부착’ 등 고강도 현장 통제가 사상 처음 도입된다. 수험생들이 마지막까지 최선의 결과를 낼 수 있도록 교육당국뿐 아니라 모두가 협조해야 한다.정부는 긴급 대책이 초래할 불신과 불이익을 막는 데 한 치의 소홀함도 없게 해야 한다. 전날 김민석 더불어민주당 대표는 ‘수능 AI 부정행위 대책’ 고위 당정 협의회에서 “(부정행위) 적발 시 응시자격을 최대 10년간 제한하는 내용의 입법화를 준비하겠다”고 밝혔다. 시험이 끝난 뒤라도 부정행위가 확인되면 입학 취소와 형사처벌까지 가능하도록 관련법을 제정해 올해부터 적용...</p>
+                                        <p class="date">2026.11.18 18:15</p>
+                                    </div>
+                                </article>
+                            </li>
+<li data-article-date="2026-11-18">
+                                <article>
+                                    <picture class="">
+                                        
+                                        
+                                        <img src="../../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+                                    </picture>
+                                    <div>
+                                        <a href="https://www.khan.co.kr/article/202611181810001" title="[사설]계엄해제 표결 방해 추경호 1심 무죄, 상급심선 엄밀한 판단을">[사설]계엄해제 표결 방해 추경호 1심 무죄, 상급심선 엄밀한 판단을</a>
+                                        <p class="desc">국민의힘 의원들의 12·3 비상계엄 해제요구안 표결 참여를 방해한 혐의(내란중요임무종사)로 기소된 추경호 대구시장이 18일 1심에서 무죄를 선고받았다. 서울중앙지법 형사합의34부는 “윤석열이 계엄 해제 표결 저지를 요청했다고 보기 어렵다. 설령 윤석열의 요청이 있었다고 하더라도 이 요청을 승낙했다고 보기도 어렵다”고 했다. 조은석 내란특검팀이 기소한 사건 중 1심에서 무죄가 나온 첫 사례다.윤석열의 비상계엄 선포 당시 국민의힘 원내대표였던 추 시장은 의원총회 장소를 국회에서 여의도 당사로, 당사에서 국회로 바꾸었다. 그러는 동안 국민의힘 의원 108명 중 추 시장을 포함한 90명이 비상계엄 해제요구안 표결에 불참했다. 추 시장은 오후 11시22분쯤 윤석열과 통화했다. 윤석열은 “계엄이 오래 안 갈 것이니까 너무 걱정하지 마라”라고 했다. 내란특검은 “계엄이 오래 걸리지 않을 테니 협조해달라는 지시”이고, 이를 받아들인 추 시장이 의총 장소를 수시로 바꾸어 의원들의 ...</p>
+                                        <p class="date">2026.11.18 18:10</p>
+                                    </div>
+                                </article>
+                            </li>
+<li data-article-date="2026-11-17">
+                                <article>
+                                    <picture class="">
+                                        
+                                        
+                                        <img src="../../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+                                    </picture>
+                                    <div>
+                                        <a href="https://www.khan.co.kr/article/202611171933001" title="[사설]연말 민생국회 와중에 내분으로 날 새는 무책임한 여당">[사설]연말 민생국회 와중에 내분으로 날 새는 무책임한 여당</a>
+                                        <p class="desc">더불어민주당 초선의원들이 17일 ‘이재명 대통령의 윤석열 탄핵 반대’ 발언으로 논란을 빚은 최민희 최고위원에 대한 중징계와 당직 사퇴를 촉구하는 성명을 발표했다. 당 초선의원 71명 중 친정청래(친청)계 16명을 제외한 대다수 친이재명(친명)계 의원들이 집단행동에 나선 것이다. 친청계는 “윤리심판원으로 넘어간 사안에 연서명이 타당하냐”며 즉각 반발했다. ‘신천지 3자 비밀연합’ 논란으로 시작된 계파 갈등이 최 최고위원 징계 문제로 이어지면서 내분이 격화하고 있는 것이다. 새해 예산안 심사·처리 등 민생 현안이 산적한 연말 상황에서 집권여당이 이처럼 귀중한 시간을 권력 다툼에 허비해도 되는 것인지 묻게 된다.더민초 대표 안태준 의원 등 초선의원 55명은 입장문에서 “지도부라는 지위가 책임 면제 사유가 될 수 없다”며 당 윤리심판원의 엄정한 판단을 촉구했다. 최 최고위원에게도 최고위원직 사퇴를 포함한 책임 있는 선택을 요구했다. 당원 자격 정지에 준하는 처벌과 자진 탈...</p>
+                                        <p class="date">2026.11.17 19:33</p>
+                                    </div>
+                                </article>
+                            </li>
+<li data-article-date="2026-11-17">
+                                <article>
+                                    <picture class="">
+                                        
+                                        
+                                        <img src="../../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+                                    </picture>
+                                    <div>
+                                        <a href="https://www.khan.co.kr/article/202611171810011" title="[사설]벤처기업에 극심한‘돈맥경화’, 이래서 혁신성장 가능하겠나">[사설]벤처기업에 극심한‘돈맥경화’, 이래서 혁신성장 가능하겠나</a>
+                                        <p class="desc">혁신성장의 엔진인 벤처기업들이 자금조달에 극심한 어려움을 겪고 있다. 대한상공회의소는 17일 벤처기업 244곳을 조사한 결과 최근 1년 새 자금사정 때문에 설비투자나 연구개발(R&amp;D), 신규 채용 등 핵심 사업을 연기·축소·취소한 곳이 60.7%에 달했다고 밝혔다. 최근 우리 경제는 세계에서 4번째로 연 수출 1조달러를 달성하고 성장률도 크게 올라가고 있다. 하지만 눈부신 성과 대부분은 대기업 호황 덕이고 중소·벤처기업들은 불황의 터널에서 빠져나오지 못하고 있다. 경제 여건이 나쁘지 않은데도 기술과 아이디어가 있는 벤처기업이 자금을 구하지 못하고 사업을 접는 현실이라면 우리 경제의 앞날은 어두울 수밖에 없다.조사 결과 벤처기업의 53.7%가 자금조달 여건이 ‘어렵다’고 했고, ‘원활하다’는 곳은 15.2%에 불과했다. 자금조달의 최대 걸림돌로 지목된 것은 투자유치(54.8%), 공공대출(46.7%), 민간대출(54.3%) 등 모든 영역에서 ‘매출·이익 등 재...</p>
+                                        <p class="date">2026.11.17 18:10</p>
+                                    </div>
+                                </article>
+                            </li>
+</ul>
+                    </div>
+                    <div class="page">
+                        <ul id="paging">
+                            <li><a  class="btn btn-prev disabled"><span class="txt">이전 페이지로 이동</span></a></li><li class="active"><a aria-current="page">1</a></li><li><a href="https://www.khan.co.kr/opinion/editorial/articles?page=2">2</a></li><li><a href="https://www.khan.co.kr/opinion/editorial/articles?page=3">3</a></li><li><a href="https://www.khan.co.kr/opinion/editorial/articles?page=4">4</a></li><li><a href="https://www.khan.co.kr/opinion/editorial/articles?page=5">5</a></li><li><a href="https://www.khan.co.kr/opinion/editorial/articles?page=6" class="btn btn-next"><span class="txt">다음 페이지로 이동</span></a></li>                        </ul>
+                    </div>
+                    <div class="none" id="no_result" style="display: none;">
+                        <p>
+                            <span class="txt">검색 결과 없음</span>
+                            검색결과가 없습니다.
+                            <button class="btn-reset">초기화</button>
+                        </p>
+                    </div>
+				</div>
+                <aside>
+
+                    <ul class="aside-wrap">
+                        <li>
+                            <div class="banner-aside-top-middle">
+                                <div class="ad-wrapper type-pc">
+                                    <div class="ad-inner-wrap" style="width:300px;height:250px;">
+<!-- KH_View_MRD_25 -->
+                                    <!-- [pc-AD] 섹션면/기사면 우측 배너 (300x250) -->
+                                    <div id="ads21">
+                                        <!-- newscode_KSS_300250_RM 2026.07.06 ~ -->
+
+                                    </div>
+                                    <!--// [pc-AD] 섹션면/기사면 우측 배너 (300x250) -->                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+
+
+                        <li class="no-border">
+                            
+                        <div class="area-tit">주요기사</div>
+                        <ul class="list major-art-wrap m-major"><li>
+   <article>
+       <picture>
+           
+           
+           
+           
+           
+           
+           <img src="../../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+       </picture>
+       <div>
+           <a href="https://www.khan.co.kr/article/202611201402001" title="‘단추에 스티커’ 이러다 시험장 국룰 될라···28일 교사 임용시험도 수능 못잖은 ‘AI 커닝’ 방지책">
+               ‘단추에 스티커’ 이러다 시험장 국룰 될라···28일 교사 임용시험도 수능 못잖은 ‘AI 커닝’ 방지책
+           </a>
+       </div>
+   </article>
+</li>
+<li>
+   <article>
+       <picture>
+           
+           
+           
+           
+           
+           
+           <img src="../../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+       </picture>
+       <div>
+           <a href="https://www.khan.co.kr/article/202611201601001" title="김건희, 도이치 주가조작 유죄에 격앙 “난 죽어도 이해 못 해···대법관들이 내 사건 봤는지 의문”">
+               김건희, 도이치 주가조작 유죄에 격앙 “난 죽어도 이해 못 해···대법관들이 내 사건 봤는지 의문”
+           </a>
+       </div>
+   </article>
+</li>
+<li>
+   <article>
+       <picture>
+           
+           
+           
+           
+           
+           
+           <img src="../../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+       </picture>
+       <div>
+           <a href="https://www.khan.co.kr/article/202611202127001" title="관객이 던진 털모자 삼킨 뒤 끝내 숨진 ‘기적의 하마’ 피오나···전 세계 팬들 애도">
+               관객이 던진 털모자 삼킨 뒤 끝내 숨진 ‘기적의 하마’ 피오나···전 세계 팬들 애도
+           </a>
+       </div>
+   </article>
+</li>
+<li>
+   <article>
+       <picture>
+           
+           
+           
+           
+           
+           
+           <img src="../../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+       </picture>
+       <div>
+           <a href="https://www.khan.co.kr/article/202611201212001" title="수학문제 풀이 없이 답 적고 안경 ‘만지작’···적발되자 ‘스마트안경’ 감춘 채 뿔테 안경 꺼내줘">
+               수학문제 풀이 없이 답 적고 안경 ‘만지작’···적발되자 ‘스마트안경’ 감춘 채 뿔테 안경 꺼내줘
+           </a>
+       </div>
+   </article>
+</li>
+<li>
+   <article>
+       <picture>
+           
+           
+           
+           
+           
+           
+           <img src="../../assets/evere/media-placeholder.svg" class="evere-media-placeholder" alt="" loading="lazy">
+       </picture>
+       <div>
+           <a href="https://www.khan.co.kr/article/202611201131001" title="김치·마늘 담았던 플라스틱 용기, 빡빡 닦아도 ‘윽’ 짙게 밴 냄새 없애려면">
+               김치·마늘 담았던 플라스틱 용기, 빡빡 닦아도 ‘윽’ 짙게 밴 냄새 없애려면
+           </a>
+       </div>
+   </article>
+</li>
+</ul>
+
+
+                        
+                        </li>
+                    </ul>
+
+                </aside>
+			</section>
+</div>
+</main>
+<footer ep_page_scrollarea="{&quot;1024&quot;:7,&quot;768&quot;:9,&quot;393&quot;:9}" class="appuse">
+        <div class="expand evere-footer-sitemap">
+            <div class="wrap menu">
+                <ul>
+<li id="footer-opinion">
+<strong>오피니언</strong>
+<ul>
+<li>사설</li>
+<li>칼럼</li>
+<li>기고</li>
+</ul>
+</li>
+<li id="footer-wiki">
+<strong>위키</strong>
+<ul>
+<li>위키일반</li>
+<li>운영협의회</li>
+<li>비공식단체</li>
+<li>의장동정</li>
+</ul>
+</li>
+<li id="footer-virtual-nations">
+<strong>가상국가</strong>
+<ul>
+<li>가상국가일반</li>
+<li>네이션즈</li>
+<li>가상국제연합</li>
+<li>한가커·월본</li>
+<li>카국·디국·저능아</li>
+</ul>
+</li>
+<li id="footer-politics">
+<strong>정치</strong>
+<ul>
+<li>정치일반</li>
+<li>청와대</li>
+<li>국회·정당</li>
+<li>법비</li>
+<li>북한</li>
+<li>외교·국방</li>
+<li>행정</li>
+</ul>
+</li>
+<li id="footer-economy">
+<strong>경제</strong>
+<ul>
+<li>경제일반</li>
+<li>경제정책</li>
+<li>산업</li>
+<li>금융/증권</li>
+<li>부동산</li>
+<li>IT/과학</li>
+<li>자동차</li>
+</ul>
+</li>
+<li id="footer-society">
+<strong>사회</strong>
+<ul>
+<li>사회일반</li>
+<li>사건·사고</li>
+<li>법원·경찰</li>
+<li>교육</li>
+<li>노동</li>
+<li>보건·복지</li>
+<li>날씨·환경</li>
+</ul>
+</li>
+<li id="footer-international">
+<strong>국제</strong>
+<ul>
+<li>국제일반</li>
+<li>중국</li>
+<li>일본</li>
+<li>아시아·호주</li>
+<li>미국·중남미</li>
+<li>유럽</li>
+<li>중동·아프리카</li>
+</ul>
+</li>
+<li id="footer-health">
+<strong>건강</strong>
+<ul>
+<li>건강일반</li>
+<li>리빙포인트</li>
+<li>궂긴소식</li>
+<li>국짐소식</li>
+</ul>
+</li>
+<li id="footer-sports">
+<strong>스포츠</strong>
+<ul>
+<li>스포츠일반</li>
+<li>야구</li>
+<li>축구</li>
+<li>농구·배구</li>
+<li>골프</li>
+</ul>
+</li>
+<li id="footer-culture">
+<strong>문화</strong>
+<ul>
+<li>문화일반</li>
+<li>K-POP</li>
+<li>종교</li>
+<li>남광희</li>
+<li>영화·음악</li>
+<li>미술·전시·공연</li>
+</ul>
+</li>
+                </ul>
+            </div>
+        </div>
+        <div class="expand">
+            <div class="wrap etc">
+                <ul>
+                    <li>
+                        <a href="https://company.khan.co.kr/" title="회사소개" target="_blank">회사소개</a>
+                    </li>
+                    <li>
+                        <a href="https://www.khan.co.kr/subscribe.html" title="구독신청" target="_self">구독신청</a>
+                    </li>
+                    <li>
+                        <a href="https://company.khan.co.kr/business/ads" title="온라인광고" target="_blank">온라인광고</a>
+                    </li>
+                    <li>
+                        <a href="https://company.khan.co.kr/business/partnership" title="사업제휴" target="_blank">사업제휴</a>
+                    </li>
+                    <li>
+                        <a href="https://recruit.khan.co.kr/" title="채용" target="_blank">채용</a>
+                    </li>
+                    <li>
+                        <a href="https://www.khan.co.kr/help/help_digital.html" title="저작권∙콘텐츠 사용" target="_self">저작권∙콘텐츠 사용</a>
+                    </li>
+                    <li>
+                        <a href="https://www.khan.co.kr/article/200509211710302" title="고충처리" target="_self">고충처리</a>
+                    </li>
+                    <li>
+                        <a href="https://www.khan.co.kr/help/help_agreement.html" title="HELP" target="_self">HELP</a>
+                    </li>
+                    <li>
+                        <div title="열기" class="btn-familysite">Family site</div>
+                        <ul class="familysite-list">
+                            <li>
+                                <a href="https://sports.khan.co.kr/" title="스포츠경향" target="_blank">스포츠경향</a>
+                            </li>
+                            <li>
+                                <a href="https://weekly.khan.co.kr/" title="주간경향" target="_blank">주간경향</a>
+                            </li>
+                            <li>
+                                <a href="https://lady.khan.co.kr/" title="레이디경향" target="_blank">레이디경향</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="familysite">
+            <div class="familysite-list-m">
+                <ul>
+                    <li>
+                        <a href="https://www.khan.co.kr/" title="경향신문 앱" target="_blank" class="khan-app">경향신문 앱</a>
+                    </li>
+                    <li>
+                        <a href="https://sports.khan.co.kr/" title="스포츠경향" target="_blank">스포츠경향</a>
+                    </li>
+                    <li>
+                        <a href="https://weekly.khan.co.kr/" title="주간경향" target="_blank">주간경향</a>
+                    </li>
+                    <li>
+                        <a href="https://lady.khan.co.kr/" title="레이디경향" target="_blank">레이디경향</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="expand info">
+            <div class="wrap info" ep_page_scrollarea="{&quot;1280&quot;:6}">
+                <ul>
+                    <li>
+                        <a class="evere-footer-logo" href="../../"><img src="../../assets/evere/wordmark.svg" alt="이브레"></a>
+                    </li>
+                    <li>
+                        <ul class="menu">
+                            <li>
+                                <a href="https://www.khan.co.kr/help/help_agreement.html" title="이용약관">이용약관</a>
+                            </li>
+                            <li>
+                                <a href="https://www.khan.co.kr/help/help_privately.html" title="개인정보처리방침">개인정보처리방침</a>
+                            </li>
+                            <li>
+                                <a href="#footer-opinion" title="사이트맵">사이트맵</a>
+                            </li>
+                        </ul>
+                        
+                        
+                        <ul class="contact">
+                            <li>강원 강릉시 관솔길 이브레신문사</li>
+                            <li>고객센터 : <a href="mailto:evewiki@gmail.com">evewiki@gmail.com</a></li>
+                        </ul>
+                        <ul class="manager">
+                            <li>발행인·편집인 : 혼종인</li>
+                            <li>청소년보호책임자 : 은혜누나</li>
+                        </ul>
+                        <p class="copy">ⓒ이브레신문, All rights reserved.</p>
+                    </li>
+                    <li>
+                        <ul class="link">
+                            <li>
+                                <a href="https://www.facebook.com/kyunghyangshinmun" title="facebook" target="_blank" class="txt btn-facebook" rel="nofollow">facebook</a>
+                            </li>
+                            <li>
+                                <a href="https://www.youtube.com/thekyunghyangtv" title="youtube" target="_blank" class="txt btn-youtube" rel="nofollow">youtube</a>
+                            </li>
+                            <li>
+                                <a href="https://x.com/kyunghyang" title="x" target="_blank" class="txt btn-x" rel="nofollow">X</a>
+                            </li>
+                            <li>
+                                <a href="https://www.instagram.com/kyunghyangshinmun/" title="instagram" target="_blank" class="txt btn-instagram" rel="nofollow">instagram</a>
+                            </li>
+                            <li>
+                                <a href="https://news.google.com/publications/CAAqJAgKIh5DQklTRUFnTWFnd0tDbXRvWVc0dVkyOHVhM0lvQUFQAQ?ceid=KR:ko&amp;oc=3&amp;hl=ko&amp;gl=KR" title="google" target="_blank" class="txt btn-google" rel="nofollow">google</a>
+                            </li>
+                            <li>
+                                <a href="https://www.khan.co.kr/help/help_rss.html" title="rss" target="_self" class="txt btn-rss" rel="nofollow">rss</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <button title="상단으로 페이지 이동" class="txt btn-top appuse">상단으로 페이지 이동</button>
+    </footer>
+</body>
+</html>

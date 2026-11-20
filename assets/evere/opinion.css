@@ -18,3 +18,14 @@
 @media (max-width: 767px) {
     .opinion-title { margin-inline: 20px; }
 }
+
+.evere-opinion-list .btn-left { position: relative; }
+#opinion-date-picker {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 26px;
+    height: 26px;
+    opacity: 0;
+    pointer-events: none;
+}
+.evere-opinion-list :is(#recentList > li, .contents .page)[hidden] { display: none; }
