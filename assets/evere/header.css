@@ -17,7 +17,8 @@
 @media (min-width: 1024px) {
     .nav-type11 { gap: 12px; padding-left: 48px; }
     .nav-type11 > .logo-yna21 { position: static; transform: none; }
-    .nav-type11 .gnb-menu01 { margin: 0 auto; padding: 0; }
+    .nav-type11 .gnb-menu01 { flex: 1 1 auto; margin: 0; padding: 0; }
+    .gnb-menu01 .list01 { justify-content: space-between; gap: 8px; }
     .nav-type11 .utility-zone { flex: 0 0 auto; width: auto; margin-right: 0; }
     .nav-type11 .utility-zone .menu01 { left: -10px; }
 }
@@ -26,8 +27,21 @@
 .nav-type01 .gnb-menu01::before { background-color: var(--ui-tag003); }
 .nav-type01 .gnb-menu01 .list01 { margin-left: 48px; }
 .nav-type11 .gnb-menu01 { min-width: 0; overflow: auto hidden; scrollbar-width: none; }
-.nav-type01 .gnb-menu01 .list01 { display: flex; width: max-content; white-space: nowrap; }
-.gnb-menu01 li.evewiki { margin-left: 12px; }
+.gnb-menu01 .list01 li.evewiki {
+    position: relative;
+    margin-left: 12px;
+    padding-left: 12px;
+}
+.gnb-menu01 .list01 li.evewiki::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 1px;
+    height: 16px;
+    background-color: var(--ui-tag004);
+    transform: translateY(-50%);
+}
 .yna-shell :is(.gnb-menu01, .evere-menu) li.evewiki > a { color: #3757C7; }
 .yna-shell :is(.gnb-menu01, .evere-menu) li.saevit > a { color: #13B5B1; }
 .hide01, .evere-panel[hidden] { display: none; }
@@ -52,6 +66,6 @@
     .header02 .logo-yna01 img { width: 91px; }
     .header02 .lang-zone01 { display: none; }
     .header02 { padding-inline: 0; }
-    .nav-type01 .gnb-menu01 .list01 { margin-left: 0; padding-inline: 0; }
+    .nav-type01 .gnb-menu01 .list01 { width: max-content; margin-left: 0; padding-inline: 0; }
     .nav-type01 .gnb-menu01 .list01 li:first-child > a { padding-left: 0; }
 }
