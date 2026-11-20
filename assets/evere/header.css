@@ -1,0 +1,33 @@
+:host { display: block; }
+.yna-shell, .yna-shell :where(a, button, input) {
+    font-family: "Pretendard Variable", Pretendard, sans-serif;
+}
+.header02 { position: relative; }
+.header02 .logo-yna01::before { display: none; }
+.header02 .logo-yna01 img { display: block; width: 218px; height: auto; }
+.wrap-header02 { position: relative; border-bottom: 2px solid #00B8B4; }
+.nav-type01 .gnb-menu01 { overflow: auto hidden; scrollbar-width: none; }
+.nav-type01 .gnb-menu01 .list01 { display: flex; width: max-content; white-space: nowrap; }
+.nav-type01 .gnb-menu01 a:hover { color: #007c79; }
+.hide01, .evere-panel[hidden] { display: none; }
+
+.evere-panel {
+    position: absolute;
+    z-index: 30;
+    inset: 100% 0 auto;
+    padding: 20px max(20px, calc((100% - 1160px) / 2));
+    background: #fff;
+    border-bottom: 2px solid #00B8B4;
+    box-shadow: 0 8px 16px #0002;
+}
+.evere-panel form { display: flex; gap: 8px; }
+.evere-panel input { min-width: 0; flex: 1; padding: 10px; border: 1px solid #999; }
+.evere-panel button { padding: 10px 20px; background: #00B8B4; color: #111; }
+.evere-panel ul { display: flex; flex-wrap: wrap; gap: 14px 24px; }
+.evere-panel [aria-live] { display: block; margin-top: 8px; }
+:focus-visible { outline: 2px solid #00B8B4; outline-offset: 3px; }
+
+@media (max-width: 1023px) {
+    .header02 .logo-yna01 img { width: 91px; }
+    .header02 .lang-zone01 { display: none; }
+}

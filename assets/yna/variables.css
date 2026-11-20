@@ -1,0 +1,589 @@
+@charset "utf-8";
+/*************************************************
+* 프로젝트명 : 변수 정의
+* comment : variables.css
+*************************************************/
+
+/* =============== ####변수 정의 ======================== */
+/* --ui-tag$$$ : element에 사용되는 색상 (border,bg 등)
+ * --ui-bg$$$ : background-image 사용되는 변수 (기본)
+ * --ui-bg500~ : background-image 사용되는 변수 (로고)
+ * --ui-filter$$$ : filter 기능을 통해 element 및 이미지에 색상 변경 가능 (다크모드)
+ * --font-color$$$ : 폰트에 사용되는 색상 */
+
+:host{
+	/* ---- ##ui-tag000 ~ 019 ---- */
+	/* [ui]무채색 */
+	--ui-tag000:transparent; /* (default) */
+	--ui-tag001:#fff; /* (default) */
+	--ui-tag002:#000; /* (default) */
+	--ui-tag003:#111;
+	--ui-tag004:#CDCDCD;
+	--ui-tag005:#E9E9E9;
+	--ui-tag006:#444;
+	--ui-tag007:#F9F9F9;
+	--ui-tag008:#eee;
+	--ui-tag009:#F6F8FC;
+	--ui-tag010:#666;
+	--ui-tag011:#f5f5f5;
+	--ui-tag012:#888;
+	--ui-tag013:#E9EBED;
+	--ui-tag014:#323232;
+	--ui-tag015:#D9D9D9;
+	--ui-tag016:#333;
+	--ui-tag017:#1d1d1d;
+	--ui-tag018:rgba(0, 0, 0, 0.40); /* #999 */
+	--ui-tag019:#F6F8FF;
+	--ui-tag020:none;
+	--ui-tag021:#222;
+	--ui-tag022:#CCC;
+	--ui-tag023:#DDD;
+	--ui-tag024:#fafafa;
+	--ui-tag025:rgba(0, 0, 0, 0.04);
+	--ui-tag026:rgba(17, 17, 17, 0.8);
+	--ui-tag027:#E1E1E1;
+
+
+	/* ---- ##ui-tag020 ~ ---- */
+	/* [ui]그 외 */
+	--ui-tag030:#4F6FCB;
+	--ui-tag031:#374E8E;
+	--ui-tag032:#1F5DD6;
+	--ui-tag033:#00FFEF;
+	--ui-tag034:#4E8567;
+	--ui-tag035:#F61C8F;
+	--ui-tag036:#E36F5A;
+	--ui-tag037:#1D969C;
+	--ui-tag038:#D0EAF7;
+	--ui-tag039:#D0EAF7;
+	--ui-tag040:rgba(79,111,203,0.9);
+	--ui-tag041:#FEB1EB;
+	--ui-tag042:#60ACE2;
+	--ui-tag043:#F9EFFA;
+	--ui-tag044:#F6F8FF;
+	--ui-tag045:#7CB1FF;
+	--ui-tag046:#2D1C82;
+	--ui-tag047:#F1EBFF;
+	--ui-tag048:#03C75A;
+	--ui-tag049:#F8BA00;
+	--ui-tag050:linear-gradient(0deg, rgba(79, 111, 203, 0.50) 0%, rgba(79, 111, 203, 0.50) 100%), linear-gradient(91deg, #A4C3FF 0.01%, #ACB9FF 19.2%, #8144CF 96%);
+	--ui-tag051:#EEDDFF;
+	--ui-tag052:#D9BDFF;
+	--ui-tag053:#F3254F;
+	--ui-tag054:#004CCE;
+	--ui-tag055:#4676DC;
+	--ui-tag056:#75A54F;
+	--ui-tag057:#1D77DD;
+	--ui-tag058:#ADD3FF;
+	--ui-tag059:#2DC2A6;
+	--ui-tag060:#293766;
+	--ui-tag061:#CF4223;
+	--ui-tag062:#FFC94D;
+	--ui-tag063:#DCE2F5;
+	--ui-tag064:#FEFAE8;
+	--ui-tag065:#FAFFFC;
+	--ui-tag066:#F7FAF6;
+	--ui-tag067:rgba(78, 133, 103, 0.1);
+	--ui-tag068:#4F92D7;
+	--ui-tag069:#E9F4F8;
+	--ui-tag070:#72CBDE;
+	--ui-tag071:#A8DBDB;
+	--ui-tag072:#7ECECC;
+	--ui-tag073:#4BAEAB;
+	--ui-tag074:#388E8B;
+	--ui-tag075:linear-gradient(to right, rgba(60,85,153,1) 0%,rgba(50,70,131,1) 60%);
+	--ui-tag076:#efe9ff;
+	--ui-tag077:#e8f0fe;
+	--ui-tag078:#E7F8F8;
+	--ui-tag079:#FFF2EB;
+	--ui-tag080:linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, #FFF 70%);
+	--ui-tag081:linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, #F6F8FC 70%);
+	--ui-tag082:linear-gradient(90deg, rgba(34, 34, 34, 0.60) 0%, #222 64.9%);
+	--ui-tag083:linear-gradient(0deg, rgba(0, 0, 0, 0.40) 0%, rgba(0, 0, 0, 0.40) 100%), linear-gradient(180deg, rgba(0, 0, 0, 0.00) 17.34%, rgba(0, 0, 0, 0.40) 54.04%);
+	--ui-tag084:linear-gradient(180deg, rgba(0, 0, 0, 0.00) 17.34%, rgba(0, 0, 0, 0.40) 54.04%);
+	--ui-tag085:linear-gradient(-90deg, rgba(255, 255, 255, 0.60) 0%, #FFF 64.9%);/* 그라데이션 좌>우 */
+	--ui-tag086:#4AA4FF;/*날씨 좋음*/
+	--ui-tag087:#32cd68;/*날씨 보통*/
+	--ui-tag088:#f9922d;/*날씨 나쁨*/
+	--ui-tag089:#f66665;/*날씨 매우나쁨*/
+	--ui-tag090:#652d90;/*날씨 위험*/
+	--ui-tag091:linear-gradient(0deg, rgba(255, 255, 255, 0.80) 0%, rgba(255, 255, 255, 0.80) 100%), #FBCCC3;
+	--ui-tag092:#0ff;
+	--ui-tag093:#0F0;
+	--ui-tag094:#FF0;
+	--ui-tag095:#F00;
+	--ui-tag096:#800080;
+	--ui-tag097:#1C4EE1;
+	--ui-tag098:#0068D1;
+	--ui-tag099:#FFF280;
+	--ui-tag100:linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, #fff 79%);/* 그라데이션 아래>위 */
+	--ui-tag101:#FF7474;
+	--ui-tag102:#FFFCF6;
+	--ui-tag103:linear-gradient(to right, rgba(245,245,245,0) 0%,rgba(255,255,255,1) 100%);
+	--ui-tag104:#FDB105;
+	--ui-tag105:#3C96A3;
+	--ui-tag106:#4F9ED7;
+	--ui-tag107:#9890E6;
+	--ui-tag108:linear-gradient(180deg,rgba(217,248,241,0) 50%, rgba(217,248,241,0.85) 50%);
+	--ui-tag109:#FCE9D4;
+	--ui-tag110:#F1E9DC;
+	--ui-tag111:#5A9974;
+	--ui-tag112:#E7380D;
+	--ui-tag113:#C84006;
+	--ui-tag114:#A03305;
+	--ui-tag115:#6D44AB; /* K-VIBE */
+
+
+	/* ---- ##ui-bg001 ~ 019 ---- */
+	/* [ui]공통 헤더/푸터 영역 이미지 요소 */
+	--ui-bg001:url(https://r.yna.co.kr/www/home_n/v03/img/ico_menu02.svg); /* 헤더 메뉴 아이콘 */
+	--ui-bg002:url(https://r.yna.co.kr/www/home_n/v03/img/ico_login01.svg); /* 헤더 로그인(사람 모양) 아이콘 */
+	--ui-bg003:url(https://r.yna.co.kr/www/home_n/v03/img/ico_srch01.svg); /* 헤더 검색 아이콘 */
+	--ui-bg004:url(https://r.yna.co.kr/www/home_n/v03/img/ico_close02.svg); /* 헤더 검색 닫기 24*24 */
+	--ui-bg005:url(https://r.yna.co.kr/www/home_n/v03/img/ico_alert01.svg); /* 헤더 검색 닫기 */
+	--ui-bg006:url(https://r.yna.co.kr/www/home_n/v03/img/ico_arr02.svg); /* 버튼 arrow */
+	--ui-bg007:url(https://r.yna.co.kr/www/home_n/v03/img/ico_close01.svg); /* 메뉴 팝업 닫기 : 24*24 */
+	--ui-bg008:none;
+	--ui-bg009:none;
+	--ui-bg010:url(https://r.yna.co.kr/www/home_n/v03/img/ico_setting01.svg); /* 앱설정 */
+	--ui-bg011:url(https://r.yna.co.kr/www/home_n/v03/img/ico_close03.svg); /* 헤더 검색 닫기 25*25*/
+	--ui-bg012:url(https://r.yna.co.kr/www/home_n/v03/img/ico_menu03.svg); /* 헤더 메뉴 아이콘 */
+	--ui-bg013:url(https://r.yna.co.kr/www/home_n/v03/img/ico_open01.svg); /* 패밀리사이트 열기 + 아이콘 */
+	--ui-bg014:url(https://r.yna.co.kr/www/home_n/v03/img/ico_close04.svg); /* 패밀리사이트 닫기 - 아이콘 */
+	--ui-bg015:url(https://r.yna.co.kr/www/home_n/v03/img/ico_arr05.svg); /* 풋터 메뉴 arrow */
+	--ui-bg016:url(https://r.yna.co.kr/www/home_n/v03/img/ico_arr06.svg); /* 풋터 메뉴 arrow */
+
+	/* ---- ##ui-bg020 ~ 499 ---- */
+	/* [ui]배경 이미지(arrow,아이콘 요소) */
+	--ui-bg021:url(https://r.yna.co.kr/www/home_n/v03/img/ico_arr01.svg); /* 타이틀 arrow 18*19, stroke:2 */
+	--ui-bg022:url(https://r.yna.co.kr/www/home_n/v03/img/ico_people01.svg); /* aside 사람 아이콘 */
+	--ui-bg023:url(https://r.yna.co.kr/www/home_n/v03/img/ico_newspaper01.svg);/* aside 뉴스레터 아이콘 */
+	--ui-bg028:url(https://r.yna.co.kr/www/home_n/v03/img/ico_pause01.svg); /* 자동 슬라이드 멈춤 */
+	--ui-bg029:url(https://r.yna.co.kr/www/home_n/v03/img/ico_play01.svg); /* 자동 슬라이드 실행 */
+	--ui-bg030:url(https://r.yna.co.kr/www/home_n/v03/img/ico_photo01.svg);
+	--ui-bg031:url(https://r.yna.co.kr/www/home_n/v03/img/ico_gallery01.svg);
+	--ui-bg032:url(https://r.yna.co.kr/www/home_n/v03/img/ico_plus01.svg); /* 구독 plus 아이콘 흰색 */
+	--ui-bg033:url(https://r.yna.co.kr/www/home_n/v03/img/ico_question01.svg); /* 물음표 아이콘 */
+	--ui-bg034:url(https://r.yna.co.kr/www/home_n/v03/img/ico_play02.svg); /* 자동 슬라이드 실행 */
+	--ui-bg035:url(https://r.yna.co.kr/www/home_n/v03/img/ico_file01.svg); /* 자동 슬라이드 실행 */
+	--ui-bg036:url(https://r.yna.co.kr/www/home_n/v03/img/ico_arr13.svg); /* 슬라이드 활성화 이전/다음 화살표 : 18*18, stroke:2 */
+	--ui-bg037:url(https://r.yna.co.kr/www/home_n/v03/img/ico_arr15.svg); /* 날씨페이지 기상특보 더보기 : 14*14, stroke:1.5 */
+	--ui-bg038:url(https://r.yna.co.kr/www/home_n/v03/img/ico_arr23.svg); /* title-type032: 말풍선 화살표 타이틀 버튼의 화살표 */
+	--ui-bg039:url(https://r.yna.co.kr/www/home_n/v03/img/ico_arr24.svg); /* 뉴스 제보는 카카오톡 okjebo 버튼의 화살표 : 14*15 */
+	--ui-bg040:url(https://r.yna.co.kr/www/home_n/v03/img/ico_arr03.svg);/* btn-type300.arr02, (광고 운영배너)bnr-wrap005 : 헬로아카이브 화살표 15*15, stroke:1.5 */
+	--ui-bg041:url(https://r.yna.co.kr/www/home_n/v03/img/ico_arr07.svg);/* nav-path 화살표 20*20, stroke:1.5 */
+	--ui-bg042:url(https://r.yna.co.kr/www/home_n/v03/img/ico_motif01.svg);/* 연합라운지 타이틀 말풍선 스타일 */
+	--ui-bg043:url(https://r.yna.co.kr/www/home_n/v03/img/ico_picker01.svg); /*말풍선 피커*/
+	--ui-bg044:url(https://r.yna.co.kr/www/home_n/v03/img/ico_people02.svg); /* 인물형 none 이미지 사람 아이콘(본문매핑소재, 검색)  */
+	--ui-bg045:url(https://r.yna.co.kr/www/home_n/v03/img/ico_arr18.svg); /* 연합라운지 팝업뷰어 화살표 : 20*20, stroke:2 */
+	--ui-bg046:url(https://r.yna.co.kr/www/home_n/v03/img/ico_arr19.svg); /* 캘린더 이동 화살표 : 30*30, 방향화살표 */
+	--ui-bg047:url(https://r.yna.co.kr/www/home_n/v03/img/ico_mail02.svg); /* 메일아이콘2*/
+	--ui-bg048:url(https://r.yna.co.kr/www/home_n/v03/img/ico_calendar01.svg); /* 캘린더 아이콘*/
+	--ui-bg049:url(https://r.yna.co.kr/www/home_n/v03/img/ico_check01.svg); /* 구독 체크(√) 아이콘 : 8*8, stroke:1.5 */
+	--ui-bg050:url(https://r.yna.co.kr/www/home_n/v03/img/ico_arr14.svg); /* 슬라이드 이전/다음 : 화살표 흰색 :15*26, stroke:2 */
+	--ui-bg051:url(https://r.yna.co.kr/www/home_n/v03/img/ico_mapdott01.svg);/* 특파원 세계지도 dott */
+	--ui-bg052:url(https://r.yna.co.kr/www/home_n/v03/img/ico_play03.svg); /* 슬라이드 활성화 이전 <  화살표 흰색 */
+	--ui-bg053:url(https://r.yna.co.kr/www/home_n/v03/img/ico_home02.svg); /* btn-type438 집모양 아이콘 */
+	--ui-bg054:url(https://r.yna.co.kr/www/home_n/v03/img/ico_arr09.svg); /* 뉴스 더보기 / 내일의경기 / 기자의 세상읽기 */
+	--ui-bg055:url(https://r.yna.co.kr/www/home_n/v03/img/ico_arr10.svg); /* 말풍선 타이틀 화살표 , 오늘의경기 화살표, 마케팅 윈도우 이동아이콘 : 16*16, stroke:1.5*/
+	--ui-bg056:url(https://r.yna.co.kr/www/home_n/v03/img/ico_new01.svg); /* new 아이콘 */
+	--ui-bg057:url(https://r.yna.co.kr/www/home_n/v03/img/ico_arr11.svg); /* 특파원전체보기 화살표 16*16, stroke:2 */
+	--ui-bg058:url(https://r.yna.co.kr/www/home_n/v03/img/ico_noti02.svg);
+	--ui-bg059:url(https://r.yna.co.kr/www/home_n/v03/img/ico_check02.svg); /* 체크(√) 아이콘 : 툴팁 3줄요약 하단 체크아이콘 : 12*12, stroke:2 */
+	--ui-bg060:url(https://r.yna.co.kr/www/home_n/v03/img/ico_page01_first01.svg); /* 페이징 처음으로 아이콘 */
+	--ui-bg061:url(https://r.yna.co.kr/www/home_n/v03/img/ico_page01_prev01.svg); /* 페이징 이전 아이콘 */
+	--ui-bg062:url(https://r.yna.co.kr/www/home_n/v03/img/ico_page01_next01.svg); /* 페이징 다음 아이콘 */
+	--ui-bg063:url(https://r.yna.co.kr/www/home_n/v03/img/ico_page01_last01.svg); /* 페이징 마지막으로 아이콘 */
+	--ui-bg064:none;
+	--ui-bg065:none;
+	--ui-bg066:url(https://r.yna.co.kr/www/home_n/v03/img/ico_view03.svg); /* 본문 : 뷰어수 : 눈모양 */
+	--ui-bg067:url(https://r.yna.co.kr/www/home_n/v03/img/ico_arr17.svg); /* 슬라이드 활성화 이전/다음 : strok1.5 */
+	--ui-bg070:url(https://r.yna.co.kr/www/home_n/v03/img/ico_rank01.svg); /* 마이 : 내등급 아이콘 */
+	--ui-bg071:url(https://r.yna.co.kr/www/home_n/v03/img/ico_coupon01.svg); /* 이용권 쿠폰 아이콘 */
+	--ui-bg072:url(https://r.yna.co.kr/www/home_n/v03/img/ico_del01.svg); /* 휴지통 아이콘 */
+	--ui-bg073:url(https://r.yna.co.kr/www/home_n/v03/img/ico_setting03.svg); /* 세팅 아이콘 */
+	--ui-bg074:url(https://r.yna.co.kr/www/home_n/v03/img/ico_check03.svg); /* 체크(√) 아이콘 : 툴팁 3줄요약 하단 체크아이콘 : 16*16 */
+	--ui-bg075:url(https://r.yna.co.kr/www/home_n/v03/img/ico_edit01.svg); /* 수정 아이콘 */
+	--ui-bg076:url(https://r.yna.co.kr/www/home_n/v03/img/ico_trash01.svg); /* 삭제 아이콘 */
+	--ui-bg077:url(https://r.yna.co.kr/www/home_n/v03/img/ico_close08.svg); /* 삭제 아이콘 14*15*/
+	--ui-bg078:url(https://r.yna.co.kr/www/home_n/v03/img/ico_more01.svg); /* 더보기 아이콘 */
+	--ui-bg079:url(https://r.yna.co.kr/www/home_n/v03/img/ico_comment_good01.svg); /* 좋아요/싫어요 off */
+	--ui-bg080:url(https://r.yna.co.kr/www/home_n/v03/img/ico_comment_good02.svg); /* 좋아요/싫어요 on */
+	--ui-bg081:url(https://r.yna.co.kr/www/home_n/v03/img/bg_color_f6f8fc.jpg);/* 섹션 디지털홈 톱뉴스bg */
+	--ui-bg082:none;
+	--ui-bg083:url(https://r.yna.co.kr/www/home_n/v03/img/ico_close09.svg); /* 마케팅 윈도우 닫기아이콘 12*13 */
+	--ui-bg084:none;
+	--ui-bg085:url(https://r.yna.co.kr/www/home_n/v03/img/ico_weather03.svg); /* 마케팅 윈도우 날씨아이콘 */
+	--ui-bg086:url(https://r.yna.co.kr/www/home_n/v03/img/ico_breakin_news01.svg); /* 마케팅 윈도우 속보아이콘 */
+	--ui-bg087:url(https://r.yna.co.kr/www/home_n/v03/img/ico_lang01.svg); /* 마케팅 윈도우 다국어아이콘 */
+	--ui-bg088:url(https://r.yna.co.kr/www/home_n/v03/img/ico_naver01.svg); /* 로그인 유도 팝업 네이버 아이콘 */
+	--ui-bg089:url(https://r.yna.co.kr/www/home_n/v03/img/ico_check04.svg); /* 체크(√) 아이콘 : 툴팁 3줄요약 하단 체크아이콘 : 12*12, stroke:2 (--ui-bg059)번과 체크 스타일 상이함) */
+	--ui-bg090:url(https://r.yna.co.kr/www/home_n/v03/img/ico_check05.svg); /* form체크아이콘1 : 13*9 */
+	--ui-bg091:url(https://r.yna.co.kr/www/home_n/v03/img/ico_info02.svg); /* 연합마이뉴스 툴팁안내아이콘 : 14*14 */
+	--ui-bg092:url(https://r.yna.co.kr/www/home_n/v03/img/ico_down03.svg); /* 다운로드 아이콘 */
+	--ui-bg093:url(https://r.yna.co.kr/www/home_n/v03/img/ico_reply01.svg); /* 리플 아이콘 */
+	--ui-bg094:url(https://r.yna.co.kr/www/home_n/v03/img/ico_arr22.svg); /* 마이페이지 이용권 이동 버튼 : 화살표 아이콘 */
+	--ui-bg095:url(https://r.yna.co.kr/www/home_n/v03/img/ico_calendar01_arr01.svg); /* 캘린더 날짜 화살표*/
+	--ui-bg096:url(https://r.yna.co.kr/www/home_n/v03/img/ico_calendar01_arr02.svg); /* 캘린더 전체 화살표*/
+	--ui-bg098:url(https://r.yna.co.kr/www/home_n/v03/img/ico_question02.svg); /* 툴팁 물음표2 */
+	--ui-bg097:url(https://r.yna.co.kr/www/home_n/v03/img/ico_info01.svg); /* 툴팁안내아이콘 : 16*16 */
+	--ui-bg099:url(https://r.yna.co.kr/www/home_n/v03/img/ico_rank02.svg); /* 마이 : 랭크 아이콘(하늘) */
+	--ui-bg100:url(https://r.yna.co.kr/www/home_n/v03/img/ico_rank05.svg); /* 마이 : 랭크 아이콘(파랑) */
+	--ui-bg101:url(https://r.yna.co.kr/www/home_n/v03/img/ico_rank04.svg); /* 마이 : 랭크 아이콘(노랑) */
+	--ui-bg102:url(https://r.yna.co.kr/www/home_n/v03/img/ico_rank03.svg); /* 마이 : 랭크 아이콘(은색) */
+	--ui-bg103:url(https://r.yna.co.kr/www/home_n/v03/img/ico_no_data01.svg); /* 마이 : 데이타없음 아이콘(라이트) */
+	--ui-bg104:url(https://r.yna.co.kr/www/home_n/v03/img/ico_no_data02.svg); /* 마이 : 데이타없음 아이콘(다크) */
+	--ui-bg105:url(https://r.yna.co.kr/www/home_n/v03/img/bg_polygon01.svg); /* 연합라운지 타이틀영역 */
+	--ui-bg106:url(https://r.yna.co.kr/www/home_n/v03/img/ico_crossword01.png);/* Y뷰어 배너 : 크로스워드 */
+	--ui-bg107:url(https://r.yna.co.kr/www/home_n/v03/img/ico_quize01.png);/* Y뷰어 배너 : 뉴스퀴즈 */
+	--ui-bg108:url(https://r.yna.co.kr/www/home_n/v03/img/ico_vote01.png);/* Y뷰어 배너 : 뉴스퀴즈 */
+	--ui-bg109:url(https://r.yna.co.kr/www/home_n/v03/img/ico_board01.png);/* Y뷰어 배너 : 뉴스퀴즈 */
+	--ui-bg110:url(https://r.yna.co.kr/www/home_n/v03/img/ico_yview_free01.svg);/* Y뷰어 배너 : 뉴스퀴즈 */
+	--ui-bg111:url(https://r.yna.co.kr/www/home_n/v03/img/ico_yview_like01.svg);/* Y뷰어 배너 : 뉴스퀴즈 */
+	--ui-bg112:url(https://r.yna.co.kr/www/home_n/v03/img/ico_yview_game01.svg);/* Y뷰어 배너 : 뉴스퀴즈 */
+	--ui-bg113:url(https://r.yna.co.kr/www/home_n/v03/img/ico_yview_my01.svg);/* Y뷰어 배너 : 뉴스퀴즈 */
+	--ui-bg114:url(https://r.yna.co.kr/www/home_n/v03/img/ico_share01.svg);/* 리스트 공통 : 공유 */
+	--ui-bg115:url(https://r.yna.co.kr/www/home_n/v03/img/ico_scrap01_off.svg);/* 리스트 공통 : 북마크 off */
+	--ui-bg116:url(https://r.yna.co.kr/www/home_n/v03/img/ico_scrap01_on.svg);/* 리스트 공통 : 북마크 on */
+	--ui-bg117:url(https://r.yna.co.kr/www/home_n/v03/img/ico_top01.svg);/* 스크롤 최상단 이동 arrow */
+	--ui-bg118:url(https://r.yna.co.kr/www/home_n/v03/img/ico_close10.svg);/* 스크롤 최상단 이동 arrow */
+	--ui-bg119:url(https://r.yna.co.kr/www/home_n/v03/img/ico_close11.svg);/* 삭제 아이콘 20*20 */
+	--ui-bg120:url(https://r.yna.co.kr/www/home_n/v03/img/ico_google01.png?v=20260615_1400);/* 구글 아이콘 */
+
+	/* 258~299 : 지역,국가 관련 아이콘 */
+	/* 258~270 : 지역별 실시간 뉴스 : 지역 원형 아이콘 */
+	--ui-bg258:url(https://r.yna.co.kr/www/home_n/v03/img/bg_local_figure02_gg01.jpg); /*경기*/
+	--ui-bg259:url(https://r.yna.co.kr/www/home_n/v03/img/bg_local_figure02_in01.jpg); /*인천*/
+	--ui-bg260:url(https://r.yna.co.kr/www/home_n/v03/img/bg_local_figure02_bu01.jpg); /*부산*/
+	--ui-bg261:url(https://r.yna.co.kr/www/home_n/v03/img/bg_local_figure02_ul01.jpg); /*울산*/
+	--ui-bg262:url(https://r.yna.co.kr/www/home_n/v03/img/bg_local_figure02_gn01.jpg); /*경남*/
+	--ui-bg263:url(https://r.yna.co.kr/www/home_n/v03/img/bg_local_figure02_dggb01.jpg); /*대구경북*/
+	--ui-bg264:url(https://r.yna.co.kr/www/home_n/v03/img/bg_local_figure02_gjjn01.jpg); /*광주전남*/
+	--ui-bg265:url(https://r.yna.co.kr/www/home_n/v03/img/bg_local_figure02_jb01.jpg); /*전북*/
+	--ui-bg266:url(https://r.yna.co.kr/www/home_n/v03/img/bg_local_figure02_djcnsj01.jpg); /*대전충남세종*/
+	--ui-bg267:url(https://r.yna.co.kr/www/home_n/v03/img/bg_local_figure02_cb01.jpg); /*충북*/
+	--ui-bg268:url(https://r.yna.co.kr/www/home_n/v03/img/bg_local_figure02_gw01.jpg); /*강원*/
+	--ui-bg269:url(https://r.yna.co.kr/www/home_n/v03/img/bg_local_figure02_jj01.jpg); /*제주*/
+	/* 278~299 : 국가 버튼(btn-type404.**) ---- */
+	--ui-bg278:url(https://r.yna.co.kr/www/home_n/v03/img/ico_flag01_en.svg);/*미국*/
+	--ui-bg279:url(https://r.yna.co.kr/www/home_n/v03/img/ico_flag01_beijing.svg); /*베이징*/
+	--ui-bg280:url(https://r.yna.co.kr/www/home_n/v03/img/ico_flag01_bangkok.svg); /*방콕*/
+	--ui-bg281:url(https://r.yna.co.kr/www/home_n/v03/img/ico_flag01_berlin.svg); /*베를린*/
+	--ui-bg282:url(https://r.yna.co.kr/www/home_n/v03/img/ico_flag01_brussels.svg); /*브리셀*/
+	--ui-bg283:url(https://r.yna.co.kr/www/home_n/v03/img/ico_flag01_buenosaires.svg); /*부에노스아이레스*/
+	--ui-bg284:url(https://r.yna.co.kr/www/home_n/v03/img/ico_flag01_cairo.svg); /*카이로*/
+	--ui-bg285:url(https://r.yna.co.kr/www/home_n/v03/img/ico_flag01_geneva.svg); /*제네바*/
+	--ui-bg286:url(https://r.yna.co.kr/www/home_n/v03/img/ico_flag01_hanoi.svg); /*하노이*/
+	--ui-bg287:url(https://r.yna.co.kr/www/home_n/v03/img/ico_flag01_istanbul.svg); /*이스탄불*/
+	--ui-bg288:url(https://r.yna.co.kr/www/home_n/v03/img/ico_flag01_jakarta.svg); /*자카르타*/
+	--ui-bg289:url(https://r.yna.co.kr/www/home_n/v03/img/ico_flag01_johannesburg.svg); /*요하네스버그*/
+	--ui-bg290:url(https://r.yna.co.kr/www/home_n/v03/img/ico_flag01_london.svg); /*런던*/
+	--ui-bg291:url(https://r.yna.co.kr/www/home_n/v03/img/ico_flag01_mexicocity.svg); /*멕시코시티*/
+	--ui-bg292:url(https://r.yna.co.kr/www/home_n/v03/img/ico_flag01_moscow.svg); /*모스크바*/
+	--ui-bg293:url(https://r.yna.co.kr/www/home_n/v03/img/ico_flag01_newdelhi.svg); /*뉴델리*/
+	--ui-bg294:url(https://r.yna.co.kr/www/home_n/v03/img/ico_flag01_paris.svg); /*파리*/
+	--ui-bg295:url(https://r.yna.co.kr/www/home_n/v03/img/ico_flag01_rome.svg); /*로마*/
+	--ui-bg296:url(https://r.yna.co.kr/www/home_n/v03/img/ico_flag01_saopaulo.svg); /*상파울루*/
+	--ui-bg297:url(https://r.yna.co.kr/www/home_n/v03/img/ico_flag01_taipei.svg); /*타이페이*/
+	--ui-bg298:url(https://r.yna.co.kr/www/home_n/v03/img/ico_flag01_tokyo.svg); /*도쿄*/
+	--ui-bg299:url(https://r.yna.co.kr/www/home_n/v03/img/ico_flag01_vancouver.svg); /*벤쿠버*/
+
+	/* ---- ##ui-bg300 ~ 399 ---- */
+	/* [광고]운영배너 */
+	--ui-bg300:url(https://r.yna.co.kr/www/home_n/v03/img/ico_people01.svg); /* 광고 운영배너 : bnr-wrap001 : 메인 배너 아이콘 사람 모양 */
+	--ui-bg301:url(https://r.yna.co.kr/www/home_n/v03/img/ico_newspaper01.svg);/* 광고 운영배너 : bnr-wrap001 : 메인 배너 아이콘 책 모양 */
+	--ui-bg302:url(https://r.yna.co.kr/www/home_n/v03/img/ico_oana01.svg); /* 광고 운영배너 : bnr-wrap002 : 메인 배너 oana */
+	--ui-bg303:url(https://r.yna.co.kr/www/home_n/v03/img/ico_arr12.svg);/* 광고 운영배너 : bnr-wrap006 : 뉴스게임즈 화살표 18*18, stroke:2 */
+	--ui-bg304:url(https://r.yna.co.kr/www/home_n/v03/img/ico_games01.png); /* 광고 운영배너 : bnr-wrap006 : 뉴스게임즈 로봇 이미지 */
+	--ui-bg305:url(https://r.yna.co.kr/www/home_n/v03/img/ico_toontoon01.png); /* 광고 운영배너 : bnr-wrap007 : 툰툰 아이콘 */
+	--ui-bg306:url(https://r.yna.co.kr/www/home_n/v03/img/bnr_bg01.png); /* 광고 운영배너 : bnr-wrap006, bnr-wrap010 : 연합뉴스 Games, 앱다운로드 배경 */
+	--ui-bg307:url(https://r.yna.co.kr/www/home_n/v03/img/ico_heart01.svg); /* 광고 운영배너 : bnr-wrap011 : 고향사랑기부 하트 */
+	--ui-bg308:url(https://r.yna.co.kr/www/home_n/v03/img/bnr_bg02.png); /* 광고 운영배너 : bnr-wrap013 : 보도자료 해외배포 서비스 배경 */
+	--ui-bg309:url(https://r.yna.co.kr/www/home_n/v03/img/ico_esg01.svg); /* 광고 운영배너 : bnr-wrap014 : ESG 새싹 */
+	--ui-bg310:url(https://r.yna.co.kr/www/home_n/v03/img/bg_ir01.png); /* 광고 운영배너 : bnr-wrap015 : 연합뉴스 IR 클럽 : 사람  */
+	--ui-bg311:url(https://r.yna.co.kr/www/home_n/v03/img/bg_ir02.svg); /* 광고 운영배너 : bnr-wrap015 : 연합뉴스 IR 클럽 : 화살표 */
+	--ui-bg312:url(https://r.yna.co.kr/www/home_n/v03/img/bnr_bg03_left.png); /* 광고 운영배너 : bnr-wrap016 : 연합뉴스 글로벌코리아본부 배경왼쪽 */
+	--ui-bg313:url(https://r.yna.co.kr/www/home_n/v03/img/bnr_bg03_right.png); /* 광고 운영배너 : bnr-wrap016 : 연합뉴스 글로벌코리아본부 배경오른쪽 */
+	--ui-bg314:url(https://r.yna.co.kr/www/home_n/v03/img/bnr_bg04.png); /* 광고 운영배너 : bnr-wrap018 : 연합뉴스 Games 배경 */
+	--ui-bg315:url(https://r.yna.co.kr/www/home_n/v03/img/bnr_bg05.png); /* 광고 운영배너 : bnr-wrap019 : Y스코어 배경 */
+	--ui-bg316:url(https://r.yna.co.kr/www/home_n/v03/img/ico_lounge01.svg); /* 광고 운영배너 : bnr-wrap21 : 연합라운지 이미지 */
+
+	/* ---- ##ui-bg400~499 ---- */
+	/* [이미지요소] 비주얼타입 */
+	/*  400~426 / 461~481 : [세계 리스트] 특파원 상단 : bg_crsp_city01_****$$ */
+	--ui-bg400:url(https://r.yna.co.kr/www/home_n/v03/img/bg_crsp_city01_johannesburg01.jpg);
+	--ui-bg401:url(https://r.yna.co.kr/www/home_n/v03/img/bg_crsp_city01_cairo01.jpg);
+	--ui-bg402:url(https://r.yna.co.kr/www/home_n/v03/img/bg_crsp_city01_istanbul01.jpg);
+	--ui-bg403:url(https://r.yna.co.kr/www/home_n/v03/img/bg_crsp_city01_newyork01.jpg);
+	--ui-bg404:url(https://r.yna.co.kr/www/home_n/v03/img/bg_crsp_city01_washington01.jpg);
+	--ui-bg405:url(https://r.yna.co.kr/www/home_n/v03/img/bg_crsp_city01_la01.jpg);
+	--ui-bg406:url(https://r.yna.co.kr/www/home_n/v03/img/bg_crsp_city01_sanfrancisco01.jpg);;
+	--ui-bg407:url(https://r.yna.co.kr/www/home_n/v03/img/bg_crsp_city01_atlanta01.jpg);
+	--ui-bg408:url(https://r.yna.co.kr/www/home_n/v03/img/bg_crsp_city01_vancouver01.jpg);
+	--ui-bg409:url(https://r.yna.co.kr/www/home_n/v03/img/bg_crsp_city01_mexicocity01.jpg);
+	--ui-bg410:url(https://r.yna.co.kr/www/home_n/v03/img/bg_crsp_city01_saopaulo01.jpg);
+	--ui-bg411:url(https://r.yna.co.kr/www/home_n/v03/img/bg_crsp_city01_buenosaires01.jpg);
+	--ui-bg412:url(https://r.yna.co.kr/www/home_n/v03/img/bg_crsp_city01_tokyo01.jpg);
+	--ui-bg413:url(https://r.yna.co.kr/www/home_n/v03/img/bg_crsp_city01_beijing01.jpg);
+	--ui-bg414:url(https://r.yna.co.kr/www/home_n/v03/img/bg_crsp_city01_bangkok01.jpg);
+	--ui-bg415:url(https://r.yna.co.kr/www/home_n/v03/img/bg_crsp_city01_hanoi01.jpg);
+	--ui-bg416:url(https://r.yna.co.kr/www/home_n/v03/img/bg_crsp_city01_taipei01.jpg);
+	--ui-bg417:url(https://r.yna.co.kr/www/home_n/v03/img/bg_crsp_city01_jakarta01.jpg);
+	--ui-bg418:url(https://r.yna.co.kr/www/home_n/v03/img/bg_crsp_city01_newdelhi01.jpg);
+	--ui-bg419:url(https://r.yna.co.kr/www/home_n/v03/img/bg_crsp_city01_london01.jpg);
+	--ui-bg420:url(https://r.yna.co.kr/www/home_n/v03/img/bg_crsp_city01_berlin01.jpg);
+	--ui-bg421:url(https://r.yna.co.kr/www/home_n/v03/img/bg_crsp_city01_paris01.jpg);
+	--ui-bg422:url(https://r.yna.co.kr/www/home_n/v03/img/bg_crsp_city01_moscow01.jpg);
+	--ui-bg423:url(https://r.yna.co.kr/www/home_n/v03/img/bg_crsp_city01_brussels01.jpg);
+	--ui-bg424:url(https://r.yna.co.kr/www/home_n/v03/img/bg_crsp_city01_geneva01.jpg);
+	--ui-bg425:url(https://r.yna.co.kr/www/home_n/v03/img/bg_crsp_city01_rome01.jpg);
+	--ui-bg426:url(https://r.yna.co.kr/www/home_n/v03/img/bg_crsp_city01_vatican01.jpg);
+
+	--ui-bg461:url(https://r.yna.co.kr/www/home_n/v03/img/bg_crsp_city01_shanghai01.jpg);
+
+	/*  427~ : [전국 리스트] 지역 별 톱영역 */
+	--ui-bg427:url(https://r.yna.co.kr/www/home_n/v03/img/bg_local_figure01_gg01.jpg); /* 서브 섹션 전국 경기배경 */
+	--ui-bg428:url(https://r.yna.co.kr/www/home_n/v03/img/bg_local_figure01_in01.jpg); /*인천*/;
+	--ui-bg429:url(https://r.yna.co.kr/www/home_n/v03/img/bg_local_figure01_bu01.jpg); /*부산*/
+	--ui-bg430:url(https://r.yna.co.kr/www/home_n/v03/img/bg_local_figure01_ul02.jpg); /*울산*/
+	--ui-bg431:url(https://r.yna.co.kr/www/home_n/v03/img/bg_local_figure01_gn01.jpg); /*경남*/
+	--ui-bg432:url(https://r.yna.co.kr/www/home_n/v03/img/bg_local_figure01_dggb01.jpg); /*대구경북*/
+	--ui-bg433:url(https://r.yna.co.kr/www/home_n/v03/img/bg_local_figure01_gjjn01.jpg); /*광주전남*/
+	--ui-bg434:url(https://r.yna.co.kr/www/home_n/v03/img/bg_local_figure01_jb01.jpg); /*전북*/
+	--ui-bg435:url(https://r.yna.co.kr/www/home_n/v03/img/bg_local_figure01_djcnsj01.jpg); /*대전충남세종*/
+	--ui-bg436:url(https://r.yna.co.kr/www/home_n/v03/img/bg_local_figure01_cb02.jpg); /*충북*/
+	--ui-bg437:url(https://r.yna.co.kr/www/home_n/v03/img/bg_local_figure01_gw01.jpg); /*강원*/
+	--ui-bg438:url(https://r.yna.co.kr/www/home_n/v03/img/bg_local_figure01_jj01.jpg); /*제주*/
+	/*  439~ : visual-type05 : 기타 성금 */
+	--ui-bg439:url(https://r.yna.co.kr/www/home_n/v03/img/bg_donation01.jpg); /* [기타] 성금모금 : 상단 이미지 */
+	--ui-bg440:url(https://r.yna.co.kr/www/home_n/v03/img/bg_newspaper01.jpg); /* [기타] 신문의날 : 상단 이미지 */
+	/* 우분투 비주얼 */
+	--ui-bg441:url(https://r.yna.co.kr/www/home_n/v03/img/bg_ubuntu01_pc.png);/* 우분투 비주얼 pc */
+	--ui-bg442:url(https://r.yna.co.kr/www/home_n/v03/img/bg_ubuntu01_t.png);/* 우분투 비주얼 t */
+	--ui-bg443:url(https://r.yna.co.kr/www/home_n/v03/img/bg_ubuntu01_m.png);/* 우분투 비주얼 m */
+	/* --ui-bg461~481 사용금지 : 세계 특파원 사용 예정 */
+
+	/* ---- ##ui-bg500 ~ ---- */
+	/* [ui]로고 */
+	--ui-bg500:url(https://r.yna.co.kr/www/home_n/v03/img/logo_yna01.svg); /* 연합뉴스 로고 */
+	--ui-bg501:url(https://r.yna.co.kr/www/home_n/v03/img/logo_yna02.svg); /* 연합뉴스 로고 흰색 */
+	--ui-bg502:url(https://r.yna.co.kr/www/home_n/v03/img/logo_yna03.svg); /* 연합뉴스 로고 회색 */
+	--ui-bg503:url(https://r.yna.co.kr/www/home_n/v03/img/logo_yna10.svg); /* 연합뉴스 로고 흰색 심플형 */
+	--ui-bg504:url(https://r.yna.co.kr/www/home_n/v03/img/ico_youtube01.svg); /* youtube 로고 */
+	--ui-bg505:url(https://r.yna.co.kr/www/home_n/v03/img/ico_youtube02.svg); /* youtube 로고 */
+	--ui-bg506:url(https://r.yna.co.kr/www/home_n/v03/img/logo_yna20.svg); /* 연합뉴스 로고 텍스트형 : 남색 */
+	--ui-bg507:none;
+	--ui-bg508:none;
+	--ui-bg509:none;
+	--ui-bg510:url(https://r.yna.co.kr/www/home_n/v03/img/ico_sns01_fb01.svg?v=20250214_1338); /* gnb sns 페이스북 */
+	--ui-bg511:url(https://r.yna.co.kr/www/home_n/v03/img/ico_sns01_ins01.svg?v=20250214_1338); /* gnb sns 인스타그램 */
+	--ui-bg512:url(https://r.yna.co.kr/www/home_n/v03/img/ico_sns01_youtube01.svg?v=20250214_1338); /* sns 유튜브 */
+	--ui-bg513:url(https://r.yna.co.kr/www/home_n/v03/img/ico_sns01_tw01.svg?v=20250214_1338); /* gnb sns 트위터 */
+	--ui-bg514:url(https://r.yna.co.kr/www/home_n/v03/img/ico_health01.svg); /* 더건강 */
+	--ui-bg515:url(https://r.yna.co.kr/www/home_n/v03/img/ico_set03_kkt01.svg); /* SNS공유 카카오톡 */
+	--ui-bg516:url(https://r.yna.co.kr/www/home_n/v03/img/ico_set03_fb01.svg); /* SNS공유 페이스북 */
+	--ui-bg517:url(https://r.yna.co.kr/www/home_n/v03/img/ico_set03_tw01.svg); /* SNS공유 트위터 */
+	--ui-bg518:url(https://r.yna.co.kr/www/home_n/v03/img/ico_set03_fbm01.svg); /* SNS공유 페이스북메신저 */
+	--ui-bg519:url(https://r.yna.co.kr/www/home_n/v03/img/ico_set03_fbm01_bg.svg); /* SNS공유 페이스북메신저-bg */
+	--ui-bg520:url(https://r.yna.co.kr/www/home_n/v03/img/ico_set03_band01.svg); /* SNS공유 네이버밴드 */
+	--ui-bg521:url(https://r.yna.co.kr/www/home_n/v03/img/ico_set03_copy01.svg); /* SNS공유 URL공유 */
+	--ui-bg522:url(https://r.yna.co.kr/www/home_n/v03/img/ico_archive01.svg); /* Archive 로고 */
+	--ui-bg523:url(https://r.yna.co.kr/www/home_n/v03/img/ico_youtube04.svg); /* youtube 로고 */
+	--ui-bg524:url(https://r.yna.co.kr/www/home_n/v03/img/ico_naver02.svg); /* 네이버 로고 : 운영배너 */
+	--ui-bg525:url(https://r.yna.co.kr/www/home_n/v03/img/ico_daum01.svg); /* 다음 로고 : 운영배너 */
+	--ui-bg526:url(https://r.yna.co.kr/www/home_n/v03/img/ico_rss01.svg); /* 기타 :  RSS피드  */
+	--ui-bg527:url(https://r.yna.co.kr/www/home_n/v03/img/ico_dable01.png); /* 광고 : 데이블  */
+	--ui-bg528:url(https://r.yna.co.kr/www/home_n/v03/img/ico_archive02.svg); /* Archive 로고(마이) */
+	--ui-bg529:none;
+	--ui-bg530:url(https://r.yna.co.kr/www/home_n/v03/img/logo_yna11.svg);/* yna 로고 18*18, 전경컬러없음  */
+	--ui-bg531:url(https://r.yna.co.kr/www/home_n/v03/img/ico_naver01.svg);/* 네이버 로고 18*18, 전경컬러없음  */
+	--ui-bg532:url(https://r.yna.co.kr/www/home_n/v03/img/ico_kkt01.svg);/* 카카오 로고 18*18, 전경컬러없음  */
+	--ui-bg533:url(https://r.yna.co.kr/www/home_n/v03/img/ico_gg01.svg);/* 구글 로고 18*18, 전경컬러없음  */
+	--ui-bg534:url(https://r.yna.co.kr/www/home_n/v03/img/ico_apple01.svg);/* 애플 로고 18*18, 전경컬러없음  */
+	--ui-bg535:url(https://r.yna.co.kr/www/home_n/v03/img/ico_ms01.svg);/* ms 로고 18*18, 전경컬러없음  */
+
+	--ui-bg536:url(https://r.yna.co.kr/www/home_n/v03/img/ico_channel_cubscr_yna02.png); /* 유튜브채널: 연합뉴스 */
+	--ui-bg537:url(https://r.yna.co.kr/www/home_n/v03/img/ico_channel_cubscr_tongtongtv02.png); /* 유튜브채널: 통통tv */
+	--ui-bg538:url(https://r.yna.co.kr/www/home_n/v03/img/ico_channel_cubscr_tongtong-tech02.png); /* 유튜브채널: 통통테크 */
+	--ui-bg539:url(https://r.yna.co.kr/www/home_n/v03/img/ico_channel_cubscr_tongtong-living02.png); /* 유튜브채널: 통통리빙 */
+	--ui-bg540:url(https://r.yna.co.kr/www/home_n/v03/img/ico_channel_cubscr_know02.png); /* 유튜브채널: 코리아나우 */
+	--ui-bg541:url(https://r.yna.co.kr/www/home_n/v03/img/ico_channel_cubscr_d-story02.png); /* 유튜브채널: D스토리 */
+	--ui-bg542:url(https://r.yna.co.kr/www/home_n/v03/img/ico_ubuntu01.svg); /* 우분투 로고 */
+	--ui-bg543:url(https://r.yna.co.kr/www/home_n/v03/img/ico_channel_cubscr_nknow02.png); /* 유튜브채널: 노스코리아나우 로고 */
+	--ui-bg544:url(https://r.yna.co.kr/www/home_n/v03/img/ico_channel_cubscr_kvibe01.png); /* 유튜브채널: K-VIBE 로고 */
+
+	--ui-bg545:url(https://r.yna.co.kr/www/home_n/v03/img/logo_yna12.svg);/* yna 로고 bg패턴 336*236 전경컬러없음  */
+
+	/* 상품소개 페이지 : 현업 추가 요청 */
+	--ui-bg701:url(https://r.yna.co.kr/www/home_n/v03/img/ico_type71_int01.svg);
+	--ui-bg702:url(https://r.yna.co.kr/www/home_n/v03/img/ico_type71_play01.svg);
+	--ui-bg703:url(https://r.yna.co.kr/www/home_n/v03/img/ico_type71_clock01.svg);
+	--ui-bg704:url(https://r.yna.co.kr/www/home_n/v03/img/ico_type71_beat01.svg);
+	--ui-bg705:url(https://r.yna.co.kr/www/home_n/v03/img/ico_type71_news01.svg);
+	--ui-bg706:url(https://r.yna.co.kr/www/home_n/v03/img/ico_type71_save01.svg);
+	--ui-bg707:url(https://r.yna.co.kr/www/home_n/v03/img/ico_type71_glob01.svg);
+	--ui-bg708:url(https://r.yna.co.kr/www/home_n/v03/img/ico_type71_book01.svg);
+	--ui-bg709:url(https://r.yna.co.kr/www/home_n/v03/img/ico_type71_photo01.svg);
+	--ui-bg710:url(https://r.yna.co.kr/www/home_n/v03/img/ico_type71_news02.svg);
+
+	/* ir클럽 상단 */
+	--ui-bg721:url(https://r.yna.co.kr/www/home_n/v03/img/img_irclub_top01.png?v=20250109_1037);
+
+	/* ---- ##ui-bg770 ~ 799 ---- */
+	/* Y뷰어 */
+	--ui-bg770:url(https://r.yna.co.kr/www/home_n/v03/img/ico_report01.svg); /* Y뷰어 제보*/
+	--ui-bg771:url(https://r.yna.co.kr/www/home_n/v03/img/ico_setting02.svg); /* Y뷰어 설정*/
+	--ui-bg772:url(https://r.yna.co.kr/www/home_n/v03/img/ico_coupone01.svg); /* Y뷰어 쿠폰*/
+	--ui-bg773:url(https://r.yna.co.kr/www/home_n/v03/img/ico_close07.svg); /* Y뷰어 팝업 닫기 21*22*/
+	--ui-bg774:url(https://r.yna.co.kr/www/home_n/v03/img/bg-symbols01.gif); /* Y뷰어 symbols bg*/
+	--ui-bg775:url(https://r.yna.co.kr/www/home_n/v03/img/ico_home01.svg); /* Y뷰어 홈 */
+	--ui-bg776:url(https://r.yna.co.kr/www/home_n/v03/img/ico_bknews01.svg); /* Y뷰어 속보 */
+	--ui-bg777:url(https://r.yna.co.kr/www/home_n/v03/img/ico_symbols01.svg); /* Y뷰어 symbols */
+	--ui-bg778:url(https://r.yna.co.kr/www/home_n/v03/img/ico_screen01.svg); /* Y뷰어 영상 */
+
+	/* ---- ##ui-bg800 ~ 999 ---- */
+	/* [ui]배경 이미지 (본문) */
+	--ui-bg800:url(https://r.yna.co.kr/www/home_n/v03/img/ico_view01.svg);/* 이미지 확대 보기 */
+	--ui-bg801:url(https://r.yna.co.kr/www/home_n/v03/img/ico_view02.svg);/* 헬로아카이브 */
+	--ui-bg802:url(https://r.yna.co.kr/www/home_n/v03/img/ico_encyclop01.svg);/* 인물정보 */
+	--ui-bg803:url(https://r.yna.co.kr/www/home_n/v03/img/ico_encyclop02.svg);/* 연합백과 */
+	--ui-bg804:url(https://r.yna.co.kr/www/home_n/v03/img/ico_summary01.svg);/* 세줄보기 */
+	--ui-bg805:url(https://r.yna.co.kr/www/home_n/v03/img/ico_set01_scrap01_off.svg);/* 스크랩Off */
+	--ui-bg806:url(https://r.yna.co.kr/www/home_n/v03/img/ico_set01_scrap01_on.svg);/* 스크랩On */
+	--ui-bg807:url(https://r.yna.co.kr/www/home_n/v03/img/ico_set01_share01.svg);/* 공유 */
+	--ui-bg808:url(https://r.yna.co.kr/www/home_n/v03/img/ico_set01_cmt01.svg);/* 댓글 */
+	--ui-bg809:url(https://r.yna.co.kr/www/home_n/v03/img/ico_set01_fsize01.svg);/* 폰트크기 */
+	--ui-bg810:url(https://r.yna.co.kr/www/home_n/v03/img/ico_set01_print01.svg);/* 인쇄 */
+	--ui-bg811:url(https://r.yna.co.kr/www/home_n/v03/img/ico_set01_report01.svg);/* 제보 */
+	--ui-bg812:url(https://r.yna.co.kr/www/home_n/v03/img/ico_search01.svg); /* 통합검색 검색 */
+	--ui-bg813:url(https://r.yna.co.kr/www/home_n/v03/img/ico_noti01.svg); /* 통합검색 안내 */
+	--ui-bg814:url(https://r.yna.co.kr/www/home_n/v03/img/ico_close05.svg); /* 통합검색 clear 8*8*/
+	--ui-bg815:url(https://r.yna.co.kr/www/home_n/v03/img/ico_filter01.svg); /* 통합검색 filter */
+	--ui-bg816:url(https://r.yna.co.kr/www/home_n/v03/img/ico_arr03.svg); /* 버튼 arrow 15*15, stroke:1.5 */
+	--ui-bg817:url(https://r.yna.co.kr/www/home_n/v03/img/ico_arr04.svg); /* 버튼 arrow 17*17, stroke:1.5 */
+	--ui-bg818:url(https://r.yna.co.kr/www/home_n/v03/img/ico_search02.svg); /* 통합검색 검색02 */
+	--ui-bg819:url(https://r.yna.co.kr/www/home_n/v03/img/ico_arr08.svg); /* 통합검색 리스트 바로가기 - 아이콘 12*12, stroke:none */
+	--ui-bg820:url(https://r.yna.co.kr/www/home_n/v03/img/ico_time01.svg); /* 통합검색 시간 */
+	--ui-bg821:url(https://r.yna.co.kr/www/home_n/v03/img/ico_close06.svg); /* 통합검색 삭제 14*13 */
+	--ui-bg822:url(https://r.yna.co.kr/www/home_n/v03/img/ico_arr16.svg);/* 날씨 select up 화살표 14*14, stroke:none */
+	--ui-bg823:url(https://r.yna.co.kr/www/home_n/v03/img/ico_arr20.svg); /* 날씨 특보현황 select 화살표 21*20, stroke:1.5 */
+	--ui-bg824:url(https://r.yna.co.kr/www/home_n/v03/img/bg_people_none01.svg); /* 인물정보 이미지 없음 */
+	--ui-bg825:url(https://r.yna.co.kr/www/home_n/v03/img/ico_down01.svg);/* 다운로드 */
+	--ui-bg826:url(https://r.yna.co.kr/www/home_n/v03/img/bg_sports01_calendar01.svg);/* 오늘의 경기 배경1 */
+	--ui-bg827:url(https://r.yna.co.kr/www/home_n/v03/img/bg_sports01_calendar02.svg);/* 오늘의 경기 배경2 */
+	--ui-bg828:url(https://r.yna.co.kr/www/home_n/v03/img/bg_sports02_calendar01.svg);/* 내일의 경기 배경1 */
+	--ui-bg829:url(https://r.yna.co.kr/www/home_n/v03/img/bg_sports02_calendar02.svg);/* 내일의 경기 배경2 */
+	--ui-bg830:url(https://r.yna.co.kr/www/home_n/v03/img/ico_triangle01.svg);/* 오피니언 말풍선 삼각형 */
+	--ui-bg831:url(https://r.yna.co.kr/www/home_n/v03/img/ico_search03.svg); /* 기자검색 검색 - 아이콘 */
+	--ui-bg832:url(https://r.yna.co.kr/www/home_n/v03/img/ico_emoticon01.svg?v=20261029_1555); /* 좋아요 - 아이콘 */
+	--ui-bg833:url(https://r.yna.co.kr/www/home_n/v03/img/ico_emoticon02.svg?v=20261029_1555); /* 슬퍼요 - 아이콘 */
+	--ui-bg834:url(https://r.yna.co.kr/www/home_n/v03/img/ico_emoticon03.svg?v=20261029_1555); /* 화나요 - 아이콘 */
+	--ui-bg835:url(https://r.yna.co.kr/www/home_n/v03/img/ico_emoticon04.svg?v=20261029_1555); /* 후속요청 - 아이콘 */
+	--ui-bg836:url(https://r.yna.co.kr/www/home_n/v03/img/ico_type12_copy01.svg); /* RSS- 주소복사 아이콘 */
+	--ui-bg837:url(https://r.yna.co.kr/www/home_n/v03/img/ico_play06.svg);/* 리스트 영상 아이콘 */
+	--ui-bg838:url(https://r.yna.co.kr/www/home_n/v03/img/ico_graphic01.svg);/* 리스트 영상 아이콘 */
+
+	/* ---- ##font-color000 ~ 019 ---- */
+	/* [font]무채색 */
+	--font-color000:transparent; /* (default) */
+	--font-color001:#fff; /* (default) */
+	--font-color002:#000; /* (default) */
+	--font-color003:#111; /* (default) */
+	--font-color004:#888;
+	--font-color005:#444;
+	--font-color006:#666;
+	--font-color007:#f5f5f5;
+	--font-color008:#cdcdcd;
+	--font-color009:#E9E9E9;
+	--font-color010:#72787E; /* 메인 - 오늘의날씨 */
+	--font-color011:#DDD;
+	--font-color012:#555;
+	--font-color013:#D0D0D0;
+	--font-color014:#222;
+	/* ---- ##font-color020 ~ $$$ ---- */
+	/* [font]그 외 */
+	--font-color021:#4F6FCB;
+	--font-color022:#3061ff;
+	--font-color023:#374E8E;
+	--font-color024:#1F5DD6;
+	--font-color025:#293766;
+	--font-color026:none;
+	--font-color027:#712E5A;
+	--font-color028:#4E8567;
+	--font-color029:#CF4223;
+	--font-color030:#7CB1FF;
+	--font-color031:#274D75;
+	--font-color032:#E36F5A;
+	--font-color033:#FFC94D;
+	--font-color034:#8EAC5E;
+	--font-color035:#F1D53E;
+	--font-color036:#EE882B;
+	--font-color037:#E45734;
+	--font-color038:#B13A2A;
+	--font-color039:#4F9ED7;
+	--font-color040:#F7F8F9;
+	--font-color041:#FDE90F;
+	--font-color042:#70C3FF;
+	--font-color043:#46E0EA;
+	--font-color044:#CACACA;
+	--font-color045:#FFC94D;
+	--font-color046:#342B63;
+	--font-color047:#7132F1;
+	--font-color048:#FCFF7C;
+	--font-color049:#FFEBB0;
+	--font-color050:#012D6A;
+	--font-color051:#0F3723;
+	--font-color052:#512ca1;
+	--font-color053:#158D8D;
+	--font-color054:#E66B2E;
+	--font-color055:#1273ff; /* 미세먼지 좋음 */
+	--font-color056:#00cc33; /* 미세먼지 보통 */
+	--font-color057:#ff7d00; /* 미세먼지 나쁨 */
+	--font-color058:#ff3000; /* 미세먼지 매우나쁨 */
+	--font-color059:#0D38B4;
+	--font-color060:#7548D1;
+	--font-color061:#6D93FF;
+	--font-color062:#D29840;
+	--font-color063:#FFFA79;
+	--font-color064:#6564C7;
+	--font-color065:#C84006;
+	--font-color066:#006935;
+	--font-color067:#B90B0B;
+	--font-color068:#8864BF; /* K-VIBE */
+
+
+	/* ---- ##ui-filter000 ~ 099 ---- */
+	/* [ui]기본 (무채색) */
+	--ui-filter000:transparent; /* (default) */
+	--ui-filter001:brightness(0) invert(1); /* 모든색 → #fff */
+	--ui-filter002:brightness(0) invert(0); /* 모든색 → #000 */
+	--ui-filter003:brightness(0) invert(0.945); /* 모든색 → #f1f1f1 */
+	--ui-filter004:brightness(0) invert(0.2); /* 모든색 → #333 */
+	--ui-filter005:brightness(0) invert(0.734); /* 모든색 → #444 */
+	--ui-filter006:brightness(0) invert(0.4); /* 모든색 → #666 */
+	--ui-filter007:brightness(0) invert(0.465); /* 모든색 → #777 */
+	--ui-filter008:brightness(0) invert(0.534); /* 모든색 → #888 */
+	--ui-filter009:brightness(0) invert(0.6); /* 모든색 → #999 */
+	--ui-filter010:brightness(0) invert(0.8); /* 모든색 → #ccc */
+	--ui-filter011:brightness(0.8) invert(100%); /* 모든색 → #CDCDCD */
+	--ui-filter012:brightness(0) saturate(100%) invert(0%) sepia(5%) saturate(7386%) hue-rotate(327deg) brightness(118%) contrast(87%); /* 모든색 → #111111 */
+	--ui-filter013:brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(2610%) hue-rotate(183deg) brightness(112%) contrast(78%); /* 모든색 → #E3E3E3 */
+	--ui-filter014:brightness(0) saturate(100%) invert(89%) sepia(0%) saturate(5%) hue-rotate(115deg) brightness(97%) contrast(93%);/* 모든색 → #D0D0D0 */
+	--ui-filter015:brightness(0) saturate(100%) invert(4%) sepia(4%) saturate(156%) hue-rotate(314deg) brightness(98%) contrast(93%);/* 모든색 → #121212 */
+	--ui-filter016:brightness(0) saturate(100%) invert(57%) sepia(0%) saturate(4567%) hue-rotate(10deg) brightness(104%) contrast(107%);/* 모든색 → #A0A0A0 */
+	--ui-filter017:brightness(0) saturate(100%) invert(12%) sepia(4%) saturate(19%) hue-rotate(336deg) brightness(97%) contrast(86%);/* 모든색 → #2C2C2C */
+	/* ---- ##ui-filter100 ~ ---- */
+	/* [ui]그 외 */
+	/* 모든색 →  */
+	--ui-filter101:brightness(0) saturate(100%) invert(42%) sepia(65%) saturate(1157%) hue-rotate(202deg) brightness(85%) contrast(85%); /* #4F6FCB (파랑) */
+	--ui-filter102:brightness(0) saturate(100%) invert(31%) sepia(63%) saturate(6673%) hue-rotate(199deg) brightness(93%) contrast(101%);/* #0069D4 (파랑) */
+	--ui-filter103:brightness(0) saturate(100%) invert(44%) sepia(37%) saturate(438%) hue-rotate(95deg) brightness(96%) contrast(81%);/* #4E8567 (녹색) */
+	--ui-filter104:brightness(0) saturate(100%) invert(60%) sepia(39%) saturate(3656%) hue-rotate(200deg) brightness(100%) contrast(102%);/* #6D93FF (파랑) */
+	--ui-filter105:brightness(0) saturate(100%) invert(28%) sepia(10%) saturate(5683%) hue-rotate(194deg) brightness(89%) contrast(83%);/*#374E8E (파랑)*/
+	--ui-filter106:brightness(0) saturate(100%) invert(93%) sepia(80%) saturate(5593%) hue-rotate(172deg) brightness(101%) contrast(100%); /*#BDE3FF(하늘) */
+
+
+	/* ---- ##ui-opacity ---- */
+	/* 마우스 오버시 opacity값 */
+	--ui-opacity001:0.7;
+}

@@ -1,0 +1,1031 @@
+/* colorMode - light(default) */
+:root {
+	/* GNB */
+	--svg-logo: url("https://img.khan.co.kr/images/khan/svg/default/logo.svg");
+    --svg-logo-pub80: url("https://img.khan.co.kr/images/khan/svg/default/logo-pub80.svg");
+	--svg-gnb-menu: url("https://img.khan.co.kr/images/khan/svg/default/ic-gnb-menu.svg");
+	--svg-gnb-menu-active: url("https://img.khan.co.kr/images/khan/svg/default/ic-gnb-menu-active.svg");
+	--svg-gnb-mypage: url("https://img.khan.co.kr/images/khan/svg/default/ic-gnb-mypage.svg");
+    --svg-gnb-mypage-loggedIn: url("https://img.khan.co.kr/images/khan/svg/default/ic-gnb-mypage-logged-in.svg");
+	--svg-gnb-search: url("https://img.khan.co.kr/images/khan/svg/default/ic-gnb-search.svg");
+	--svg-ic-close-24: url("https://img.khan.co.kr/images/khan/svg/default/ic-close-24.svg");
+	--svg-ic-plus-24: url("https://img.khan.co.kr/images/khan/svg/default/ic-plus-24.svg");
+	--svg-ic-minus-24: url("https://img.khan.co.kr/images/khan/svg/default/ic-minus-24.svg");
+	/* arrow */
+	--svg-ic-arrow-down-16-gray: url("https://img.khan.co.kr/images/khan/svg/default/ic-arrow-down-16-gray.svg");
+	--svg-ic-arrow-down-16: url("https://img.khan.co.kr/images/khan/svg/default/ic-arrow-down-16.svg");
+	--svg-ic-arrow-last-16: url("https://img.khan.co.kr/images/khan/svg/default/ic-arrow-last-16.svg");
+	--svg-ic-arrow-first-16: url("https://img.khan.co.kr/images/khan/svg/default/ic-arrow-first-16.svg");
+	--svg-ic-arrow-prev-16: url("https://img.khan.co.kr/images/khan/svg/default/ic-arrow-prev-16.svg");
+	--svg-ic-arrow-next-16: url("https://img.khan.co.kr/images/khan/svg/default/ic-arrow-next-16.svg");
+	--svg-ic-arrow-left-24: url("https://img.khan.co.kr/images/khan/svg/default/ic-arrow-left-24.svg");
+	--svg-ic-arrow-right-24: url("https://img.khan.co.kr/images/khan/svg/default/ic-arrow-right-24.svg");
+	--svg-ic-arrow-right-16: url("https://img.khan.co.kr/images/khan/svg/default/ic-arrow-right-16.svg");
+	--svg-ic-arrow-long-24: url("https://img.khan.co.kr/images/khan/svg/default/ic-arrow-long-right-24.svg");
+	--svg-ic-arrow-long-24-photo: url("https://img.khan.co.kr/images/khan/svg/default/ic-arrow-long-right-24-photo.svg");
+	--svg-ic-arrow-outlink-18-gray: url("https://img.khan.co.kr/images/khan/svg/default/ic-arrow-outlink-18-gray.svg");
+	--svg-ic-arrow-outlink-24: url("https://img.khan.co.kr/images/khan/svg/default/ic-arrow-outlink-24.svg");
+	/* icon */
+	--svg-ic-bookmark-16-off: url("https://img.khan.co.kr/images/khan/svg/default/ic-bookmark-16-off.svg");
+	--svg-ic-bookmark-16-on: url("https://img.khan.co.kr/images/khan/svg/default/ic-bookmark-16-on.svg");
+	--svg-ic-bookmark-24-off: url("https://img.khan.co.kr/images/khan/svg/default/ic-bookmark-24-off.svg");
+	--svg-ic-bookmark-24-on: url("https://img.khan.co.kr/images/khan/svg/default/ic-bookmark-24-on.svg");
+	--svg-ic-quotation01 : url('https://img.khan.co.kr/images/khan/svg/default/ic-quote-article-01.svg');
+	--png-ic-quotation03 : url('https://img.khan.co.kr/images/khan/svg/default/ic-quote-article-03-tail.png');
+	--svg-ic-calendar-26: url("https://img.khan.co.kr/images/khan/svg/default/ic-calendar-26.svg");
+	--svg-ic-filter: url("https://img.khan.co.kr/images/khan/svg/default/ic-filter.svg");
+	--svg-ic-info: url("https://img.khan.co.kr/images/khan/svg/default/ic-info-24.svg");
+	--svg-ic-input-radio-normal: url("https://img.khan.co.kr/images/khan/svg/default/ic-input-radio-normal.svg");
+	--svg-ic-input-radio-checked: url("https://img.khan.co.kr/images/khan/svg/default/ic-input-radio-checked.svg");
+	--svg-ic-like-off: url("https://img.khan.co.kr/images/khan/svg/default/ic-like-off.svg");
+	--svg-ic-like-on: url("https://img.khan.co.kr/images/khan/svg/default/ic-like-on.svg");
+	--svg-ic-refresh: url("https://img.khan.co.kr/images/khan/svg/default/ic-refresh.svg");
+	--svg-ic-setting-24: url('https://img.khan.co.kr/images/khan/svg/default/ic-setting-24.svg');
+	--svg-ic-share-link: url("https://img.khan.co.kr/images/khan/svg/default/ic-share-link.svg");
+	--svg-ic-share-email: url("https://img.khan.co.kr/images/khan/svg/default/ic-share-email.svg");
+	--svg-ic-tail: url("https://img.khan.co.kr/images/khan/svg/default/ic-tail.svg");
+    --svg-ic-tail-totop: url("https://img.khan.co.kr/images/khan/svg/default/ic-tail-totop.svg");
+	--svg-ic-article-read-tail: url('https://img.khan.co.kr/images/khan/svg/default/ic-article-read-tail.svg');
+	--svg-ic-tooltip-arrow: url("https://img.khan.co.kr/images/khan/svg/default/ic-tootip-arrow-16.svg");
+	--svg-ic-article-reply: url('https://img.khan.co.kr/images/khan/svg/default/ic-article-reply.svg');
+	--svg-ic-article-play-top: url('https://img.khan.co.kr/images/khan/svg/default/ic-article-play-top.svg');
+	--svg-ic-article-pause-top: url('https://img.khan.co.kr/images/khan/svg/default/ic-article-pause-top.svg');
+	--svg-ic-article-comment: url("https://img.khan.co.kr/images/khan/svg/default/ic-article-comment.svg");
+	--svg-ic-article-textsize: url("https://img.khan.co.kr/images/khan/svg/default/ic-article-textsize.svg");
+	--svg-ic-article-colormode: url("https://img.khan.co.kr/images/khan/svg/default/ic-article-colormode.svg");
+	--svg-ic-article-bookmark: url("https://img.khan.co.kr/images/khan/svg/default/ic-article-bookmark.svg");
+	--svg-ic-article-bookmark-on: url("https://img.khan.co.kr/images/khan/svg/default/ic-article-bookmark-on.svg");
+    --svg-ic-article-favorite: url("https://img.khan.co.kr/images/khan/svg/default/ic-article-favorite.svg");
+	--svg-ic-article-favorite-on: url("https://img.khan.co.kr/images/khan/svg/default/ic-article-favorite-on.svg");
+	--svg-ic-article-share: url("https://img.khan.co.kr/images/khan/svg/default/ic-article-share.svg");
+	--svg-ic-article-print: url("https://img.khan.co.kr/images/khan/svg/default/ic-article-print.svg");
+	--svg-ic-article-comment: url("https://img.khan.co.kr/images/khan/svg/default/ic-article-comment.svg");
+	--svg-ic-article-textsize: url("https://img.khan.co.kr/images/khan/svg/default/ic-article-textsize.svg");
+	--svg-ic-article-colormode: url("https://img.khan.co.kr/images/khan/svg/default/ic-article-colormode.svg");
+	--svg-ic-article-bookmark: url("https://img.khan.co.kr/images/khan/svg/default/ic-article-bookmark.svg");
+    --svg-ic-article-favorite: url("https://img.khan.co.kr/images/khan/svg/default/ic-article-favorite.svg");
+	--svg-ic-article-share: url("https://img.khan.co.kr/images/khan/svg/default/ic-article-share.svg");
+	--svg-ic-article-print: url("https://img.khan.co.kr/images/khan/svg/default/ic-article-print.svg");
+	--svg-ic-textsize-1: url("https://img.khan.co.kr/images/khan/svg/default/ic-textsize-1.svg");
+	--svg-ic-textsize-2: url("https://img.khan.co.kr/images/khan/svg/default/ic-textsize-2.svg");
+	--svg-ic-textsize-3: url("https://img.khan.co.kr/images/khan/svg/default/ic-textsize-3.svg");
+	--svg-ic-textsize-1-on: url("https://img.khan.co.kr/images/khan/svg/default/ic-textsize-1-on.svg");
+	--svg-ic-textsize-2-on: url("https://img.khan.co.kr/images/khan/svg/default/ic-textsize-2-on.svg");
+	--svg-ic-textsize-3-on: url("https://img.khan.co.kr/images/khan/svg/default/ic-textsize-3-on.svg");
+	--svg-ic-colormode-w: url("https://img.khan.co.kr/images/khan/svg/default/ic-colormode-w.svg");
+	--svg-ic-colormode-d: url("https://img.khan.co.kr/images/khan/svg/default/ic-colormode-d.svg");
+	--svg-ic-colormode-b: url("https://img.khan.co.kr/images/khan/svg/default/ic-colormode-b.svg");
+	--svg-ic-colormode-g: url("https://img.khan.co.kr/images/khan/svg/default/ic-colormode-g.svg");
+	--svg-ic-colormode-w-on: url("https://img.khan.co.kr/images/khan/svg/default/ic-colormode-w-on.svg");
+	--svg-ic-colormode-d-on: url("https://img.khan.co.kr/images/khan/svg/default/ic-colormode-d-on.svg");
+	--svg-ic-colormode-b-on: url("https://img.khan.co.kr/images/khan/svg/default/ic-colormode-b-on.svg");
+    --svg-ic-colormode-g-on: url("https://img.khan.co.kr/images/khan/svg/default/ic-colormode-g-on.svg"); 
+    --svg-ic-expression-clapping: url("https://img.khan.co.kr/images/khan/svg/default/ico-fn-clapping.svg");
+    --svg-ic-expression-thumb: url("https://img.khan.co.kr/images/khan/svg/default/ico-fn-thumb.svg");
+    --svg-ic-expression-good: url("https://img.khan.co.kr/images/khan/svg/default/ico-fn-idea.svg");
+    --svg-ic-expression-interesting: url("https://img.khan.co.kr/images/khan/svg/default/ico-fn-interesting.svg");
+    --svg-ic-expression-want: url("https://img.khan.co.kr/images/khan/svg/default/ico-fn-want.svg");
+    --svg-ic-li-related: url("https://img.khan.co.kr/images/khan/svg/default/icon-line-related.svg");
+	/* FOOTER */
+	--svg-ic-footer-logo-facebook: url("https://img.khan.co.kr/images/khan/svg/default/ic-footer-logo-facebook.svg");
+	--svg-ic-footer-logo-youtube: url("https://img.khan.co.kr/images/khan/svg/default/ic-footer-logo-youtube.svg");
+	--svg-ic-footer-logo-x: url("https://img.khan.co.kr/images/khan/svg/default/ic-footer-logo-x.svg");
+	--svg-ic-footer-logo-instagram: url("https://img.khan.co.kr/images/khan/svg/default/ic-footer-logo-instagram.svg");
+	--svg-ic-footer-logo-google: url("https://img.khan.co.kr/images/khan/svg/default/ic-footer-logo-google.svg");
+    --svg-ic-footer-logo-threads: url("https://img.khan.co.kr/images/khan/svg/default/ic-footer-logo-threads.svg");
+	--svg-ic-footer-logo-rss: url("https://img.khan.co.kr/images/khan/svg/default/ic-footer-logo-rss.svg");
+    --svg-ic-footer-share-link: url('https://img.khan.co.kr/images/khan/svg/default/ic-footer-share-link.svg');
+    --svg-ic-footer-move-top: url('https://img.khan.co.kr/images/khan/svg/common/ic-move-top.svg');
+	/* background */
+    --background-white: #FFF;
+	--background-default: #FFF;
+	--background-dark: #F2F2F2;
+	--background-highlight: #333;
+    --background-invert: #242424;
+    --background-bright: #F2F4F9;
+    --background-radiant: #F8F8F8;
+	/* dim */
+	--dim: rgba(0, 0, 0, 0.7);
+	/* text */
+	--text-primary: #151515;
+	--text-secondary: #666;
+	--text-description: #888;
+	--text-inverted: #FFF;
+	--text-disabled: #AAA;
+	--text-impact: #4C70E8;
+	--text-strong: #333;
+	--text-accent-opinion : #BA9571;
+	/* surface */
+	--surface-impact: #4C70E8;
+	--surface-impact-soft: #DFE7FF;
+	--surface-soft: #F2F2F2;
+	/* stroke */
+	--stroke-primary: #151515;
+	--stroke-framing: #DDD;
+    --stroke-separator: #EEE;
+    --stroke-bright: #E5E7ED;
+	/* icon */
+	--icon-soft: #888;
+    /* 광고없는 기사뷰 헤더 */
+    main.art-noad-tp .article-wrap article header {
+	--text-primary: #EEE;
+	--text-secondary: #999;
+	--text-description: #EEE;
+	--text-inverted: #FFF;
+	--text-disabled: #777;
+	--text-impact: #4C70E8;
+	--text-strong: #EEE;
+	--text-accent-opinion : #BA9571;
+    }
+    ul.bottom li.editor div.expand-list a {
+    --text-strong: #333;
+    }
+}
+  
+  /* Dark mode */
+  :root[color-theme="dark"] {
+	/* GNB */
+	--svg-logo: url("https://img.khan.co.kr/images/khan/svg/dark/logo.svg");
+    --svg-logo-pub80: url("https://img.khan.co.kr/images/khan/svg/dark/logo-pub80.svg");
+	--svg-gnb-menu: url("https://img.khan.co.kr/images/khan/svg/dark/ic-gnb-menu.svg");
+	--svg-gnb-menu-active: url("https://img.khan.co.kr/images/khan/svg/dark/ic-gnb-menu-active.svg");
+	--svg-gnb-mypage: url("https://img.khan.co.kr/images/khan/svg/dark/ic-gnb-mypage.svg");
+    --svg-gnb-mypage-loggedIn: url("https://img.khan.co.kr/images/khan/svg/dark/ic-gnb-mypage-logged-in.svg");
+	--svg-gnb-search: url("https://img.khan.co.kr/images/khan/svg/dark/ic-gnb-search.svg");
+	--svg-ic-close-24: url("https://img.khan.co.kr/images/khan/svg/dark/ic-close-24.svg");
+	--svg-ic-plus-24: url("https://img.khan.co.kr/images/khan/svg/dark/ic-plus-24.svg");
+	--svg-ic-minus-24: url("https://img.khan.co.kr/images/khan/svg/dark/ic-minus-24.svg");
+	/* arrow */
+	--svg-ic-arrow-down-16-gray: url("https://img.khan.co.kr/images/khan/svg/dark/ic-arrow-down-16-gray.svg");
+	--svg-ic-arrow-down-16: url("https://img.khan.co.kr/images/khan/svg/dark/ic-arrow-down-16.svg");
+	--svg-ic-arrow-last-16: url("https://img.khan.co.kr/images/khan/svg/dark/ic-arrow-last-16.svg");
+	--svg-ic-arrow-first-16: url("https://img.khan.co.kr/images/khan/svg/dark/ic-arrow-first-16.svg");
+	--svg-ic-arrow-prev-16: url("https://img.khan.co.kr/images/khan/svg/dark/ic-arrow-prev-16.svg");
+	--svg-ic-arrow-next-16: url("https://img.khan.co.kr/images/khan/svg/dark/ic-arrow-next-16.svg");
+	--svg-ic-arrow-left-24: url("https://img.khan.co.kr/images/khan/svg/dark/ic-arrow-left-24.svg");
+	--svg-ic-arrow-right-24: url("https://img.khan.co.kr/images/khan/svg/dark/ic-arrow-right-24.svg");
+	--svg-ic-arrow-right-16: url("https://img.khan.co.kr/images/khan/svg/dark/ic-arrow-right-16.svg");
+	--svg-ic-arrow-long-24: url("https://img.khan.co.kr/images/khan/svg/dark/ic-arrow-long-right-24.svg");
+	--svg-ic-arrow-long-24-photo: url("https://img.khan.co.kr/images/khan/svg/dark/ic-arrow-long-right-24-photo.svg");
+	--svg-ic-arrow-outlink-18-gray: url("https://img.khan.co.kr/images/khan/svg/dark/ic-arrow-outlink-18-gray.svg");
+	--svg-ic-arrow-outlink-24: url("https://img.khan.co.kr/images/khan/svg/dark/ic-arrow-outlink-24.svg");
+	/* icon */
+	--svg-ic-bookmark-16-off: url("https://img.khan.co.kr/images/khan/svg/dark/ic-bookmark-16-off.svg");
+	--svg-ic-bookmark-16-on: url("https://img.khan.co.kr/images/khan/svg/dark/ic-bookmark-16-on.svg");
+	--svg-ic-bookmark-24-off: url("https://img.khan.co.kr/images/khan/svg/dark/ic-bookmark-24-off.svg");
+	--svg-ic-bookmark-24-on: url("https://img.khan.co.kr/images/khan/svg/dark/ic-bookmark-24-on.svg");
+	--svg-ic-quotation01 : url('https://img.khan.co.kr/images/khan/svg/dark/ic-quote-article-01.svg');
+	--png-ic-quotation03 : url('https://img.khan.co.kr/images/khan/svg/dark/ic-quote-article-03-tail.png');
+	--svg-ic-calendar-26: url("https://img.khan.co.kr/images/khan/svg/dark/ic-calendar-26.svg");
+	--svg-ic-filter: url("https://img.khan.co.kr/images/khan/svg/dark/ic-filter.svg");
+	--svg-ic-info: url("https://img.khan.co.kr/images/khan/svg/dark/ic-info-24.svg");
+	--svg-ic-input-radio-normal: url("https://img.khan.co.kr/images/khan/svg/dark/ic-input-radio-normal.svg");
+	--svg-ic-input-radio-checked: url("https://img.khan.co.kr/images/khan/svg/dark/ic-input-radio-checked.svg");
+	--svg-ic-like-off: url("https://img.khan.co.kr/images/khan/svg/dark/ic-like-off.svg");
+	--svg-ic-like-on: url("https://img.khan.co.kr/images/khan/svg/dark/ic-like-on.svg");
+	--svg-ic-refresh: url("https://img.khan.co.kr/images/khan/svg/dark/ic-refresh.svg");
+	--svg-ic-setting-24: url('https://img.khan.co.kr/images/khan/svg/dark/ic-setting-24.svg');
+	--svg-ic-share-link: url("https://img.khan.co.kr/images/khan/svg/dark/ic-share-link.svg");
+	--svg-ic-share-email: url("https://img.khan.co.kr/images/khan/svg/dark/ic-share-email.svg");
+	--svg-ic-tail: url("https://img.khan.co.kr/images/khan/svg/dark/ic-tail.svg");
+	--svg-ic-article-read-tail: url('https://img.khan.co.kr/images/khan/svg/dark/ic-article-read-tail.svg');
+	--svg-ic-tooltip-arrow: url("https://img.khan.co.kr/images/khan/svg/dark/ic-tootip-arrow-16.svg");
+	--svg-ic-article-reply: url('https://img.khan.co.kr/images/khan/svg/dark/ic-article-reply.svg');
+	--svg-ic-article-play-top: url('https://img.khan.co.kr/images/khan/svg/dark/ic-article-play-top.svg');
+	--svg-ic-article-pause-top: url('https://img.khan.co.kr/images/khan/svg/dark/ic-article-pause-top.svg');
+	--svg-ic-article-comment: url("https://img.khan.co.kr/images/khan/svg/dark/ic-article-comment.svg");
+	--svg-ic-article-textsize: url("https://img.khan.co.kr/images/khan/svg/dark/ic-article-textsize.svg");
+	--svg-ic-article-colormode: url("https://img.khan.co.kr/images/khan/svg/dark/ic-article-colormode.svg");
+	--svg-ic-article-bookmark: url("https://img.khan.co.kr/images/khan/svg/dark/ic-article-bookmark.svg");
+	--svg-ic-article-bookmark-on: url("https://img.khan.co.kr/images/khan/svg/dark/ic-article-bookmark-on.svg");
+    --svg-ic-article-favorite: url("https://img.khan.co.kr/images/khan/svg/dark/ic-article-favorite.svg");
+	--svg-ic-article-favorite-on: url("https://img.khan.co.kr/images/khan/svg/dark/ic-article-favorite-on.svg");
+	--svg-ic-article-share: url("https://img.khan.co.kr/images/khan/svg/dark/ic-article-share.svg");
+	--svg-ic-article-print: url("https://img.khan.co.kr/images/khan/svg/dark/ic-article-print.svg");
+	--svg-ic-article-comment: url("https://img.khan.co.kr/images/khan/svg/dark/ic-article-comment.svg");
+	--svg-ic-article-textsize: url("https://img.khan.co.kr/images/khan/svg/dark/ic-article-textsize.svg");
+	--svg-ic-article-colormode: url("https://img.khan.co.kr/images/khan/svg/dark/ic-article-colormode.svg");
+	--svg-ic-article-bookmark: url("https://img.khan.co.kr/images/khan/svg/dark/ic-article-bookmark.svg");
+    --svg-ic-article-favorite: url("https://img.khan.co.kr/images/khan/svg/dark/ic-article-favorite.svg");
+	--svg-ic-article-share: url("https://img.khan.co.kr/images/khan/svg/dark/ic-article-share.svg");
+	--svg-ic-article-print: url("https://img.khan.co.kr/images/khan/svg/dark/ic-article-print.svg");
+	--svg-ic-textsize-1: url("https://img.khan.co.kr/images/khan/svg/dark/ic-textsize-1.svg");
+	--svg-ic-textsize-2: url("https://img.khan.co.kr/images/khan/svg/dark/ic-textsize-2.svg");
+	--svg-ic-textsize-3: url("https://img.khan.co.kr/images/khan/svg/dark/ic-textsize-3.svg");
+	--svg-ic-textsize-1-on: url("https://img.khan.co.kr/images/khan/svg/dark/ic-textsize-1-on.svg");
+	--svg-ic-textsize-2-on: url("https://img.khan.co.kr/images/khan/svg/dark/ic-textsize-2-on.svg");
+	--svg-ic-textsize-3-on: url("https://img.khan.co.kr/images/khan/svg/dark/ic-textsize-3-on.svg");
+	--svg-ic-colormode-w: url("https://img.khan.co.kr/images/khan/svg/dark/ic-colormode-w.svg");
+	--svg-ic-colormode-d: url("https://img.khan.co.kr/images/khan/svg/dark/ic-colormode-d.svg");
+	--svg-ic-colormode-b: url("https://img.khan.co.kr/images/khan/svg/dark/ic-colormode-b.svg");
+	--svg-ic-colormode-g: url("https://img.khan.co.kr/images/khan/svg/dark/ic-colormode-g.svg");
+	--svg-ic-colormode-w-on: url("https://img.khan.co.kr/images/khan/svg/dark/ic-colormode-w-on.svg");
+	--svg-ic-colormode-d-on: url("https://img.khan.co.kr/images/khan/svg/dark/ic-colormode-d-on.svg");
+	--svg-ic-colormode-b-on: url("https://img.khan.co.kr/images/khan/svg/dark/ic-colormode-b-on.svg");
+	--svg-ic-colormode-g-on: url("https://img.khan.co.kr/images/khan/svg/dark/ic-colormode-g-on.svg"); 
+    --svg-ic-expression-clapping: url("https://img.khan.co.kr/images/khan/svg/dark/ico-fn-clapping.svg");
+    --svg-ic-expression-thumb: url("https://img.khan.co.kr/images/khan/svg/dark/ico-fn-thumb.svg");
+    --svg-ic-expression-good: url("https://img.khan.co.kr/images/khan/svg/dark/ico-fn-idea.svg");
+    --svg-ic-expression-interesting: url("https://img.khan.co.kr/images/khan/svg/dark/ico-fn-interesting.svg");
+    --svg-ic-expression-want: url("https://img.khan.co.kr/images/khan/svg/dark/ico-fn-want.svg");
+    --svg-ic-li-related: url("https://img.khan.co.kr/images/khan/svg/dark/icon-line-related.svg");
+	/* FOOTER */
+	--svg-ic-footer-logo-facebook: url("https://img.khan.co.kr/images/khan/svg/dark/ic-footer-logo-facebook.svg");
+	--svg-ic-footer-logo-youtube: url("https://img.khan.co.kr/images/khan/svg/dark/ic-footer-logo-youtube.svg");
+	--svg-ic-footer-logo-x: url("https://img.khan.co.kr/images/khan/svg/dark/ic-footer-logo-x.svg");
+	--svg-ic-footer-logo-instagram: url("https://img.khan.co.kr/images/khan/svg/dark/ic-footer-logo-instagram.svg");
+	--svg-ic-footer-logo-google: url("https://img.khan.co.kr/images/khan/svg/dark/ic-footer-logo-google.svg");
+    --svg-ic-footer-logo-threads: url("https://img.khan.co.kr/images/khan/svg/dark/ic-footer-logo-threads.svg");
+	--svg-ic-footer-logo-rss: url("https://img.khan.co.kr/images/khan/svg/dark/ic-footer-logo-rss.svg");
+    --svg-ic-footer-share-link: url('https://img.khan.co.kr/images/khan/svg/dark/ic-footer-share-link.svg');
+	/* background */
+	--background-default: #242424;
+	--background-dark: #1E1E1E;
+	--background-highlight: #444;
+    --background-invert: #FFF;
+    --background-bright: #333;
+    --background-radiant: #333;
+	/* dim */
+	--dim: rgba(0, 0, 0, 0.7);
+	/* text */
+	--text-primary: #DDD;
+	--text-secondary: #999;
+	--text-description: #777;
+	--text-inverted: #FFF;
+	--text-disabled: #777;
+	--text-impact: #4C70E8;
+	--text-strong: #A9B2AC;
+	--text-accent-opinion : #BA9571;
+	/* surface */
+	--surface-impact: #6A8DFF;
+	--surface-impact-soft: #DFE7FF;
+	--surface-soft: #1E1E1E;
+	/* stroke */
+	--stroke-primary: #DDD;
+	--stroke-framing: #444;
+    --stroke-separator: #333;
+    --stroke-bright: #444;
+	/* icon */
+	--icon-soft: #777;
+    ul.bottom li.editor div.expand-list a {
+    --text-strong: #A9B2AC;
+    }
+  }
+  
+  /* Beige Mode */
+  :root[color-theme="beige"] {
+	/* GNB */
+	--svg-logo: url("https://img.khan.co.kr/images/khan/svg/beige/logo.svg");
+    --svg-logo-pub80: url("https://img.khan.co.kr/images/khan/svg/beige/logo-pub80.svg");
+	--svg-gnb-menu: url("https://img.khan.co.kr/images/khan/svg/beige/ic-gnb-menu.svg");
+	--svg-gnb-menu-active: url("https://img.khan.co.kr/images/khan/svg/beige/ic-gnb-menu-active.svg");
+	--svg-gnb-mypage: url("https://img.khan.co.kr/images/khan/svg/beige/ic-gnb-mypage.svg");
+    --svg-gnb-mypage-loggedIn: url("https://img.khan.co.kr/images/khan/svg/beige/ic-gnb-mypage-logged-in.svg");
+	--svg-gnb-search: url("https://img.khan.co.kr/images/khan/svg/beige/ic-gnb-search.svg");
+	--svg-ic-close-24: url("https://img.khan.co.kr/images/khan/svg/beige/ic-close-24.svg");
+	--svg-ic-plus-24: url("https://img.khan.co.kr/images/khan/svg/beige/ic-plus-24.svg");
+	--svg-ic-minus-24: url("https://img.khan.co.kr/images/khan/svg/beige/ic-minus-24.svg");
+	/* arrow */
+	--svg-ic-arrow-down-16-gray: url("https://img.khan.co.kr/images/khan/svg/beige/ic-arrow-down-16-gray.svg");
+	--svg-ic-arrow-down-16: url("https://img.khan.co.kr/images/khan/svg/beige/ic-arrow-down-16.svg");
+	--svg-ic-arrow-last-16: url("https://img.khan.co.kr/images/khan/svg/beige/ic-arrow-last-16.svg");
+	--svg-ic-arrow-first-16: url("https://img.khan.co.kr/images/khan/svg/beige/ic-arrow-first-16.svg");
+	--svg-ic-arrow-prev-16: url("https://img.khan.co.kr/images/khan/svg/beige/ic-arrow-prev-16.svg");
+	--svg-ic-arrow-next-16: url("https://img.khan.co.kr/images/khan/svg/beige/ic-arrow-next-16.svg");
+	--svg-ic-arrow-left-24: url("https://img.khan.co.kr/images/khan/svg/beige/ic-arrow-left-24.svg");
+	--svg-ic-arrow-right-24: url("https://img.khan.co.kr/images/khan/svg/beige/ic-arrow-right-24.svg");
+	--svg-ic-arrow-right-16: url("https://img.khan.co.kr/images/khan/svg/beige/ic-arrow-right-16.svg");
+	--svg-ic-arrow-long-24: url("https://img.khan.co.kr/images/khan/svg/beige/ic-arrow-long-right-24.svg");
+	--svg-ic-arrow-long-24-photo: url("https://img.khan.co.kr/images/khan/svg/beige/ic-arrow-long-right-24-photo.svg");
+	--svg-ic-arrow-outlink-18-gray: url("https://img.khan.co.kr/images/khan/svg/beige/ic-arrow-outlink-18-gray.svg");
+	--svg-ic-arrow-outlink-24: url("https://img.khan.co.kr/images/khan/svg/beige/ic-arrow-outlink-24.svg");
+	/* icon */
+	--svg-ic-bookmark-16-off: url("https://img.khan.co.kr/images/khan/svg/beige/ic-bookmark-16-off.svg");
+	--svg-ic-bookmark-16-on: url("https://img.khan.co.kr/images/khan/svg/beige/ic-bookmark-16-on.svg");
+	--svg-ic-bookmark-24-off: url("https://img.khan.co.kr/images/khan/svg/beige/ic-bookmark-24-off.svg");
+	--svg-ic-bookmark-24-on: url("https://img.khan.co.kr/images/khan/svg/beige/ic-bookmark-24-on.svg");
+	--svg-ic-quotation01 : url('https://img.khan.co.kr/images/khan/svg/beige/ic-quote-article-01.svg');
+	--png-ic-quotation03 : url('https://img.khan.co.kr/images/khan/svg/beige/ic-quote-article-03-tail.png');
+	--svg-ic-calendar-26: url("https://img.khan.co.kr/images/khan/svg/beige/ic-calendar-26.svg");
+	--svg-ic-filter: url("https://img.khan.co.kr/images/khan/svg/beige/ic-filter.svg");
+	--svg-ic-info: url("https://img.khan.co.kr/images/khan/svg/beige/ic-info-24.svg");
+	--svg-ic-input-radio-normal: url("https://img.khan.co.kr/images/khan/svg/beige/ic-input-radio-normal.svg");
+	--svg-ic-input-radio-checked: url("https://img.khan.co.kr/images/khan/svg/beige/ic-input-radio-checked.svg");
+	--svg-ic-like-off: url("https://img.khan.co.kr/images/khan/svg/beige/ic-like-off.svg");
+	--svg-ic-like-on: url("https://img.khan.co.kr/images/khan/svg/beige/ic-like-on.svg");
+	--svg-ic-refresh: url("https://img.khan.co.kr/images/khan/svg/beige/ic-refresh.svg");
+	--svg-ic-setting-24: url('https://img.khan.co.kr/images/khan/svg/beige/ic-setting-24.svg');
+	--svg-ic-share-link: url("https://img.khan.co.kr/images/khan/svg/beige/ic-share-link.svg");
+	--svg-ic-share-email: url("https://img.khan.co.kr/images/khan/svg/beige/ic-share-email.svg");
+	--svg-ic-tail: url("https://img.khan.co.kr/images/khan/svg/beige/ic-tail.svg");
+	--svg-ic-article-read-tail: url('https://img.khan.co.kr/images/khan/svg/beige/ic-article-read-tail.svg');
+	--svg-ic-tooltip-arrow: url("https://img.khan.co.kr/images/khan/svg/beige/ic-tootip-arrow-16.svg");
+	--svg-ic-article-reply: url('https://img.khan.co.kr/images/khan/svg/beige/ic-article-reply.svg');
+	--svg-ic-article-play-top: url('https://img.khan.co.kr/images/khan/svg/beige/ic-article-play-top.svg');
+	--svg-ic-article-pause-top: url('https://img.khan.co.kr/images/khan/svg/beige/ic-article-pause-top.svg');
+	--svg-ic-article-comment: url("https://img.khan.co.kr/images/khan/svg/beige/ic-article-comment.svg");
+	--svg-ic-article-textsize: url("https://img.khan.co.kr/images/khan/svg/beige/ic-article-textsize.svg");
+	--svg-ic-article-colormode: url("https://img.khan.co.kr/images/khan/svg/beige/ic-article-colormode.svg");
+	--svg-ic-article-bookmark: url("https://img.khan.co.kr/images/khan/svg/beige/ic-article-bookmark.svg");
+	--svg-ic-article-bookmark-on: url("https://img.khan.co.kr/images/khan/svg/beige/ic-article-bookmark-on.svg");
+    --svg-ic-article-favorite: url("https://img.khan.co.kr/images/khan/svg/beige/ic-article-favorite.svg");
+	--svg-ic-article-favorite-on: url("https://img.khan.co.kr/images/khan/svg/beige/ic-article-favorite-on.svg");
+	--svg-ic-article-share: url("https://img.khan.co.kr/images/khan/svg/beige/ic-article-share.svg");
+	--svg-ic-article-print: url("https://img.khan.co.kr/images/khan/svg/beige/ic-article-print.svg");
+	--svg-ic-article-comment: url("https://img.khan.co.kr/images/khan/svg/beige/ic-article-comment.svg");
+	--svg-ic-article-textsize: url("https://img.khan.co.kr/images/khan/svg/beige/ic-article-textsize.svg");
+	--svg-ic-article-colormode: url("https://img.khan.co.kr/images/khan/svg/beige/ic-article-colormode.svg");
+	--svg-ic-article-bookmark: url("https://img.khan.co.kr/images/khan/svg/beige/ic-article-bookmark.svg");
+    --svg-ic-article-favorite: url("https://img.khan.co.kr/images/khan/svg/beige/ic-article-favorite.svg");
+	--svg-ic-article-share: url("https://img.khan.co.kr/images/khan/svg/beige/ic-article-share.svg");
+	--svg-ic-article-print: url("https://img.khan.co.kr/images/khan/svg/beige/ic-article-print.svg");
+	--svg-ic-textsize-1: url("https://img.khan.co.kr/images/khan/svg/beige/ic-textsize-1.svg");
+	--svg-ic-textsize-2: url("https://img.khan.co.kr/images/khan/svg/beige/ic-textsize-2.svg");
+	--svg-ic-textsize-3: url("https://img.khan.co.kr/images/khan/svg/beige/ic-textsize-3.svg");
+	--svg-ic-textsize-1-on: url("https://img.khan.co.kr/images/khan/svg/beige/ic-textsize-1-on.svg");
+	--svg-ic-textsize-2-on: url("https://img.khan.co.kr/images/khan/svg/beige/ic-textsize-2-on.svg");
+	--svg-ic-textsize-3-on: url("https://img.khan.co.kr/images/khan/svg/beige/ic-textsize-3-on.svg");
+	--svg-ic-colormode-w: url("https://img.khan.co.kr/images/khan/svg/beige/ic-colormode-w.svg");
+	--svg-ic-colormode-d: url("https://img.khan.co.kr/images/khan/svg/beige/ic-colormode-d.svg");
+	--svg-ic-colormode-b: url("https://img.khan.co.kr/images/khan/svg/beige/ic-colormode-b.svg");
+	--svg-ic-colormode-g: url("https://img.khan.co.kr/images/khan/svg/beige/ic-colormode-g.svg");
+	--svg-ic-colormode-w-on: url("https://img.khan.co.kr/images/khan/svg/beige/ic-colormode-w-on.svg");
+	--svg-ic-colormode-d-on: url("https://img.khan.co.kr/images/khan/svg/beige/ic-colormode-d-on.svg");
+	--svg-ic-colormode-b-on: url("https://img.khan.co.kr/images/khan/svg/beige/ic-colormode-b-on.svg");
+    --svg-ic-colormode-g-on: url("https://img.khan.co.kr/images/khan/svg/beige/ic-colormode-g-on.svg");
+    --svg-ic-expression-clapping: url("https://img.khan.co.kr/images/khan/svg/beige/ico-fn-clapping.svg");
+    --svg-ic-expression-thumb: url("https://img.khan.co.kr/images/khan/svg/beige/ico-fn-thumb.svg");
+    --svg-ic-expression-good: url("https://img.khan.co.kr/images/khan/svg/beige/ico-fn-idea.svg");
+    --svg-ic-expression-interesting: url("https://img.khan.co.kr/images/khan/svg/beige/ico-fn-interesting.svg");
+    --svg-ic-expression-want: url("https://img.khan.co.kr/images/khan/svg/beige/ico-fn-want.svg");
+    --svg-ic-li-related: url("https://img.khan.co.kr/images/khan/svg/beige/icon-line-related.svg");
+	/* FOOTER */
+	--svg-ic-footer-logo-facebook: url("https://img.khan.co.kr/images/khan/svg/beige/ic-footer-logo-facebook.svg");
+	--svg-ic-footer-logo-youtube: url("https://img.khan.co.kr/images/khan/svg/beige/ic-footer-logo-youtube.svg");
+	--svg-ic-footer-logo-x: url("https://img.khan.co.kr/images/khan/svg/beige/ic-footer-logo-x.svg");
+	--svg-ic-footer-logo-instagram: url("https://img.khan.co.kr/images/khan/svg/beige/ic-footer-logo-instagram.svg");
+	--svg-ic-footer-logo-google: url("https://img.khan.co.kr/images/khan/svg/beige/ic-footer-logo-google.svg");
+    --svg-ic-footer-logo-threads: url("https://img.khan.co.kr/images/khan/svg/beige/ic-footer-logo-threads.svg");
+	--svg-ic-footer-logo-rss: url("https://img.khan.co.kr/images/khan/svg/beige/ic-footer-logo-rss.svg");
+    --svg-ic-footer-share-link: url('https://img.khan.co.kr/images/khan/svg/beige/ic-footer-share-link.svg');
+	/* background */
+	--background-default: #FAF0E1;
+	--background-dark: #F2F2F2;
+	--background-highlight: #333;
+    --background-invert: #242424;
+    --background-bright: #F0E3D1;
+    --background-radiant: #F0E3D1;
+	/* dim */
+	--dim: rgba(0, 0, 0, 0.7);
+	/* text */
+	--text-primary: #2F2920;
+	--text-secondary: #756B5C;
+	--text-description: #8A8070;
+	--text-inverted: #FFF;
+	--text-disabled: #AAA;
+	--text-impact: #4C70E8;
+	--text-strong: #433D34;
+	--text-accent-opinion : #BA9571;
+	/* surface */
+	--surface-impact: #4C70E8;
+	--surface-impact-soft: #DFE7FF;
+	--surface-soft: #F0E3D1;
+	/* stroke */
+	--stroke-primary: #2F2920;
+	--stroke-framing: #C2B7A7;
+    --stroke-separator: #E0D3C1;
+    --stroke-bright: #E0D3C1;
+	/* icon */
+	--icon-soft: #8A8070;
+  }
+  
+  /* Green Mode */
+  :root[color-theme="green"] {
+	/* GNB */
+	--svg-logo: url("https://img.khan.co.kr/images/khan/svg/green/logo.svg");
+    --svg-logo-pub80: url("https://img.khan.co.kr/images/khan/svg/green/logo-pub80.svg");
+	--svg-gnb-menu: url("https://img.khan.co.kr/images/khan/svg/green/ic-gnb-menu.svg");
+	--svg-gnb-menu-active: url("https://img.khan.co.kr/images/khan/svg/green/ic-gnb-menu-active.svg");
+	--svg-gnb-mypage: url("https://img.khan.co.kr/images/khan/svg/green/ic-gnb-mypage.svg");
+    --svg-gnb-mypage-loggedIn: url("https://img.khan.co.kr/images/khan/svg/green/ic-gnb-mypage-logged-in.svg");
+	--svg-gnb-search: url("https://img.khan.co.kr/images/khan/svg/green/ic-gnb-search.svg");
+	--svg-ic-close-24: url("https://img.khan.co.kr/images/khan/svg/green/ic-close-24.svg");
+	--svg-ic-plus-24: url("https://img.khan.co.kr/images/khan/svg/green/ic-plus-24.svg");
+	--svg-ic-minus-24: url("https://img.khan.co.kr/images/khan/svg/green/ic-minus-24.svg");
+	/* arrow */
+	--svg-ic-arrow-down-16-gray: url("https://img.khan.co.kr/images/khan/svg/green/ic-arrow-down-16-gray.svg");
+	--svg-ic-arrow-down-16: url("https://img.khan.co.kr/images/khan/svg/green/ic-arrow-down-16.svg");
+	--svg-ic-arrow-last-16: url("https://img.khan.co.kr/images/khan/svg/green/ic-arrow-last-16.svg");
+	--svg-ic-arrow-first-16: url("https://img.khan.co.kr/images/khan/svg/green/ic-arrow-first-16.svg");
+	--svg-ic-arrow-prev-16: url("https://img.khan.co.kr/images/khan/svg/green/ic-arrow-prev-16.svg");
+	--svg-ic-arrow-next-16: url("https://img.khan.co.kr/images/khan/svg/green/ic-arrow-next-16.svg");
+	--svg-ic-arrow-left-24: url("https://img.khan.co.kr/images/khan/svg/green/ic-arrow-left-24.svg");
+	--svg-ic-arrow-right-24: url("https://img.khan.co.kr/images/khan/svg/green/ic-arrow-right-24.svg");
+	--svg-ic-arrow-right-16: url("https://img.khan.co.kr/images/khan/svg/green/ic-arrow-right-16.svg");
+	--svg-ic-arrow-long-24: url("https://img.khan.co.kr/images/khan/svg/green/ic-arrow-long-right-24.svg");
+	--svg-ic-arrow-long-24-photo: url("https://img.khan.co.kr/images/khan/svg/green/ic-arrow-long-right-24-photo.svg");
+	--svg-ic-arrow-outlink-18-gray: url("https://img.khan.co.kr/images/khan/svg/green/ic-arrow-outlink-18-gray.svg");
+	--svg-ic-arrow-outlink-24: url("https://img.khan.co.kr/images/khan/svg/green/ic-arrow-outlink-24.svg");
+	/* icon */
+	--svg-ic-bookmark-16-off: url("https://img.khan.co.kr/images/khan/svg/green/ic-bookmark-16-off.svg");
+	--svg-ic-bookmark-16-on: url("https://img.khan.co.kr/images/khan/svg/green/ic-bookmark-16-on.svg");
+	--svg-ic-bookmark-24-off: url("https://img.khan.co.kr/images/khan/svg/green/ic-bookmark-24-off.svg");
+	--svg-ic-bookmark-24-on: url("https://img.khan.co.kr/images/khan/svg/green/ic-bookmark-24-on.svg");
+	--svg-ic-quotation01 : url('https://img.khan.co.kr/images/khan/svg/green/ic-quote-article-01.svg');
+	--png-ic-quotation03 : url('https://img.khan.co.kr/images/khan/svg/green/ic-quote-article-03-tail.png');
+	--svg-ic-calendar-26: url("https://img.khan.co.kr/images/khan/svg/green/ic-calendar-26.svg");
+	--svg-ic-filter: url("https://img.khan.co.kr/images/khan/svg/green/ic-filter.svg");
+	--svg-ic-info: url("https://img.khan.co.kr/images/khan/svg/green/ic-info-24.svg");
+	--svg-ic-input-radio-normal: url("https://img.khan.co.kr/images/khan/svg/green/ic-input-radio-normal.svg");
+	--svg-ic-input-radio-checked: url("https://img.khan.co.kr/images/khan/svg/green/ic-input-radio-checked.svg");
+	--svg-ic-like-off: url("https://img.khan.co.kr/images/khan/svg/green/ic-like-off.svg");
+	--svg-ic-like-on: url("https://img.khan.co.kr/images/khan/svg/green/ic-like-on.svg");
+	--svg-ic-refresh: url("https://img.khan.co.kr/images/khan/svg/green/ic-refresh.svg");
+	--svg-ic-setting-24: url('https://img.khan.co.kr/images/khan/svg/green/ic-setting-24.svg');
+	--svg-ic-share-link: url("https://img.khan.co.kr/images/khan/svg/green/ic-share-link.svg");
+	--svg-ic-share-email: url("https://img.khan.co.kr/images/khan/svg/green/ic-share-email.svg");
+	--svg-ic-tail: url("https://img.khan.co.kr/images/khan/svg/green/ic-tail.svg");
+	--svg-ic-article-read-tail: url('https://img.khan.co.kr/images/khan/svg/green/ic-article-read-tail.svg');
+	--svg-ic-tooltip-arrow: url("https://img.khan.co.kr/images/khan/svg/green/ic-tootip-arrow-16.svg");
+	--svg-ic-article-reply: url('https://img.khan.co.kr/images/khan/svg/green/ic-article-reply.svg');
+	--svg-ic-article-play-top: url('https://img.khan.co.kr/images/khan/svg/green/ic-article-play-top.svg');
+	--svg-ic-article-pause-top: url('https://img.khan.co.kr/images/khan/svg/green/ic-article-pause-top.svg');
+	--svg-ic-article-comment: url("https://img.khan.co.kr/images/khan/svg/green/ic-article-comment.svg");
+	--svg-ic-article-textsize: url("https://img.khan.co.kr/images/khan/svg/green/ic-article-textsize.svg");
+	--svg-ic-article-colormode: url("https://img.khan.co.kr/images/khan/svg/green/ic-article-colormode.svg");
+	--svg-ic-article-bookmark: url("https://img.khan.co.kr/images/khan/svg/green/ic-article-bookmark.svg");
+	--svg-ic-article-bookmark-on: url("https://img.khan.co.kr/images/khan/svg/green/ic-article-bookmark-on.svg");
+    --svg-ic-article-favorite: url("https://img.khan.co.kr/images/khan/svg/green/ic-article-favorite.svg");
+	--svg-ic-article-favorite-on: url("https://img.khan.co.kr/images/khan/svg/green/ic-article-favorite-on.svg");
+	--svg-ic-article-share: url("https://img.khan.co.kr/images/khan/svg/green/ic-article-share.svg");
+	--svg-ic-article-print: url("https://img.khan.co.kr/images/khan/svg/green/ic-article-print.svg");
+	--svg-ic-article-comment: url("https://img.khan.co.kr/images/khan/svg/green/ic-article-comment.svg");
+	--svg-ic-article-textsize: url("https://img.khan.co.kr/images/khan/svg/green/ic-article-textsize.svg");
+	--svg-ic-article-colormode: url("https://img.khan.co.kr/images/khan/svg/green/ic-article-colormode.svg");
+	--svg-ic-article-bookmark: url("https://img.khan.co.kr/images/khan/svg/green/ic-article-bookmark.svg");
+    --svg-ic-article-favorite: url("https://img.khan.co.kr/images/khan/svg/green/ic-article-favorite.svg");
+	--svg-ic-article-share: url("https://img.khan.co.kr/images/khan/svg/green/ic-article-share.svg");
+	--svg-ic-article-print: url("https://img.khan.co.kr/images/khan/svg/green/ic-article-print.svg");
+	--svg-ic-textsize-1: url("https://img.khan.co.kr/images/khan/svg/green/ic-textsize-1.svg");
+	--svg-ic-textsize-2: url("https://img.khan.co.kr/images/khan/svg/green/ic-textsize-2.svg");
+	--svg-ic-textsize-3: url("https://img.khan.co.kr/images/khan/svg/green/ic-textsize-3.svg");
+	--svg-ic-textsize-1-on: url("https://img.khan.co.kr/images/khan/svg/green/ic-textsize-1-on.svg");
+	--svg-ic-textsize-2-on: url("https://img.khan.co.kr/images/khan/svg/green/ic-textsize-2-on.svg");
+	--svg-ic-textsize-3-on: url("https://img.khan.co.kr/images/khan/svg/green/ic-textsize-3-on.svg");
+	--svg-ic-colormode-w: url("https://img.khan.co.kr/images/khan/svg/green/ic-colormode-w.svg");
+	--svg-ic-colormode-d: url("https://img.khan.co.kr/images/khan/svg/green/ic-colormode-d.svg");
+	--svg-ic-colormode-b: url("https://img.khan.co.kr/images/khan/svg/green/ic-colormode-b.svg");
+	--svg-ic-colormode-g: url("https://img.khan.co.kr/images/khan/svg/green/ic-colormode-g.svg");
+	--svg-ic-colormode-w-on: url("https://img.khan.co.kr/images/khan/svg/green/ic-colormode-w-on.svg");
+	--svg-ic-colormode-d-on: url("https://img.khan.co.kr/images/khan/svg/green/ic-colormode-d-on.svg");
+	--svg-ic-colormode-b-on: url("https://img.khan.co.kr/images/khan/svg/green/ic-colormode-b-on.svg");
+    --svg-ic-colormode-g-on: url("https://img.khan.co.kr/images/khan/svg/green/ic-colormode-g-on.svg");
+    --svg-ic-expression-clapping: url("https://img.khan.co.kr/images/khan/svg/green/ico-fn-clapping.svg");
+    --svg-ic-expression-thumb: url("https://img.khan.co.kr/images/khan/svg/green/ico-fn-thumb.svg");
+    --svg-ic-expression-good: url("https://img.khan.co.kr/images/khan/svg/green/ico-fn-idea.svg");
+    --svg-ic-expression-interesting: url("https://img.khan.co.kr/images/khan/svg/green/ico-fn-interesting.svg");
+    --svg-ic-expression-want: url("https://img.khan.co.kr/images/khan/svg/green/ico-fn-want.svg");
+    --svg-ic-li-related: url("https://img.khan.co.kr/images/khan/svg/green/icon-line-related.svg");
+	/* FOOTER */
+	--svg-ic-footer-logo-facebook: url("https://img.khan.co.kr/images/khan/svg/green/ic-footer-logo-facebook.svg");
+	--svg-ic-footer-logo-youtube: url("https://img.khan.co.kr/images/khan/svg/green/ic-footer-logo-youtube.svg");
+	--svg-ic-footer-logo-x: url("https://img.khan.co.kr/images/khan/svg/green/ic-footer-logo-x.svg");
+	--svg-ic-footer-logo-instagram: url("https://img.khan.co.kr/images/khan/svg/green/ic-footer-logo-instagram.svg");
+	--svg-ic-footer-logo-google: url("https://img.khan.co.kr/images/khan/svg/green/ic-footer-logo-google.svg");
+    --svg-ic-footer-logo-threads: url("https://img.khan.co.kr/images/khan/svg/green/ic-footer-logo-threads.svg");
+	--svg-ic-footer-logo-rss: url("https://img.khan.co.kr/images/khan/svg/green/ic-footer-logo-rss.svg");
+    --svg-ic-footer-share-link: url('https://img.khan.co.kr/images/khan/svg/green/ic-footer-share-link.svg');
+	/* background */
+	--background-default: #1C2920;
+	--background-dark: #F2F2F2;
+	--background-highlight: #333;
+    --background-invert: #C4CCC6;
+    --background-bright: #313D35;
+    --background-radiant: #313D35;
+	/* dim */
+	--dim: rgba(0, 0, 0, 0.7);
+	/* text */
+	--text-primary: #C4CCC6;
+	--text-secondary: #919994;
+	--text-description: #6D7A72;
+	--text-inverted: #FFF;
+	--text-disabled: #AAA;
+	--text-impact: #4C70E8;
+	--text-strong: #A9B2AC;
+	--text-accent-opinion : #BA9571;
+	/* surface */
+	--surface-impact: #4C70E8;
+	--surface-impact-soft: #DFE7FF;
+	--surface-soft: #17241B;
+	/* stroke */
+	--stroke-primary: #C4CCC6;
+	--stroke-framing: #3D4D43;
+    --stroke-separator: #313D35;
+    --stroke-bright: #555;
+	/* icon */
+	--icon-soft: #6D7A72;
+    ul.bottom li.editor div.expand-list a {
+    --text-strong: #A9B2AC;
+    }
+}
+/* reset, common, font */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video { margin: 0; padding: 0; border: 0; font-size: 100%; vertical-align: baseline; box-sizing: border-box; }
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display: block; box-sizing: border-box; }
+body { line-height: 1; }
+ol, ul { list-style: none; }
+blockquote, q { quotes: none; }
+input, textarea { box-sizing: border-box; }
+blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none; }
+table {	border-collapse: collapse; border-spacing: 0; }
+img { display: block; }
+em { font-style: normal; }
+a { text-decoration: none; color: var(--text-primary); }
+a.txt, span.txt, button.txt, .blind { text-indent: -9999px; font-size: 0; line-height: 0; }
+button { margin: 0; padding: 0; outline: 0; border: 0 none; background-color: transparent; cursor:pointer; }
+.dim { background-color: var(--dim); width: 100%; height: 100%; position: fixed; display: none; }
+.dim-add { background-color: var(--dim); width: 100%; height: 100%; position: fixed; display: none; /* pointer-events: none; */ }
+.not_scroll { overflow: hidden; touch-action: none; }
+.display-none { display: none!important; }
+#dim-menu { z-index: 8; }
+#dim-all { z-index: 11; }
+#dim-gudoc { z-index: 8; }
+/* @font-face { font-family: 'Pretendard Variable'; font-weight: 45 920; font-style: normal; font-display: swap; src: url('https://img.khan.co.kr/spko/fonts/PretendardVariable.woff2') format('woff2-variations'); }
+@font-face { font-family: 'Pretendard Variable'; font-weight: 400 800; font-style: normal; font-display: swap; src: url('https://img.khan.co.kr/spko/fonts/PretendardVariable.400-800.3713.woff2') format('woff2-variations'); }
+body { font-family: "Pretendard Variable", sans-serif; color: var(--text-primary); background-color: var(--background-default);}
+*/
+@font-face { font-family: 'SUIT'; font-weight: 700; font-display: swap; src: url('https://img.khan.co.kr/spko/fonts/sm/SUIT-ExtraBold.woff2') format('woff2'); }
+@font-face { font-family: 'SUIT'; font-weight: 400; font-display: swap; src: url('https://img.khan.co.kr/spko/fonts/sm/SUIT-Medium.woff2') format('woff2'); }
+@font-face { font-family: 'EllipsisFont'; src: local('Segoe UI'), local('Apple SD Gothic Neo'), local('Malgun Gothic'); unicode-range: U+00B7; }
+
+body { font-family: "EllipsisFont", "SUIT", Noto Sans KR, Helvetica-light, AppleSDGothicNeo-Light, Roboto-Light, Malgun Gothic, Dotum, Helvetica, AppleGothic, Sans-serif; font-feature-settings: "ss18" on; font-synthesis: none; letter-spacing: -.01em; color: var(--text-primary); background-color: var(--background-default); }
+i { font-synthesis: style; }
+
+em.red { display: inline-block; vertical-align: text-bottom; padding: 0 4px; margin-right: 8px; border-radius: 2px; font-size: 12px; font-weight: 600; line-height: 18px; color: #FFF; background-color: #F25050; } /* 속보 */
+em.blue { display: inline-block; vertical-align: text-bottom; padding: 0 4px; margin-right: 8px; border-radius: 2px; font-size: 12px; font-weight: 600; line-height: 18px; color: #FFF; background-color: #4C70E8; } /* 단독, 전문 */
+em.l { font-size: 15px; line-height: 18px; padding: 3px 5px; }
+
+span.tag { display: inline-block; vertical-align: text-bottom; padding: 0 4px; margin-right: 8px; border-radius: 2px; font-size: 12px; font-weight: 600; line-height: 18px; }
+.tag.tag-blue { color: #FFF!important; background-color: #4C70E8; } /* 단독, 전문 */
+.tag.tag-red { color: #FFF!important; background-color: #F25050; } /* 속보 */
+.tag.tag-quote { text-indent: -9999px; width: 16px; background: url("https://img.khan.co.kr/images/khan/svg/common/ic-quote.svg") no-repeat left 50%; background-size: cover; } /* 인용구 */
+.add { display: inline; }
+.add.bold { font-weight: 700!important; } /* 볼드 처리 */
+.add.fc-red { color: #f25632!important; } /* 강조색-붉은색계열 */
+.add.fc-blue { color: #366fd1!important; } /* 강조색-푸른색계열 */
+.add.fc-brown { color: #c27a33!important; } /* 강조색-브라운계열 */
+
+/* toolTip */
+.btn-tooltip { position: absolute; right: 0; top: 14px; z-index: 1; cursor: pointer; display: block; width: 24px; height: 24px; background: var(--svg-ic-info) no-repeat; }
+.tooltip-wrap { display: none; position: absolute; top: 50%; right: 42px; z-index: 2; transform: translateY(-50%); }
+.tooltip-wrap div.tooltip { display: flex; padding: 8px 8px 12px 16px; border-radius: 8px; background-color: var(--surface-impact); }
+.tooltip-wrap div.tooltip::after { position: absolute; display: block; width: 16px; height: 16px; right: -13px; top: 50%; transform: translateY(-50%); content: ''; background: var(--svg-ic-tooltip-arrow) no-repeat; }
+.tooltip-wrap div.tooltip p { width: 174px; padding-right: 18px; color: var(--text-inverted); font-size: 14px; font-weight: 600; line-height: 20px; padding-top: 4px; }
+.tooltip-wrap div.tooltip p strong.khanup { display: inline-block; height: 20px; content: ''; padding-right: 60px; background: url('https://img.khan.co.kr/images/khan/svg/common/ic-khanup-default.svg') no-repeat; background-position: right center; background-size: 57px; /* color: var(--text-impact); */ } /* 칸업 로고 표시 */
+.tooltip-wrap div.tooltip p a.login { display: inline-block; text-decoration: underline; color: #fff; font-size: 100%; }
+.tooltip-wrap div.tooltip button { cursor: pointer; font-size:0; text-indent: -9999px; border: 0; padding: 0; margin: 0; display: block; width: 20px; height: 20px; right: 0; top: 16px; z-index: 1; content: ''; background: url("https://img.khan.co.kr/images/khan/svg/common/ic-close-20-white.svg") no-repeat; }
+
+/* header */
+/* header - GNB */
+body > header { background-color: var(--background-default); position: fixed; width: 100%; z-index: 10; }
+body > header .wrap { max-width: 1216px; margin: 0 auto; }
+body > header .wrap.gnb { display: flex; flex-direction: row; justify-content: space-between; align-items: center; height: 93px; transition: all 0.3s; }
+body > header.scroll .wrap.gnb { transition: none; }
+body > header hr { margin: 0 auto; padding: 0; max-width: 1216px; height: 0; border: 0; border-bottom: 3px solid var(--stroke-primary); transition: all 0.3s; }
+body > header .wrap h1 > a  { display: block; width: 158px; height: 40px; background: var(--svg-logo); background-size: 100% 100%; transition: all 0.3s; }
+/* header - scroll */
+body > header.scroll hr { max-width: 100%; border-bottom: 1px solid var(--stroke-separator); }
+body > header.scroll .wrap.gnb { height: 71px; }
+body > header.scroll .wrap h1 > a  { width: 111px; height: 28px; }
+/* header - menu */
+body > header .menu-category { display: flex; position: absolute; left: 50%; transform: translateX(-50%);}
+body > header .menu-category li { padding: 0 6px; }
+body > header .menu-category li a { font-size: 18px; font-weight: 700; line-height: 22px; display: block; padding: 6px; }
+body > header .menu-common { display: flex; align-items: center; margin-right: -8px; }
+body > header .menu-common li { padding: 0 6px; }
+body > header .menu-common li:first-child { margin: 0 4px 0 0;}
+body > header .menu-common li:last-child { padding: 0 0 0 6px; }
+body > header .menu-common li a,
+body > header .menu-common li button { display: block; width: 36px; height: 36px; background-size: 100% 100%; }
+body > header .menu-common li a.mynews,
+body > header .menu-common li button.mynews { width: auto; height: auto; padding: 2.5px 4.5px; border-radius: 4px; border: 1.5px solid var(--text-impact); color: var(--text-impact); font-size: 12px; font-weight: 500; line-height: 14px; }
+body > header .menu-common li a.mynews:hover,
+body > header .menu-common li button.mynews:hover { color: var(--text-inverted); background-color: var(--surface-impact); }
+body > header .menu-common li a.mypage,
+body > header .menu-common li button.mypage { background: var(--svg-gnb-mypage); }
+body > header .menu-common li a.mypage.active,
+body > header .menu-common li button.mypage.active { background: var(--svg-gnb-mypage-loggedIn); }
+body > header .menu-common li a.search,
+body > header .menu-common li button.search { background: var(--svg-gnb-search); cursor: pointer; }
+body > header .menu-common li a.search.active,
+body > header .menu-common li button.search.active { background: var(--svg-gnb-menu-active); }
+body > header .menu-common li a.menu,
+body > header .menu-common li button.menu { background: var(--svg-gnb-menu); cursor: pointer; }
+body > header .menu-common li a.menu.active,
+body > header .menu-common li button.menu.active { background: var(--svg-gnb-menu-active); }
+/* header - menuExpand - category */
+body > header .category { display: none; }
+body > header .category .title-m { display: none; }
+body > header .category > ul { width: 100%; display: flex; flex-wrap: wrap; flex-direction: row; align-items: stretch; margin-top: 24px; }
+body > header .category > ul > li { flex: 1 1 10%; border-right: 1px solid var(--stroke-separator); gap: 16px; margin-bottom: 24px;}
+body > header .category > ul > li:first-child > dl { padding-left: 0; }
+body > header .category > ul > li:last-child { border-right: 0; }
+body > header .category > ul > li > dl { padding-left: 16px; }
+body > header .category > ul > li > dl > dt { font-size: 15px; font-weight: 700; line-height: 22px; }
+body > header .category > ul > li > dl > dd {padding-top:4px;}
+body > header .category > ul > li > dl > dd > ul > li { padding-top: 12px; }
+body > header .category > ul > li > dl > dd > ul > li.btn-m-all { display: none; }
+body > header .category > ul > li > dl > dd > ul > li > a { font-size: 14px; font-weight: 500; line-height: 20px; }
+body > header .category > ul > li:last-child > ul.dt { padding-left: 15px; }
+body > header .category > ul > li > ul.dt { padding-left: 16px; }
+body > header .category > ul > li > ul.dt > li { padding-top: 12px; }
+body > header .category > ul > li > ul.dt > li:first-child { padding: 0; }
+body > header .category > ul > li > ul.dt > li > a { font-size: 15px; font-weight: 700; line-height: 22px; }
+body > header .category > ul > li > ul.dt > li > a.alter { font-size: 13px; font-weight: 600; line-height: 20px; display: block; padding-left: 24px; background-repeat: no-repeat; background-size: 20px 20px; background-position: left center;}
+/* header - menuExpand - etc */
+body > header .etc { display: flex; justify-content: space-between; padding: 32px 0; border-top: 1px solid var(--stroke-separator);}
+body > header .etc > ul { display: flex; align-items: center; gap: 24px; }
+body > header .etc > ul > li > a { font-size: 15px; font-weight: 700; line-height: 22px; word-break: keep-all; white-space: nowrap;}
+body > header .etc > ul:last-child { gap: 20px; }
+body > header .etc > ul:last-child > li > a { font-size: 14px; font-weight: 500; line-height: 20px; }
+/* header - mobile only */
+body > header .mobile-only { display: none; }
+/* header - search */
+body > header .wrap.search { padding: 24px 0; display: none; } 
+body > header .wrap.search form { position: relative; margin: 0 auto; width: 800px; border-radius: 34px; padding: 14px 16px 14px 24px; background-color: var(--surface-soft); }
+body > header .wrap.search input { border: 0; margin: 0; padding: 0; width: 716px; font-size: 16px; line-height: 24px; background-color: transparent; outline: none; color: var(--text-primary);}
+body > header .wrap.search input::placeholder { color: var(--text-disabled); }
+body > header .wrap.search button { position: absolute; top: 8px; right: 16px; border: 0; margin: 0; padding: 0; width: 36px; height: 36px; background: var(--svg-gnb-search); cursor: pointer; }
+
+/* footer */
+body > footer, body > footer a { color: var(--text-secondary); }
+body > footer { position: relative;  z-index: 4; }
+body > footer .expand { border-top: 1px solid var(--stroke-separator); }
+body > footer .wrap { max-width: 1216px; margin: 0 auto; }
+/* footer - menu */
+body > footer .wrap.menu { padding: 19px 0 42px; }
+body > footer .menu > ul { display: flex; flex-wrap: wrap; align-items: stretch; }
+body > footer .menu > ul > li { flex: 1 1 15%; }
+body > footer .menu > ul > li > ul > li { padding-bottom: 12px; }
+body > footer .menu > ul > li > ul > li:last-child { padding-bottom: 0; }
+body > footer .menu > ul > li > ul > li > a { color: var(--text-description); font-size: 14px; font-weight: 500; line-height: 20px; }
+/* footer - etc */
+body > footer .wrap.etc { padding: 15px 0 16px; }
+body > footer .etc > ul { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+body > footer .etc > ul > li:last-child { position: relative; }
+body > footer .etc > ul > li > a,
+body > footer .etc > ul > li > div { color: var(--text-secondary); font-size: 13px; font-weight: 500; line-height: 18px; }
+body > footer .etc > ul > li > a.btn-familysite,
+body > footer .etc > ul > li > div.btn-familysite { cursor: pointer; display: block; position: relative; padding-right: 20px; }
+body > footer .etc > ul > li > a.btn-familysite::after,
+body > footer .etc > ul > li > div.btn-familysite::after { position: absolute; display: block; width: 16px; height: 16px; right: 0; top: 1px; content: ''; background: var(--svg-ic-arrow-down-16-gray) no-repeat; transition: all 0.3s; }
+body > footer .etc > ul > li > a.btn-familysite.active::after,
+body > footer .etc > ul > li > div.btn-familysite.active::after { transform: rotate(180deg); }
+body > footer .etc > ul > li > ul.familysite-list { display: none; position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%); padding: 14px 16px; border-radius: 4px; border: 1px solid var(--stroke-framing); background-color: var(--background-default); }
+body > footer .etc > ul > li > ul.familysite-list > li { padding-bottom: 14px; }
+body > footer .etc > ul > li > ul.familysite-list > li:last-child { padding: 0; }
+body > footer .etc > ul > li > ul.familysite-list > li > a { word-break: keep-all; color: var(--text-description); font-size: 13px; font-weight: 500; line-height: 18px; }
+/* footer - family site only tablet, mobile */
+body > footer .familysite-list-m { display: none; } 
+/* footer - information */
+body > footer .expand.info { background-color: var(--surface-soft); padding: 32px 0 42px; border-top: 0; }
+body > footer .info { color: var(--text-secondary); font-size: 13px; font-weight: 400; line-height: 18px; }
+body > footer .info h1 > a  { display: block; width: 111px; height: 28px; background: var(--svg-logo); background-size: 100% 100%; }
+body > footer .info > ul { display: flex; flex-wrap: wrap; align-items: top; justify-content: space-between; }
+body > footer .info > ul > li:first-child { padding-right: 96px; }
+body > footer .info > ul > li:last-child { padding-left: 127px; }
+body > footer .info .menu, body > footer .info .contact, body > footer .info .manager, body > footer .info .link { display: flex; }
+body > footer .info .menu { padding-bottom: 16px; gap: 16px; }
+body > footer .info .menu a { font-weight: 600; }
+body > footer .info .contact, body > footer .info .manager { gap: 12px; padding-bottom: 6px;}
+body > footer .info .manager { gap:0; }
+body > footer .info .manager li { border-right: 1px solid var(--stroke-framing); padding: 0 8px; }
+body > footer .info .manager li:first-child { padding-left: 0; }
+body > footer .info .manager li:last-child { border: 0; padding-right: 0; }
+body > footer .info .link { gap: 16px; }
+body > footer .info .link a { display: block; width: 36px; height: 36px; background-size: 100% 100%; }
+body > footer .info .link a.btn-facebook { background-image: var(--svg-ic-footer-logo-facebook); }
+body > footer .info .link a.btn-youtube { background-image: var(--svg-ic-footer-logo-youtube); }
+body > footer .info .link a.btn-x { background-image: var(--svg-ic-footer-logo-x); }
+body > footer .info .link a.btn-instagram { background-image: var(--svg-ic-footer-logo-instagram); }
+body > footer .info .link a.btn-google { background-image: var(--svg-ic-footer-logo-google); }
+body > footer .info .link a.btn-rss { background-image: var(--svg-ic-footer-logo-rss); }
+body > footer a.btn-top,
+body > footer button.btn-top { position: fixed; bottom: 62px; right: 22px; display: block; width: 48px; height: 48px; background: var(--svg-ic-footer-move-top) no-repeat center; background-color: var(--background-default); z-index: 7; opacity: .75; border-radius: 100%; }
+body > footer a.btn-top.appuse,
+body > footer button.btn-top.appuse { bottom: 32px; }
+body > footer a.btn-top.bnr_extend,
+body > footer button.btn-top.bnr_extend { bottom: 112px; }
+body > footer.bnr_extend { padding-bottom: 100px; }
+body > footer.appuse { padding-bottom: 0; }
+body > footer.appuse button.btn-top, 
+body > footer.appuse button.btn-top.appuse { bottom: 32px; }
+
+/* common */
+/* common - article */
+article { position: relative; }
+article > picture { display: block; border-radius: 8px; overflow: hidden; }
+article > div { display: flex; flex-direction: column; }
+article > div > a::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 1; }
+article > div > p.desc { color: var(--text-description); display: -webkit-box; overflow: hidden; text-overflow: ellipsis; -webkit-line-clamp: 3;  -webkit-box-orient: vertical; }
+article > div > a { display: -webkit-box; overflow: hidden; text-overflow: ellipsis; -webkit-line-clamp: 2;  -webkit-box-orient: vertical; }
+article > picture.video { position: relative; }
+article > picture.video::after,
+article a > picture.video::after { position: absolute; content: ''; display: block; width: 100%; height: 33.3%; bottom: 0; left: 0; border-radius: 0 0 8px 8px; background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.80) 100%); }
+article > picture.video > span.ic-video,
+article a > picture.video > span.ic-video { position: absolute; bottom: 0; right: 0; display: block; width: 48px; height: 48px; background: url("https://img.khan.co.kr/images/khan/svg/common/ic-play-48.svg") no-repeat center; z-index: 1; }
+article > picture.photo { position: relative; }
+article > picture.photo::after { position: absolute; content: ''; display: block; width: 100%; height: 33.3%; bottom: 0; left: 0; border-radius: 0 0 8px 8px; background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.80) 100%); }
+article > picture.photo > span { font-size: 14px; font-weight: 500; line-height: 20px; }
+article > picture.photo > span.ic-photo { position: absolute; bottom: 0; right: 0; display: flex; justify-content: flex-end; align-items: center; width: 100%; height: 48px; padding-right: 48px; background: url("https://img.khan.co.kr/images/khan/svg/common/ic-photo.svg") no-repeat center right; z-index: 1; }
+article > div > input.bookmark { margin: 0; position: absolute; right: -10px; bottom: -10px; width: 44px; height: 44px; background: transparent var(--svg-ic-bookmark-24-off) no-repeat center; background-size: 24px 24px; border: 0; appearance: none; z-index: 2; }
+article > div > input.bookmark:checked { background-image: var(--svg-ic-bookmark-24-on); }
+/* common - picture (img, source) */
+picture > img, picture > source { width: 100%; height: 100%; object-fit: cover; }
+
+/* common - datepicker - ignore juqery-ui.min.css */
+.ui-widget { font-family: 'SUIT', sans-serif !important; font-size: 14px !important; font-weight: 600; line-height: 20px; }
+.ui-widget-header { background-color: transparent; border: 0 !important; }
+.ui-datepicker { width: auto !important; }
+.ui-datepicker .ui-datepicker-header { padding: 0 !important; }
+.ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next { width: inherit !important; height: inherit !important; position: initial !important;}
+.ui-datepicker .ui-datepicker-prev span, .ui-datepicker .ui-datepicker-next span { position: inherit !important; margin: 0 !important; }
+.ui-state-hover,.ui-widget-content .ui-state-hover,.ui-widget-header .ui-state-hover,.ui-state-focus,.ui-widget-content .ui-state-focus,.ui-widget-header .ui-state-focus,.ui-button:hover,.ui-button:focus { border: 0; background: none; font-weight: inherit; color: inherit; }
+.ui-widget.ui-widget-content { border: 0 !important; background-color: transparent; }
+.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br { border-radius: 0 !important; }
+.ui-datepicker table { font-size: inherit !important; margin: inherit; width: inherit; }
+.ui-datepicker th { padding: inherit !important; }
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default, .ui-button, html .ui-button.ui-state-disabled:hover, html .ui-button.ui-state-disabled:active { border: 0 !important; background: none !important; color: inherit !important; font-weight:inherit !important; }
+.ui-datepicker td span, .ui-datepicker td a { line-height: 32px; text-align: center; padding: 0 !important; font-weight: 600; }
+/* common - datepicker - custom */
+.hasDatepicker { background-color: var(--background-default); border-radius: 8px; box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.15); width: 312px; }
+.datepicker_close { position: absolute; right: 16px; top: 16px; cursor: pointer; }
+.datepicker_close span { text-indent: -9999px; font-size: 0; display: block; width: 24px; height: 24px; background-position: 0 0; background-image: var(--svg-ic-close-24) !important; background-size: 24px 24px; }
+.ui-datepicker, .ui-widget-header { color: var(--text-primary) !important; }
+.ui-datepicker .ui-datepicker-header { position: absolute !important; top: 0; left: 50%; height: 52px; background-color: var(--background-default); transform: translateX(-50%); }
+.ui-datepicker-prev { float: left; cursor: pointer; margin: 16px 8px 0 0; }
+.ui-datepicker-prev.ui-state-disabled { opacity: 0.3; }
+.ui-datepicker-next { float: right; cursor: pointer; margin: 16px 0 0 8px; }
+.ui-datepicker-next.ui-state-disabled { opacity: 0.3; }
+.ui-datepicker .ui-datepicker-title { display: inline-block; margin: 16px 0 0 0 !important; width: 72px; text-align: center !important; font-size: 16px; font-style: normal; font-weight: 700; line-height: 24px !important; }
+.ui-datepicker-prev > span, .ui-datepicker-next > span { text-indent: -9999px; font-size: 0; display: block; width: 24px; height: 24px; }
+.ui-icon-circle-triangle-e {background-position: 0 0 !important; background-image: var(--svg-ic-arrow-right-24) !important; background-size: 24px 24px;}
+.ui-icon-circle-triangle-w {background-position: 0 0 !important; background-image: var(--svg-ic-arrow-left-24) !important; background-size: 24px 24px;}
+.ui-datepicker table.ui-datepicker-calendar { width: calc(100% - 32px); margin: 52px 16px 16px 16px; }
+.ui-datepicker-calendar th { height: 32px; line-height: 32px; text-align: center !important; font-size: 14px; font-style: normal; font-weight: 700 !important; }
+.ui-datepicker-calendar td { width: calc(100%/7); padding: 4px !important; }
+.ui-datepicker-calendar td.ui-datepicker-other-month, .ui-datepicker-calendar td.ui-datepicker-unselectable { opacity:0.3; }
+.ui-datepicker-calendar td a, .ui-datepicker-calendar td span { display: block !important;  width: 100%; height: 32px; font-size: 14px; font-weight: 600; line-height: 32px; text-align: center !important; }
+.ui-datepicker-calendar td a.ui-state-highlight { border-radius: 4px; background-color: var(--surface-soft) !important; }
+.ui-datepicker-calendar td a.ui-state-active { border-radius: 4px; background-color: var(--background-highlight) !important; color: var(--text-inverted) !important; }
+.ui-datepicker-calendar td a.ui-state-highlight.ui-state-active { border-radius: 4px; background-color: var(--background-highlight) !important; color: var(--text-inverted) !important; }
+.ui-state-disabled-color, .ui-widget-content .ui-state-disabled-color, .ui-widget-header .ui-state-disabled-color { opacity: .35; filter:Alpha(Opacity=35); /* support: IE8 */ background-image: none; }
+
+/* Ad */
+.ad-wrapper { position: relative; overflow: hidden; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
+.ad-wrapper > div.ad-inner-wrap { position: relative; margin:0 auto; background: #fafafa; z-index: 1; }
+.ad-wrapper > div.ad-inner-wrap:before { position: absolute; content: "Advertisement"; top: 50%; left: 0; right: 0; transform: translateY(-50%); margin: auto; font-size: 15px; text-align: center; color: #b5b5b5; z-index: 0; }
+.ad-wrapper > div.ad-inner-wrap > div { position: relative; }
+.ad-wrapper > div.ad-inner-wrap > #ads14,
+.ad-wrapper > div.ad-inner-wrap > div iframe { background-color:#fafafa; }
+/* asideTopMiddleBanner */
+.banner-aside-top-middle { display: block; }
+
+
+
+/* response */
+@media screen and (min-width: 1024px) and (max-width: 1279px) {
+	/* mobileFixedBottomBanner */
+	.banner-mobile-fixed-bottom { display: block; }
+	/* header */
+	/* header - GNB */
+	body > header .wrap { max-width: 928px; }
+	body > header .wrap.gnb { height: 81px; }
+	body > header hr { max-width: 928px; }
+	body > header .wrap h1 > a  { width: 124px; height: 32px; }
+	/* header - scroll */
+	body > header.scroll hr { max-width: 100%; height:0; border-bottom-color: var(--stroke-separator); }
+	body > header.scroll .wrap h1 > a  { width: 111px; height: 28px; }
+	/* header - menu */
+	body > header .menu-category li a { font-size: 16px; line-height: 22px; }
+	/* header - menuExpand - category */
+	body > header .category > ul > li { flex: 16.6666%; flex-grow: 0; }
+	body > header .category > ul > li:nth-child(6) { border-right: 0; }
+	body > header .category > ul > li:nth-child(7) > ul.dt { padding-left: 0; margin-bottom: 24px; }
+	body > header .category > ul > li > dl > dt { font-size: 14px; line-height: 20px; }
+	body > header .category > ul > li > dl > dd {padding-top:2px;}
+	body > header .category > ul > li > dl > dd > ul > li { padding-top: 10px; }
+	body > header .category > ul > li > dl > dd > ul > li > a { font-size: 13px; line-height: 18px; }
+	body > header .category > ul > li > ul.dt > li > a { font-size: 14px; line-height: 20px; }
+	/* header - menuExpand - etc */
+	body > header .etc { padding: 24px 0; }
+	body > header .etc > ul > li > a { font-size: 14px; line-height: 20px;}
+	body > header .etc > ul:last-child { gap: 16px; }
+	body > header .etc > ul:last-child > li > a { font-size: 13px; line-height: 18px; }
+	/* header - search */
+	body > header .wrap.search { padding: 24px 0; } 
+	body > header .wrap.search form { width: 768px; }
+	body > header .wrap.search input { width: 684px; }
+	/* footer */
+	body > footer .wrap { max-width: 928px; }
+	/* footer - menu */
+	/* footer - etc */
+	/* footer - family site only tablet, mobile */
+	/* footer - information */
+	body > footer .info > ul > li:first-child { padding-right: 48px; }
+	body > footer .info > ul > li:last-child { padding-left: 102px; }
+	body > footer .info .contact { width: 370px; flex-wrap: wrap; row-gap: 6px; }
+	/* asideTopMiddleBanner */
+	.banner-aside-top-middle { display: none; }
+}
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+	/* header */
+	/* header - GNB */
+	body > header .wrap { max-width:720px; }
+	body > header .wrap.gnb { height: 81px; }
+	body > header hr { max-width: 720px; }
+	body > header .wrap h1 > a  { width: 124px; height: 32px; }
+	/* header - scroll */
+	/* header - menu */
+	body > header .menu-category { display: none; }
+	/* header - menuExpand - category */
+    body > header .category { position: fixed; background-color: var(--background-default); inset: 72px 0px 0px; margin: 0px; overflow: auto; max-height: 662px!important; width: 100%; padding-left: 100px; padding-right: 100px; max-width: 100%; min-width: 700px; box-sizing: border-box; }
+    body.flat > header .category { position: static; padding: 0; }
+	body > header .category > ul > li { flex: 20%; flex-grow: 0; }
+	body > header .category > ul > li:nth-child(5) { border-right: 0; }
+	body > header .category > ul > li:nth-child(6) > dl { padding: 0;}
+	body > header .category > ul > li:nth-child(6) > ul.dt { padding-left: 0; margin-bottom: 0; }
+	body > header .category > ul > li > dl > dt { font-size: 14px; line-height: 20px; }
+	body > header .category > ul > li > dl > dd { display: block!important; padding-top: 2px; }
+	body > header .category > ul > li > dl > dd > ul > li { padding-top: 10px; }
+	body > header .category > ul > li > dl > dd > ul > li > a { font-size: 13px; line-height: 18px; }
+	body > header .category > ul > li > ul.dt > li > a { font-size: 14px; line-height: 20px; }
+	/* header - menuExpand - etc */
+	body > header .etc { padding: 24px 0; }
+	body > header .etc > ul > li > a { font-size: 14px; line-height: 20px;}
+	body > header .etc > ul:last-child { gap: 16px; }
+	body > header .etc > ul:last-child > li > a { font-size: 13px; line-height: 18px; }
+	/* header - search */
+	body > header .wrap.search { padding: 16px 0; position: fixed; background-color: var(--background-default); inset: 72px 0px 0px; margin: 0px; overflow: auto; height: 84px!important;  width: 100%; padding-left: 100px; padding-right: 100px; max-width: 100%; min-width: 700px; box-sizing: border-box; z-index: 9; }
+    body.flat > header .wrap.search { position: static; }
+	body > header .wrap.search form { width: 100%; }
+	body > header .wrap.search input { width: 636px; }
+
+	/* footer */
+	body > footer .wrap { max-width: 720px; }
+	body > footer .expand { display: none; }
+	body > footer .expand.info { display:block; padding: 32px 0; }
+	/* footer - menu */
+	/* footer - etc */
+	/* footer - family site only tablet, mobile */
+	body > footer .familysite { border-top: 1px solid var(--stroke-separator); width: 100%; max-width: none; }
+	body > footer .familysite-list-m { display: block; max-width: 720px; margin: 0 auto; padding: 20px 0; }
+	body > footer .familysite-list-m > ul { display: flex; flex-wrap: wrap; gap: 12px; }
+	body > footer .familysite-list-m > ul > li { flex: 1 1 34%; }
+	body > footer .familysite-list-m > ul > li > a { display: inline-block; position: relative; padding-right: 18px; font-size: 14px; font-weight: 500; line-height: 18px; color: var(--text-description); }
+	body > footer .familysite-list-m > ul > li > a::after { position: absolute; display: block; width: 18px; height: 18px; right: 0; top: 0; content: ''; background: var(--svg-ic-arrow-outlink-18-gray) no-repeat; } 
+	/* footer - information */
+	body > footer .info > ul { display: block; }
+	body > footer .info > ul > li:first-child { padding-right: 0; }
+	body > footer .info > ul > li:last-child { padding-left: 0; padding-top: 24px; }
+	body > footer .info h1 > a  { width: 95px; height: 24px; }
+	body > footer .info .menu { padding-top: 24px; }
+	body > footer .info .contact { display: block; line-height: 22px; padding-bottom: 16px; }
+	body > footer .info .manager { padding-bottom: 16px; }
+	/* asideTopMiddleBanner */
+	.banner-aside-top-middle { display: none; }
+}
+@media screen and (max-width: 767px) {
+	/* header */
+	/* header - GNB */
+	body > header .wrap { margin: 0 12px; }
+	body > header hr { max-width: inherit; margin: 0 20px; }
+	body > header .wrap.gnb { height: 55px; position: relative; }
+	body > header .wrap h1 > a  { width: 95px; height: 24px; margin-left: 43px; }
+	/* header - scroll */
+	body > header.scroll hr { max-width: 100%; height:0; background-color: var(--background-default); border-bottom: 1px solid var(--stroke-separator); margin: 0; }
+	body > header.scroll .wrap.gnb { height: 55px; position: relative; }
+	body > header.scroll .wrap h1 > a  { width: 95px; height: 24px; margin-left: 43px; }
+	/* header - menu */
+	body > header .menu-common { margin: 0; }
+	body > header .menu-common li { padding: 0; }
+	body > header .menu-common li:first-child { margin: 0; padding-right: 10px; }
+	body > header .menu-common li:nth-child(3) {padding: 0 0 0 8px;}
+	body > header .menu-common li:last-child {padding:0;}
+	body > header .menu-common li a.menu,
+    body > header .menu-common li button.menu { position: absolute; left: 0; top: 11px; z-index: 11;}
+	body > header .menu-common li a.menu.active,
+    body > header .menu-common li button.menu.active { left: auto; right: 0; }
+	body > header .menu-category { display: none; }
+	/* header - menuExpand - category */
+	body > header .category { position:fixed; background-color: var(--background-default); top: 0; left: 0; right: 0; bottom: 0; margin: 0; overflow: auto; z-index: 10; }
+	body > header .category .title-m { display: flex; align-items: center; width: calc(100% - 40px); height: 58px; border-bottom: 3px solid var(--stroke-primary); background-color: var(--background-default); margin: 0 20px; position: fixed; z-index: 10; }
+    body > header .category .title-m > p { font-size: 24px; font-weight: 700; line-height: 28px; }
+    body > header .category .title-m > p > a { display: block; width: 95px; height: 24px; background: var(--svg-logo); background-size: 100% 100%; transition: all 0.3s; }
+	body > header .category .title-m > button { height: 28px; background: none; padding: 5px 22px 5px 10px; margin: 0 0 0 12px; border-radius: 4px; border: 1px solid var(--stroke-framing); color: #666; font-size: 13px; font-weight: 500; background: url("https://img.khan.co.kr/images/khan/svg/common/ic-plus-16.svg") no-repeat; background-size: 16px 16px; background-position: calc(100% - 5px); }
+	body > header .category .title-m > button > span.active { display: none; }
+	body > header .category .title-m > button.active {background-image: url("https://img.khan.co.kr/images/khan/svg/common/ic-minus-16.svg"); }
+	body > header .category .title-m > button.active > span.normal { display: none;}
+	body > header .category .title-m > button.active > span.active { display: block; }
+	body > header .category > ul { margin: 0 20px; padding-top: 58px; width: calc(100% - 40px); }
+	body > header .category > ul > li { flex: 100%; flex-grow: 0; border-right: 0; margin: 0; border-bottom: 1px solid var(--stroke-separator); }
+	body > header .category > ul > li:last-child { border: 0; }
+	body > header .category > ul > li:last-child > ul.dt { padding: 4px 0 19px; }
+	body > header .category > ul > li > dl { padding: 0;}
+	body > header .category > ul > li:nth-child(6) > ul.dt { padding-left: 0; margin-bottom: 0; }
+	body > header .category > ul > li > dl > dt { font-size: 18px; line-height: 66px; }
+	body > header .category > ul > li > dl > dt > a { display: block; height: 65px; position: relative; }
+	/* body > header .category > ul > li > dl > dt > a::after { position: absolute; display: block; width: 24px; height: 24px; right: 0; top: 20px; content: ''; background: var(--svg-ic-plus-24) no-repeat; }
+    body > header .category > ul > li > dl > dt > a.active::after { background-image: var(--svg-ic-minus-24); } */
+    body > header .category > ul > li > dl > dt > a span { position: absolute; display: block; width: 32px; height: 32px; right: 0; top: 20px; background: var(--svg-ic-plus-24) no-repeat center; }
+	body > header .category > ul > li > dl > dt > a.active span { background-image: var(--svg-ic-minus-24); }
+	body > header .category > ul > li > dl > dd { padding-top: 0; display: none; }
+	body > header .category > ul > li > dl > dd > ul { display: flex; flex-wrap: wrap; padding-bottom: 8px; }
+	body > header .category > ul > li > dl > dd > ul > li { flex: 1 1 50%; padding-top: 0; padding-bottom: 12px; }
+	body > header .category > ul > li > dl > dd > ul > li.btn-m-all { display: block; }
+	body > header .category > ul > li > dl > dd > ul > li > a { font-size: 16px; line-height: 24px; }
+	body > header .category > ul > li > ul.dt { padding: 4px 0 19px 0; display: flex; flex-wrap: wrap; }
+	body > header .category > ul > li > ul.dt > li { flex: 1 1 50%; padding: 16px 0 0 0; }
+	body > header .category > ul > li > ul.dt > li:first-child { padding: 16px 0 0 0; }
+	body > header .category > ul > li > ul.dt > li > a { font-size: 18px; line-height: 26px; }
+	body > header .category > ul > li > ul.dt > li > a.alter { font-size: 18px; line-height: 26px; padding-left: 32px; }
+	body > header .category > ul > li > ul.dt > li > a.tv, header .category > ul > li > ul.dt > li > a.newstaurant { background-size: 24px 24px; }
+	/* header - menuExpand - etc */
+	body > header .etc { flex-direction: column; padding: 20px 0; margin: 0 20px; }
+	body > header .etc > ul:first-child { gap: 0; padding: 4px 0 19px 0; border-bottom: 1px solid var(--stroke-separator); }
+    body > header .etc > ul:first-child > li { flex: 1 1 50%; }
+    body > header .etc > ul:first-child > li a { font-size: 18px; line-height: 26px; }
+	body > header .etc > ul:last-child { gap: 0; flex-wrap: wrap; width: 100%; padding-top: 22px; }
+	body > header .etc > ul:last-child > li { flex: 1 1 50%; padding-bottom: 12px; height: 30px; }
+	body > header .etc > ul:last-child > li > a { font-size: 14px; line-height: 18px; color: var(--text-description); }
+	/* header - mobile only */
+	body > header .mobile-only { display: block; }
+	body > header .mobile-only ul.familysite-list { display: flex; flex-wrap: wrap; gap: 12px; margin: 0 auto; padding: 20px; background-color: var(--surface-soft);}
+	body > header .mobile-only ul.familysite-list > li { flex: 1 1 34%; }
+	body > header .mobile-only ul.familysite-list > li > a,
+    body > header .mobile-only ul.familysite-list > li > button { display: inline-block; position: relative; padding-right: 16px; font-size: 14px; font-weight: 500; line-height: 18px; color: var(--text-description); font-family: inherit; }
+	body > header .mobile-only ul.familysite-list > li > a::after,
+    body > header .mobile-only ul.familysite-list > li > button::after { position: absolute; display: block; width: 18px; height: 18px; right: 0; top: 0; content: ''; background: var(--svg-ic-arrow-outlink-18-gray) no-repeat; }
+	body > header .mobile-only ul.sns-list { display: flex; gap: 16px; padding: 20px; }
+	body > header .mobile-only ul.sns-list a { display: block; width: 36px; height: 36px; background-size: 100% 100%; }
+	body > header .mobile-only ul.sns-list a.btn-facebook { background-image: url("https://img.khan.co.kr/images/khan/svg/common/ic-menu-footer-logo-facebook.svg"); }
+	body > header .mobile-only ul.sns-list a.btn-youtube { background-image: url("https://img.khan.co.kr/images/khan/svg/common/ic-menu-footer-logo-youtube.svg"); }
+	body > header .mobile-only ul.sns-list a.btn-x { background-image: url("https://img.khan.co.kr/images/khan/svg/common/ic-menu-footer-logo-x.svg"); }
+	body > header .mobile-only ul.sns-list a.btn-instagram { background-image: url("https://img.khan.co.kr/images/khan/svg/common/ic-menu-footer-logo-instagram.svg"); }
+	body > header .mobile-only ul.sns-list a.btn-google { background-image: url("https://img.khan.co.kr/images/khan/svg/common/ic-menu-footer-logo-google.svg"); }
+	body > header .mobile-only ul.sns-list a.btn-rss { background-image: url("https://img.khan.co.kr/images/khan/svg/common/ic-menu-footer-logo-rss.svg"); }
+
+	/* header - search */
+	/* body > header .wrap.search { padding: 16px 0; } */
+    body > header .wrap.search { position: fixed; top: 58px; width: 100%; margin: 0; padding: 16px 12px; border-top: 1px solid var(--stroke-separator); background: var(--background-default); z-index: 9; }
+	body > header .wrap.search form { width: 100%; }
+	body > header .wrap.search input { width: calc(100% - 40px); }
+
+	/* footer */
+	body > footer .expand { display: none; }
+	body > footer .expand.info { display:block; padding: 32px 20px; }
+	/* footer - menu */
+	/* footer - etc */
+	/* footer - family site only tablet, mobile */
+	body > footer .familysite { border-top: 1px solid var(--stroke-separator); max-width: none; }
+	body > footer .familysite-list-m { display: block; margin: 0 auto; padding: 20px; }
+	body > footer .familysite-list-m > ul { display: flex; flex-wrap: wrap; gap: 12px; }
+	body > footer .familysite-list-m > ul > li { flex: 1 1 34%; }
+	body > footer .familysite-list-m > ul > li > a,
+    body > footer .familysite-list-m > ul > li > button { display: inline-block; position: relative; padding-right: 18px; font-size: 14px; font-weight: 500; line-height: 18px; color: var(--text-description); font-family: inherit; }
+	body > footer .familysite-list-m > ul > li > a::after,
+    body > footer .familysite-list-m > ul > li > button::after { position: absolute; display: block; width: 18px; height: 18px; right: 0; top: 0; content: ''; background: var(--svg-ic-arrow-outlink-18-gray) no-repeat; }
+	/* footer - information */
+	body > footer .info > ul { display: block; }
+	body > footer .info > ul > li:first-child { padding-right: 0; }
+	body > footer .info > ul > li:last-child { padding-left: 0; padding-top: 24px; }
+	body > footer .info h1 > a  { width: 95px; height: 24px; }
+	body > footer .info .menu { padding-top: 24px; }
+	body > footer .info .menu a { font-size: 13px; line-height: 18px; }
+	body > footer .info .contact { display: block; line-height: 22px; padding-bottom: 16px; }
+	body > footer .info .contact li { font-size: 13px; font-weight: 400; line-height: 22px; } 
+	body > footer .info .manager { padding-bottom: 16px; }
+	body > footer .info .manager li { font-size: 13px; font-weight: 400; line-height: 18px; } 
+
+	/* common */
+	/* common - article */
+	article > div > input.bookmark { width: 36px; height: 36px; background-image: var( --svg-ic-bookmark-16-off); background-size: 16px 16px; }
+	article > div > input.bookmark:checked { background-image: var( --svg-ic-bookmark-16-on); }
+
+	/* asideTopMiddleBanner */
+	.banner-aside-top-middle { display: none; }
+  }
+
+  /* 창간 80주년 제호 변경 - 2026년 유지 후 속성 제거 */
+h1.pub80-ci { display: flex; align-items: flex-end; margin: -3px 0 0; }
+h1.pub80-ci a.pub80-symbol { width: 40px; height: 40px; margin: 0 5px 0 0; text-indent: -9999px; font-size: 0; line-height: 0; background: var(--svg-logo-pub80); background-size: 100% 100%; transition: all 0.3s; }
+h1.pub80-ci a.txt { width: 126px; height: 32px; margin: 0 0 1px 0; }
+body > header.scroll .wrap h1.pub80-ci { margin: -2px 0 0; }
+body > header.scroll .wrap h1.pub80-ci > a.pub80-symbol { width: 28px; height: 28px; margin: 0 3px 0 0; }
+body > header.scroll .wrap h1.pub80-ci > a.txt { width: 88px; height: 22px; }
+
+@media screen and (max-width: 767px) {
+    body > header .wrap h1.pub80-ci > a.pub80-symbol { width: 33px; height: 33px; margin: 0 3px 0 43px; }
+    body > header .wrap h1.pub80-ci > a.txt { width: 95px; height: 24px; margin: 0 0 2px 0; }
+    body > header.scroll .wrap h1.pub80-ci > a.pub80-symbol { width: 33px; height: 33px; margin: 0 3px 0 43px; }
+    body > header.scroll .wrap h1.pub80-ci > a.txt { width: 95px; height: 24px; margin: 0 0 2px 0; }
+}

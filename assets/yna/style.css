@@ -1,0 +1,2313 @@
+@charset "utf-8";
+/*************************************************
+ * 프로젝트명 : 연합뉴스 국문 PC 홈페이지 (★ 2024)
+ * comment : 광고, 특집 코너/배너, 이벤트 페이지, 팝업 등
+*************************************************/
+[class*='aside-box'] .ir-txt01{position:absolute;top:0;left:0;z-index:-1;}
+[class*='aside-box'].sticky{position:fixed;}
+[class*='aside-box'].static{position:absolute;}
+[class*='aside-box'] .ads-box:empty{display:none;}
+[class*='aside-box'] [class*='area']{display:flex;justify-content:center;}
+
+/* =============== ####본문내광고 ======================== */
+/* ---- ##aside-article$$$ :  ---- */
+/* PC : 000 ~ 099 (디바이스 공통이fv면 PC 번호 범위 사용)
+ * Mobile,Tablet : 100 ~ 199
+ * APP : 200 ~ 299 */
+
+
+/* =============== ####마케팅국 광고 ======================== */
+/* ---- ##aside-box000 ~ 199 ---- */
+/* PC : 000 ~ 099 (디바이스 공통이면 PC 번호 범위 사용)
+ * Mobile,Tablet : 100 ~ 199 */
+/* 마케팅국 광고 공통 */
+@media only screen and (max-width:767px){
+	[class*="aside-box00"]{display:none;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	[class*="aside-box00"]{display:none;}
+}
+/* ---- ##aside-box001 : PC 서브 상단 공통 광고 ---- */
+.aside-box001{display:flex;justify-content:space-between;align-items:center;box-sizing:border-box;max-width:1200px;height:95px;margin:0 auto;padding:0 100px;}
+.aside-box001 .ads-box{flex-shrink:0;width:258px;height:63px;}
+/* ---- ##aside-box002 : PC 본문 우측 영역 01 ---- */
+.aside-box002 .ads-box{width:300px;height:43px;}
+/* ---- ##aside-box003 : PC 본문 우측 영역 02 ---- */
+.aside-box003{display:flex;justify-content:center;flex-direction:column;align-items:center;padding:30px 0;background-color:var(--ui-tag007);}
+.aside-box003 [class*="ads-right"] .ads-box{width:231px;margin-top:8px;}
+.aside-box003 .ads-right01 .ads-box{margin-top:0;}
+.aside-box003 .area01 .ads-box:empty{display:none;}
+@media only screen and (min-width:1025px){
+	.aside-box003 .area01 .ads-box>a,
+	.aside-box003 .area01 .ads-box img{display:block;width:100%;}
+}
+/* ---- ##aside-box004 : 본문 중간 ---- */
+.aside-box004 .ads-box{display:flex;justify-content:center;margin:0 auto 40px;}
+/* ---- ##aside-box005 : 본문 고정형 : 우측 ---- */
+.aside-box005{display:none;flex-direction:column;position:absolute;top:760px;left:50%;z-index:1;width:132px !important;margin:0 0 0 670px !important;}
+.aside-box005 [class*='area0']{margin-bottom:40px;}
+.aside-box005 .ads-box{width:132px;height:260px;}
+.aside-box005.sticky{top:102px !important;}
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.aside-box005{margin:0 0 0 560px !important;}
+}
+@media only screen and (min-width:1025px){
+	.aside-box005{display:flex;}
+}
+/* ---- ##aside-box006 : 메인 주요뉴스01 하단 ---- */
+.aside-box006{display:flex;justify-content:center;width:100%;}
+.aside-box006 .area01{flex-shrink:0;width:100%;}
+.aside-box006 .ads-box{display:flex;flex-shrink:0;justify-content:center;width:100%;min-height:70px;margin:0 auto;}
+.aside-box006 .ads-box a,
+.aside-box006 .ads-box a img{display:block;max-width:100%;}
+/* ---- ##aside-box007 : 메인 주요뉴스02 하단 ---- */
+.aside-box007{display:flex;justify-content:center;width:100%;}
+.aside-box007 .area01{flex-shrink:0;width:100%;}
+.aside-box007 .ads-box{display:flex;flex-shrink:0;justify-content:center;width:100%;min-height:50px;margin:0 auto;}
+.aside-box007 .ads-box a,
+.aside-box007 .ads-box a img{display:block;max-width:100%;}
+.aside-box007,
+.aside-box007 .area01:empty{margin-top:0 !important;}
+.aside-box007 .area01{margin-top:40px;}
+.aside-box007,
+.aside-box007 .ads-main-juyo02{display:none !important;}
+/* ---- ##aside-box008 : 리스트 중간 ---- */
+.aside-box008{display:flex;justify-content:center;width:100%;}
+.aside-box008 .area01{flex-shrink:0;width:100%;}
+.aside-box008 .ads-box{display:flex;flex-shrink:0;justify-content:center;width:100%;min-height:50px;margin:0 auto 40px;}
+.aside-box008 .ads-box a,
+.aside-box008 .ads-box a img{display:block;max-width:100%;}
+/* ---- ##aside-box009 : 사회 홈 최신뉴스 첫번째 위 ---- */
+.aside-box009{display:flex;justify-content:center;width:100%;margin-top:0!important;}
+.aside-box009 .area01{flex-shrink:0;width:100%;}
+.aside-box009 .ads-box{display:flex;flex-shrink:0;justify-content:center;width:100%;min-height:50px;margin:0 auto 40px;}
+.aside-box009 .ads-box a,
+.aside-box009 .ads-box a img{display:block;max-width:100%;}
+
+/* ---- ##aside-box1$$ 공통---- */
+[class*='aside-box1']{display:none;}
+@media only screen and (max-width:767px){
+	[class*='aside-box1']{display:block;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	[class*='aside-box1']{display:block;}
+}
+/* ---- ##aside-box100 : 리스트 중간---- */
+.aside-box100 .ads-box img{width:100%;}
+@media only screen and (max-width:767px){
+	.aside-box100 .area01{width:100%;flex-wrap:wrap;margin:0 auto;}
+	.aside-box100 .area01 .ads-box{width:100%;display:flex;justify-content:center;}
+	.aside-box100 .area01 .ads-box>a{width:320px;flex-shrink:0;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.aside-box100 .area01{width:100%;flex-wrap:wrap;margin:0 auto;}
+	.aside-box100 .area01 .ads-box{width:100%;display:flex;justify-content:center;}
+	.aside-box100 .area01 .ads-box>a{width:320px;flex-shrink:0;}
+}
+@media only screen and (max-width:320px){
+	.aside-box100 .area01 .ads-box{width:calc(100% - 32px);}
+	.aside-box100 .area01 .ads-box>a{width:100%;flex-shrink:0;}
+}
+/* ---- ##aside-box101 : 톱뉴스 중간, 통단 하단---- */
+.aside-box101{display:none;justify-content:center;flex-direction:row;width:100%;gap:32px}
+.aside-box101 .area01{width:320px;flex-wrap:wrap;}
+.aside-box101 .ads-box{display:flex;justify-content:center;width:100%;}
+.aside-box101 .ads-box img{display:block;width:100%;}
+@media only screen and (max-width:767px){
+	.aside-box101{display:flex;flex-direction:column;align-items:center;margin-top:0 !important;gap:12px}
+	.aside-box101 .area01{max-width:320px;flex-wrap:wrap;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.aside-box101{display:flex;margin-top:0 !important;}
+}
+@media only screen and (max-width:320px){
+	[class*='news-type1']+.aside-box101{width:calc(100% - 32px);margin:0 auto;}
+	.aside-box101 .area01{max-width:none;flex-wrap:wrap;width:100%;}
+}
+
+/* =============== ####비즈국 광고 ======================== */
+/* ---- ##aside-box200 ~ 399 ---- */
+/* 혼합 광고 영역 : * 넘버링 비즈국 번호대 사용 */
+/* PC : 200 ~ 299 (디바이스 공통이면 PC 번호 범위 사용)
+200~209 : 우측영역 300*$$$ : 1개 타입
+210~219 : 가로형  300*250 2개 타입
+220~229 : 함께 읽기 좋은 콘텐츠, 함께 보면 좋은 콘텐츠, 함께 볼만한 콘텐츠 타입
+230~239 : 세로형 , 우측 sticky
+240~249 : border 형 광고 (검색 구글광고)
+ * Mobile,Tablet : 300 ~ 399
+300~309 : 회색배경타입
+310~319 : 배경 없는 기본 직사각 타입
+320~329 : 함께 읽기 좋은 콘텐츠, 함께 보면 좋은 콘텐츠, 함께 볼만한 콘텐츠
+380~389 : 하단 fixed 타입
+390~399 : 텍스트형 광고  */
+
+/* ---- ##aside-box20$ : PC 본문 우측 영역 01 : 300*250 : 1개 타입 ---- */
+[class*="aside-box20"] [class*='area']{width:300px;}
+.aside-box201+.aside-box202{margin-top:16px !important;}
+/* ---- ##aside-box207 ---- */
+@media only screen and (max-width:767px){
+	[class*="aside-box2"]{display: none !important;}
+	.aside-box207{display:flex !important;justify-content:center;}
+	.aside-box207 .area01,
+	.aside-box207 .area01>a,
+	.aside-box207 .area01 img{width:100%;max-width:320px;text-align:center;}
+}
+@media only screen and (max-width:374px){
+	.aside-box207 .area01 img{max-width:300px;}
+}
+/* ---- ##aside-box21$ : PC 본문 하단 : 300*250 : 2개 타입 ---- */
+[class*="aside-box21"]{display:flex;justify-content:center;margin-bottom:40px;gap:40px;}
+.aside-box211 .area01{min-height:250px;}
+/* 구글 광고 정렬 | JIAD-137
+ * -- 구글 광고에서 우선 순위가 높게(important) css 를 사용시 광고 정렬이 틀어지는 현상을 개선 */
+.aside-box211 .area01 [id*="div-gpt-ad-"]{display:contents;}
+/* ---- ##aside-box220 : 가로형 ---- */
+[class*="aside-box22"]{width:640px;margin:0 auto;}
+[class*="aside-box22"] [class*='area']{flex-direction:column;width:100%;}
+[class*="aside-box22"] .title-con01{align-items:flex-end;width:100%;}
+.aside-box221 .videoCube a.item-thumbnail-href{display:block!important;}
+/* ---- ##aside-box230 : 세로형 ---- */
+.aside-box230 [class*='area']{/*width:300px;height:600px;*/}
+/* ---- ##aside-box231 : 세로형 : 본문 고정형 : 좌측 ---- */
+.aside-box231{display:none;flex-direction:column;position:absolute;top:0;left:50%;z-index:1;width:132px !important;margin:0 0 0 -790px !important;}
+.aside-box231 [class*='area']{width:120px;height:600px;}
+.aside-box231.sticky{top:102px !important;}
+/* 일반형/대형 프레임 : 1025px 이상 */
+@media only screen and (min-width:1025px){
+	.aside-box231{display:flex !important;}
+}
+/* ---- ##aside-box240 ---- */
+.aside-box240{display:flex;justify-content:center;align-items:center;box-sizing:border-box;width:300px;padding:19px 0 21px 0;background-color: var(--ui-tag007);}
+.aside-box240 .area01{flex-shrink:0;}
+
+@media only screen and (min-width:768px) and (max-width:1023px){
+	[class*="aside-box2"]{display:none;}
+	.aside-box207{display:flex !important;justify-content:center;}
+	.aside-box207 .area01,
+	.aside-box207 .area01>a,
+	.aside-box207 .area01 img{width:100%;max-width:320px;}
+}
+
+/* ---- ##aside-box300 ~ 399 : Mobile,Tablet (300*25) ---- */
+[class*="aside-box3"]{display:none;justify-content:center;flex-direction:column;align-items:center;}
+[class*="aside-box3"] [class*='area']{flex-shrink:0;box-sizing:border-box;width:100%;padding:0 16px;}
+[class*="aside-box3"] .con{display:flex;justify-content:center;width:100%;}
+/* aside-box30$ : 회색 배경 타입 */
+[class*="aside-box30"]{width:calc(100% + 32px);margin:0 0 40px -16px;padding-bottom:16px;background-color:var(--ui-tag007);text-align:center;}
+[class*="aside-box30"]:before{content:'ADVERTISEMENT';height:30px;font-size:11px;line-height:30px;font-weight:600;color:var(--ui-tag010);}
+.aside-box300 .area01{min-height:250px;}
+.aside-box301 .area01{min-height:250px;}
+.aside-box302 .area01{min-height:250px;}
+.aside-box303 .area01{min-height:250px;}
+/* ---- ##aside-box311 : 320*100 ---- */
+.aside-box311 [class*='area']{display:block;margin:0 auto;}
+.aside-box311 .con{display:block;width:320px;margin:0 auto;}
+/*.aside-box312 .con{display:initial;text-align:center;}*/
+/* ---- ##aside-box32$ ---- */
+/* 함께 읽기 좋은 콘텐츠, 함께 보면 좋은 콘텐츠, 함께 볼만한 콘텐츠 */
+[class*='aside-box32']{display:none;box-sizing:border-box;width:100%;}
+[class*='aside-box32'] .title-con01{align-items:flex-end;box-sizing:border-box;width:100%;padding:0 16px;}
+[class*='aside-box32'] .title-con01 [class*='btn-type']{flex-shrink:0;margin-bottom:3px;}
+[class*='aside-box32'] .con{width:100%;height:auto;min-height:155px;}
+[class*='aside-box32'] .title-type001{height:auto;}
+[class*='aside-box32'] .area01{width:100%;height:auto;}
+[class*="aside-box32"] a{display:block;}
+/* ---- ##aside-box38$ : 하단 fixed 타입 ---- */
+[class*="aside-box38"]{display:none;justify-content:center;position:sticky!important;left:0;bottom:0;z-index:500;width:100%;height:50px;background-color:var(--ui-tag004);box-sizing:border-box;padding:1px;}
+[class*="aside-box38"] [class*='area']{display:block;padding:0;}
+[class*="aside-box38"] .btn-type309{position:absolute;top:0;left:0;z-index:500;}
+[class*="aside-box38"] [class*="area"]{flex-shrink:0;position:absolute;top:0;left:50%;width:100%;max-width:320px;height:50px;transform:translateX(-50%);}
+/* [class*="aside-box38"] [class*="area"]{flex-shrink:0;position:absolute;top:0;left:50%;width:100%;height:50px;transform:translateX(-50%);} */
+[class*="aside-box38"].hide{display:none;}
+[class*="aside-box38"] [class*="area"]{max-width:100%;}
+.aside-box380 [class*="area0"].hide{display:none !important;}
+.yna-shell.popup-mode [class*="aside-box38"]{z-index:221!important;}
+.aside-box382{display:none!important;position:fixed!important;left:0;bottom:0;z-index:700;width:100%;height:50px;}
+/* ---- ##aside-box39$ : 텍스트광고 타입 ---- */
+[class*='aside-box39']{display:none; }
+[class*="aside-box39"] .con{display:block;width:100%;}
+[class*='aside-box39'] [class*='area']{display:block;}
+.aside-box391 iframe{display:none;}
+@media only screen and (max-width:767px){
+	[class*="aside-box3"]{display:block;}
+	[class*='aside-box32']{max-width:100%;min-height:155px;}
+	/*.aside-box312 [class*='area'],*/
+	[class*='aside-box32'] [class*='area']{display:block;}
+	[class*="aside-box38"]{display:flex;}
+	[class*='aside-box39']{display:block;max-width:672px;margin:20px auto 0 !important;}
+	.aside-box391{margin:40px auto 0 !important;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	[class*="aside-box3"]{display:block;}
+	/*.aside-box312 [class*='area'],*/
+	[class*='aside-box32'] [class*='area']{display:block;}
+	[class*="aside-box38"]{display:flex;}
+	[class*='aside-box39']{display:block;max-width:672px;margin:20px auto 0 !important;}
+}
+
+/* =============== ####홈페이지 운영배너 | bnr-wrap$$$ ======================== */
+/* (디바이스 공통이면 PC 번호 범위 사용) */
+
+/* ---- ##bnr-wrap$$$ : 공통 ---- */
+[class*="bnr-wrap"]{display:flex;flex-shrink:0;width:100%;}
+[class*='bnr-wrap'] .txt01{font-size:15px;font-weight:600;color:var(--font-color003);}
+[class*="bnr-wrap"]>button{border:none;}
+[class*="bnr-wrap"]>a,
+[class*="bnr-wrap"]>button{display:flex;justify-content:center;align-items:center;box-sizing:border-box;width:100%;height:100%;min-height:50px;margin:0 auto;}
+[class*="bnr-wrap"].active>a,
+[class*="bnr-wrap"].active>button{display:flex;}
+[class*="bnr-wrap"].hide{display:none;}
+[class*="bnr-wrap"] [class*='txt0']{flex-shrink:0;position:relative;max-width:100%;font-size:16px;line-height:100%;font-weight:500;color:var(--font-color001);text-align:center;}
+[class*="bnr-wrap"] .bold{font-weight:700;}
+[class*="bnr-wrap"] .txt02{display:flex;align-items:center;}
+[class*='bnr-wrap00']{justify-content:flex-start;position:relative;box-sizing:border-box;}
+[class*='bnr-wrap00']>a{flex-shrink:0;width:auto;margin:0;}
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	[class*="bnr-wrap"] [class*='txt0']{font-size:14px;font-weight:600;}
+	[class*="bnr-wrap"] [class*='txt0']>em{display:block;}
+}
+/* ---- ##bnr-wrap001 : 오늘의 인사/부고, 주요신문 톱뉴스 사설 (메인) ---- */
+.bnr-wrap001{border:1px solid var(--ui-tag005)}
+.bnr-wrap001>a{min-height:50px;padding-right:16px;}
+.bnr-wrap001>a+a{position:relative;padding-left:17px;}
+.bnr-wrap001>a+a .txt01{padding-left:0;}
+.bnr-wrap001.people a+a:before{content:'';display:block;position:absolute;top:50%;left:0;width:1px;height:14px;background-color:var(--ui-tag004);transform:translateY(-50%);}
+.bnr-wrap001 .arr01:after{content:'';display:block;width:14px;height:14px;background-image:var(--ui-bg054);background-position:0 0;background-repeat:no-repeat;}
+.bnr-wrap001 .txt01{padding-left:20px;font-size:15px;color:var(--font-color003);}
+.bnr-wrap001.people:before{content:'';display:block;position:absolute;top:50%;right:20px;width:24px;height:24px;background-image:var(--ui-bg300);background-repeat:no-repeat;transform:translateY(-50%);}
+.bnr-wrap001.newspaper:before{content:'';display:block;position:absolute;top:50%;right:20px;width:22px;height:24px;background-image:var(--ui-bg301);background-repeat:no-repeat;transform:translateY(-50%);}
+@media only screen and (min-width:1024px) and (max-width:1279px) {
+	.bnr-wrap001 .txt01{padding-left:16px;}
+	.bnr-wrap001>a{padding-right:11px;}
+	.bnr-wrap001>a+a{padding-left:12px;}
+}
+@media only screen and (min-width:1024px){
+	.bnr-wrap001>a:hover .txt01{opacity:var(--ui-opacity001);}
+	.bnr-wrap001>a.arr01:hover:after{opacity:var(--ui-opacity001);}
+}
+/* ---- ##bnr-wrap002 : 아태뉴스통신사기구 (메인) ---- */
+.bnr-wrap002{display:flex;justify-content:center;width:100%;border:1px solid var(--ui-tag005);background-color:var(--ui-tag060)}
+.bnr-wrap002>a{display:flex;justify-content:center;width:100%;min-height:50px;color:var(--font-color001);}
+.bnr-wrap002 .txt01{display:flex;align-items:center;position:relative;/*padding-left:20px;*/font-size:15px;}
+.bnr-wrap002 .txt01:before{content:'';display:block;width:66px;height:23px;margin-right:8px;background-image:var(--ui-bg302);background-size:66px 23px;background-repeat:no-repeat;}
+
+/* ---- ##bnr-wrap003.style01~49 : 텍스트형 배너 (메인) ---- */
+/* bnr-wrap003 공통 스타일 추가시 정정보도에 영향이 안가도록 확인필요!! */
+.bnr-wrap003{height:auto !important;}
+.bnr-wrap003>a{display:flex;justify-content:center;align-items:center;box-sizing:border-box;width:100%;min-height:60px;padding:8px 12px;border:1px solid var(--ui-tag005);background-color:var(--ui-tag005);line-height:1.3;}
+.bnr-wrap003 .txt01{margin-left:0 !important;font-size:15px;color:var(--font-color003) !important;}
+
+/* 텍스트형 배너 기본높이 조정 */
+.bnr-wrap003.style03>a{min-height:40px;}
+
+/* ---- .bnr-wrap003.style02 높이값 조정 40px ---- */
+.bnr-wrap003.style02>a{min-height:40px;}
+
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.bnr-wrap003>a{min-height:50px;}
+	.bnr-wrap003.style02>a{min-height:50px;}
+}
+@media only screen and (min-width:1024px) and (max-width:1279px) {
+	.bnr-wrap003 .txt01{line-height:1.3;}
+	.bnr-wrap003 .txt01>em{display:block;}
+}
+@media only screen and (max-width:767px){
+	.bnr-wrap003>a{min-height:50px;}
+	.bnr-wrap003.style02>a{min-height:50px;}
+}
+
+/* ---- ##bnr-wrap003.style51 : 정정보도 ---- */
+.bnr-wrap003.style51>a{justify-content:flex-start;}
+.bnr-wrap003.style51>a .txt01{line-height:1.5;font-weight:500;text-align:left;}
+
+/* ---- ##bnr-wrap004 : 전국>제주> 이미지 배너 : 이야기가 있는 행복한 제주시 ---- */
+.bnr-wrap004{display:flex;justify-content:center;}
+/* ---- ##bnr-wrap005 : 헬로아카이브 ---- */
+.bnr-wrap005.style01{height:60px;}
+.bnr-wrap005>a{width:100%;background-color:var(--ui-tag064);font-size:15px;}
+.bnr-wrap005 .txt01{flex-shrink:0;position:relative;margin-left:5px;padding-right:20px;background-image:var(--ui-bg040);background-size:15px auto;background-position:right center;background-repeat:no-repeat;font-size:16px;color:var(--font-color003) !important;}
+.bnr-wrap005>a:before{content:'';display:block;flex-shrink:0;width:70px;height:22px;margin-right:8px;background-image:var(--ui-bg522);background-size:100% auto;}
+@media only screen and (max-width:374px){
+	.bnr-wrap005 .txt01{margin-left:0;}
+	.bnr-wrap005 a:before{margin-right:4px;}
+}
+@media only screen and (max-width:280px){
+	.bnr-wrap005 .txt01{display:inline-block;max-width:125px;margin-left:5px;line-height:17px;}
+}
+/* ---- ##bnr-wrap006 : 연합뉴스 Games ---- */
+.bnr-wrap006{height:48px !important;padding:0;}
+.bnr-wrap006>a{display:flex;justify-content:space-between;width:100%;height:48px !important;min-height:48px !important;padding:0 29px 0 24px;background-image:var(--ui-bg306);background-size:100% 100%;background-repeat:no-repeat;}
+.bnr-wrap006 .txt01{flex-shrink:0;position:relative;margin-left:8px;padding-right:20px;background-image:var(--ui-bg303);background-size:18px 18px;background-position:right center;background-repeat:no-repeat;font-size:16px;}
+.bnr-wrap006 a:after{content:'';display:block;flex-shrink:0;width:33px;height:32px;background-image:var(--ui-bg304);background-size:100% 100%;background-repeat:no-repeat;}
+/* ---- ##bnr-wrap007 ---- */
+/* 문화 > 툰툰하게 웹툰 뉴스레터 (300x54) */
+.bnr-wrap007{width:100%;height:54px;}
+.bnr-wrap007>a{overflow:hidden;display:flex;justify-content:center;position:relative;width:100%;margin:0 auto;background-color:var(--ui-tag051);}
+.bnr-wrap007>a:before,
+.bnr-wrap007>a:after{content:'';opacity:0.5;display:block;position:absolute;width:100px;height:50px;background-color:var(--ui-tag052);transform:rotate(17deg);}
+.bnr-wrap007>a:before{top:-47px;right:-23px;}
+.bnr-wrap007>a:after{left:-33px;bottom:-44px;}
+.bnr-wrap007 .txt01{font-size:17px;color:var(--font-color003);}
+.bnr-wrap007 .txt01 .bold{display:flex;flex-shrink:0;align-items:center;}
+.bnr-wrap007 .txt01 em{display:flex;flex-shrink:0;align-items:center;color:var(--font-color047);}
+.bnr-wrap007 .txt01 em:before{content:'';display:block;width:30px;height:30px;background-image:var(--ui-bg305);}
+.bnr-wrap007 .txt02{height:22px;margin-left:28px;padding:0 6px;border-radius:2px;background-color:var(--ui-tag053);font-size:12px;font-weight:700;color:var(--font-color001);}
+.bnr-wrap007 .txt02:before{display:none;}
+/* ---- ##bnr-wrap008 : 네이버구독 ---- */
+.bnr-wrap008>a{width:100%;background-color:var(--ui-tag048);}
+.bnr-wrap008>a:before{content:'';display:block;flex-shrink:0;width:22px;height:22px;margin-right:8px;background-image:var(--ui-bg524);background-size:100% auto;}
+.bnr-wrap008 .txt02:before{content:'';display:block;flex-shrink:0;width:1px;height:12px;margin:0 12px;background-color:var(--ui-tag001);}
+.bnr-wrap008 .txt02 .space01{margin-left:4px;}
+@media only screen and (max-width:374px){
+	.bnr-wrap008 [class*='txt0']{margin-left:0;}
+}
+@media only screen and (max-width:280px){
+	.bnr-wrap008 .txt01,
+	.bnr-wrap008 .txt02:before{display:none;}
+}
+/* ---- ##bnr-wrap009 : 다음채널 ---- */
+.bnr-wrap009>a{width:100%;background-color:var(--ui-tag049);}
+.bnr-wrap009>a:before{content:'';display:block;flex-shrink:0;width:22px;height:22px;margin-right:8px;background-image:var(--ui-bg525);background-size:100% auto;}
+.bnr-wrap009 .txt02:before{content:'';display:block;flex-shrink:0;width:1px;height:12px;margin:0 12px;background-color:var(--ui-tag001);}
+.bnr-wrap009 .txt02 .space01{margin-left:4px;}
+@media only screen and (max-width:374px){
+	.bnr-wrap009 [class*='txt0']{margin-left:0;}
+}
+@media only screen and (max-width:280px){
+	.bnr-wrap009 .txt01,
+	.bnr-wrap009 .txt02:before{display:none;}
+}
+/* ---- ##bnr-wrap010 : 앱다운로드 ---- */
+.bnr-wrap010>a{width:100%;background-image:var(--ui-bg306);background-size:100% 100%;background-repeat:no-repeat;}
+.bnr-wrap010>a:before{content:'';display:block;flex-shrink:0;width:32px;height:36px;margin-right:8px;background-image:var(--ui-bg503);background-size:100% auto;background-repeat:no-repeat;}
+@media only screen and (max-width:374px){
+	.bnr-wrap010 a:before{margin-right:4px;}
+	.bnr-wrap010 .txt01{margin-left:0;padding-right:0;background:none;font-size:14px;}
+}
+@media only screen and (max-width:280px){
+	.bnr-wrap010 .txt01{display:inline-block;max-width:125px;margin-left:5px;line-height:17px;}
+}
+/* ---- ##bnr-wrap011 : 고향사랑기부 ---- */
+.bnr-wrap011>a{width:100%;height:40px;min-height:auto;background-color:var(--ui-tag057);}
+.bnr-wrap011 [class*='txt0']{align-items:center;font-size:12px;font-weight:700;color:var(--font-color001);}
+.bnr-wrap011 .txt01{color:var(--font-color049);}
+.bnr-wrap011 .txt02{position:relative;margin-left:4px;font-size:16px;font-weight:700;}
+.bnr-wrap011 .txt02:after{content:'';display:block;position:absolute;top:-10px;right:-10px;width:15px;height:13px;background-image:var(--ui-bg307);background-size:100% 100%;background-position:0 0;background-repeat:no-repeat;}
+.bnr-wrap011.style01>a{height:72px;}
+.bnr-wrap011.style01 [class*='txt0']{font-size:22px;}
+.bnr-wrap011.style01 .txt02{margin-left:8px;font-size:28px;}
+.bnr-wrap011.style01 .txt02:after{top:-15px;right:-18px;width:27px;height:24px;}
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap011>a{height:33px;}
+	.bnr-wrap011 .txt02{font-size:12px;}
+	.bnr-wrap011.style01 [class*='txt0']{font-size:22px;}
+	.bnr-wrap011.style01 .txt02{font-size:28px;}
+}
+@media only screen and (max-width:767px){
+	.bnr-wrap011>a{height:50px;}
+	.bnr-wrap011 [class*='txt0']{font-size:14px !important;}
+	.bnr-wrap011.style01>a{max-width:343px;height:50px;}
+	.bnr-wrap011.style01 .txt02{margin-left:4px;font-size:19px !important;}
+	.bnr-wrap011.style01 .txt02:after{top:-10px;right:-10px;width:17px;height:14px;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.bnr-wrap011>a{height:50px;}
+	.bnr-wrap011 [class*='txt0']{font-size:14px !important;}
+	.bnr-wrap011.style01>a{max-width:343px;height:50px;}
+	.bnr-wrap011.style01 .txt02{margin-left:4px;font-size:19px !important;}
+	.bnr-wrap011.style01 .txt02:after{top:-10px;right:-10px;width:17px;height:14px;}
+}
+/* ---- ##bnr-wrap013 : 보도자료 해외배포 서비스 ---- */
+.bnr-wrap013>a{width:100%;height:60px;background-color:var(--ui-tag055);background-image:var(--ui-bg308);background-size:auto 100%;background-position:center center;background-repeat:no-repeat;}
+.bnr-wrap013 .txt01{font-size:17px;font-weight:700;color:var(--font-color001);}
+/* ---- ##bnr-wrap014 : ESG ---- */
+.bnr-wrap014>a{width:100%;height:40px;min-height:auto;background-color:var(--ui-tag056);}
+.bnr-wrap014 [class*='txt0']{display:flex;flex-shrink:0;align-items:center;font-size:14px;font-weight:600;color:var(--font-color001);}
+.bnr-wrap014 .txt01{color:var(--font-color048);}
+.bnr-wrap014 .txt02{position:relative;margin:0 4px;font-size:22px;font-weight:700;}
+.bnr-wrap014 .txt02:after{content:'';display:block;position:absolute;top:-2px;right:4px;width:8px;height:8px;background-image:var(--ui-bg309);background-position:0 0;background-repeat:no-repeat;}
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap014>a{height:33px;}
+	.bnr-wrap014 [class*='txt0']{font-size:12px;}
+	.bnr-wrap014 .txt02{font-size:16px;}
+	.bnr-wrap014 .txt02:after{top:-3px;right:1px;}
+}
+@media only screen and (max-width:767px){
+	.bnr-wrap014>a{height:50px;}
+	.bnr-wrap014 [class*='txt0']{font-size:14px;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.bnr-wrap014>a{height:50px;}
+	.bnr-wrap014 [class*='txt0']{font-size:14px;}
+}
+/* ---- ##bnr-wrap015 : 연합뉴스 IR 클럽 ---- */
+.bnr-wrap015>a{position:relative;width:100%;height:40px;min-height:100%;background-color:var(--ui-tag058);}
+.bnr-wrap015>a:before,
+.bnr-wrap015>a:after{content:'';display:block;position:absolute;bottom:0;z-index:0;height:100%;background-size:auto 100%;background-repeat:no-repeat;}
+.bnr-wrap015>a:before{left:0;width:86px;height:100%;background-image:var(--ui-bg310);}
+.bnr-wrap015>a:after{right:0;width:82px;height:100%;background-image:var(--ui-bg311);}
+.bnr-wrap015>a [class*='txt0']{font-size:16px;font-weight:700;}
+.bnr-wrap015 .txt01{margin-right:4px;color:var(--font-color050);}
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap015>a{height:33px;}
+	.bnr-wrap015>a [class*='txt0']{font-size:13px;}
+}
+@media only screen and (max-width:767px){
+	.bnr-wrap015{display:none!important;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.bnr-wrap015{display:none!important;}
+}
+/* ---- ##bnr-wrap016 : 연합뉴스 글로벌코리아본부 ---- */
+.bnr-wrap016>a{position:relative;width:100%;height:40px;min-height:100%;background-color:var(--ui-tag059);}
+.bnr-wrap016>a:after,
+.bnr-wrap016>a:before{content:'';display:block;position:absolute;top:0;z-index:1;width:100%;height:100%;background-size:auto 100%;background-repeat:no-repeat;}
+.bnr-wrap016>a:before{left:0;background-image:var(--ui-bg312);background-position:left top;}
+.bnr-wrap016>a:after{right:0;background-image:var(--ui-bg313);background-position:right top;}
+.bnr-wrap016>a [class*='txt0']{position:relative;z-index:2;font-size:16px;font-weight:700;}
+.bnr-wrap016 .txt02{position:relative;z-index:2;margin-left:4px;color:var(--font-color051);}
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap016>a{height:33px;}
+	.bnr-wrap016>a [class*='txt0']{font-size:13px;}
+}
+/* ---- ##bnr-wrap018 : 연합뉴스 Games ---- */
+.bnr-wrap018>a{flex-direction:column;align-items:flex-start;position:relative;box-sizing:border-box;max-width:590px;height:100px;padding:24px 30px;background-image:var(--ui-bg314);background-size:100% 100%;background-repeat:no-repeat;}
+.bnr-wrap018 .btn-type312{position:absolute;top:32px;right:30px;}
+.bnr-wrap018>a>.txt01{font-size:20px;line-height:1.5;font-weight:700;}
+.bnr-wrap018 .txt02{font-size:16px;line-height:1.5;text-align:left;word-break:keep-all;}
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap018>a{height:122px;}
+	.bnr-wrap018 .btn-type312{top:43px;}
+	.bnr-wrap018 .txt02{max-width:192px;}
+}
+@media only screen and (max-width:767px){
+	.bnr-wrap018>a{height:99px;padding:16px 20px;background-size:auto;background-position:left top;}
+	.bnr-wrap018>a>.txt01{font-size:18px;}
+	.bnr-wrap018 .txt02{max-width:158px;font-size:14px;}
+	.bnr-wrap018 .btn-type312{right:13px;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.bnr-wrap018>a{height:99px;padding:16px 20px;background-size:auto;background-position:left top;}
+	.bnr-wrap018>a>.txt01{font-size:18px;}
+	.bnr-wrap018 .txt02{max-width:168px;font-size:14px;}
+	.bnr-wrap018 .btn-type312{right:20px;}
+}
+/* ---- ##bnr-wrap019 : Y스코어 ---- */
+.bnr-wrap019>a{flex-direction:column;align-items:flex-start;position:relative;box-sizing:border-box;max-width:590px;height:100px;padding:24px 30px;background-image:var(--ui-bg315);background-size:100% 100%;background-repeat:no-repeat;}
+.bnr-wrap019 .btn-type312{position:absolute;top:32px;right:30px;}
+.bnr-wrap019>a>.txt01{font-size:20px;line-height:1.5;font-weight:700;}
+.bnr-wrap019 .txt02{font-size:16px;line-height:1.5;text-align:left;word-break:keep-all;}
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap019>a{height:122px;}
+	.bnr-wrap019 .btn-type312{top:43px;}
+	.bnr-wrap019 .txt02{max-width:174px;}
+}
+@media only screen and (max-width:767px){
+	.bnr-wrap019>a{height:99px;padding:16px 20px;background-size:auto;background-position:left top;}
+	.bnr-wrap019>a>.txt01{font-size:18px;}
+	.bnr-wrap019 .txt02{max-width:153px;font-size:14px;}
+	.bnr-wrap019 .btn-type312{right:13px;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.bnr-wrap019>a{height:99px;padding:16px 20px;background-size:auto;background-position:left top;}
+	.bnr-wrap019>a>.txt01{font-size:18px;}
+	.bnr-wrap019 .txt02{max-width:153px;font-size:14px;}
+	.bnr-wrap019 .btn-type312{right:20px;}
+}
+/* ---- ##bnr-wrap021 : 연합라운지 ---- */
+.bnr-wrap021>a,
+.bnr-wrap021>button{overflow:hidden;max-width:1200px;height:100px;background-color:var(--ui-tag031);color:var(--font-color001);}
+.bnr-wrap021>a:before,
+.bnr-wrap021>button:before{content:'';display:block;position:relative;top:10px;width:214px;height:199px;background-image:var(--ui-bg316);background-size:100% 100%;background-repeat:no-repeat;}
+.bnr-wrap021 .con{display:flex;flex-direction:column;align-items:flex-start;}
+.bnr-wrap021 .txt01{font-size:24px;line-height:1.5;font-weight:700;}
+.bnr-wrap021 .txt02{opacity:0.8;font-size:16px;line-height:1.5;font-weight:500;text-align:left;}
+.bnr-wrap021 .txt02>span{display:block;padding-left:4px;}
+@media only screen and (max-width:767px){
+	.bnr-wrap021>a{height:90px;}
+	.bnr-wrap021>a:before{top:0;width:135px;height:90px;}
+	.bnr-wrap021 .txt01{font-size:16px;}
+	.bnr-wrap021 .txt02{display:inline-flex;flex-direction:column;align-items:flex-start;max-width:116px;margin-top:2px;font-size:12px;line-height:1.3;}
+	.bnr-wrap021 .txt02>span{display:block;padding-left:0;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.bnr-wrap021>a{height:90px;}
+	.bnr-wrap021>a:before{top:0;width:135px;height:90px;}
+	.bnr-wrap021 .txt01{font-size:16px;}
+	.bnr-wrap021 .txt02{display:flex;flex-direction:column;align-items:flex-start;max-width:116px;margin-top:2px;font-size:12px;line-height:1.3;}
+	.bnr-wrap021 .txt02>span{display:block;padding-left:0;}
+}
+
+/* ---- ##bnr-wrap024 : 재난포털 ---- */
+/* 2025-03-22 : background-color:var(--ui-tag105); */
+.bnr-wrap024>a{display:flex;justify-content:center;align-items:center;width:100%;height:50px;min-height:auto;background-color:#cd7e44;}
+.bnr-wrap024>a>.con{display:flex;justify-content:center;flex-direction:row;gap:4px;}
+.bnr-wrap024 [class*='txt0']{font-size:16px;font-weight:600;}
+.bnr-wrap024 .txt01{color:var(--font-color001);}
+.bnr-wrap024 .txt02{color:var(--font-color063);}
+.bnr-wrap024 .txt03{color:#ffeab8;}
+.bnr-wrap024 .txt04{margin-right:5px;color:#aabacc;}
+.bnr-wrap024 .txt05{margin-right:5px;color:#ffeab8;}
+.bnr-wrap024+.bnr-wrap028{margin-top:16px;}
+/* 재난포털 배너 확장 - bg컬러 변경 */
+.bnr-wrap024.bg01>a{background-color:#052c55;}/* 폭우 */
+.bnr-wrap024.bg02>a{background-color:#e66825;}/* 폭염 */
+
+/* ---- ##bnr-wrap026 : 아프리카와 동행 우분투 ---- */
+.bnr-wrap026{background-color:#99CCFF;}
+.bnr-wrap026>a{display:flex;width:100%;height:50px;}
+.bnr-wrap026>a .con{width:270px;height:50px;background:url(https://r.yna.co.kr/www/home_n/v03/img/bnr_ubuntu_pc01_20250903.png) no-repeat 0 0;}
+.bnr-wrap026.style01>a{min-height:40px;height:40px;}
+.bnr-wrap026.style01>a .con{height:40px;background:url(https://r.yna.co.kr/www/home_n/v03/img/bnr_ubuntu02_pc01.png) no-repeat 0 0;}
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap026>a .con{width:221px;height:50px;background:url(https://r.yna.co.kr/www/home_n/v03/img/bnr_ubuntu_pc02_20250903.png) no-repeat 0 0;}
+	.bnr-wrap026.style01>a .con{height:40px;background:url(https://r.yna.co.kr/www/home_n/v03/img/bnr_ubuntu02_pc02.png) no-repeat 0 0;}
+}
+@media only screen and (max-width:1023px){
+	.page-intrnal .aside-box425 .bnr-wrap026.area01{max-width:initial;}
+	.bnr-wrap026>a .con{width:343px;height:50px;background:url(https://r.yna.co.kr/www/home_n/v03/img/bnr_ubuntu_m01_20250903.png) no-repeat center 0;background-size:343px 50px;}
+	.bnr-wrap026.style01>a{height:50px;}
+	.bnr-wrap026.style01>a .con{width:343px;height:50px;background:url(https://r.yna.co.kr/www/home_n/v03/img/bnr_ubuntu_m01_20250903.png) no-repeat center 0;background-size:343px 50px;}
+}
+
+/* ---- ##bnr-wrap027 ---- */
+.bnr-wrap027{height:40px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_brandup2025_bg02.png) 0 0 no-repeat;}
+.bnr-wrap027>a{display:flex;align-items:center;justify-content:center;height:100%;min-height:auto;color:#CD2F1C;font-size:16px;font-weight:600;letter-spacing:-0.72px;}
+
+/* ---- ##bnr-wrap028 : 새로운 연합뉴스를 만나세요 ---- */
+.bnr-wrap028{position:relative;overflow:hidden;}
+.bnr-wrap028>a{display:flex;justify-content:center;align-items:center;width:100%;height:50px;background-color:var(--ui-tag030);}
+.bnr-wrap028>a>.con{display:inline-flex;justify-content:center;}
+.bnr-wrap028>a .txt01{font-size:16px;font-weight:600;}
+.bnr-wrap028>a:before,
+.bnr-wrap028>a:after{content:'';display:block;position:absolute;z-index:1;top:-100%;width:51px;height:136px;background:var(--ui-tag100);transform:rotateZ(227deg);opacity:0.1;}
+.bnr-wrap028>a:before{left:0;margin-left:50px;}
+.bnr-wrap028>a:after{right:0;margin-right:30px;}
+.bnr-wrap028:after{content:'';display:block;position:absolute;top:0;right:0;width:44px;height:70px;background:var(--ui-tag100);transform:rotateZ(180deg);opacity:0.1;}
+
+/* ---- ##bnr-wrap029 : 새로운 연합뉴스를 만나세요 (본문 최상단) ---- */
+.bnr-wrap029{position:relative;overflow:hidden;background-color:var(--ui-tag030);}
+.bnr-wrap029>a{position:relative;display:flex;justify-content:center;align-items:center;width:980px;height:50px;}
+.bnr-wrap029>a>.con{display:inline-flex;justify-content:center;padding:0 57px;}
+.bnr-wrap029>a .txt01{font-size:14px;font-weight:700;line-height:1.5;}
+.bnr-wrap029>a .txt02{margin-left:8px;font-size:12px;font-weight:500;line-height:1.5;}
+.bnr-wrap029>a:before,
+.bnr-wrap029>a:after{content:'';display:block;/*position:absolute;*/z-index:1;top:-100%;width:51px;height:136px;background:var(--ui-tag100);transform:rotateZ(227deg);opacity:0.1;}
+.bnr-wrap029>a:before{left:0;margin-left:50px;}
+.bnr-wrap029>a:after{right:0;margin-right:81px;}
+.bnr-wrap029:after{content:'';display:block;position:absolute;top:0;left:50%;margin-left:239px;width:60px;height:70px;background:var(--ui-tag100);transform:rotateZ(180deg);opacity:0.1;}
+.bnr-wrap029 .btn-type004.close02{position:absolute;z-index:10;top:50%;left:50%;margin-left:456px;width:50px;height:50px;transform:translateY(-50%);}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.bnr-wrap029>a{position:relative;display:flex;justify-content:center;align-items:center;width:100%;height:62px;}
+	.bnr-wrap029>a>.con{flex-direction:column;}
+	.bnr-wrap029>a .txt01{font-size:14px;font-weight:700;}
+	.bnr-wrap029:after{margin-left:159px;}
+	.bnr-wrap029 .btn-type004.close02{left:auto;right:0;margin-left:0;}
+}
+@media only screen and (max-width:767px){
+	.bnr-wrap029>a:before,
+	.bnr-wrap029>a:after{position:absolute;}
+	.bnr-wrap029>a{position:relative;display:flex;justify-content:center;align-items:center;width:100%;height:62px;}
+	.bnr-wrap029>a>.con{flex-direction:column;}
+	.bnr-wrap029:after{margin-left:0;right:0;left:auto;}
+	.bnr-wrap029>a:after{margin-right:31px;}
+	.bnr-wrap029 .btn-type004.close02{left:auto;right:0;margin-left:0;}
+}
+/* ---- ##bnr-wrap030 : 우분투 아프리카 난민 포럼 ---- */
+.bnr-wrap030{height:40px;background-color:#BEE4FA;background-image:url(https://r.yna.co.kr/ad/img/2025/bnr_wrap_030_bg01.png);background-repeat:no-repeat;}
+.bnr-wrap030>a{flex-wrap:wrap;flex-direction:column;padding:6px 0 4px;width:100%;height:100%;min-height:auto;}
+.bnr-wrap030 .txt01{font-weight:700;font-size:15px;color:#028E86;}
+.bnr-wrap030 .txt02{position:relative;margin-top:3px;padding-right:10px;font-weight:700;font-size:12px;color:#293278;}
+.bnr-wrap030 .txt02:after{content:'';clear:both;position:absolute;top:50%;right:0;margin-top:-4px;width:6px;height:8px;background-image:url(https://r.yna.co.kr/ad/img/2025/bnr_wrap_030_arr01.svg);}
+.bnr-wrap030.style01{background-image:url(https://r.yna.co.kr/ad/img/2025/bnr_wrap_030_bg02.png);}
+
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap030{height:40px;}
+	.bnr-wrap030 .txt01{font-size:14px;}
+	.bnr-wrap030 .txt02{margin-top:3px;font-size:12px;}
+}
+@media only screen and (max-width:767px){
+	.bnr-wrap030{height:50px;}
+	.bnr-wrap030>a{padding:6px 0 5px;}
+	.bnr-wrap030 .txt01{width:100%;}
+	.bnr-wrap030 .txt02{margin-top:4px;font-size:13px;}
+	.bnr-wrap030 .txt02:after{margin-top:-3px;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.bnr-wrap030{height:50px;}
+	.bnr-wrap030>a{padding:6px 0 5px;}
+	.bnr-wrap030 .txt01{width:100%;}
+	.bnr-wrap030 .txt02{margin-top:4px;font-size:13px;}
+	.bnr-wrap030 .txt02:after{margin-top:-3px;}
+}
+
+/* ---- ##bnr-wrap031 : PC전용 수림문학상 ---- */
+.bnr-wrap031{height:40px;background-color:#D0F4DE;background-image:url(https://r.yna.co.kr/ad/img/2025/bnr_soorim_20250409.png);background-repeat:no-repeat;}
+.bnr-wrap031>a{display:flex;justify-content:center;align-items:center;gap:3px;min-height:40px;}
+.bnr-wrap031 .txt01{font-weight:700;font-size:15px;color:#fff;}
+.bnr-wrap031 .txt02{font-weight:500;font-size:13px;color:#666;}
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap031>a{letter-spacing:-1px;}
+	.bnr-wrap031 .txt01{font-size:14px;}
+	.bnr-wrap031 .txt02{font-size:12px;}
+}
+@media only screen and (max-width:767px){
+	.bnr-wrap031{display:none!important;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.bnr-wrap031{display:none!important;}
+}
+
+/* ---- ##bnr-wrap032 : PC전용 Y-FARM ---- */
+.bnr-wrap032{position:relative;height:40px;background-color:#FFEACB;}
+.bnr-wrap032>a{min-height:40px;gap:10px;}
+.bnr-wrap032:before,
+.bnr-wrap032:after{content:'';display:block;position:absolute;top:0;background-repeat:no-repeat;}
+.bnr-wrap032:before{left:0;width:50px;height:40px;background-image:url(https://r.yna.co.kr/ad/img/2025/bnr_yfarm01_20250417.png);}
+.bnr-wrap032:after{right:0;width:22px;height:14px;background-image:url(https://r.yna.co.kr/ad/img/2025/bnr_yfarm03_20250417.png);}
+.bnr-wrap032 .txt01{display:block;margin-left:40px;width:74px;height:40px;text-indent:-9999px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_yfarm02_20250417.png) center no-repeat;}
+.bnr-wrap032 .txt02{width:123px;flex-wrap:wrap;}
+.bnr-wrap032 .txt02 .date{margin-top:2px;width:100%;display:block;font-weight:700;font-size:14px;color:#5F311D;}
+.bnr-wrap032 .txt02 .place{width:100%;display:block;font-weight:400;font-size:12px;color:#666;}
+@media only screen and (max-width:767px){
+	.bnr-wrap032{display:none !important;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.bnr-wrap032{display:none !important;}
+}
+
+/* ---- ##bnr-wrap033 : 세이브더칠드런 국제어린이마라톤 ---- */
+.bnr-wrap033{position:relative;height:40px;background-color:#16A3E4;}
+.bnr-wrap033>a{min-height:40px;gap:25px;}
+.bnr-wrap033:before{content:'';display:block;position:absolute;bottom:0;left:0;width:46px;height:38px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_sc01_20250421.png) 0 0/auto 38px no-repeat;}
+.bnr-wrap033 .tit{display:block;margin-left:40px;width:99px;height:28px;text-indent:-9999px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_sc02_20250421.png) 0 0/99px auto no-repeat;}
+.bnr-wrap033 .txt{margin-top:3px;}
+.bnr-wrap033 .txt .date{display:flex;align-items:center;justify-content:center;box-sizing:border-box;border-radius:20px;background:#fff;width:54px;height:16px;font-weight:600;font-size:12px;color:#E60012;}
+.bnr-wrap033 .txt .place{display:block;margin-top:3px;font-weight:400;font-size:11px;line-height:1.2;color:#fff;}
+@media only screen and (max-width:767px){
+	.bnr-wrap033{display:none !important;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.bnr-wrap033{display:none !important;}
+}
+
+/* ---- ##bnr-wrap034 : 2025대선 국문 배너 PC ---- */
+.bnr-wrap034{height:60px;border:1px solid #D5CFEE;background-color:#F7F5FF;box-sizing:border-box;}
+.bnr-wrap034 .con{display:flex;align-items:center;position:relative;width:100%;}
+.bnr-wrap034 .logo{width:185px;height:26px;margin-left:24px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_election2025_tit01.png) 0 0 no-repeat;}
+.bnr-wrap034 .logo .txt{position:absolute;width:1px;height:1px;clip:rect(0 0 0 0);overflow:hidden;}
+.bnr-wrap034 .menu{display:flex;align-items:center;margin-left:24px}
+.bnr-wrap034 .menu li a{display:inline-block;font-size:15px;color:#1B1457;font-weight:600;}
+.bnr-wrap034 .menu li + li{position:relative;margin-left:16px;padding-left:18px;}
+.bnr-wrap034 .menu li + li:before{content:'';display:block;position:absolute;top:5px;left:0;width:2px;height:14px;background-color:#D7D1EB;}
+.bnr-wrap034 .d-day{display:flex;align-items:center;margin-left:auto;margin-right:118px;}
+.bnr-wrap034 .d-day .txt{font-size:13px;font-weight:500;color:#9184C5;letter-spacing:0;}
+.bnr-wrap034 .d-day .txt strong{font-weight:600;}
+.bnr-wrap034 .d-day .day{margin-left:10px;font-size:28px;font-weight:800;color:#6F52EE;}
+.bnr-wrap034 .obj01{position:absolute;top:0;right:24px;width:78px;height:58px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_election2025_obj01.png) 0 0 no-repeat;}
+.bnr-wrap034 .vote-rate{display:flex;align-items:center;margin-left:auto;margin-right:118px;}
+.bnr-wrap034 .vote-rate .txt{font-size:13px;font-weight:600;color:#1B1457;letter-spacing:0;}
+.bnr-wrap034 .vote-rate .txt strong{color:#7A5DFC;}
+.bnr-wrap034 .vote-rate .percent{display:flex;align-items:baseline;margin-left:8px;font-size:20px;font-weight:800;color:#6F52EE;}
+.bnr-wrap034 .vote-rate .percent .num{font-size:28px;}
+.bnr-wrap034 .vote-rate .time{margin-left:8px;color:#555;font-size:13px;font-weight:500;}
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap034 .d-day,
+	.bnr-wrap034 .d-day .txt{display:none;}
+	.bnr-wrap034 .menu{margin-left:20px}
+	.bnr-wrap034 .menu li + li{margin-left:12px;padding-left:14px;}
+	.bnr-wrap034 .d-day{margin-right:98px;}
+	.bnr-wrap034 .obj01{right:12px;}
+	.bnr-wrap034 .vote-rate{display:none;}
+}
+
+/* ---- ##bnr-wrap035 : 2025대선 국문 배너 M ---- */
+.bnr-wrap035{height:60px;border:1px solid #D5CFEE;background-color:#F7F5FF;box-sizing:border-box;}
+.bnr-wrap035 .con{width:100%;height:100%;}
+.bnr-wrap035 .con>a{display:flex;align-items:center;justify-content:center;width:100%;height:100%;}
+.bnr-wrap035 .logo{width:160px;height:23px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_m_election2025_tit01.png) 0 0 no-repeat;background-size:160px 23px;}
+.bnr-wrap035 .logo .txt{position:absolute;width:1px;height:1px;clip:rect(0 0 0 0);overflow:hidden;}
+.bnr-wrap035 .obj01{width:60px;height:48px;margin-top:auto;margin-left:16px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_m_election2025_obj01.png) 0 0 no-repeat;background-size:60px 48px;}
+/* step01 사전투표 */
+.bnr-wrap035.step01 .con{display:flex;align-items:center;position:relative;width:100%;}
+.bnr-wrap035.step01 .logo{width:185px;height:26px;margin-left:24px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_election2025_tit01.png) 0 0 no-repeat;}
+.bnr-wrap035.step01 .logo .txt{position:absolute;width:1px;height:1px;clip:rect(0 0 0 0);overflow:hidden;}
+.bnr-wrap035.step01 .obj01{position:absolute;top:0;right:24px;width:78px;height:58px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_election2025_obj01.png) 0 0 no-repeat;}
+.bnr-wrap035.step01 .vote-rate{display:flex;align-items:center;margin-left:auto;margin-right:118px;}
+.bnr-wrap035.step01 .vote-rate .txt{font-size:13px;font-weight:600;color:#1B1457;letter-spacing:0;line-height:18px;}
+.bnr-wrap035.step01 .vote-rate .txt strong{color:#7A5DFC;}
+.bnr-wrap035.step01 .vote-rate .percent{display:flex;align-items:baseline;margin-left:8px;font-size:20px;font-weight:800;color:#6F52EE;}
+.bnr-wrap035.step01 .vote-rate .percent .num{font-size:28px;}
+.bnr-wrap035.step01 .vote-rate .time{margin-left:8px;color:#555;font-size:13px;font-weight:500;}
+
+/* ---- ##bnr-wrap036 :연합심포지움 ---- */
+.bnr-wrap036{position:relative;height:50px;background-color:#0E1532;}
+.bnr-wrap036 .obj01{position:absolute;top:0;left:0;width:80px;height:50px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_sympo2025_obj01.png) 0 0 no-repeat;background-size:80px 50px;}
+.bnr-wrap036 .obj02{position:absolute;top:0;right:0;width:90px;height:50px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_sympo2025_obj02.png) 0 0 no-repeat;background-size:90px 50px;}
+.bnr-wrap036 a{position:relative;}
+.bnr-wrap036 a>.con{display:flex;align-items:center;flex-direction:column;}
+.bnr-wrap036 a>.con .txt01{font-size:18px;color:#fff;font-weight:700;letter-spacing:-0.9px;}
+.bnr-wrap036 a>.con .txt02{margin-top:4px;font-size:11px;color:#fff;font-weight:400;letter-spacing:0;}
+
+/* ---- ##bnr-wrap037 : 춘천연합마라톤 ---- */
+.bnr-wrap037{position:relative;width:100%;height:40px;background-color:#0068D1;}
+.bnr-wrap037 a{display:flex;align-items:center;flex-direction:column;min-height:initial;}
+.bnr-wrap037 a .txt01{display:flex;align-items:center;font-size:14px;color:#fff;font-weight:700;}
+.bnr-wrap037 a .txt01 .ico{width:31px;height:11px;margin-right:3px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_yonma2025_logo01.png);background-size:31px 11px;}
+.bnr-wrap037 a .txt02{margin-top:4px;font-size:10px;color:#91FFF9;font-weight:500;letter-spacing:-0.2px;}
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap037{height:40px;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.bnr-wrap037{height:50px;}
+}
+@media only screen and (max-width:767px){
+	.bnr-wrap037{height:50px;}
+}
+
+/* ---- ##bnr-wrap038 : 2025 다문화 배트민턴  ---- */
+.bnr-wrap038{overflow:hidden;position:relative;width:100%;height:40px;box-sizing:border-box;border:1px solid #D9D9D9;background-color:#fff;}
+.bnr-wrap038 a{position:relative;z-index:2;display:flex;padding:4px 0;flex-wrap:wrap;height:40px;min-height:100%;}
+.bnr-wrap038:before,
+.bnr-wrap038:after{content:'';z-index:1;position:absolute;top:0;}
+.bnr-wrap038:before{left:0;width:43px;height:40px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_badminton2025_bg01.png) no-repeat;}
+.bnr-wrap038:after{right:0;width:99px;height:40px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_badminton2025_bg02.png) no-repeat;}
+.bnr-wrap038 .txt{z-index:2;position:relative;display:block;font-weight:700;font-size:16px;line-height:1;letter-spacing:-0.33px;color:#212B54;}
+.bnr-wrap038 .txt .c01{color:#E60960;}
+.bnr-wrap038 .txt .c02{color:#1E4898;}
+.bnr-wrap038 .txt .c03{color:#51AF31;}
+.bnr-wrap038 .date{display:block;font-weight:500;font-size:11px;line-height:1;letter-spacing:-0.22px;color:#004D88;}
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap038 .txt{font-size:14px;}
+}
+@media only screen and (max-width:1023px){
+	.bnr-wrap038{display:none !important;}
+}
+
+/* ---- ##bnr-wrap039 : APEC2025 ---- */
+.bnr-wrap039{position:relative;height:50px;background-color:#1CAFAF;}
+.bnr-wrap039 a{position:relative;height:50px;min-height:50px;}
+.bnr-wrap039 .obj01{width:47px;height:31px;margin-right:9px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_apec2025_obj01.png) 0 0 no-repeat;background-size:47px 31px;}
+.bnr-wrap039 .con{display:flex;align-items:center;}
+.bnr-wrap039 .con .txt01{width:150px;height:14px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_apec2025_tit01_01.png) 0 0 no-repeat;background-size:150px 14px;}
+.bnr-wrap039 .con .txt02{margin-top:3px;font-size:12px;color:#050D66;font-weight:700;letter-spacing:0;}
+
+/* PC화면 - 주요기사01 노출 */
+.bnr-wrap039.style02{margin-bottom:40px;}
+.bnr-wrap039.style02 .con{position:relative;width:100%;padding:0 20px;box-sizing:border-box;}
+.bnr-wrap039.style02:after{content:'';position:absolute;bottom:0;right:0;width:320px;height:42px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_apec2025_obj02.png) 0 0 no-repeat;}
+.bnr-wrap039.style02 .con .txt01{width:250px;height:32px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_apec2025_tit01_04.png) 0 center no-repeat;}
+.bnr-wrap039 .list01{display:flex;gap:0 16px;margin-left:20px;}
+.bnr-wrap039 .list01 li{position:relative;line-height:50px;}
+.bnr-wrap039 .list01 li+li{padding-left:15px;}
+.bnr-wrap039 .list01 li:before{content:'';position:absolute;top:50%;left:0;width:1px;height:8px;margin:-4px 0 0 0;background:#fff;}
+.bnr-wrap039 .list01 li:first-child:before{display:none;}
+.bnr-wrap039 .list01 a{font-weight:600;font-size:15px;color:#fff;}
+@media only screen and (min-width:1024px){
+	.bnr-wrap039.style01{height:40px;}
+	.bnr-wrap039.style01 a{height:40px;min-height:40px;}
+	.bnr-wrap039.style01 .con .txt01{width:145px;height:13px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_apec2025_tit01_02.png) 0 0 no-repeat;background-size:145px 13px;}
+}
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap039.style02:after{content:'';position:absolute;bottom:0;right:0;width:160px;height:42px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_apec2025_obj02.png) 0 0 no-repeat;}
+}
+
+/* ---- ##bnr-wrap040 : 채용배너 3건 ---- */
+.bnr-wrap040{flex-direction:column;align-items:flex-start;box-sizing:border-box;width:100%;padding:14px;background:#E9E9E9;}
+.bnr-wrap040 .arrow01>a{padding-right:16px;}
+.bnr-wrap040 .arrow01>a:after{content:'';position:absolute;top:4px;right:0;width:8px;height:8px;border:2px solid #CDCDCD;border-right:0 !important;border-bottom:0 !important;background-image:none;transform:rotate(135deg);}
+.bnr-wrap040 .txt01{width:100%;font-weight:600;font-size:16px;color:#2e55c5;line-height:21px;letter-spacing:-0.72px;}
+.bnr-wrap040 .txt02{display:inline-block;font-weight:600;font-size:15px;color:#111;line-height:normal;}
+.bnr-wrap040 .txt03{font-weight:400;font-size:13px;color:#666;line-height:normal;}
+.bnr-wrap040 .con01{padding-left:10px;font-size:0;line-height:0;}
+.bnr-wrap040 .con01+.con01{margin-top:7px;}
+.bnr-wrap040 .txt01+.con01{margin-top:10px;}
+.bnr-wrap040 .txt02+.txt03{margin-top:2px;}
+.bnr-wrap040.style01 .txt01{color:#4F6FCB;}
+.bnr-wrap040.style01 .con01{padding-left:50px;}
+/* 대형 프레임 : 1024px ~ 1279px - 컨테이너영역980px */
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap040{padding:15px 10px;}
+	.bnr-wrap040 .txt01{font-size:16px;}
+	.bnr-wrap040 .txt03{display:none;}
+	.bnr-wrap040 .con01{width:96px;margin:0 auto;padding-left:0;}
+	.bnr-wrap040.style01 .con01{margin:0 0 0 30px;padding-left:0;width:auto;}
+	.bnr-wrap040.style01 .con01 + .con01{margin-top:7px;}
+	.bnr-wrap040.style01 .txt01+.con01{margin-top:10px;}
+}
+/* 중형 프레임 :1023px 이하 */
+@media only screen and (max-width:1023px){
+	.bnr-wrap040{display:none !important;}
+}
+
+/* ---- ##bnr-wrap041 : 채용배너 리스트형 ---- */
+.bnr-wrap041{padding:14px 20px;background-color:#E9E9E9;box-sizing:border-box;}
+.bnr-wrap041 .list{width:100%;}
+.bnr-wrap041 .list li + li{margin-top:6px;padding-top:6px;border-top:1px solid #fff;}
+.bnr-wrap041 .list li a{display:block;color:#4F6FCB;font-size:16px;font-weight:600;letter-spacing:-0.72px;line-height:22px;text-align:center;}
+.bnr-wrap041.multi .list li a{text-align:left;}
+/* 대형 프레임 : 1024px ~ 1279px - 컨테이너영역980px */
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap041{padding:14px 11px;}
+	.bnr-wrap041 .list li a{font-size:14px;letter-spacing:-0.63px;line-height:20px;}
+}
+/* 중형 프레임 :1023px 이하 */
+@media only screen and (max-width:1023px){
+	.bnr-wrap041{display:none !important;}
+}
+
+/* ---- ##bnr-wrap042 : 채용배너 텍스트형 ---- */
+.bnr-wrap042{width:100%;height:40px;background-color:#E9E9E9;box-sizing:border-box;}
+.bnr-wrap042 a{display:flex;width:100%;height:100%;min-height:auto;color:#4F6FCB;font-size:16px;font-weight:600;letter-spacing:-1.2px;line-height:22px;text-align:center;}
+.bnr-wrap042.style01{height:50px;}
+/* 대형 프레임 : 1024px ~ 1279px - 컨테이너영역980px */
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap042 a{font-size:14px;letter-spacing:-1px;line-height:20px;}
+	.bnr-wrap042.style01 a{font-size:14px;}
+}
+/* 중형 프레임 :1023px 이하 */
+@media only screen and (max-width:1023px){
+	.bnr-wrap042{display:none !important;}
+}
+
+/* ---- ##bnr-wrap043 : 베트남어 오픈 (본문 최상단) ---- */
+.bnr-wrap043{position:relative;overflow:hidden;background-color:#5956FA;}
+.bnr-wrap043>a{position:relative;display:flex;justify-content:center;align-items:center;width:980px;height:50px;}
+.bnr-wrap043>a>.con{display:inline-flex;justify-content:center;padding:0 57px;}
+.bnr-wrap043>a .txt01{font-size:12px;font-weight:500;line-height:19px;color:#FFF;}
+.bnr-wrap043>a .txt02{margin-left:4px;font-weight:700;font-size:14px;line-height:19px;color:#FFF;}
+.bnr-wrap043>a .txt02:before{content:'AI';display:inline-block;position:relative;top:-2px;width:21px;height:19px;margin-right:3px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_vietnam_obj01.png?v=20250807_01) 0 0 / 21px auto no-repeat;text-indent:-9999px;color:transparent;}
+.bnr-wrap043>a:before,
+.bnr-wrap043>a:after{content:'';display:block;z-index:1;top:-100%;width:51px;height:136px;background:var(--ui-tag100);transform:rotateZ(227deg);opacity:0.1;}
+.bnr-wrap043>a:before{left:0;margin-left:50px;}
+.bnr-wrap043>a:after{right:0;margin-right:81px;}
+.bnr-wrap043:after{content:'';display:block;position:absolute;top:0;left:50%;margin-left:239px;width:60px;height:70px;background:var(--ui-tag100);transform:rotateZ(180deg);opacity:0.1;}
+.bnr-wrap043 .btn-type004.close02{position:absolute;z-index:10;top:50%;left:50%;margin-left:456px;width:50px;height:50px;transform:translateY(-50%);}
+/* 중형 프레임 : 768px ~ 1023px - 컨테이너영역720px */
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.bnr-wrap043>a{position:relative;display:flex;justify-content:center;align-items:center;width:100%;height:62px;}
+	.bnr-wrap043>a>.con{flex-direction:column;}
+	.bnr-wrap043>a .txt01{font-size:14px;font-weight:700;}
+	.bnr-wrap043>a .txt02{margin-top:4px;margin-left:0;}
+	.bnr-wrap043:after{margin-left:159px;}
+	.bnr-wrap043 .btn-type004.close02{left:auto;right:0;margin-left:0;}
+}
+/* 소형 프레임 :767px 이하 - 컨테이너 영역 가변 */
+@media only screen and (max-width:767px){
+	.bnr-wrap043>a:before,
+	.bnr-wrap043>a:after{position:absolute;}
+	.bnr-wrap043>a{position:relative;display:flex;justify-content:center;align-items:center;width:100%;height:62px;}
+	.bnr-wrap043>a>.con{flex-direction:column;}
+	.bnr-wrap043:after{margin-left:0;right:0;left:auto;}
+	.bnr-wrap043>a:after{margin-right:31px;}
+	.bnr-wrap043 .btn-type004.close02{left:auto;right:0;margin-left:0;}
+}
+
+/* ---- ##bnr-wrap044 : 베트남어 오픈 (메인) ---- */
+.bnr-wrap044{position:relative;height:50px;background:linear-gradient(90deg, #6812F7 0%, #43C3FF 100%);}
+.bnr-wrap044:before,
+.bnr-wrap044:after{content:'';display:block;position:absolute;top:0;width:50px;height:100%;}
+.bnr-wrap044:before{left:0;background:url(https://r.yna.co.kr/ad/img/2025/bnr_vietnam_bg01.png) 0 0 / contain no-repeat;}
+.bnr-wrap044:after{right:0;background:url(https://r.yna.co.kr/ad/img/2025/bnr_vietnam_bg02.png) 100% 0 / contain no-repeat;}
+.bnr-wrap044>a{display:block;height:100%;}
+.bnr-wrap044 .con{display:flex;justify-content:center;align-items:center;height:100%;}
+.bnr-wrap044 .con>[class]{margin-top:5px;font-weight:700;font-size:16px;line-height:140%;letter-spacing:-0.32px;text-shadow:0 1px 1px rgba(0, 0, 0, 0.50);}
+.bnr-wrap044 .txt01{color:#03FBE1;}
+.bnr-wrap044 .txt01:before{content:'AI';display:inline-block;position:relative;top:-3px;width:25px;height:21px;margin-right:3px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_vietnam_obj02.png?v=20250807_01) 0 0 / 25px auto no-repeat;text-indent:-9999px;color:transparent;}
+.bnr-wrap044 .txt02{margin-left:4px;color:#fff;}
+/* 대형 프레임 : 1024px ~ 1279px - 컨테이너영역980px */
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap044:before{opacity:0.4;}
+}
+/* 중형 프레임 :1023px 이하 */
+@media only screen and (max-width:1023px){
+	.bnr-wrap044 .con>[class]{margin-top:2px;}
+	.bnr-wrap044 .txt01:before{top:-2px;}
+	.bnr-wrap044:after{right:0;background:url(https://r.yna.co.kr/ad/img/2025/bnr_vietnam_bg03.png) 100% 0 / contain no-repeat;}
+}
+
+/* ---- ##bnr-wrap045 : 제8회 서울아프리카페스티벌 ---- */
+.bnr-wrap045{position:relative;overflow:hidden;height:40px;background-color:#08AB66;}
+.bnr-wrap045:after{content:'';display:block;position:absolute;top:0;right:0;z-index:1;width:100%;height:100%;background:url(https://r.yna.co.kr/ad/img/2025/bnr_africafestival_object02.svg) 100% 0 / contain no-repeat;}
+.bnr-wrap045>a{display:flex;justify-content:center;align-items:center;position:relative;z-index:2;width:100%;height:100%;min-height:auto;}
+.bnr-wrap045 .con{display:inline-flex;justify-content:center;height:24px;}
+.bnr-wrap045 .con .txt01{padding-left:60px;font-weight:700;font-size:16px;line-height:24px;letter-spacing:-0.64px;color:#FFF;}
+.bnr-wrap045 .con .txt01:before{content:'';display:inline-block;position:absolute;top:0;left:0;width:52px;height:100%;background:url(https://r.yna.co.kr/ad/img/2025/bnr_africafestival_object01.svg) 100% 0 / contain no-repeat;}
+/* 대형 프레임 : 1024px ~ 1279px - 컨테이너영역980px */
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap045 .con{margin-top:1px;height:20px;}
+	.bnr-wrap045 .con .txt01{padding-left:47px;font-size:14px;line-height:20px;letter-spacing:-0.56px;}
+	.bnr-wrap045 .con .txt01:before{width:43px;}
+}
+/* 중형 프레임 :1023px 이하 */
+@media only screen and (max-width:1023px){
+	.bnr-wrap045{height:50px;}
+	.bnr-wrap045 .con{height:28px;margin-top:2px;}
+	.bnr-wrap045 .con .txt01{padding-left:69px;line-height:28px;}
+	.bnr-wrap045 .con .txt01:before{top:-1px;width:61px;}
+}
+
+/* ---- ##bnr-wrap046 : 2025 대한민국 도시.지역혁신 산업박람회 ---- */
+.bnr-wrap046{position:relative;overflow:hidden;height:40px;}
+.bnr-wrap046:before,
+.bnr-wrap046:after{content:'';display:block;position:absolute;top:0;right:0;z-index:1;width:100%;height:100%;}
+.bnr-wrap046:after{background:url(https://r.yna.co.kr/ad/img/2025/bnr_kcriexpo01_bg01.png) 100% 0 / contain no-repeat;}
+.bnr-wrap046>a{display:flex;justify-content:center;align-items:center;position:relative;z-index:2;width:100%;height:100%;min-height:auto;}
+.bnr-wrap046 .con{display:inline-flex;justify-content:center;height:24px;}
+
+.bnr-wrap046.y2026:before{z-index:2;box-sizing:border-box;border:1px solid #e9e9e9;}
+.bnr-wrap046.y2026:after{background:url(https://r.yna.co.kr/ad/img/2026/bnr_kcriexpo_20260914.png) -1px 0 no-repeat;}
+/* 일반형/대형 프레임 : 1024px 이상 */
+@media only screen and (min-width:1024px){
+	.bnr-wrap046 .con .txt01{overflow:hidden;display:inline-block;width:1px;height:1px;border:none;font-size:1px;line-height:1px;color:transparent;white-space:nowrap;clip:rect(1px, 1px, 1px, 1px);clip-path:inset(50%);}
+}
+/* 대형 프레임 : 1024px ~ 1279px - 컨테이너영역980px */
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap046:after{background:url(https://r.yna.co.kr/ad/img/2025/bnr_kcriexpo01_bg02.png) 100% 0 / contain no-repeat;}
+	.bnr-wrap046.y2026{height:33px;}
+	.bnr-wrap046.y2026:after{background:url(https://r.yna.co.kr/ad/img/2026/bnr_kcriexpo_20260914_33.png)}
+}
+/* 중형 프레임 :1023px 이하 */
+@media only screen and (max-width:1023px){
+	.bnr-wrap046{height:50px;background:linear-gradient(91deg, #BE06B3 29.63%, #29018E 100%);}
+	.bnr-wrap046:after{display:none;}
+	.bnr-wrap046 .con{height:30px;margin-top:2px;}
+	.bnr-wrap046 .con .txt01{padding-left:40px;font-weight:700;font-size:18px;line-height:30px;letter-spacing:-0.5px;color:#FFF;}
+	.bnr-wrap046 .con .txt01:before{content:'';display:inline-block;position:absolute;top:-1px;left:0;width:30px;height:100%;background:url(https://r.yna.co.kr/ad/img/2025/bnr_kcriexpo01_object01.png?v=20250905_01) 100% 0 / contain no-repeat;}
+
+	.bnr-wrap046.y2026{display:none !important;}
+}
+/* 소형 프레임 : 767px 이하 - 컨테이너 영역 가변 */
+@media only screen and (max-width:767px){
+	.bnr-wrap046 .con .txt01{font-size:16px;}
+}
+/* 소형 프레임 : 360px 이하 - 컨테이너 영역 가변 */
+@media only screen and (max-width:360px){
+	.bnr-wrap046 .con .txt01{padding-left:0;}
+	.bnr-wrap046 .con .txt01:before{display:none;}
+}
+/* 소형 프레임 : 320px 이하 - 컨테이너 영역 가변 */
+@media only screen and (max-width:320px){
+	.bnr-wrap046 .con .txt01{font-size:15px;}
+}
+
+/* ---- ##bnr-wrap047 : 다크모드 업데이트 안내 배너 ---- */
+.bnr-wrap047{background-color:#46587D;}
+.bnr-wrap047 a{display:flex;justify-content:center;align-items:center;height:50px;font-size:16px;color:#fff;letter-spacing:-0.42px;}
+.bnr-wrap047 a .ico{display:inline-block;width:30px;height:30px;margin-right:8px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_darkmode_ico01.svg) 0 0 no-repeat;}
+.bnr-wrap047 a strong{font-weight:700;}
+/* 대형 프레임 : 1024px ~ 1279px - 컨테이너영역980px */
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap047 a{font-size:14px;}
+}
+@media only screen and (max-width:1023px){
+	.bnr-wrap047{margin-bottom:32px;}
+}
+
+/* ---- ##bnr-wrap048 : 2025 다문화페스타 ---- */
+.bnr-wrap048{position:relative;overflow:hidden;align-items:center;justify-content:flex-start !important;height:40px;background:#56C3F1;}
+.bnr-wrap048:before{content:'';display:inline-block;position:absolute;top:50%;left:6px;margin:-17px 0 0 0;width:30px;height:34px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_multicultural01_20250912.png) 0 0 no-repeat;}
+.bnr-wrap048 a{position:relative;display:inline-block;margin:0 0 0 40px;width:212px;height:16px;min-height:inherit;background:url(https://r.yna.co.kr/ad/img/2025/bnr_multicultural02_20250912.png) 0 0 no-repeat;}
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap048:before{display:none;opacity:0;width:0;height:0;}
+	.bnr-wrap048 a{margin:0 auto;width:186px;height:14px;background-size:cover;}
+}
+@media only screen and (min-width: 768px) and (max-width: 1023px){
+	.bnr-wrap048{display:none !important;}
+}
+@media only screen and (max-width:767px){
+	.bnr-wrap048{display:none !important;}
+}
+
+/* ---- ##bnr-wrap049 : 2025 미래경제포럼 ---- */
+.bnr-wrap049{position:relative;height:40px;background-color:#073E68;overflow:hidden;}
+.bnr-wrap049 a{position:relative;height:40px;min-height:40px;}
+.bnr-wrap049 .obj01{width:49px;height:46px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_futureforum2025_obj01.png?v=20251020_1646) 0 0 no-repeat;background-size:49px 46px;}
+.bnr-wrap049 .con{display:flex;align-items:center;justify-content:center;}
+.bnr-wrap049 .con .txt01{width:120px;height:14px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_futureforum2025_tit01_01.png) 0 0 no-repeat;background-size:120px 14px;}
+.bnr-wrap049 .con .txt02{display:block;margin-top:3px;font-size:10px;color:#F3E227;font-weight:500;letter-spacing:0;text-align:center;}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.bnr-wrap049{height:50px;}
+	.bnr-wrap049 a{height:50px;min-height:50px;}
+}
+@media only screen and (max-width:767px){
+	.bnr-wrap049{height:50px;}
+	.bnr-wrap049 a{height:50px;min-height:50px;}
+}
+
+/* ---- ##bnr-wrap050 : 보도자료 원문 관련 문의 ---- */
+.bnr-wrap050>a{width:100%;height:60px;background-color:var(--ui-tag055);background-image:url(../img/bnr_bg06.png);background-size:auto 100%;background-position:center center;background-repeat:no-repeat;}
+.bnr-wrap050 .txt01{font-size:17px;font-weight:700;color:var(--font-color001);}
+
+/* ---- ##bnr-wrap051 : 2025 송년 / 2026 신년 | 핫뉴스 상단 ---- */
+/* width 100% 배너
+ * 2025 송년 : end (기본)
+ * 2026 신년 : new */
+.bnr-wrap051>a{position:relative;width:100%;height:50px;min-height:100%;}
+.bnr-wrap051>a .con{display:flex;justify-content:center;align-items:center;width:100%;height:100%;}
+.bnr-wrap051>a [class*='txt0']{position:relative;z-index:2;}
+.bnr-wrap051>a .txt01{width:155px;height:20px;}
+/* 일반형/대형 프레임 : 1024px 이상 (PC 기본) */
+@media only screen and (min-width:1024px){
+	.bnr-wrap051>a{background:url(https://r.yna.co.kr/ad/img/2025/bnr_endyear_v01_1200_01.jpg?v=20251210_1430) 0 0 no-repeat;}
+	.bnr-wrap051>a .txt01{background:url(https://r.yna.co.kr/ad/img/2025/bnr_endyear_v01_sitename01.png) 0 0 no-repeat;}
+
+	.bnr-wrap051.new>a{background:url(https://r.yna.co.kr/ad/img/2025/bnr_newyear_v01_1200_01.jpg?v=20251210_1430) 0 0 no-repeat;}
+	.bnr-wrap051.new>a .txt01{background:url(https://r.yna.co.kr/ad/img/2025/bnr_newyear_v01_sitename01.png) 0 0 no-repeat;}
+}
+/* 중형,소형 프레임 : 1023px 이하 */
+@media only screen and (max-width:1023px){
+	.bnr-wrap051>a .txt01{width:164px;height:21px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_endyear_v01_sitename02.png) 0 0 / cover no-repeat;}
+	.bnr-wrap051.new>a .txt01{width:165px;height:22px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_newyear_v01_sitename02.png) 0 0 / cover no-repeat;}
+}
+/* 중형 프레임 : 768px ~ 1023px - 컨테이너영역720px */
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.bnr-wrap051>a{background:url(https://r.yna.co.kr/ad/img/2025/bnr_endyear_v01_0768_01.jpg?v=20251210_1430) 50% 0 / cover no-repeat;}
+	.bnr-wrap051.new>a{background:url(https://r.yna.co.kr/ad/img/2025/bnr_newyear_v01_0768_01.jpg?v=20251210_1430) 50% 0 / cover no-repeat;}
+}
+/* 소형 프레임 : 767px 이하 - 컨테이너 영역 가변 */
+@media only screen and (max-width:767px){
+	.bnr-wrap051>a{background:url(https://r.yna.co.kr/ad/img/2025/bnr_endyear_v01_0375_01.jpg?v=20251210_1430) 50% 0 / cover no-repeat;}
+	.bnr-wrap051.new>a{background:url(https://r.yna.co.kr/ad/img/2025/bnr_newyear_v01_0375_01.jpg?v=20251210_1430) 50% 0 / cover no-repeat;}
+}
+
+/* ---- ##bnr-wrap052 : 2025 송년 / 2026 신년 | 메인 주요01 상단 ---- */
+/* width 50% 하프 배너
+ * 2025 송년 : end
+ * 2026 신년 : new */
+.bnr-wrap052{position:relative;width:100%;height:50px;min-height:100%;}
+.bnr-wrap052 .con{display:flex;align-items:center;width:100%;height:100%;}
+.bnr-wrap052 .title01{position:relative;z-index:2;width:150px;height:20px;}
+.bnr-wrap052 .title01>a{width:100%;height:100%;}
+.bnr-wrap052 .list01{font-size:0;line-height:20px;}
+.bnr-wrap052 .list01 li{display:inline-block;position:relative;padding-left:7px;line-height:inherit;}
+.bnr-wrap052 .list01 li:before{content:'';display:inline-block;position:absolute;top:50%;left:0;width:3px;height:3px;margin-top:-1.5px;border-radius:50%;}
+.bnr-wrap052 .list01 li>a{font-weight:600;font-size:13px;line-height:inherit;text-align:center;}
+.bnr-wrap052 .con.end .list01 li:before{background-color:#4066FF;}
+.bnr-wrap052 .con.end .list01 li>a{color:#2F32E0;}
+.bnr-wrap052 .con.new .list01 li:before{background-color:#3AB59F;}
+.bnr-wrap052 .con.new .list01 li>a{color:#00896B;}
+/* 대형 와이드 프레임 : 1280px 이상 - 컨테이너영역1200px */
+@media only screen and (min-width:1280px){
+	.bnr-wrap052 .title01{margin-left:24px;margin-right:24px;}
+	.bnr-wrap052 .list01 li+li{margin-left:16px;}
+}
+/* 대형 프레임 : 1024px ~ 1279px - 컨테이너영역980px */
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap052 .title01{margin-left:16px;margin-right:16px;}
+	.bnr-wrap052 .list01 li+li{margin-left:8px;}
+}
+/* 일반형/대형 프레임 : 1024px 이상 (PC 기본) */
+@media only screen and (min-width:1024px){
+	.bnr-wrap052 .con.end{background:url(https://r.yna.co.kr/ad/img/2025/bnr_endyear_v02_1200_01.jpg?v=20251210_1430) 0 0 no-repeat;}
+	.bnr-wrap052 .con.new{background:url(https://r.yna.co.kr/ad/img/2025/bnr_newyear_v02_1200_01.jpg) 0 0 no-repeat;}
+}
+/* 중형,소형 프레임 : 1023px 이하 */
+@media only screen and (max-width:1023px){
+	.bnr-wrap052 .list01{display:none;}
+	.bnr-wrap052 .con{justify-content:center;}
+}
+/* 중형 프레임 : 768px ~ 1023px - 컨테이너영역720px */
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.bnr-wrap052 .con.end{background:url(https://r.yna.co.kr/ad/img/2025/bnr_endyear_v02_0768_01.jpg) 50% 0 / cover no-repeat;}
+	.bnr-wrap052 .con.new{background:url(https://r.yna.co.kr/ad/img/2025/bnr_newyear_v02_0768_01.jpg) 50% 0 / cover no-repeat;}
+}
+/* 중형/일반형/대형 프레임 : 768 이상 (PC 기본) */
+@media only screen and (min-width:768px){
+	.bnr-wrap052 .con.end .title01{width:150px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_endyear_v02_sitename01.png) 0 0 no-repeat;}
+	.bnr-wrap052 .con.new .title01{width:151px;background:url(https://r.yna.co.kr/ad/img/2025/bnr_newyear_v02_sitename01.png) 0 0 no-repeat;}
+}
+/* 소형 프레임 : 767px 이하 - 컨테이너 영역 가변 */
+@media only screen and (max-width:767px){
+	.bnr-wrap052 .con.end{background:url(https://r.yna.co.kr/ad/img/2025/bnr_endyear_v02_0375_01.jpg) 50% 0 / cover no-repeat;}
+	.bnr-wrap052 .con.new{background:url(https://r.yna.co.kr/ad/img/2025/bnr_newyear_v02_0375_01.jpg) 50% 0 / cover no-repeat;}
+
+	.bnr-wrap052 .title01{position:relative;z-index:2;width:132px;height:18px;}
+	.bnr-wrap052 .con.end .title01{background:url(https://r.yna.co.kr/ad/img/2025/bnr_endyear_v02_sitename02.png) 0 0 / cover no-repeat;}
+	.bnr-wrap052 .con.new .title01{background:url(https://r.yna.co.kr/ad/img/2025/bnr_newyear_v02_sitename02.png) 0 0 / cover no-repeat;}
+}
+
+/* ---- ##bnr-wrap053 : 동계올림픽 2026 - 국문 메인 오픈 전 ---- */
+.bnr-wrap053{position:relative;height:50px;background: linear-gradient(90deg, #006491 0%, rgba(11, 147, 157, 0.50) 100%);}
+.bnr-wrap053:before{content:'';display:block;position:absolute;top:0;left:0;width:100%;height:100%;border: 1px solid rgba(0, 0, 0, 0.04);box-sizing:border-box;}
+.bnr-wrap053 a{position:relative;height:50px;min-height:50px;}
+.bnr-wrap053 .con{display:flex;align-items:center;}
+.bnr-wrap053 .con .txt01{font-size:22px;font-weight:500;color:#fff;}
+.bnr-wrap053 .con .txt01 .t01{font-size:24px;font-weight:800;}
+/* 대형 프레임 : 1024px ~ 1279px - 컨테이너영역980px */
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap053 .con .txt01{font-size:20px;}
+	.bnr-wrap053 .con .txt01 .t01{font-size:22px;}
+}
+
+/* ---- ##bnr-wrap054 : 동계올림픽 2026 - 국문 메인 오픈 후 ---- */
+.bnr-wrap054{position:relative;width:100%;height:50px;background:linear-gradient(90deg, #006491 0%, #85C9CE 40.48%, #85C9CE 70.36%, #21D6EB 100%);}
+.bnr-wrap054:before{content:'';display:block;position:absolute;top:0;left:0;width:100%;height:100%;border: 1px solid rgba(0, 0, 0, 0.04);box-sizing:border-box;}
+.bnr-wrap054:after{content:'';display:block;position:absolute;top:0;right:0;width:308px;height:50px;background:url(https://r.yna.co.kr/ad/img/2026/bnr_milano2026_obj01.png);background-size:308px 50px;}
+.bnr-wrap054 .con{position:relative;display:flex;align-items:center;width:100%;padding:0 16px;box-sizing:border-box;z-index:1;}
+.bnr-wrap054 .con .site-tit{font-size:22px;color:#fff;font-weight:500;}
+.bnr-wrap054 .con .site-tit .t01{font-size:24px;font-weight:800;}
+.bnr-wrap054 .con .date{margin-left:8px;color:#111;font-size:14px;font-weight:500;opacity:0.5;}
+.bnr-wrap054 .con .menu-list{display:flex;align-items:center;margin-left:32px;}
+.bnr-wrap054 .con .menu-list li + li{margin-left:20px;}
+.bnr-wrap054 .con .menu-list li .txt{font-size:15px;color:#0C2A2C;font-weight:500;}
+.bnr-wrap054 .con .site-unit{display:flex;align-items:center;margin-left:auto;}
+.bnr-wrap054 .con .site-unit .title-box .info{font-size:12px;color:#111;font-weight:500;line-height:14px;}
+.bnr-wrap054 .con .site-unit .title-box .info .ranking{color:#AE0C0C;}
+.bnr-wrap054 .con .site-unit .list{display:flex;align-items:center;margin-left:8px;}
+.bnr-wrap054 .con .site-unit .list li + li{margin-left:8px;}
+.bnr-wrap054 .con .site-unit .list li i{display:flex;align-items:center;justify-content:center;width:30px;height:30px;}
+.bnr-wrap054 .con .site-unit .list li i.ico-unit004-gold{background:url(https://r.yna.co.kr/ad/img/2026/bnr_milano2026_medal01.png);background-size:30px 30px;}
+.bnr-wrap054 .con .site-unit .list li i.ico-unit004-silver{background:url(https://r.yna.co.kr/ad/img/2026/bnr_milano2026_medal02.png);background-size:30px 30px;}
+.bnr-wrap054 .con .site-unit .list li i.ico-unit004-bronze{background:url(https://r.yna.co.kr/ad/img/2026/bnr_milano2026_medal03.png);background-size:30px 30px;}
+.bnr-wrap054 .con .site-unit .list li .txt{font-size:16px;font-weight:700;line-height:18px;color:#111;}
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap054 .con .menu-list{margin-left:20px;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.bnr-wrap054 .con .menu-list{margin-left:20px;}
+}
+@media only screen and (max-width:767px){
+	.bnr-wrap054{background:linear-gradient(90deg, #006491 0%, #85C9CE 100%);}
+	.bnr-wrap054:before{display:none;}
+	.bnr-wrap054:after{display:none;}
+	.bnr-wrap054 .con{padding:0;}
+	.bnr-wrap054 .con .site-tit{display:flex;align-items:center;justify-content:center;width:100%;height:100%;}
+	.bnr-wrap054 .con .date{display:none;}
+	.bnr-wrap054 .con .menu-list{display:none;}
+	.bnr-wrap054 .con .site-unit{display:none;}
+}
+
+/* ---- ##bnr-wrap055 : 동계올림픽 2026 - 국문메인 패럴림픽 ---- */
+.bnr-wrap055{position:relative;height:50px;background: var(--milano_gradi_paralympic, linear-gradient(90deg, #DC4DC9 0%, #6B48C4 32%, #24B9C4 67%, #21D6EB 100%));}
+.bnr-wrap055:before{content:'';display:block;position:absolute;top:0;left:0;width:100%;height:100%;border: 1px solid rgba(0, 0, 0, 0.04);box-sizing:border-box;}
+.bnr-wrap055 a{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:100%;color:#fff;font-size:18px;font-weight:600;}
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap055 a{font-size:16px;}
+}
+@media only screen and (max-width:1023px){
+	.bnr-wrap055 a{font-size:20px;}
+}
+
+/* ---- ##bnr-wrap056 : 국가브랜드업 2026 - PC전용 ---- */
+.bnr-wrap056{position:relative;height:50px;background-color:#19A8DF;}
+.bnr-wrap056:before,
+.bnr-wrap056:after{content:'';display:block;position:absolute;bottom:0;}
+.bnr-wrap056:before{left:0;width:49px;height:36px;background-image:url(https://r.yna.co.kr/ad/img/2026/bnr_brandup2026_left01.png);}
+.bnr-wrap056:after{right:0;width:67px;height:35px;background-image:url(https://r.yna.co.kr/ad/img/2026/bnr_brandup2026_right01.png);}
+.bnr-wrap056 a{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:4px 0;width:100%;height:100%;padding:10px 0;box-sizing:border-box;}
+.bnr-wrap056 .tit{display:inline-flex;width:180px;height:18px;background-image:url(https://r.yna.co.kr/ad/img/2026/bnr_brandup2026_title.png);}
+.bnr-wrap056 .date{color:#111;font-size:11px;line-height:1;}
+
+@media only screen and (max-width:767px){
+	.bnr-wrap056{display:none!important;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.bnr-wrap056{display:none!important;}
+}
+
+/* ---- ##bnr-wrap057 : wbc 2026 - 국문메인 ---- */
+.bnr-wrap057{position:relative;height:50px;background-color:#A2CDDE;}
+.bnr-wrap057.style01{display:none;}
+.bnr-wrap057>a{display:block;width:100%;height:100%;}
+.bnr-wrap057 .con{display:flex;align-items:center;justify-content:center;}
+.bnr-wrap057 .obj01{width:214px;height:50px;margin-left:20px;background:url(https://r.yna.co.kr/ad/img/2026/bnr_wbc2026_obj01.png?v=20260225_1100) no-repeat 0 0;background-size:214px 50px;}
+.bnr-wrap057 .txt01{display:none;margin-left:12px;text-align:left;}
+.bnr-wrap057 .txt01 .row01{font-size:14px;color:#184B84;font-weight:600;letter-spacing:-0.56px;}
+.bnr-wrap057 .txt01 .row02{font-size:12px;color:#666;font-weight:500;letter-spacing:-0.48px;}
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap057 .obj01{margin-left:20px;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.bnr-wrap057.style01{display:block;}
+	.bnr-wrap057 .obj01{margin-left:0;}
+	.bnr-wrap057 .txt01{display:block;}
+}
+@media only screen and (max-width:767px){
+	.bnr-wrap057.style01{display:block;}
+	.bnr-wrap057 .obj01{margin-left:0;}
+}
+
+/* 핫뉴스 아래, wbc 2026 배너 모바일에는 비노출 */
+@media only screen and (max-width:1023px){
+	.aside-box425 .bnr-wrap057{display:none !important;}
+}
+
+/* ---- ##bnr-wrap058 : wbc 2026, 패럴림픽 하프배너 - 국문메인 ---- */
+.bnr-wrap058{display:flex;height:50px;}
+.bnr-wrap058.style01{display:none;}
+.aside-box423 .bnr-wrap058.style01.area01 + .area01{margin-top:0;}
+.bnr-wrap058 a{display:block;width:50%;height:100%}
+.bnr-wrap058 a .con{display:flex;align-items:center;justify-content:center;height:100%;}
+.bnr-wrap058 a.link01 .con{background-color:#A2CDDE;}
+.bnr-wrap058 a.link01 .obj01{width:166px;height:50px;margin-left:10px;background:url(https://r.yna.co.kr/ad/img/2026/bnr_wbc2026_obj02.png) no-repeat 0 0;background-size:cover;}
+.bnr-wrap058 a.link02 .con{background-color:#037E87;}
+.bnr-wrap058 a.link02 .txt01{font-size:18px;color:#fff;font-weight:600;letter-spacing:-0.72px;}
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap058 a.link02 .txt01{font-size:16px;letter-spacing:-0.64px;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.bnr-wrap058.style01{display:flex;}
+	.aside-box423 .bnr-wrap058.style01.area01 + .area01{margin-top:16px;}
+	.bnr-wrap058 a.link02 .txt01{font-size:18px;letter-spacing:-0.8px;}
+	.bnr-wrap058 a.link01 .obj01{margin-left:0;background-size:188px 50px;}
+}
+@media only screen and (max-width:767px){
+	.bnr-wrap058.style01{display:flex;}
+	.aside-box423 .bnr-wrap058.style01.area01 + .area01{margin-top:16px;}
+	.bnr-wrap058 a.link02 .txt01{font-size:18px;letter-spacing:-0.8px;}
+	.bnr-wrap058 a.link01 .obj01{margin-left:10px;}
+}
+
+/* 핫뉴스 아래, wbc 2026, 패럴림픽 반반 배너 모바일에는 비노출 */
+@media only screen and (max-width:1023px){
+	.aside-box425 .bnr-wrap058{display:none !important;}
+}
+
+/* ---- ##bnr-wrap059 : wbc 2026 - 스포츠섹션 ---- */
+.bnr-wrap059{position:relative;height:50px;background-color:#A2CDDE;}
+.bnr-wrap059 .con{display:flex;align-items:center;justify-content:center;width:100%;height:100%;}
+.bnr-wrap059 a{display:block;}
+.bnr-wrap059 a .obj01{width:214px;height:50px;background:url(https://r.yna.co.kr/ad/img/2026/bnr_wbc2026_obj01.png?v=20260225_1100) no-repeat 0 0;background-size:214px 50px;}
+.bnr-wrap059 .txt01{margin-left:20px;text-align:left;}
+.bnr-wrap059 .txt01 .row01{font-size:14px;color:#184B84;font-weight:600;letter-spacing:-0.56px;}
+.bnr-wrap059 .txt01 .row02{font-size:12px;color:#666;font-weight:500;letter-spacing:-0.48px;}
+.bnr-wrap059 .menu01{display:flex;align-items:center;margin-left:37px;}
+.bnr-wrap059 .menu01 li + li{margin-left:20px;}
+.bnr-wrap059 .menu01 li a{font-size:15px;color:#111;letter-spacing:-0.6px;font-weight:600;}
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap059 .menu01{display:none;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.bnr-wrap059 .menu01{display:none;}
+}
+@media only screen and (max-width:767px){
+	.bnr-wrap059 .txt01{display:none;}
+	.bnr-wrap059 .menu01{display:none;}
+}
+
+/* ---- ##bnr-wrap060 : wbc 2026, 패럴림픽 하프배너 - 스포츠섹션 ---- */
+.bnr-wrap060{display:flex;height:50px;}
+.bnr-wrap060 a{display:block;width:50%;height:100%}
+.bnr-wrap060 a .con{display:flex;align-items:center;justify-content:center;height:100%;}
+.bnr-wrap060 a.link01 .con{background-color:#A2CDDE;}
+.bnr-wrap060 a.link01 .obj01{width:166px;height:50px;background:url(https://r.yna.co.kr/ad/img/2026/bnr_wbc2026_obj02.png) no-repeat 0 0;background-size:cover;}
+.bnr-wrap060 a.link01 .txt01{margin-left:8px;text-align:left;}
+.bnr-wrap060 a.link01 .txt01 .row01{font-size:18px;color:#184B84;font-weight:600;letter-spacing:-0.56px;}
+.bnr-wrap060 a.link01 .txt01 .row02{font-size:12px;color:#666;font-weight:500;letter-spacing:-0.48px;}
+.bnr-wrap060 a.link02 .con{background-color:#037E87;}
+.bnr-wrap060 a.link02 .txt01{font-size:18px;color:#fff;font-weight:600;letter-spacing:-0.72px;}
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap060 a.link01 .txt01{display:none;}
+	.bnr-wrap060 a.link02 .txt01{font-size:20px;letter-spacing:-0.8px;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.bnr-wrap060 a.link01 .obj01{margin-left:0;}
+	.bnr-wrap060 a.link01 .txt01{display:none;}
+	.bnr-wrap060 a.link02 .txt01{font-size:18px;letter-spacing:-0.8px;}
+}
+@media only screen and (max-width:767px){
+	.bnr-wrap060 a.link01 .obj01{margin-left:10px;}
+	.bnr-wrap060 a.link01 .txt01{display:none;}
+	.bnr-wrap060 a.link02 .txt01{font-size:18px;letter-spacing:-0.8px;}
+}
+
+/* ---- ##bnr-wrap061 : 플랫폼 리포지션 배너 추가 - 국문메인 ---- */
+.bnr-wrap061{display:flex;height:50px;background:linear-gradient(90deg, #12CEDB 0%, #2653C4 37.5%, #2E8FD4 76%, #2BAFEF 100%);}
+.bnr-wrap061 a{position:relative;overflow:hidden;}
+.bnr-wrap061 a:before{content:'';display:block;position:absolute;top:0;left:50%;width:144px;height:50px;background:url(https://r.yna.co.kr/ad/img/2026/bnr_pfrt_20260226.png) 0 0/144px 50px no-repeat;}
+.bnr-wrap061 .con{display:flex;}
+.bnr-wrap061>a [class*='txt0']{color:#fff;line-height:100%;}
+.bnr-wrap061 .txt02{font-weight:500;font-size:14px;}
+.bnr-wrap061 .txt03{font-weight:600;font-size:18px;}
+/* 플랫폼 리포지션 본문 상단 띠배너 - bnr-wrap061.wide01 */
+.bnr-wrap061.wide01 a:before{margin-left:-244px;}
+.bnr-wrap061.wide01 .txt03{display:none;}
+.bnr-wrap061.wide01 .btn-type004.close02{position:absolute;z-index:10;top:50%;left:50%;margin-left:456px;width:50px;height:50px;transform:translateY(-50%);}
+/* 일반형/대형 프레임 : 1024px 이상 (PC 기본) */
+@media only screen and (min-width:1024px){
+	.bnr-wrap061 a:before{margin-left:-245px;}
+	.bnr-wrap061 .txt01{font-weight:700;font-size:18px;}
+	.bnr-wrap061 .txt02{margin-left:8px;}
+	/* 주요뉴스02 */
+	.aside-box429 .bnr-wrap061 .txt03{display:none;}
+	/* 주요뉴스02 우측 - 핫뉴스 상,하단 */
+	.aside-box423 .bnr-wrap061 a:before,
+	.aside-box425 .bnr-wrap061 a:before{margin-left:-163px;}
+	.aside-box423 .bnr-wrap061>a [class*='txt0'],
+	.aside-box425 .bnr-wrap061>a [class*='txt0']{font-weight:600;font-size:16px;}
+	.aside-box423 .bnr-wrap061 .txt02,
+	.aside-box425 .bnr-wrap061 .txt02{display:none;}
+	.aside-box423 .bnr-wrap061 .txt03,
+	.aside-box425 .bnr-wrap061 .txt03{display:inline-flex;margin-left:4px;}
+	/* 주요뉴스03 우측 - 오토플레이 상단 */
+	.aside-box410 .bnr-wrap061,
+	.aside-box411 .bnr-wrap061{height:40px;}
+	.aside-box410 .bnr-wrap061>a,
+	.aside-box411 .bnr-wrap061>a{min-height:40px;}
+	.aside-box410 .bnr-wrap061 a:before,
+	.aside-box411 .bnr-wrap061 a:before{margin-left:-163px;background-position-y:-8px;}
+	.aside-box410 .bnr-wrap061>a [class*='txt0'],
+	.aside-box411 .bnr-wrap061>a [class*='txt0']{font-weight:600;font-size:15px;}
+	.aside-box410 .bnr-wrap061 .txt02,
+	.aside-box411 .bnr-wrap061 .txt02{display:none;}
+	.aside-box410 .bnr-wrap061 .txt03,
+	.aside-box411 .bnr-wrap061 .txt03{display:inline-flex;margin-left:4px;}
+}
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.aside-box423 .bnr-wrap061>a [class*='txt0'],
+	.aside-box425 .bnr-wrap061>a [class*='txt0']{font-size:15px;}
+	.aside-box423 .bnr-wrap061 a:before,
+	.aside-box425 .bnr-wrap061 a:before{margin-left:-137px;}
+	/* 주요뉴스03 우측 - 오토플레이 상단 */
+	.aside-box410 .bnr-wrap061,
+	.aside-box411 .bnr-wrap061{height:33px;}
+	.aside-box410 .bnr-wrap061>a,
+	.aside-box411 .bnr-wrap061>a{min-height:33px;}
+	.aside-box410 .bnr-wrap061 a:before,
+	.aside-box411 .bnr-wrap061 a:before{margin-left:-163px;background-position-y:-8px;}
+	.aside-box410 .bnr-wrap061>a [class*='txt0'],
+	.aside-box411 .bnr-wrap061>a [class*='txt0']{font-weight:600;font-size:13px;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.bnr-wrap061 a:before{margin-left:-244px;}
+	.bnr-wrap061 .txt01{font-weight:700;font-size:18px;}
+	.bnr-wrap061 .txt02{margin-left:8px;}
+	.bnr-wrap061 .txt03{display:none !important;}
+	.bnr-wrap061.wide01 .btn-type004.close02{left:auto;right:0;margin-left:0;}
+
+	/* 특집배너와 위치겹침, pc/m 위치 조정으로 배너가림처리 2026-03-10 */
+	.yna-shell:not(.body-wide01) .aside-box423.position02.show01 .bnr-wrap061{display:none !important;}
+}
+@media only screen and (max-width:767px){
+	.bnr-wrap061 a:before{margin-left:-188px;}
+	.bnr-wrap061>a [class*='txt0']{font-weight:600;font-size:16px;}
+	.bnr-wrap061 .txt02{display:none !important;}
+	.bnr-wrap061 .txt03{display:inline-flex;margin-left:4px;}
+	.bnr-wrap061.wide01 .txt02{display:block !important;}
+	.bnr-wrap061.wide01 .con{flex-direction:column;gap:4px 0;}
+	.bnr-wrap061.wide01 .txt01{font-weight:700;font-size:14px;}
+	.bnr-wrap061.wide01 .txt02{font-weight:500;font-size:12px;}
+	.bnr-wrap061.wide01 .btn-type004.close02{left:auto;right:0;margin-left:0;}
+	.bnr-wrap061.wide01 a:before{margin-left:-153px;}
+	/* 특집배너와 위치겹침, pc/m 위치 조정으로 배너가림처리 2026-03-10 */
+	.yna-shell:not(.body-wide01) .aside-box423.position02.show01 .bnr-wrap061{display:none !important;}
+}
+
+/* ---- ##bnr-wrap062 : 신문의날 표어 배너 - 국문메인 ---- */
+.bnr-wrap062{overflow:hidden;height:78px !important;border:1px solid #e9e9e9;background:#fff;box-sizing:border-box;}
+.bnr-wrap062>a{position:relative;justify-content:start;padding-left:16px;}
+.bnr-wrap062 .wrap-txt{position:relative;z-index:1;}
+.bnr-wrap062 .txt01{font-size:15px;font-weight:600;line-height:120%;color:#111;text-align:left;letter-spacing:-0.75px;}
+.bnr-wrap062 .txt02{margin-top:4px;font-size:12px;line-height:130%;color:#666;letter-spacing:-0.6px;}
+.bnr-wrap062 [class*='img0']{position:absolute;}
+.bnr-wrap062 .img01{top:19px;right:16px;width:40px;height:40px;background:url(https://r.yna.co.kr/ad/img/2026/bnr_presskorea_20260922.png) no-repeat 0 0;}
+.bnr-wrap062 .img02{top:0;right:0;width:87px;height:78px;background:url(https://r.yna.co.kr/ad/img/2026/bnr_worldnewsday_20260922.png) no-repeat;}
+/* 대형 프레임 : 1024px ~ 1279px - 컨테이너영역980px */
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap062>a{padding-left:10px;}
+	.bnr-wrap062 .txt01{font-size:13px;}
+	.bnr-wrap062 .txt02{font-size:11px;font-weight:400;}
+	.bnr-wrap062 .img01{right:10px;width:34px;height:34px;background-size:contain;}
+	.bnr-wrap062 .img02{background:url(https://r.yna.co.kr/ad/img/2026/bnr_worldnewsday_20260922_980.png) no-repeat;}
+}
+/* 중형 프레임 :1023px 이하 */
+@media only screen and (max-width:1023px){
+	.bnr-wrap062{display:none !important;}
+}
+
+/* ---- ##bnr-wrap063 : 수림문학상 배너 - 국문메인 ---- */
+.bnr-wrap063{overflow:hidden;height:40px;background-color:#93DBEB;}
+.bnr-wrap063>a{position:relative;height:100%;min-height:inherit;}
+.bnr-wrap063 .con{padding:12px 0 0 65px;}
+.bnr-wrap063 .obj01{position:absolute;top:0;left:0;width:102px;height:40px;background:url(https://r.yna.co.kr/ad/img/2026/bnr_surim_20260402.png) no-repeat;}
+.bnr-wrap063 [class*='txt0']{display:inline-flex;font-weight:700;font-size:16px;}
+.bnr-wrap063 .txt01{color:#0F6F84;}
+.bnr-wrap063 .txt02{color:#0A4350;}
+/* 대형 프레임 : 1024px ~ 1279px - 컨테이너영역980px */
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap063 .obj01{left:-17px;}
+}
+/* 중형 프레임 :1023px 이하 */
+@media only screen and (max-width:1023px){
+	.bnr-wrap063{display:none !important;}
+}
+
+/* ---- ##bnr-wrap064 : Y-FARM EXPO 2026 배너 - 국문메인 ---- */
+.bnr-wrap064{overflow:hidden;height:40px;background-color:#E1F2CE;}
+.bnr-wrap064>a{position:relative;height:100%;margin:0;min-height:40px;}
+.bnr-wrap064 .con{display:flex;align-items:center;justify-content:center;}
+.bnr-wrap064 .txt01{width:180px;height:19px;background:url(https://r.yna.co.kr/ad/img/2026/bnr_yfarmexpo2026_txt01.png) no-repeat;}
+.bnr-wrap064 .obj01{width:37px;height:36px;margin-left:5px;background:url(https://r.yna.co.kr/ad/img/2026/bnr_yfarmexpo2026_obj01.png) no-repeat;}
+/* 대형 프레임 : 1024px ~ 1279px - 컨테이너영역980px */
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap064 .obj01{display:none;}
+}
+/* 중형 프레임 :1023px 이하 */
+@media only screen and (max-width:1023px){
+	.bnr-wrap064{display:none !important;}
+}
+
+/* ---- ##bnr-wrap065 : 2026 지방선거 - 국문메인 ---- */
+/* 스크립트 클래스
+ * bnr-le2026-dday : 디데이 기능
+ * bnr-le2026-turnout : 투표율/개표율 */
+.bnr-wrap065{position:relative;width:100%;height:50px;background:linear-gradient(90deg, #04ABC4 0%, #8843F6 100%);}
+.bnr-wrap065 [class*='txt0']{max-width:none;}
+.bnr-wrap065 .con{display:flex;align-items:center;box-sizing:border-box;width:100%;padding:0 70px 0 16px;background:url(https://r.yna.co.kr/www/2026/local_election/img/cm/img_le2026_vote01.png) calc(100% - 2px) 0 / auto 50px no-repeat;}
+.bnr-wrap065 .con .site-txt01{width:139px;height:20px;margin-right:20px;background:url(https://r.yna.co.kr/www/2026/local_election/img/cm/img_le2026_title01.svg) 0 0 no-repeat;text-indent:-9999px;}
+.bnr-wrap065>.link01{display:none;}
+.bnr-wrap065 .menu-list{display:flex;flex:1;line-height:0;}
+.bnr-wrap065 .menu-list>li{position:relative;padding-left:14px;}
+.bnr-wrap065 .menu-list>li:before{content:'';display:block;position:absolute;top:3px;left:0;width:2px;height:14px;background-color:#fff;}
+.bnr-wrap065 .menu-list>li:first-child{padding-left:0;}
+.bnr-wrap065 .menu-list>li:first-child:before{display:none;}
+.bnr-wrap065 .menu-list>li+li{margin-left:12px;}
+.bnr-wrap065 .menu-list .txt01{font-weight:600;font-size:15px;line-height:150%;color:#9EE2E9;}
+.bnr-wrap065 .menu-list .anno01{margin-right:4px;}
+.bnr-wrap065 .site-box01{display:flex;align-items:center;}
+/* 디데이 */
+.bnr-wrap065 .dday-box>.tit01{font-weight:600;font-size:12px;line-height:16px;color:#FFF;text-align:right;}
+.bnr-wrap065 .dday-box>.txt01{margin-left:8px;font-weight:700;font-size:28px;line-height:33px;color:#22D3EE;}
+/* 투표율 */
+.bnr-wrap065 .turnout-box>.tit01{font-weight:600;font-size:13px;line-height:120%;color:#FFF;}
+.bnr-wrap065 .turnout-box>.tit01 .point{font-weight:600;font-size:13px;line-height:120%;color:#F6AFCA;}
+.bnr-wrap065 .turnout-box>.tit01 .time-mark{display:none;}
+.bnr-wrap065 .turnout-box>.txt01{line-height:33px;color:#22D3EE;}
+.bnr-wrap065 .turnout-box .number{margin-left:8px;font-weight:700;font-size:28px;line-height:inherit;}
+.bnr-wrap065 .turnout-box .percent{font-weight:500;font-size:20px;line-height:30px;vertical-align:bottom;}
+.bnr-wrap065 .turnout-box .time-mark{font-weight:500;font-size:13px;line-height:inherit;color:#BDBBFF;text-align:center;}
+/* style01 : 2줄 대응 클래스 */
+.bnr-wrap065.style01 .site-box01{flex-direction:column;align-items:flex-end;height:38px;}
+.bnr-wrap065.style01 .site-box01>.tit01{font-weight:400;font-size:12px;line-height:16px;}
+.bnr-wrap065.style01 .site-box01>.txt01{margin-left:0;font-size:24px;line-height:24px;}
+/* style02 : 투표율 / 디데이 동시 노출 */
+.bnr-wrap065.style02 .site-box01{align-items:center;}
+.bnr-wrap065.style02 .site-box01>.txt01{margin-left:0;font-size:18px;line-height:24px;}
+.bnr-wrap065.style02 .turnout-box>.tit01 .point{font-weight:400;font-size:12px;line-height:16px;}
+.bnr-wrap065.style02 .turnout-box .number{margin-left:0;font-size:18px;}
+.bnr-wrap065.style02 .turnout-box .percent{font-size:12px;line-height:19px;vertical-align:bottom;}
+.bnr-wrap065.style02 .turnout-box+.dday-box{margin-left:15px;}
+/* 대형 프레임 : 1279px 이하 */
+@media only screen and (max-width:1279px){
+	.bnr-wrap065 .menu-list .anno01{display:none;}
+}
+/* 소형 프레임 : 767px 이하 - 컨테이너 영역 가변 */
+@media only screen and (max-width:767px){
+	.bnr-wrap065 .con{justify-content:space-between;}
+	.bnr-wrap065 .con .site-txt01{margin-right:0;}
+	.bnr-wrap065>.link01{display:block;position:absolute;top:0;left:0;width:100%;height:100%;}
+	.bnr-wrap065 .menu-list{display:none;}
+
+	.bnr-wrap065 .site-box01{flex-direction:column;margin-top:4px;}
+	.bnr-wrap065 .site-box01>.txt01,
+	.bnr-wrap065 .site-box01 .number{margin-left:0;}
+	.bnr-wrap065 .dday-box{display:none;}
+	.bnr-wrap065 .turnout-box>.tit01{font-size:12px;}
+	.bnr-wrap065 .turnout-box>.tit01 .time-mark{display:block;}
+	.bnr-wrap065 .turnout-box>.txt01 .time-mark{display:none;}
+	.bnr-wrap065 .turnout-box>.txt01{line-height:100%;}
+	.bnr-wrap065 .turnout-box .number{font-size:18px;}
+	.bnr-wrap065 .turnout-box .percent{font-size:12px;line-height:inherit;vertical-align:baseline;}
+	.bnr-wrap065 .turnout-box .time-mark{font-size:12px;}
+
+	/* (3) 사전투표 종료 : 투표율 (최종)
+	 * (5) 선거일 : 투표율, 기준시간 */
+	.bnr-wrap065.step02 .con,
+	.bnr-wrap065.step03 .con{padding:0 10px 0 14px;background:none;}
+	/* (3) 사전투표 종료 : 투표율 (최종) */
+	.bnr-wrap065.step02 .turnout-box{align-items:flex-end;}
+	/* (5) 선거일 : 투표율, 기준시간 */
+	.bnr-wrap065.step03 .turnout-box{flex-direction:row;}
+	.bnr-wrap065.step03 .turnout-box>.txt01{margin-left:5px;}
+	.bnr-wrap065.step03 .turnout-box .number{font-size:24px;}
+	.bnr-wrap065.step03 .turnout-box .percent{margin-top:2px;font-size:14px;}
+	/* style01 : 2줄 대응 클래스 */
+	.bnr-wrap065.style01 .dday-box{display:block;}
+	/* style02 : 투표율 / 디데이 동시 노출 */
+	.bnr-wrap065.style02 .site-txt01{flex:1;}
+	.bnr-wrap065.style02 .dday-box{display:none !important;}
+}
+/* 소형 프레임 : 425px 이하 - 컨테이너 영역 가변 */
+@media only screen and (max-width:425px){
+	/* (5) 선거일 : 투표율, 기준시간 */
+	.bnr-wrap065.step03 .con{padding:0 20px 0 24px;background:none;}
+}
+/* 소형 프레임 : 375px 이하 - 컨테이너 영역 가변 */
+@media only screen and (max-width:375px){
+	.bnr-wrap065 .con .site-txt01{width:116px;height:18px;background-size:116px auto;}
+}
+/* 초소형 프레임 : 320px 이하 - 컨테이너 영역 가변 */
+@media only screen and (max-width:320px){
+	.bnr-wrap065 .con{padding:0 70px 0 16px !important;background:url(https://r.yna.co.kr/ad/img/2026/bnr_le2026_vote01.png) calc(100% - 10px) 0 / auto 50px no-repeat !important;}
+	.bnr-wrap065 .site-box01{display:none;}
+	.bnr-wrap065 .dday-box{display:none !important;}
+}
+
+/* ---- ##bnr-wrap066 : 2026 월드컵 - 국문메인 ---- */
+.bnr-wrap066{width:100%;height:50px;padding-right:40px;background:#E8EEFF;box-sizing:border-box;}
+.bnr-wrap066 .con{display:flex;align-items:center;justify-content:space-between;width:100%;}
+.bnr-wrap066 .txt-con{display:flex;align-items:center;}
+.bnr-wrap066 .tit{width:208px;height:50px;background:url(https://r.yna.co.kr/ad/img/2026/bnr_worldcup2026_tit_web.png) no-repeat;}
+.bnr-wrap066 .txt-con .date{margin-left:12px;font-weight:600;font-size:12px;color:#534DA7;}
+.bnr-wrap066 .list01{display:flex;align-items:center;}
+.bnr-wrap066 .list01>li{position:relative;}
+.bnr-wrap066 .list01>li>a{font-weight:600;font-size:13px;color:#3657FF;}
+.bnr-wrap066 .list01>li+li{margin-left:14px;padding-left:14px;}
+.bnr-wrap066 .list01>li+li:before{content:'/';position:absolute;top:50%;left:0;transform:translateY(-50%);display:inline-block;font-weight:400;font-size:10px;color:#B8BABF;}
+.bnr-wrap066 .match-con{display:flex;align-items:center;}
+.bnr-wrap066 .match-con .date,
+.bnr-wrap066 .match-con .place{font-weight:600;font-size:13px;color:#3657FF;letter-spacing:-0.52px;}
+.bnr-wrap066 .match-con .date+.place{position:relative;padding-left:8px;margin-left:8px;}
+.bnr-wrap066 .match-con .date+.place:before{content:'';position:absolute;top:50%;left:0;transform:translateY(-50%);width:2px;height:2px;border-radius:50%;background-color:#3657FF;}
+.bnr-wrap066 .match-con.s-end .date+.place,
+.bnr-wrap066 .match-con.s-ing .date+.place{padding-left:0;margin-left:0;}
+.bnr-wrap066 .match-con.s-end .date+.place:before,
+.bnr-wrap066 .match-con.s-ing .date+.place:before{display:none;}
+.bnr-wrap066 .score-info{display:flex;align-items:center;gap:0 6px;margin-left:22px;}
+.bnr-wrap066 .score{display:flex;align-items:center;gap:0 6px;}
+
+.bnr-wrap066 .score [class*='team0']{display:flex;flex-direction:column;min-width:20px;font-weight:600;font-size:16px;letter-spacing:-0.64px;line-height:1;color:#8D8D8D;text-align:center;transition:min-width linear 0.2s;}
+.bnr-wrap066 .score [class*='team0'].win{color:#3657FF;}
+.bnr-wrap066 .score [class*='team0'] .pk{font-weight:500;font-size:12px;}
+.bnr-wrap066 .score [class*='team0'] .pk:empty{display:none;}
+
+.bnr-wrap066 [class*='ico-flag001']{--flag-w:32px;--flag-h:22px;--gap:12px;display:inline-flex;align-items:center;position: relative;font-style:normal;}
+.bnr-wrap066 [class*='ico-flag001']:before{content:'';display:inline-block;flex-shrink:0;width: var(--flag-w);height: var(--flag-h);background-size:cover;background-repeat:no-repeat;background-position:center;background-color:#D7D7D7;}
+.bnr-wrap066 [class*='ico-flag001']:after{content:'';z-index:1;position:absolute;top:50%;left:0;transform:translateY(-50%);width:var(--flag-w);height:var(--flag-h);border:1px solid rgba(0, 0, 0, 0.05);box-sizing:border-box;pointer-events:none;}
+.bnr-wrap066 [class*='ico-flag001'] .txt{margin-left: var(--gap);font-weight:600;font-size:14px;line-height:22px;color:#111;}
+.bnr-wrap066 [class*='ico-flag001'] .m-br{display:none;}
+
+.bnr-wrap066 .ico-flag001-KOR:before{background-image:url(https://r.yna.co.kr/www/2026/worldcup/img/flag/KOR.png)} /* 대한민국 */
+.bnr-wrap066 .ico-flag001-MEX:before{background-image:url(https://r.yna.co.kr/www/2026/worldcup/img/flag/MEX.png)} /* 멕시코 */
+.bnr-wrap066 .ico-flag001-RSA:before{background-image:url(https://r.yna.co.kr/www/2026/worldcup/img/flag/RSA.png)} /* 남아프리카공화국 */
+.bnr-wrap066 .ico-flag001-CZE:before{background-image:url(https://r.yna.co.kr/www/2026/worldcup/img/flag/CZE.png)} /* 체코 */
+.bnr-wrap066 .ico-flag001-GER:before{background-image:url(https://r.yna.co.kr/www/2026/worldcup/img/flag/GER.png)} /* 독일 */
+.bnr-wrap066 .ico-flag001-EGY:before{background-image:url(https://r.yna.co.kr/www/2026/worldcup/img/flag/EGY.png)} /* 이집트 */
+
+.bnr-wrap066 .score-info .match-state{display:flex;align-items:center;text-align:center;flex-direction:column;}
+.bnr-wrap066 .score-info .match-state .txt{display:flex;align-items:center;justify-content:center;padding:4px;border-radius:4px;background-color:#3657FF;}
+.bnr-wrap066 .score-info .match-state .txt:before{content:'';display:inline-block;font-weight:500;font-size:12px;line-height:0.9;color:#fff;letter-spacing:-0.48px;}
+.bnr-wrap066 .score-info .match-state .date{display:none;}
+.bnr-wrap066 .s-upc .match-state .txt{}/* 경기예정 */
+.bnr-wrap066 .s-upc .match-state .txt:before{content:'경기예정';}
+.bnr-wrap066 .s-ing .match-state .txt{}/* 경기중 */
+.bnr-wrap066 .s-ing .match-state .txt{background: linear-gradient(90deg, #3657FF 0%, #6DCEFF 50%, #3657FF 100%);background-size:200% 100%;animation:flowGradient 2.3s ease-out infinite; }
+@keyframes flowGradient{0%{ background-position: 0% 0%;} 100%{ background-position: -200% 0%;}}
+.bnr-wrap066 .s-ing .match-state .txt:before{content:'경기중';}
+.bnr-wrap066 .s-end .match-state .txt{}/* 경기종료 */
+.bnr-wrap066 .s-end .match-state .txt:before{content:'경기종료';}
+.bnr-wrap066 .s-upc .score [class*='team0']{opacity:0;min-width:0;color:rgba(0,0,0,0);}
+.bnr-wrap066 .match-con.s-ing>.date,
+.bnr-wrap066 .match-con.s-end>.date{display:none;}
+/* PC우측용 */
+.bnr-wrap066.style01{padding-right:0;}
+.bnr-wrap066.style01 .con{justify-content:center;}
+.bnr-wrap066.style01 .tit{width:100%;background-position:center;}
+/* 모바일 전용 */
+.bnr-wrap066.style02{padding-right:0;}
+.bnr-wrap066.style02 .con{justify-content:center;}
+.bnr-wrap066.style02 .tit{width:100%;height:50px;background:url(https://r.yna.co.kr/ad/img/2026/bnr_worldcup2026_mob.png) center/208px 50px no-repeat;}
+/* 링크형, 스포츠 메인 */
+/* .bnr-wrap066.style03{} */
+/* 대형 프레임 : 1024px ~ 1279px - 컨테이너영역980px */
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap066{padding-right:24px;}
+	.bnr-wrap066 .score-info{margin-left:16px;}
+	.bnr-wrap066.style01 .con{justify-content:start;}
+	.bnr-wrap066.style01 .tit{background-position:left;}
+	.bnr-wrap066 .match-con>.date,
+	.bnr-wrap066 .match-con>.place{display:none;}
+	.bnr-wrap066 .match-con.s-upc>.date{display:block;}
+	.page-sports .bnr-wrap066.style03 .list01>li+li{margin-left:7px;padding-left:8px;}
+}
+/* 대형 프레임 : 1278px 이하 */
+@media only screen and (max-width:1278px){
+	.bnr-wrap066{padding-right:24px;}
+	.bnr-wrap066 .score-info{margin-left:16px;}
+	.bnr-wrap066 .match-con .place{display:none;}
+}
+/* 일반형/대형 프레임 : 768px 이상 */
+@media only screen and (min-width:768px){
+	.bnr-wrap066 .home-team [class*='ico-flag001']{padding-right:32px;}
+	.bnr-wrap066 .home-team [class*='ico-flag001'] .txt{margin-left:0;margin-right:var(--gap);}
+	.bnr-wrap066 .home-team [class*='ico-flag001']:before{content:'';z-index:1;position:absolute;top:50%;transform:translateY(-50%);left:inherit;right:0;width:var(--flag-w);height:var(--flag-h);box-sizing:border-box;pointer-events:none;}
+	.bnr-wrap066 .home-team [class*='ico-flag001']:after{left:inherit;right:0;}
+}
+/* 소형 프레임 : 767px 이하 - 컨테이너 영역 가변 */
+@media only screen and (max-width:767px){
+	.bnr-wrap066{height:62px;padding-right:16px;}
+	.bnr-wrap066 .tit{width:117px;height:62px;background:url(https://r.yna.co.kr/ad/img/2026/bnr_worldcup2026_tit_mob.png) 0 0/117px 62px no-repeat;}
+	.bnr-wrap066 .txt-con .date,
+	.bnr-wrap066 .match-con .date,
+	.bnr-wrap066 .match-con .place{display:none;}
+
+	.bnr-wrap066 .score{gap:0 4px;}
+	.bnr-wrap066 .score-info{gap:0 4px;margin-left:0;}
+	.bnr-wrap066 .s-upc .score-info .match-state .date{display:block;margin-top:5px;font-size:11px;line-height:1;letter-spacing:-0.44px;}
+	.bnr-wrap066 .s-end .score,
+	.bnr-wrap066 .s-ing .score{margin-top:-15px;}
+	.bnr-wrap066 [class*='ico-flag001']{display:flex;flex-direction:column;gap:5px;line-height:1;}
+	.bnr-wrap066 [class*='ico-flag001']:after{top:0;left:50%;transform:translateX(-50%);}
+	.bnr-wrap066 [class*='ico-flag001'] .txt{margin:0;font-size:10px;line-height:1;text-align:center;letter-spacing:-1px;}
+	.bnr-wrap066 [class*='ico-flag001'] .m-br{display:block;}
+
+	.bnr-wrap066.style01,
+	.bnr-wrap066.style02{height:50px;}
+	.bnr-wrap066.style01 .tit,
+	.bnr-wrap066.style02 .tit{width:100%;height:50px;background:url(https://r.yna.co.kr/ad/img/2026/bnr_worldcup2026_mob.png) center/208px 50px no-repeat;}
+
+	.bnr-wrap066.style03{height:50px;padding-right:0;}
+	.bnr-wrap066.style03 .list01{display:none;}
+	.bnr-wrap066.style03 .con{justify-content:center;}
+	.bnr-wrap066.style03 .txt-con{width:100%;}
+	.bnr-wrap066.style03 .tit{width:100%;height:50px;background:url(https://r.yna.co.kr/ad/img/2026/bnr_worldcup2026_mob.png) center/208px 50px no-repeat;}
+
+	/* 남아공전 정렬분기 */
+	#id_worldcup2026_match03_mainbnr.bnr-wrap066 .score-info{align-items:flex-start;}
+	#id_worldcup2026_match03_mainbnr.bnr-wrap066 .score{margin-top:6px;}
+}
+/* 초소형 프레임 : 345px 이하 */
+@media only screen and (max-width:345px){
+	.bnr-wrap066{height:62px;padding-right:8px;}
+	.bnr-wrap066 .score-info,
+	.bnr-wrap066 .score{gap:0 2px;}
+	.bnr-wrap066 .score-info .match-state .txt:before{font-size:11px;letter-spacing:-1px;}
+}
+
+/* ---- ##bnr-wrap067 : 2026 한반도 심포지엄 ---- */
+.bnr-wrap067{position:relative;height:40px;background-color:#1A2389;}
+.bnr-wrap067 .obj01{position:absolute;top:6px;left:11px;width:28px;height:28px;background:url(https://r.yna.co.kr/ad/img/2026/bnr_sympo2026_obj01.svg) 0 0 no-repeat;background-size:28px 28px;}
+.bnr-wrap067 .obj02{position:absolute;top:0;right:0;width:68px;height:40px;background:url(https://r.yna.co.kr/ad/img/2026/bnr_sympo2026_obj02.svg) 0 0 no-repeat;background-size:68px 40px;}
+.bnr-wrap067 a{position:relative;min-height:40px;}
+.bnr-wrap067 a>.con{display:flex;align-items:center;flex-direction:column;}
+.bnr-wrap067 a>.con .txt01{font-size:16px;color:#fff;font-weight:700;letter-spacing:-0.48px;line-height:normal;}
+.bnr-wrap067 a>.con .txt02{font-size:11px;color:#fff;font-weight:400;letter-spacing:-0.33px;line-height:normal;}
+/* 대형 프레임 : 1024px ~ 1279px - 컨테이너영역980px */
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap067 .obj01{top:8px;left:6px;width:24px;height:24px;background-size:24px 24px;}
+	.bnr-wrap067 .obj02{top:0;right:0;width:62px;height:40px;background-size:62px 40px;}
+	.bnr-wrap067 a>.con .txt01{font-size:14px;letter-spacing:-0.42px;}
+	.bnr-wrap067 a>.con .txt02{font-size:10px;letter-spacing:-0.3px;}
+}
+/* 중형 프레임 :1023px 이하 */
+@media only screen and (max-width:1023px){
+	.bnr-wrap067{display:none !important;}
+}
+
+/* ---- ##bnr-wrap068 : 2026 다문화 배트민턴  ---- */
+.bnr-wrap068{overflow:hidden;position:relative;width:100%;height:40px;box-sizing:border-box;background:linear-gradient(90deg, #FEEBB6 0%, #A1D4F4 100%);}
+.bnr-wrap068 a{position:relative;z-index:2;display:flex;padding:4px 0;flex-wrap:wrap;height:40px;min-height:100%;}
+.bnr-wrap068:before,
+.bnr-wrap068:after{content:'';z-index:1;position:absolute;top:0;}
+.bnr-wrap068:before{left:0;width:40px;height:40px;background:url(https://r.yna.co.kr/ad/img/2026/bnr_badminton2026_bg01.png) no-repeat;}
+.bnr-wrap068 .txt{z-index:2;position:relative;display:block;font-weight:700;font-size:16px;line-height:1;letter-spacing:-0.32px;color:#231E46;}
+.bnr-wrap068 .txt .c01{color:#ED6E25;}
+.bnr-wrap068 .txt .c02{color:#E8387C;}
+.bnr-wrap068 .txt .c03{color:#639671;}
+.bnr-wrap068 .date{display:block;margin-top:2px;font-weight:500;font-size:12px;line-height:1;letter-spacing:-0.24px;color:#357B89;}
+/* 대형 프레임 : 1024px ~ 1279px - 컨테이너영역980px */
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap068 .txt{font-size:14px;}
+}
+/* 중형 프레임 :1023px 이하 */
+@media only screen and (max-width:1023px){
+	.bnr-wrap068{display:none !important;}
+}
+
+/* ---- ##bnr-wrap069 : 2026 춘천연합마라톤 ---- */
+.bnr-wrap069{position:relative;overflow:hidden;align-items:center;justify-content:flex-start !important;height:40px;background:#086CE6;}
+.bnr-wrap069 a{position:relative;display:flex;align-items:center;justify-content:center;min-height:40px;}
+.bnr-wrap069 a .ico{display:inline-block;width:50px;height:18px;background:url(https://r.yna.co.kr/ad/img/2026/bnr_yonma2026_logo01.svg) 0 0 no-repeat;}
+.bnr-wrap069 a .txt01{margin-left:10px;color:#fff;font-size:16px;font-weight:700;letter-spacing:0;line-height:24px;}
+/* 중형 프레임 :1023px 이하 */
+@media only screen and (max-width:1023px){
+	.bnr-wrap069{display:none !important;}
+}
+
+/* ---- ##bnr-wrap070 : 2026 아이치·나고야 아시안게임  ---- */
+/* [bnr-wrap070 - 공통] */
+.bnr-wrap070 [class*='txt0']{max-width:none;}
+.bnr-wrap070 .con{box-sizing:border-box;width:100%;background:url(https://r.yna.co.kr/www/2026/asian_games/img/bnr_kr_bg_left01.svg?v=20260814_1535) 100% 0 / auto 50px no-repeat;}
+/* [bnr-wrap070 - style01] */
+.bnr-wrap070.style01{width:100%;height:50px;background-color:#FFE8E5;}
+.bnr-wrap070.style01:after{content:'';display:block;position:absolute;top:0;right:0;width:100px;height:50px;background-color:#D32919;}
+.bnr-wrap070.style01 .con{display:flex;align-items:center;position:relative;z-index:5;padding:0 16px;}
+.bnr-wrap070.style01 .site-txt01{width:181px;height:30px;}
+.bnr-wrap070.style01 .site-txt01:before{content:'';display:block;width:100%;height:100%;}
+.bnr-wrap070.style01 .site-txt21{margin-left:8px;font-weight:500;font-size:14px;line-height:100%;letter-spacing:-0.56px;color:#1F0A07;}
+.bnr-wrap070.style01 .menu-list{display:flex;flex:1;line-height:0;margin-left:12px;}
+.bnr-wrap070.style01 .menu-list>li{position:relative;}
+.bnr-wrap070.style01 .menu-list>li:first-child{padding-left:0;}
+.bnr-wrap070.style01 .menu-list>li+li{margin-left:12px;}
+.bnr-wrap070.style01 .menu-list .txt01{box-sizing:border-box;padding:4px;font-weight:500;font-size:13px;line-height:100%;color:#111;}
+.bnr-wrap070.style01 .site-unit011{display:flex;align-items:center;}
+.bnr-wrap070.style01 .site-unit011 .title-box{display:flex;flex-direction:column;align-items:center;margin-bottom:0;}
+.bnr-wrap070.style01 .site-unit011 .title-box .info .row{font-weight:700;font-size:15px;line-height:110%;letter-spacing:-0.3px;color:#FFF;}
+.bnr-wrap070.style01 .site-unit011 .title-box .info .row .ranking{font-weight:700;font-size:15px;line-height:110%;letter-spacing:-0.3px;color:#64FFDA;}
+.bnr-wrap070.style01 .site-unit011 .list{display:flex;align-items:center;margin-left:8px;}
+.bnr-wrap070.style01 .site-unit011 .list li+li{margin-left:8px;}
+.bnr-wrap070.style01 .site-unit011 [class*='ico-unit004']{display:inline-block;width:30px;height:30px;line-height:30px;text-align:center;}
+.bnr-wrap070.style01 .site-unit011 .ico-unit004-gold{background:url(https://r.yna.co.kr/www/2026/asian_games/img/bg_header_medal01.png) 0 0 / cover no-repeat;}
+.bnr-wrap070.style01 .site-unit011 .ico-unit004-silver{background:url(https://r.yna.co.kr/www/2026/asian_games/img/bg_header_medal02.png) 0 0 / cover no-repeat;}
+.bnr-wrap070.style01 .site-unit011 .ico-unit004-bronze{background:url(https://r.yna.co.kr/www/2026/asian_games/img/bg_header_medal03.png) 0 0 / cover no-repeat;}
+.bnr-wrap070.style01 .site-unit011 [class*='ico-unit004']>.txt{font-weight:700;font-size:16px;letter-spacing:-0.32px;color:#111;}
+/* [bnr-wrap070 - style02] */
+.bnr-wrap070.style02{width:100%;height:50px;background-color:#E63922;}
+.bnr-wrap070.style02 .site-txt11{display:flex;justify-content:center;align-items:center;width:100%;height:100%;}
+.bnr-wrap070.style02 .site-txt11:before{content:'';display:block;width:181px;height:30px;background:url(https://r.yna.co.kr/www/2026/asian_games/img/bnr_kr_ag2026_logo11.svg) 0 50% no-repeat;}
+/* 대형, 중형 프레임 : 1024px 이상 */
+@media only screen and (min-width:1024px){
+	.bnr-wrap070.style02 .con{background-position:0 0;}
+	.yna-shell.page-sports .bnr-wrap070.style02 .con{background-position:calc(50% + 27px) 0;}
+}
+/* 대형, 중형 프레임 : 768px 이상 */
+@media only screen and (min-width:768px){
+	/* svg 리소스 이중 호출 방지를 위해 미디어쿼리 안에서 호출 */
+	.bnr-wrap070.style01 .con .site-txt01:before{background:url(https://r.yna.co.kr/www/2026/asian_games/img/bnr_kr_ag2026_logo01.svg) 0 50% no-repeat;}
+}
+/* 대형 프레임 : 1024px ~ 1279px - 컨테이너영역980px */
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.yna-shell.page-sports .bnr-wrap070.style01 .site-txt21{display:none;}
+	.yna-shell.page-sports .bnr-wrap070.style01 .menu-list .txt01{padding:4px 3px;}
+}
+/* 대형 프레임 : 1279px 이하 */
+@media only screen and (max-width:1279px){
+	.bnr-wrap070.style01 .menu-list>li+li{margin-left:8px;}
+	.yna-shell.page-sports .bnr-wrap070.style01 .menu-list>li+li{margin-left:6px;}
+	.bnr-wrap070.style01 .site-unit011 .title-box .info .row{width:42px;font-size:12px;letter-spacing:-0.24px;}
+	.bnr-wrap070.style01 .site-unit011 .title-box .info .row .ranking{font-size:12px;}
+}
+/* 중형, 소형 프레임 : 1023px 이하 */
+@media only screen and (max-width:1023px){
+	.bnr-wrap070.style02 .con{background-position:calc(50% + 27px) 0;}
+}
+/* 소형 프레임 : 767px 이하 - 컨테이너 영역 가변 */
+@media only screen and (max-width:767px){
+	.bnr-wrap070 .site-txt21,
+	.bnr-wrap070 .menu-list,
+	.bnr-wrap070 .site-box01{display:none !important;}
+	.bnr-wrap070 .con{justify-content:center;padding:0 !important;background-position:calc(50% + 27px) 0;}
+	.bnr-wrap070.style01{background-color:#E63922;}
+	.bnr-wrap070.style01:after{display:none;}
+	.bnr-wrap070.style01 .site-txt01{display:flex;justify-content:center;align-items:center;width:100%;height:100%;}
+	.bnr-wrap070.style01 .site-txt01:before{width:181px;height:30px;background:url(https://r.yna.co.kr/www/2026/asian_games/img/bnr_kr_ag2026_logo11.svg) 0 50% no-repeat;}
+}
+
+/* ---- ##bnr-wrap071 : 2026 연합뉴스 하남 국제트레일런 페스티벌 배너 ---- */
+.bnr-wrap071{position:relative;height:40px;background-color:#0038DE;}
+.bnr-wrap071 .obj01{position:absolute;top:0;left:0;width:135px;height:40px;background:url(https://r.yna.co.kr/ad/img/2026/bnr_hanamrun20206_obj01.png) 0 0 no-repeat;background-size:135px 40px;}
+.bnr-wrap071 .obj02{position:absolute;top:0;right:0;width:135px;height:40px;background:url(https://r.yna.co.kr/ad/img/2026/bnr_hanamrun20206_obj02.png) 0 0 no-repeat;background-size:135px 40px;}
+.bnr-wrap071 a{position:relative;min-height:40px;}
+.bnr-wrap071 a>.con{display:flex;align-items:center;flex-direction:column;}
+.bnr-wrap071 a>.con .txt01{font-size:16px;color:#fff;font-weight:700;line-height:normal;}
+/* 대형 프레임 : 1024px ~ 1279px - 컨테이너영역980px */
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap071 a>.con .txt01{font-size:13px;}
+}
+/* 중형 프레임 :1023px 이하 */
+@media only screen and (max-width:1023px){
+	.bnr-wrap071{display:none !important;}
+}
+
+/* ---- ##bnr-wrap072 : 이집트 유물전 | ISRV-1195 ---- */
+.bnr-wrap072{position:relative;height:60px;background:linear-gradient(90deg,#08070B 0%,rgba(8,7,11,0.5) 25%,rgba(212,175,55,0.25) 50%,rgba(8,7,11,0.5) 75%,#08070B 100%),#08070B;}
+.bnr-wrap072:before{content:'';position:absolute;top:4px;right:4px;bottom:4px;left:4px;border:1px solid transparent;border-image:linear-gradient(90deg,rgba(212,175,55,0.8) 0%,rgba(255,224,121,0.8) 50%,rgba(110,91,29,0.8) 100%) 1;}
+.bnr-wrap072 .con{width:100%;height:100%;}
+.bnr-wrap072 .con>a{display:block;position:relative;width:100%;height:100%;}
+.bnr-wrap072 .logo{position:absolute;top:13px;left:calc(50% - 91px);width:134px;height:19px;background:url(https://r.yna.co.kr/ad/img/2026/bnr_egypt2026_tit01.svg) 0 0 no-repeat;}
+.bnr-wrap072 .logo .txt{overflow:hidden;position:absolute;width:1px;height:1px;clip:rect(0 0 0 0);}
+.bnr-wrap072 .con .txt01{position:absolute;top:34px;left:calc(50% - 91px);max-width:none;font-weight:600;font-size:11px;line-height:normal;letter-spacing:-0.132px;text-align:left;white-space:nowrap;color:#F2ECD9;opacity:0.7;}
+.bnr-wrap072 .obj01{position:absolute;top:0;left:calc(50% + 51px);width:40px;height:60px;background:url(https://r.yna.co.kr/ad/img/2026/bnr_egypt2026_obj01.png) 0 0 / 40px 60px no-repeat;}
+
+/* ---- ##bnr-wrap073 : 2026 연합뉴스 하남 국제트레일런 페스티벌 배너 높이 60px 반응형 버전 ---- */
+.bnr-wrap073{position:relative;height:60px;background-color:#0038DE;}
+.bnr-wrap073 .obj01{position:absolute;top:0;left:0;width:135px;height:60px;background:url(https://r.yna.co.kr/ad/img/2026/bnr_hanamrun20206_obj01_60.png) 0 0 no-repeat;background-size:135px 60px;}
+.bnr-wrap073 .obj02{position:absolute;top:0;right:0;width:135px;height:60px;background:url(https://r.yna.co.kr/ad/img/2026/bnr_hanamrun20206_obj02_60.png) 0 0 no-repeat;background-size:135px 60px;}
+.bnr-wrap073 a{position:relative;min-height:60px;}
+.bnr-wrap073 a>.con{display:flex;align-items:center;flex-direction:column;}
+.bnr-wrap073 a>.con .txt01{font-size:16px;color:#fff;font-weight:700;line-height:normal;}
+.bnr-wrap073 a>.con .txt02{margin-top:2px;font-size:12px;color:#fff;font-weight:600;line-height:normal;opacity:0.7;}
+/* 대형 프레임 : 1024px ~ 1279px - 컨테이너영역980px */
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap073 a>.con .txt01{font-size:13px;}
+}
+
+/* ---- ##bnr-wrap074 : 2026 미래경제포럼 ---- */
+.bnr-wrap074>a{position:relative;height:40px;min-height:40px;background:url(https://r.yna.co.kr/ad/img/2026/bnr_futureforum2026_bg01.png) center 0 no-repeat;background-size:270px 40px;}
+.bnr-wrap074.style02>a{background-image:url(https://r.yna.co.kr/ad/img/2026/bnr_futureforum2026_bg03.png);background-size:300px 40px;}
+/* 대형 프레임 : 1024px ~ 1279px - 컨테이너영역980px */
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap074>a{background-image:url(https://r.yna.co.kr/ad/img/2026/bnr_futureforum2026_bg02.png);background-size:221px 40px;}
+}
+/* 중형 프레임 :1023px 이하 */
+@media only screen and (max-width:1023px){
+	.bnr-wrap074{display:none !important;}
+}
+
+/* ---- ##bnr-wrap075 : 2026 다문화 페스타 ---- */
+.bnr-wrap075{position:relative;overflow:hidden;height:40px;}
+.bnr-wrap075:after{content:'';display:block;position:absolute;top:0;right:0;z-index:1;width:100%;height:100%;background:url(https://r.yna.co.kr/ad/img/2026/bnr_multicultural2026_w270.png) 100% 0 / contain no-repeat;}
+.bnr-wrap075>a{display:flex;justify-content:center;align-items:center;position:relative;z-index:2;width:100%;height:100%;min-height:auto;}
+.bnr-wrap075 .con{display:inline-flex;justify-content:center;height:24px;}
+.bnr-wrap075 .con .txt01{overflow:hidden;display:inline-block;width:1px;height:1px;border:none;font-size:1px;line-height:1px;color:transparent;white-space:nowrap;clip:rect(1px, 1px, 1px, 1px);clip-path:inset(50%);}
+/* 대형 프레임 : 1024px ~ 1279px - 컨테이너영역980px */
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.bnr-wrap075:after{background:url(https://r.yna.co.kr/ad/img/2026/bnr_multicultural2026_w221.png) 100% 0 / contain no-repeat;}
+}
+/* 중형 프레임 :1023px 이하 */
+@media only screen and (max-width:1023px){
+	.bnr-wrap075{display:none !important;}
+}
+
+/* --- ##bnr-wrap501 최신본문 우측 로또번호 제공
+ - 번호규칙 띄어서 분리함.
+ - PC기사본문 전용(테블릿, 모바일 노출x) */
+.bnr-wrap501{position:relative;height:40px;padding:0 8px;box-sizing:border-box;background-color:#E7EAF3;}
+.bnr-wrap501 .con{display:flex;align-items:center;gap:0 5px;min-height:40px;}
+.bnr-wrap501 .tit-con{display:flex;flex-wrap:wrap;width:55px;color:#111;line-height:1;}
+.bnr-wrap501 .tit-con .tit{display:flex;align-items:baseline;font-weight:700;}
+.bnr-wrap501 .tit-con .num{font-size:18px;letter-spacing:-1px;vertical-align:bottom;}
+.bnr-wrap501 .tit-con .stage{font-size:14px;letter-spacing:-1px;vertical-align:bottom;}
+.bnr-wrap501 .tit-con .txt{font-weight:600;font-size:10px;letter-spacing:-0.8px;opacity:0.8;}
+.bnr-wrap501 .ball-con{display:flex;justify-content:center;align-items:center;gap:4px;}
+.bnr-wrap501 .ball-con .plus{position:relative;width:10px;height:10px;}
+.bnr-wrap501 .ball-con .plus:before,
+.bnr-wrap501 .ball-con .plus:after{content:'';position:absolute;top:50%;left:0;width:10px;margin-top:-1px;height:2px;background:#111;}
+.bnr-wrap501 .ball-con .plus:before{}
+.bnr-wrap501 .ball-con .plus:after{transform:rotate(90deg);}
+.bnr-wrap501 .ball{display:inline-flex;width:26px;height:26px;border-radius:50%;justify-content:center;align-items:center;}
+.bnr-wrap501 .ball .txt{display:inline-block;font-weight:700;font-size:14px;letter-spacing:-0.42px;color:#fff;text-align:center;/*text-shadow: 0 0 2px rgba(0, 0, 0, 0.50);*/}
+.bnr-wrap501 .ball.color01{background-color:#E08F00;}/* 1~10 */
+.bnr-wrap501 .ball.color02{background-color:#0063CC;}/* 11~20 */
+.bnr-wrap501 .ball.color03{background-color:#D8314F;}/* 21~30 */
+.bnr-wrap501 .ball.color04{background-color:#6E7382;} /* 31~40 */
+.bnr-wrap501 .ball.color05{background-color:#2C9E44;} /* 41~45 */
+/* 중형 프레임 :1023px 이하 */
+@media only screen and (max-width:1023px){
+	.bnr-wrap501{display:none !important;}
+}
+
+/* =============== ####홈페이지 운영배너 | aside-box4 ======================== */
+/* ---- ##aside-box400 ~ ... ---- */
+[class*='aside-box4']{position:relative;}
+[class*='aside-box4']{justify-content:center;flex-direction:column;align-items:center;box-sizing:border-box;width:100%;margin:0 auto;}
+[class*='aside-box40']{max-width:640px;}
+[class*='aside-box4']+[class*='aside-box4']{margin-top:12px;}
+/* ---- ##aside-box400>bnr-wrap005 : [본문]헬로아카이브 운영배너 : PC */
+.aside-box400{display:flex;}
+@media only screen and (max-width:767px){
+	.aside-box400{display:none;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.aside-box400{display:none;}
+}
+/* ---- ##aside-box401 > bnr-wrap10$ ---- */
+/* [본문]랜덤노출 운영배너(헬로아카이브,다음채널,네이버구독,앱다운로드) : M */
+.aside-box401{display:none;}
+@media only screen and (max-width:767px){
+	.aside-box401{display:flex;}
+	.aside-box401 [class*="aside-bnr10"]{display:none;}
+	.aside-box401 .active{display:flex;}
+	.aside-box401 [class*="aside-bnr10"].active{display:flex;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.aside-box401{display:flex;}
+	.aside-box401 [class*="aside-bnr10"]{display:none !important;}
+	.aside-box401 .active{display:flex;margin-top:20px !important;}
+	.aside-box401 [class*="aside-bnr10"].active{display:flex;}
+}
+/* ---- ##aside-box403 : 메인 하단 배너 ---- */
+.aside-box403{margin-top:0 !important;}
+.aside-box403 .area01+.area01{margin-top:16px;}
+.aside-box403 [class*='bnr-wrap']{justify-content:flex-start;box-sizing:border-box;height:60px;}
+.aside-box411+.aside-box403{margin-top:16px !important;}
+
+.aside-box403 [class*='bnr-wrap'].style03{height:40px;}
+.aside-box403 [class*='bnr-wrap'].style03>a{min-height:40px;}
+@media only screen and (max-width:1023px){
+	/* PC만 배너 노출 */
+	.aside-box403 [class*='bnr-wrap'].style03.pc{display:none;}
+}
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.aside-box403 .area01+.area01{margin-top:8px;}
+}
+@media only screen and (max-width:767px){
+	.aside-box403 [class*='bnr-wrap']{height:50px;}
+	.aside-box403 .area01+.area01{margin-top:12px;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.aside-box403 [class*='bnr-wrap']{height:50px;}
+	.aside-box403 .area01+.area01{margin-top:12px;}
+}
+/* ---- ##aside-box404 : 메인 하단 배너 ---- */
+@media only screen and (max-width:767px){
+	.aside-box405{display:none;}
+	.aside-box404{padding:0 16px;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.aside-box405{display:none;}
+	.aside-box404{padding:0 16px;}
+}
+/* ---- ##aside-box406 : 전국>고향사랑기부 ---- */
+.aside-box406{display:flex;justify-content:center;width:100%;max-width:1200px;background-color:var(--ui-tag054);}
+.aside-box406 .area01{flex-shrink:0;}
+@media only screen and (max-width:767px){
+	.aside-box406{max-width:320px;}
+	.wrap-container .aside-box406+.aside-box100{margin-top:12px;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.aside-box406{max-width:320px;}
+	.wrap-container .aside-box406+.aside-box100{margin-top:12px !important;}
+}
+/* ---- ##aside-box407 : 전국> 강원도 평화와 번영 강원시대 (이미지배너) ---- */
+.aside-box407{display:block;}
+@media only screen and (max-width:767px){
+	.aside-box407{display:none;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px) {
+	.aside-box407{display:none;}
+}
+/* ---- ##aside-box408 : 비주얼 홈 운영 배너 : 헬로아카이브 (전 해상도 노출) ---- */
+.aside-box408{display:block;max-width:1200px;}
+.aside-box408 .bnr-wrap101 a{max-width:1200px;}
+@media only screen and (max-width:767px){
+	.aside-box408{display:block;box-sizing:border-box;width:100% !important;padding:0 16px;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.aside-box408{display:block;box-sizing:border-box;padding:0 24px;}
+}
+/* ---- ##aside-box409 : 보도자료 (PC) ---- */
+.aside-box409{display:block;}
+.aside-box409 [class*='bnr-wrap'] + [class*='bnr-wrap']{margin-top:10px;}
+@media only screen and (max-width:767px){
+	.aside-box409{display:none;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.aside-box409{display:none;}
+}
+/* ---- ##aside-box410 : 메인 운영배너 ---- */
+/* ESG, 고향사랑기부(랜덤노출/전 해상도 노출) */
+.aside-box410{margin-top:0 !important;}
+.aside-box410 .bnr-wrap028>a .txt01{font-size:15px;}
+.aside-box410 .area01+.area01{margin-top:16px;}
+/*.main-hotnews01+.aside-box410{margin-top:24px !important;}*/
+@media only screen and (min-width:1024px) {
+	.aside-box410 .bnr-wrap028>a{min-height:40px;height:40px;}
+}
+@media only screen and (max-width:767px){
+	.aside-box410{margin-top:40px !important;}
+	/*.main-hotnews01+.aside-box410{margin-top:19px !important;}*/
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.aside-box410{width:50%;margin-top:40px !important;}
+	.main-hotnews01+.aside-box410{margin-top:40px !important;}
+}
+/* ---- ##aside-box411 : 메인 운영배너 ---- */
+/* ir클럽, 글로벌코리아본부(전 해상도 노출) */
+.aside-box411{margin-top:0 !important;}
+.aside-box411 + .aside-box410{margin-top:16px !important;}
+.aside-box410+.aside-box411{margin-top:16px !important;}
+.aside-box410 .area02{margin-bottom:16px;}
+.aside-box411 .area01+.area01{margin-top:16px;}
+@media only screen and (max-width:767px){
+	.aside-box411{display:none;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.aside-box411{display:none;}
+}
+/* ---- ##aside-box412 : 메인 운영배너 ---- */
+/* 동영상광고 (PC) */
+.aside-box412{width:270px;height:152px;margin-top:16px !important;}
+.aside-box412 .area01{width:100%;height:100%;}
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.aside-box412{width:221px;height:124px;margin-top:16px !important;}
+}
+@media only screen and (max-width:767px){
+	.aside-box412{display:none;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.aside-box412{display:none;}
+}
+/* ---- ##aside-box413 : 본문 고정형 ---- */
+/* 우측 fixed광고 */
+.aside-box413{position:absolute;top:1312px;left:50%;z-index:1;width:132px !important;margin:0 0 0 670px !important;}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.aside-box424{padding:0 24px;}
+}
+/* ---- ##aside-box414 : 마이페이지 메인 중간 (전 해상도 노출) ---- */
+.aside-box414{display:flex;justify-content:space-between;flex-direction:row;gap:20px;}
+.aside-box414 [class*="bnr-wrap"]{flex-shrink:1;width:calc(100% - 10px);}
+@media only screen and (max-width:767px){
+	.aside-box414{flex-direction:column;padding:0 16px;}
+	.aside-box414 [class*="bnr-wrap"]{flex-shrink:1;width:100%;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.aside-box414{padding:0 24px;}
+}
+/* ---- ##aside-box415 : 경제 홈 (전 해상도 노출) ---- */
+.aside-box415{margin-top:0!important;margin-bottom:40px;}
+.aside-box415{height:80px;}
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.aside-box415{height:62px;}
+}
+@media only screen and (max-width:767px){
+	.aside-box415{width:100%;max-width:320px;height:74px;}
+	.aside-box415 img{width:100%;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.aside-box415{width:100%;max-width:320px;height:74px;}
+	.aside-box415 img{width:100%;}
+}
+/* ---- ##aside-box416 : 홈 연합라운지 (전 해상도 노출) ---- */
+.aside-box416{display:block;}
+/* ---- ##aside-box417 : 사회 홈 (PC) ---- */
+.aside-box417{display:flex;flex-direction:column;margin-top:0 !important;}
+.aside-box417 .area01+.area01{margin-top:10px;}
+@media only screen and (max-width:767px){
+	.aside-box417{display:none;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.aside-box417{display:none;}
+}
+/* ---- ##aside-box418 : [PC] 본문 연합라운지 ---- */
+.aside-box418{display:block;}
+@media only screen and (max-width:767px){
+	.aside-box418{display:none;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.aside-box418{display:none;}
+}
+/* ---- ##aside-box419 : [M] 본문 연합라운지 ---- */
+.aside-box419{display:none;}
+@media only screen and (max-width:767px){
+	.aside-box419{display:block;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.aside-box419{display:block;}
+}
+/* ---- ##aside-box420 : 메인 정정보도 ---- */
+/* 메인 핫뉴스 상단 : corrected01
+ * 메인 핫뉴스 하단 : corrected02 */
+.aside-box420 .area01{position:relative;}
+.aside-box420 .area01+.area01>a{padding:9px 12px 8px;}
+.aside-box420 .area01+.area01:before{content:'';display:block;position:absolute;top:0;left:50%;width:calc(100% - 24px);height:1px;background-color:#888;transform:translateX(-50%);}
+.aside-box420 .area01+.area01{margin-top:16px;}
+.aside-box420 .area01:not(.bnr-wrap003)::before,
+.aside-box420 #safeModebnr+.area01.bnr-wrap003::before{display:none;}
+.aside-box420.corrected02{margin-top:0 !important;}
+.aside-box420.corrected02+[class*='aside-box']{margin-top:16px !important;}
+/* 일반형/대형 프레임 : 768px 이상 */
+@media only screen and (min-width:768px){
+	.aside-box420.corrected01:first-child{margin-top:0 !important;}
+}
+/* ---- ##aside-box421 : PC 운영 배너(올림픽 등) ---- */
+/* 주요1 상단 배치 , M 운영 배너(올림픽 등), 톱뉴스 중간 배치*/
+.aside-box421{width:890px;height:60px;margin:0 0 40px !important;}
+.aside-box421:empty{display:none;}
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.aside-box421{width:727px;height:60px;margin:0 0 40px !important;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.aside-box421{display:block;width:100vw!important;height:60px;margin:32px 0 0 0 !important;}
+	.aside-box421+.news-type002{margin-top:32px;}
+}
+@media only screen and (max-width:767px){
+	.aside-box421{display:block;width:100vw!important;height:60px;margin:32px 0 0 0 !important;}
+	.aside-box421+.news-type002{margin-top:32px;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.aside-box421{display:none;}
+}
+/* ---- ##aside-box422 ---- */
+/* M 운영 배너(올림픽 등), 톱뉴스 중간 배치 */
+.aside-box422{display:none;}
+.aside-box422:empty{display:none;}
+@media only screen and (max-width:767px){
+	.aside-box422{display:block;width:100vw!important;height:60px;margin:32px 0 0 0 !important;}
+	.aside-box422+.news-type002{margin-top:32px;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.aside-box422{display:block;width:100vw;height:60px;margin:32px 0 0 -24px !important;}
+	.aside-box422+.news-type002{margin-top:32px;}
+}
+/* ---- ##aside-box423 ---- */
+/* 2025-03-22 : position01, position02 추가 (모바일에서만 톱기사 하단 배치)
+ -- position01 : 톱기사01 하단 배치
+ -- position02 : 핫뉴스 상단 배치 */
+.aside-box423{margin-top:0 !important;}
+.aside-box423.position01{display:none;}
+
+.aside-box423+.aside-box420{margin:16px 0 0 !important;}
+.aside-box423 .area01+.area01{margin-top:16px;}
+.aside-box423 .area01+.area02{margin-top:16px;}
+.aside-box423 .bnr-wrap003.style02>a{min-height:50px;}
+.aside-box423 .bnr-wrap003.style02 .txt01{font-weight:600;font-size:16px;}
+.aside-box423 [class*='bnr-wrap04'] + [class*='bnr-wrap04'],
+.aside-box423 .bnr-wrap024 + [class*='bnr-wrap04'],
+.aside-box423 .bnr-wrap039 + [class*='bnr-wrap04']{margin-top:16px;}
+/* 대형 프레임 : 1024px ~ 1279px - 컨테이너영역980px */
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.aside-box423 .bnr-wrap003.style02 .txt01{font-size:14px;}
+}
+/* 중형 프레임 :1023px 이하 */
+@media only screen and (max-width:1023px){
+	.aside-box423{margin:40px auto 0 !important;}
+	/* 2026-02-13 : (임시)사칭 메일 작업을 하면서 배너 보이도록 처리 */
+	.aside-box423.position02{display:none !important;}
+	.aside-box423.position02.show01{display:block !important;}
+}
+/* 중형 프레임 : 768px ~ 1023px - 컨테이너영역720px */
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.aside-box423{width:50%;}
+	.aside-box423.position01{display:block;width:100%;margin-top:28px !important;}
+	.aside-box423.position01+.top-main02{margin-top:32px;}
+}
+/* 소형 프레임 : 767px 이하 - 컨테이너 영역 가변 */
+@media only screen and (max-width:767px){
+	.aside-box423{max-width:100%;}
+	.aside-box423.position01{display:block;margin-top:28px !important;}
+	.aside-box423 .bnr-wrap003.style02 .txt01{font-weight:600;font-size:16px;}
+	.yna-shell:not(.body-wide01) .aside-box423.position02{display:none !important;}
+	/* 2026-02-13 : (임시)사칭 메일 작업을 하면서 배너 보이도록 처리 */
+	.yna-shell:not(.body-wide01) .aside-box423.position02.show01{display:block !important;}
+}
+
+/* ---- ##aside-box424 : 본문 고정형 우측 ---- */
+.aside-box424{position:absolute;top:1492px;left:50%;z-index:1;width:132px !important;margin:0 0 0 670px !important;}
+@media only screen and (max-width:767px){
+	.aside-box424{flex-direction:column;padding:0 16px;}
+	.aside-box424 [class*="bnr-wrap"]{flex-shrink:1;width:100%;}
+}
+
+/* ---- ##aside-box425 : 메인 운영배너 : 우분투(랜덤노출/전 해상도 노출) ---- */
+.aside-box425{margin-top:0 !important;}
+.aside-box425 [class*="area0"]+[class*="area0"]{margin-top:16px;}
+.aside-box425 .bnr-wrap003.style02>a{min-height:50px;}
+.aside-box425 .bnr-wrap003.style02 .txt01{font-weight:600;font-size:16px;}
+.aside-box425 .bnr-wrap044{display:none;} /* 베트남어 오픈 배너 */
+.main-hotnews01+.aside-box425{margin-top:24px !important;}
+/* 중형 프레임 :1023px 이하 */
+@media only screen and (max-width:1023px){
+	.aside-box425 .bnr-wrap044{display:block;} /* 베트남어 오픈 배너 */
+}
+/* 중형 프레임 : 768px ~ 1023px - 컨테이너영역720px */
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.aside-box425{width:50%;margin-top:40px !important;}
+	.main-hotnews01+.aside-box425{margin-top:40px !important;}
+}
+/* 소형 프레임 : 767px 이하 - 컨테이너 영역 가변 */
+@media only screen and (max-width:767px){
+	.aside-box425{margin-top:40px !important;}
+	.main-hotnews01+.aside-box425{margin-top:40px !important;}
+	.aside-box425 .area01+.area02{margin-top:16px;}
+}
+
+/* ---- ##aside-box426 : 본문 최상단 : 회원가입/로그인 유도배너 (랜덤노출/전 해상도 노출) ---- */
+.aside-box426.sticky{position:relative;top:0;left:0;z-index:255;}
+
+/* ---- ##aside-box427 : 대선 배너 PC ---- */
+.aside-box427{display:block;margin:0 0 40px 0 !important;}
+@media only screen and (max-width:1023px){
+	.aside-box427{display:none;}
+}
+
+/* ---- ##aside-box428 : 대선 배너 M ---- */
+.aside-box428{display:none;margin-top:30px !important;}
+@media only screen and (max-width:1023px){
+	.aside-box428{display:block;}
+	.aside-box428>.area01+.area01{margin-top:16px;}
+	.page-main .top-main-news001 .aside-box428{margin:34px auto 0;}
+	.page-main .main-content01 .top-area02 .aside-box428{display:none;}
+	.page-main.body-wide01 .main-content01 .top-area02 .aside-box428{display:block;}
+	.yna-shell.page-politics .wrap-container .content03 .aside-box428{width:100%;}
+}
+
+/* ---- ##aside-box429 : 메인 주요뉴스01 상단 ---- */
+.aside-box429{display:none;}
+.aside-box429 .area01+.area01{margin-top:16px;}
+.aside-box429 .area01+.area02{margin-top:16px;}
+/* 일반형/대형 프레임 : 1024px 이상 (PC 기본) */
+@media only screen and (min-width:1024px){
+	/* 메인 주요뉴스01 상단 위치 | 노출 */
+	.main-content02 .aside-box429{display:block;margin-top:0 !important;margin-bottom:40px;}
+}
+/* 중형 프레임 :1023px 이하 */
+@media only screen and (max-width:1023px){
+	/* 메인 톱기사/통단 영역 | 노출 */
+	.page-main:not(.body-wide01) .main-content01 .top-area01 .aside-box429{display:block;}
+	.page-main:not(.body-wide01) .main-content01 .top-area02 .aside-box429{display:none;}
+	.page-main.body-wide01 .main-content01 .top-area02 .aside-box429{display:block;}
+	/* 메인 톱기사 */
+	.main-content01 .top-area01 .aside-box429{margin:34px auto 0;}
+	/* 메인 통단 */
+	.main-content01 .top-area02 .aside-box429{margin:34px auto 0;}
+}
+/* 타임라인 통단의 기사 하단에 배너 노출시 중복 배너 노출 방지를 위해 사용 */
+.top-wide021:has(.tongdan) + .aside-box429,
+.top-wide022:has(.tongdan) + .aside-box429,
+.top-wide023:has(.tongdan) + .aside-box429{display:none !important;}
+
+/* ---- ##aside-box430 : 스포츠 섹션 - 동계올림픽 2026 ---- */
+.aside-box430{margin:0 0 40px !important;}
+@media only screen and (min-width:1024px) and (max-width:1279px){
+	.aside-box430 .bnr-wrap054 .con .date{display:none;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.aside-box430{padding:0 14px;}
+}
+@media only screen and (max-width:767px){
+	.aside-box430{margin:0 16px 40px !important;}
+}
+
+/* ---- ##aside-box431 : M 국문 메인 마켓티커 위 ---- */
+.aside-box431{display:none;}
+.container501 .aside-box431 + [class*='main-ticker0']{margin-top:0 !important;}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.aside-box431{display:block;margin:32px 0 0 !important;padding:0 24px;}
+	.container501 .aside-box431 + [class*='main-ticker0']{margin-top:32px !important;}
+}
+@media only screen and (max-width:767px){
+	.aside-box431{display:block;margin-top:0 !important;padding:0 16px;}
+	.aside-box431>[class*="area"]:first-child{margin:24px 0 0 !important;}
+	.container501 .aside-box431 + [class*='main-ticker0']{margin-top:24px !important}
+}
+
+/* ---- ##aside-box432 : 정치 섹션 - 우측 최신주요 상단 위치 ---- */
+/* 2026-04-29 : 2026 지방선거 배너 추가시 영역 생성 */
+/* .aside-box432{} */
+.page-politics .sub-content01 .aside-box432{margin-top:0;margin-bottom:40px;}
+
+/* ---- ##aside-box451 : 섹션 우측 최상단 공지배너(범용) ---- */
+.aside-box451{display:flex;flex-direction:column;margin-bottom:20px;}
+.aside-box451 .area01+.area01{margin-top:10px;}
+@media only screen and (min-width:1024px){
+	.aside-box451{margin-top:0 !important;}
+}
+@media only screen and (min-width:768px) and (max-width:1023px){
+	.aside-box451{width:auto;margin-left:16px;margin-right:16px;}
+}
+
+/* ---- ##aside-box501 :  ---- */
+/* ♠ 2차 작업과 클래스 중복 방지를 위해 aside-box5$$ 으로 생성
+ * 우분투리스트 사용 : aside-box003 과 동일한 스타일 */
+[class*='aside-box5']>[class*='title-con']{display:flex;justify-content:flex-start;align-items:center;box-sizing:border-box;width:100%;padding-bottom:10px;}
+
+.aside-box501{display:flex;justify-content:center;flex-direction:column;align-items:center;padding:0 0 30px;background-color:var(--ui-tag007);}
+.aside-box501>[class*="area"] .box{width:232px;margin-top:8px;}
+.aside-box501>.ir-txt01 + .area01 .box{margin-top:0;}
+.aside-box501>.area01 .box:empty{display:none;}
+.aside-box501>[class*="area"] .box img{display:block;width:100%;}
+@media only screen and (min-width:1024px){
+	.wrap-container [class*='aside-box'].aside-box501:first-child{margin-top:0;}
+}
+@media only screen and (max-width:1023px){
+	.aside-box501{box-sizing:border-box;margin:40px 16px 0;}
+}
+
+
+/* =============== ####이벤트 페이지 ======================== */
+
+
+/* =============== ####팝업(이벤트) ======================== */
+/* 팝업 클래스명 정의 */

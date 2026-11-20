@@ -1,0 +1,21 @@
+:root {
+    --evere-accent: #00B8B4;
+    --surface-impact: var(--evere-accent);
+    --surface-impact-soft: #d9f6f5;
+    --text-impact: #007c79;
+    --swiper-theme-color: var(--evere-accent);
+}
+
+body, main :where(button, input, select, textarea), footer :where(button, input) {
+    font-family: "Pretendard Variable", Pretendard, sans-serif;
+}
+
+#evere-header {
+    position: sticky;
+    top: 0;
+    z-index: 150;
+}
+
+#evere-header + main { padding-top: 0; }
+.evere-footer-logo img { width: 112px; height: auto; }
+:focus-visible { outline: 2px solid var(--evere-accent); outline-offset: 3px; }
