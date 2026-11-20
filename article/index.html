@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>기사 | 이브레</title>
+  <link rel="icon" href="../assets/evere/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
+  <link rel="stylesheet" href="../assets/evere/account.css">
+  <script type="module" src="../assets/evere/article.js"></script>
+</head>
+<body>
+  <header class="account-header">
+    <a href="../" aria-label="이브레 홈"><img src="../assets/evere/wordmark.svg" alt="이브레" width="110"></a>
+    <a href="../account/">회원 계정</a>
+  </header>
+  <main>
+    <p id="status" role="status"></p>
+    <article id="published-article" hidden>
+      <p id="sector"></p>
+      <h1 id="title"></h1>
+      <p id="byline" class="article-meta"></p>
+      <div id="body" class="article-body"></div>
+    </article>
+    <section id="comments-section" class="article-section" aria-labelledby="comments-title" hidden>
+      <h2 id="comments-title">댓글</h2>
+      <form id="comment-form" hidden>
+        <label>댓글 쓰기<textarea name="comment" rows="4" maxlength="2000" required></textarea></label>
+        <button type="submit">댓글 등록</button>
+      </form>
+      <p id="comment-sign-in"><a href="../account/">이브레 계정으로 로그인하고 댓글을 남겨 주세요.</a></p>
+      <ul id="comments" class="comment-list"></ul>
+      <div class="pager">
+        <button id="comments-previous" type="button" disabled>이전</button>
+        <button id="comments-next" type="button" disabled>다음</button>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

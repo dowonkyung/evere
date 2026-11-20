@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#00B8B4">
+  <title>회원 계정 | 이브레</title>
+  <link rel="icon" href="../assets/evere/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
+  <link rel="stylesheet" href="../assets/evere/account.css">
+  <script type="module" src="../assets/evere/account.js"></script>
+</head>
+<body>
+  <header class="account-header">
+    <a href="../" aria-label="이브레 홈"><img src="../assets/evere/wordmark.svg" alt="이브레" width="110"></a>
+    <button id="sign-out" type="button" hidden>로그아웃</button>
+  </header>
+  <main>
+    <p id="status" role="status" aria-live="polite"></p>
+    <section id="access" hidden>
+      <h1 id="access-title">로그인</h1>
+      <form id="access-form">
+        <label>이메일<input name="email" type="email" autocomplete="email" required></label>
+        <label>비밀번호<input name="password" type="password" autocomplete="current-password" required></label>
+        <label id="signup-name" hidden>기자명<input name="displayName" maxlength="40"></label>
+        <button id="access-submit" type="submit">로그인</button>
+      </form>
+      <button id="switch-mode" class="text-action" type="button">회원가입</button>
+      <button id="resend" class="text-action" type="button" hidden>인증 이메일 다시 보내기</button>
+    </section>
+    <section id="profile-setup" hidden>
+      <h1>이브레 기자명 등록</h1>
+      <form id="profile-form">
+        <label>기자명<input name="displayName" maxlength="40" required></label>
+        <button type="submit">등록</button>
+      </form>
+    </section>
+    <section id="workspace" hidden>
+      <h1>편집실</h1>
+      <p id="member-summary"></p>
+      <details id="membership-admin" hidden>
+        <summary>회원 등급 및 섹터 관리</summary>
+        <form id="members-form">
+          <label>회원<select name="member" required></select></label>
+          <label>등급<select name="role" required></select></label>
+          <fieldset class="sector-fields" hidden><legend>승인된 섹터</legend><div class="checkbox-grid"></div></fieldset>
+          <button type="submit">권한 저장</button>
+        </form>
+      </details>
+      <details open>
+        <summary>기사 작성</summary>
+        <form id="article-form">
+          <label>제목<input name="title" maxlength="200" required></label>
+          <label>섹터<select name="sector" required></select></label>
+          <label>하위 분류<select name="category"></select></label>
+          <label>기자명<select name="byline" multiple size="5" required></select></label>
+          <p id="byline-help"></p>
+          <label>본문<textarea name="body" rows="9" maxlength="50000" required></textarea></label>
+          <button type="submit">승인 요청</button>
+        </form>
+      </details>
+      <section class="article-section" aria-labelledby="article-title">
+        <h2 id="article-title">기사 목록</h2>
+        <div id="articles"></div>
+        <div class="pager">
+          <button id="previous" type="button" disabled>이전</button>
+          <button id="next" type="button" disabled>다음</button>
+        </div>
+      </section>
+    </section>
+    <noscript>회원 기능을 이용하려면 JavaScript를 켜 주세요.</noscript>
+  </main>
+</body>
+</html>

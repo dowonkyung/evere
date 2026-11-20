@@ -59,7 +59,14 @@ if (series.length) {
 }
 
 const dateFormat = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' });
-const published = articles.filter((entry) =>
+let live = [];
+try {
+    const { publishedFeed } = await import('./published-feed.js');
+    live = await publishedFeed(section, selected);
+} catch {
+    // The saved preview stays available when the news feed is unreachable.
+}
+const published = [...live, ...articles].filter((entry) =>
     entry.section === section && (!selected || entry.category === selected) &&
     Number.isFinite(Date.parse(entry.publishedAt)) && Date.parse(entry.publishedAt) <= now
 ).sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt));
