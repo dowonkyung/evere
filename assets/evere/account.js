@@ -146,6 +146,10 @@ function canEdit(sector) {
         (member.role === 'department_head' && member.sectors.includes(sector));
 }
 
+function displayName(id) {
+    return members.find((entry) => entry.id === id)?.display_name || '이브레 회원';
+}
+
 async function refreshMembers() {
     ui('member-summary').textContent = member.display_name + ' · ' + roleNames[member.role];
     if (!articleForm) return;
