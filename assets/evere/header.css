@@ -55,11 +55,28 @@
 :focus-visible { outline: 2px solid #00B8B4; outline-offset: 3px; }
 
 @media (max-width: 1023px) {
+    .wrap-header02 { --header-start: 24px; --header-end: 14px; }
     .header02 .logo-yna01 img { width: 91px; }
     .header02 .lang-zone01 { display: none; }
-    .header02 { padding-inline: 0; }
-    .nav-type01 .gnb-menu01 .list01 { margin-left: 0; padding-inline: 0; }
-    .nav-type01 .gnb-menu01 .list01 li:first-child > a { padding-left: 0; }
+    .wrap-header02 .header02, .wrap-header02 .nav-type01 { width: 100%; }
+    .wrap-header02 .header02 { padding-inline: var(--header-start) var(--header-end); }
+    .wrap-header02 .nav-type01 .gnb-menu01 { grid-template-columns: max-content max-content; }
+    .wrap-header02 .nav-type01 .gnb-menu01::before {
+        height: 1px;
+        background-color: var(--ui-tag004);
+        pointer-events: none;
+    }
+    .wrap-header02 .nav-type01 .gnb-menu01 .list01 { margin-left: 0; padding-inline: 0; }
+    .wrap-header02 .nav-type01 .gnb-menu01 .evere-news-links {
+        grid-column: 1;
+        padding-inline-start: var(--header-start);
+    }
+    .wrap-header02 .nav-type01 .gnb-menu01 .evere-partner-links { grid-column: 2; }
+    .wrap-header02 .nav-type01 .evere-news-links li:first-child > a { padding-inline-start: 0; }
+}
+
+@media (max-width: 767px) {
+    .wrap-header02 { --header-start: 16px; --header-end: 6px; }
 }
 
 @media (min-width: 1024px) and (max-width: 1279px) {
