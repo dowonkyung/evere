@@ -134,9 +134,13 @@
 .compose-add + .compose-add { margin-top: 8px; }
 .compose-add button { color: var(--accent-hover); white-space: nowrap; }
 .compose-body { border-top: 1px solid var(--line); padding: clamp(16px, 2vw, 25px); }
-.compose-body h2 { margin-bottom: 10px; }
-.compose-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 3px; border: 1px solid var(--line); border-bottom: 0; border-radius: 8px 8px 0 0; padding: 5px; background: var(--canvas); }
+.compose-body-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 10px; }
+[data-editor-count] { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+.compose-toolbar { display: grid; border: 1px solid var(--line); border-bottom: 0; border-radius: 8px 8px 0 0; background: var(--canvas); }
+.compose-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 6px; }
+.compose-tools + .compose-tools { border-top: 1px solid var(--line); }
 .compose-toolbar button { padding: 6px; min-width: 28px; font-size: 12px; border-color: transparent; background: transparent; }
+.compose-toolbar .compose-insert-photo { margin-inline-start: auto; padding-inline: 11px; border-color: #9accc9; background: var(--tint); color: var(--accent-hover); }
 .compose-toolbar button:hover { background: var(--tint); color: var(--accent-hover); }
 .compose-toolbar label { display: flex; align-items: center; gap: 5px; font-size: 12px; padding-inline: 4px; }
 .compose-toolbar input[type="color"] { width: 26px; height: 26px; padding: 2px; }
@@ -145,6 +149,8 @@
 .compose-editor:focus-visible { outline: 2px solid var(--accent); outline-offset: -1px; }
 .compose-editor:empty::before { content: attr(data-placeholder); color: var(--muted); pointer-events: none; }
 .compose-editor blockquote { margin-inline: 0; padding-inline-start: 1em; border-inline-start: 3px solid var(--accent); }
+.compose-editor figure[data-photo] { cursor: pointer; }
+.compose-editor figure[data-photo]:hover { outline: 1px solid var(--accent); outline-offset: 4px; }
 .compose-actions { display: flex; justify-content: flex-end; padding: 14px clamp(16px, 2vw, 25px); border-top: 1px solid var(--line); }
 .compose-side { display: grid; gap: 14px; min-width: 0; }
 .compose-media h2 { margin-bottom: 12px; }
