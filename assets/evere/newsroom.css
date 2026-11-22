@@ -20,13 +20,20 @@
   gap: 14px;
   min-height: 64px;
   padding: 10px clamp(16px, 3vw, 36px);
-  border-bottom: 1px solid var(--line);
-  background: var(--surface);
+  background: #00b8b4;
+  color: #083438;
 }
-.newsroom-header img { display: block; width: auto; height: 40px; max-width: 100%; }
+.newsroom-brand img { display: block; width: 224px; height: auto; max-width: 100%; }
 .newsroom-header nav { display: flex; gap: 14px; align-items: center; font-size: 13px; font-weight: 600; }
 .newsroom-header a, .newsroom-nav a, .newsroom-cards a { color: inherit; text-decoration: none; }
-.newsroom-header a:hover { color: var(--accent); }
+.newsroom-header nav a:hover { text-decoration: underline; }
+.newsroom-header :focus-visible { outline-color: #083438; }
+.newsroom-identity { display: flex; align-items: center; gap: 7px; min-width: 0; }
+.newsroom-session { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.newsroom-session:has(#sign-out[hidden]) { display: none; }
+.newsroom-identity img { flex: none; object-fit: cover; border-radius: 50%; }
+.newsroom-header #member-summary { color: inherit; font-weight: 700; overflow-wrap: anywhere; }
+.newsroom-header #sign-out { flex: none; }
 
 .newsroom-main { width: 100%; margin: 0; padding: 0; }
 .newsroom-main > #status { margin: 0; padding: 12px clamp(16px, 4vw, 46px); background: var(--tint); }
@@ -50,15 +57,6 @@
 
 .newsroom #workspace { display: grid; grid-template-columns: 204px minmax(0, 1fr); min-height: calc(100dvh - 64px); }
 .newsroom-nav { padding: 22px 12px; border-right: 1px solid var(--line); background: var(--surface); }
-.newsroom-nav #member-summary {
-  margin: 0 2px 18px;
-  padding: 11px 10px;
-  border-radius: 8px;
-  background: var(--canvas);
-  color: var(--muted);
-  font-weight: 600;
-  overflow-wrap: anywhere;
-}
 .newsroom-nav a { display: block; padding: 10px 12px; margin: 3px 0; border-radius: 8px; font-size: 14px; font-weight: 600; }
 .newsroom-nav a:hover { background: var(--canvas); }
 .newsroom-nav a[aria-current="page"] { background: var(--tint); color: var(--accent-hover); box-shadow: inset 3px 0 var(--accent); }
@@ -221,11 +219,11 @@
 }
 @media (max-width: 720px) {
   .newsroom-header nav { gap: 9px; flex-wrap: wrap; justify-content: end; }
-  .newsroom-header img { height: 31px; min-width: 90px; }
+  .newsroom-brand { flex: 0 0 auto; }
+  .newsroom-brand img { width: clamp(105px, 36vw, 160px); }
   .newsroom-header button { padding: 6px 8px; }
   .newsroom #workspace { grid-template-columns: minmax(0, 1fr); }
   .newsroom-nav { display: flex; gap: 4px; flex-wrap: wrap; padding: 10px 12px; border: 0; border-bottom: 1px solid var(--line); }
-  .newsroom-nav #member-summary { flex: 0 0 100%; margin: 0 0 3px; padding: 6px 8px; }
   .newsroom-nav a { padding: 7px 8px; margin: 0; font-size: 13px; }
   .newsroom-nav a[aria-current="page"] { box-shadow: none; }
   .newsroom-slots { grid-template-columns: minmax(0, 1fr); }
