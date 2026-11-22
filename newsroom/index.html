@@ -8,8 +8,8 @@
   <link rel="icon" href="../assets/evere/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="../assets/evere/account.css?v=newsroom-4">
-  <link rel="stylesheet" href="../assets/evere/newsroom.css?v=editor-1">
-  <script type="module" src="../assets/evere/account.js?v=editor-1"></script>
+  <link rel="stylesheet" href="../assets/evere/newsroom.css?v=queue-1">
+  <script type="module" src="../assets/evere/account.js?v=queue-1"></script>
   <script type="module" src="../assets/evere/newsroom.js?v=4"></script>
 </head>
 <body class="newsroom">
@@ -168,8 +168,13 @@
           <h1>기사 목록·승인</h1>
           <section class="article-section" aria-labelledby="article-title">
         <h2 id="article-title">기사 목록</h2>
-<label class="queue-filter">상태<select id="newsroom-status-filter"><option value="">전체</option><option value="pending">승인 대기</option><option value="published">게시됨</option></select></label>
-        <div id="articles"></div>
+        <label class="queue-filter">상태<select id="newsroom-status-filter"></select></label>
+        <div class="article-table-scroll" tabindex="0" role="region" aria-label="기사 목록 표">
+          <table class="article-table">
+            <thead><tr><th scope="col">상태</th><th scope="col">섹션</th><th scope="col">제목</th><th scope="col">작성자</th><th scope="col">원고(글자)</th><th scope="col">등록일</th><th scope="col"><span class="queue-visually-hidden">보기</span></th></tr></thead>
+            <tbody id="articles"></tbody>
+          </table>
+        </div>
         <div class="pager">
           <button id="previous" type="button" disabled>이전</button>
           <button id="next" type="button" disabled>다음</button>
@@ -255,5 +260,13 @@
     </section>
     <noscript>뉴스룸을 이용하려면 JavaScript를 켜 주세요.</noscript>
   </main>
+  <dialog id="article-dialog" class="article-dialog" aria-labelledby="article-dialog-title">
+    <header>
+      <h2 id="article-dialog-title">기사 보기</h2>
+      <button id="article-dialog-close" type="button" autofocus>닫기</button>
+    </header>
+    <p id="article-dialog-status" role="status" aria-live="polite"></p>
+    <div id="article-dialog-content"></div>
+  </dialog>
 </body>
 </html>
