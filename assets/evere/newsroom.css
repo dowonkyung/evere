@@ -178,6 +178,34 @@
 .series-management li { margin-block: 8px; }
 .newsroom-board-grid, .newsroom-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
 .newsroom-slots { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.newsroom-slots {
+  min-width: 0;
+  margin: 4px 0 0;
+  padding: clamp(12px, 2vw, 20px);
+  border: 1px dashed #9abdc9;
+  border-radius: 10px;
+  background: #f6fafb;
+}
+.newsroom-slots legend { padding-inline: 6px; color: var(--muted); }
+.newsroom-slots label {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  background: var(--surface);
+}
+.newsroom-slots label:focus-within { border-color: var(--accent); }
+.newsroom-slots label::before {
+  content: "";
+  display: block;
+  height: 38px;
+  border-radius: 5px;
+  background: linear-gradient(#addfdb, #addfdb) 10px 10px / 23% 18px no-repeat,
+              linear-gradient(#c3d3dd, #c3d3dd) 42% 12px / 33% 3px no-repeat,
+              linear-gradient(#dce6ed, #dce6ed) 48% 21px / 46% 3px no-repeat,
+              #f0f5f7;
+}
+.newsroom-slots label:first-of-type::before { background-color: #e7f6f5; }
 .newsroom .article-section, .newsroom :is(#profile-settings, #membership-admin) { margin-top: 0; }
 .newsroom .article, .board-post { border-color: var(--line); }
 .newsroom .article details { border-color: var(--line); border-width: 1px; }
