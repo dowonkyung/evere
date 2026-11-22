@@ -8,8 +8,8 @@
   <link rel="icon" href="../assets/evere/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="../assets/evere/account.css?v=newsroom-4">
-  <link rel="stylesheet" href="../assets/evere/newsroom.css?v=workspace-3">
-  <script type="module" src="../assets/evere/account.js?v=newsroom-6"></script>
+  <link rel="stylesheet" href="../assets/evere/newsroom.css?v=editor-1">
+  <script type="module" src="../assets/evere/account.js?v=editor-1"></script>
   <script type="module" src="../assets/evere/newsroom.js?v=4"></script>
 </head>
 <body class="newsroom">
@@ -97,8 +97,15 @@
                 </fieldset>
               </div>
               <section class="compose-body" aria-label="본문 편집">
-                <h2>본문</h2>
+                <div class="compose-body-head"><h2>본문</h2><span data-editor-count>0자 · 0단어</span></div>
                 <div class="compose-toolbar" role="group" aria-label="본문 서식">
+                  <div class="compose-tools" role="group" aria-label="편집 및 삽입">
+                    <button type="button" data-command="undo" title="실행 취소 (Ctrl+Z)" aria-label="실행 취소">↶</button>
+                    <button type="button" data-command="redo" title="다시 실행" aria-label="다시 실행">↷</button>
+                    <button type="button" data-command="removeFormat">서식 지우기</button>
+                    <button type="button" class="compose-insert-photo" data-insert-photo>사진 삽입</button>
+                  </div>
+                  <div class="compose-tools" role="group" aria-label="글자 및 문단 정렬">
                   <button type="button" data-command="bold" aria-label="굵게"><b>B</b></button>
                   <button type="button" data-command="italic" aria-label="기울임"><i>I</i></button>
                   <button type="button" data-command="underline" aria-label="밑줄"><u>U</u></button>
@@ -114,6 +121,7 @@
                     <option value="4">18px</option><option value="5">24px</option>
                     <option value="6">32px</option><option value="7">48px</option>
                   </select></label>
+                  </div>
                 </div>
                 <div class="compose-editor" contenteditable="true" role="textbox" aria-label="본문" aria-multiline="true" data-placeholder="기사 본문을 입력하세요"></div>
               </section>
@@ -121,12 +129,12 @@
             </div>
             <aside class="compose-side">
               <section class="compose-media">
-                <h2>사진 첨부</h2>
+                <h2>본문 사진</h2>
                 <label class="compose-drop">사진을 선택하거나 여기로 끌어오세요
                   <span>JPG · PNG · WebP / 최대 8장, 장당 5MB</span>
                   <input name="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple>
                 </label>
-                <p class="compose-media-help">본문에 커서를 놓고 사진의 ‘커서 위치에 삽입’을 누르세요. 같은 버튼으로 위치를 옮길 수 있습니다.</p>
+                <p class="compose-media-help">사진을 본문에 붙여넣거나 끌어놓을 수 있습니다. 삽입한 사진을 클릭하면 캡션과 정렬을 편집할 수 있습니다.</p>
                 <ul class="compose-thumbs" data-thumbs aria-label="첨부 사진"></ul>
               </section>
               <section class="newsroom-preview" aria-label="기사 미리보기">
