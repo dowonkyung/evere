@@ -214,6 +214,29 @@
 .newsroom .article, .board-post { border-color: var(--line); }
 .newsroom .article details { border-color: var(--line); border-width: 1px; }
 .queue-filter { max-width: 220px; margin-bottom: 15px; }
+.article-table-scroll { overflow: auto; border: 1px solid var(--line); border-radius: 9px; }
+.article-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.article-table :is(th, td) { padding: 10px 12px; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
+.article-table th { background: var(--canvas); color: var(--muted); }
+.article-table tr:last-child td { border-bottom: 0; }
+.article-table .queue-title { min-width: 180px; white-space: normal; overflow-wrap: anywhere; font-weight: 650; }
+.article-table .queue-empty { color: var(--muted); padding: 24px; text-align: center; }
+.article-table button { padding: 5px 10px; }
+.queue-status { display: inline-block; padding: 4px 8px; border-radius: 6px; background: #eef1f5; color: #445268; font-size: 12px; font-weight: 700; }
+.queue-status[data-state="revising"] { background: #fff3df; color: #775000; }
+.queue-status[data-state="desked"] { background: #e8efff; color: #274789; }
+.queue-status[data-state="released"] { background: var(--tint); color: var(--accent-hover); }
+.queue-visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.article-dialog { width: min(calc(100% - 24px), 1100px); max-height: calc(100dvh - 32px); padding: 0; border: 1px solid var(--line); border-radius: var(--radius); background: var(--canvas); color: var(--ink); }
+.article-dialog::backdrop { background: #10283678; }
+.article-dialog > header { position: sticky; top: 0; z-index: 1; display: flex; justify-content: space-between; align-items: center; gap: 14px; padding: 14px 18px; border-bottom: 1px solid var(--line); background: var(--surface); }
+.article-dialog h2 { margin: 0; overflow-wrap: anywhere; }
+.article-dialog > header button { flex: none; }
+#article-dialog-content { padding: clamp(12px, 2vw, 22px); }
+#article-dialog-status { margin: 14px 18px 0; color: var(--muted); }
+#article-dialog-status:empty { display: none; }
+#article-dialog-status[data-error="true"] { color: #94302e; }
+.dialog-actions { align-items: center; margin-top: 14px; }
 .inline-check { display: flex; align-items: center; gap: 8px; }
 .inline-check input { width: auto; }
 .board-post { border-top: 1px solid var(--line); padding: 12px 0; }
