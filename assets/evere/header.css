@@ -69,10 +69,9 @@
     .wrap-header02 .nav-type01 .gnb-menu01 .list01 { margin-left: 0; padding-inline: 0; }
     .wrap-header02 .nav-type01 .gnb-menu01 .evere-news-links {
         grid-column: 1;
-        padding-inline-start: var(--header-start);
+        padding-inline-start: calc(var(--header-start) - 8px);
     }
     .wrap-header02 .nav-type01 .gnb-menu01 .evere-partner-links { grid-column: 2; }
-    .wrap-header02 .nav-type01 .evere-news-links li:first-child > a { padding-inline-start: 0; }
 }
 
 @media (max-width: 767px) {
