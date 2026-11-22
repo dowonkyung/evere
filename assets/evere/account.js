@@ -12,6 +12,7 @@ const articleForm = ui('article-form');
 const compose = articleForm && articleComposer(articleForm);
 const profileDetails = ui('profile-details-form');
 const avatarForm = ui('avatar-form');
+const headerAvatar = ui('newsroom-avatar');
 const avatarBucket = supabase.storage.from('evere-avatars');
 const avatarTypes = new Set(['image/jpeg', 'image/png', 'image/webp']);
 const memberForm = ui('members-form');
@@ -82,11 +83,12 @@ function avatarPath() {
 }
 
 function showAvatar(url) {
-    const image = ui('profile-avatar');
-    image.hidden = !url;
     ui('remove-avatar').hidden = !url;
-    if (url) image.src = url;
-    else image.removeAttribute('src');
+    for (const image of [ui('profile-avatar'), headerAvatar].filter(Boolean)) {
+        image.hidden = !url;
+        if (url) image.src = url;
+        else image.removeAttribute('src');
+    }
 }
 
 async function loadProfile() {
@@ -96,7 +98,10 @@ async function loadProfile() {
     if (member?.id !== memberId) return;
     profileDetails.elements.position.value = saved?.position_title || '';
     profileDetails.elements.bio.value = saved?.bio || '';
+    if (!headerAvatar) await loadAvatar(memberId);
+}
 
+async function loadAvatar(memberId) {
     const entries = result(await avatarBucket.list(memberId, { limit: 2, search: 'profile' }));
     if (member?.id !== memberId) return;
     if (!entries.some((entry) => entry.name === 'profile')) {
@@ -309,9 +314,11 @@ async function refresh() {
     ui('access').hidden = Boolean(user);
     ui('profile-setup').hidden = !user || Boolean(member);
     ui('workspace').hidden = !member;
+    if (headerAvatar) ui('newsroom-identity').hidden = !member;
     if (user && !member) ui('profile-form').elements.displayName.value = user.user_metadata?.evere_display_name || '';
     if (member) {
         await refreshMembers();
+        if (headerAvatar) void loadAvatar(member.id).catch(() => {});
         if (articleForm) await loadArticles();
     } else {
         ui('profile-settings').open = false;
