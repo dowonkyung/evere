@@ -82,6 +82,7 @@
     .nav-type11 .gnb-menu01 .list01 li > a { padding-inline: 3px; }
 }
 
+.yna-shell.evere-compact-shell { overflow: visible; }
 .evere-compact-shell .nav-type11 { width: min(100%, 1200px); }
 .evere-compact-shell .nav-type11 .logo-yna21 img { width: 67px; }
 .evere-compact-shell .nav-type11 .logo-yna03 img { width: 87px; }
@@ -104,6 +105,7 @@
 }
 
 @media (max-width: 1023px) {
+    .evere-compact-shell .nav-type11 > .logo-yna03 { height: 50px; }
     .evere-compact-shell .nav-type11 .article-header-title { margin-inline-start: 120px; }
 }
 
