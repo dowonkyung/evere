@@ -8,17 +8,23 @@
   <link rel="icon" href="../assets/evere/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="../assets/evere/account.css?v=newsroom-4">
-  <link rel="stylesheet" href="../assets/evere/newsroom.css?v=workspace-2">
-  <script type="module" src="../assets/evere/account.js?v=newsroom-5"></script>
+  <link rel="stylesheet" href="../assets/evere/newsroom.css?v=workspace-3">
+  <script type="module" src="../assets/evere/account.js?v=newsroom-6"></script>
   <script type="module" src="../assets/evere/newsroom.js?v=4"></script>
 </head>
 <body class="newsroom">
   <header class="newsroom-header">
-    <a href="./" aria-label="이브레 뉴스룸"><img src="../assets/evere/newsroom-logo.svg" alt="이브레 뉴스룸"></a>
+    <a class="newsroom-brand" href="./" aria-label="이브레 뉴스룸"><img src="../assets/evere/newsroom-logo-white.svg" alt="이브레 뉴스룸"></a>
     <nav aria-label="뉴스룸 링크">
       <a href="../">이브레 홈</a>
       <a href="../boards/">게시판</a>
-      <button id="sign-out" type="button" hidden>로그아웃</button>
+      <div class="newsroom-session">
+        <div class="newsroom-identity" id="newsroom-identity" hidden>
+          <img id="newsroom-avatar" width="30" height="30" alt="" hidden>
+          <span id="member-summary"></span>
+        </div>
+        <button id="sign-out" type="button" hidden>로그아웃</button>
+      </div>
     </nav>
   </header>
   <main class="newsroom-main">
@@ -43,7 +49,6 @@
     </section>
     <section id="workspace" hidden>
       <nav class="newsroom-nav" aria-label="뉴스룸 메뉴">
-        <p id="member-summary"></p>
         <a href="#overview" data-view="overview">대시보드</a>
         <a href="#write" data-view="write">기사 작성</a>
         <a href="#review" data-view="review">기사 목록·승인</a>
