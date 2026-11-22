@@ -113,6 +113,11 @@ function resetCategories() {
     const page = layout.elements.page.value;
     optionList(layout.elements.category, [['', '전체'], ...(articleCategories[page] || [])]);
     layout.elements.category.disabled = page === 'home';
+    const home = page === 'home';
+    ui('layout-slot-heading').textContent = home ? '메인 헤드라인' : '기사 배치';
+    const labels = home ? ['대표 헤드라인', '보조 헤드라인 1', '보조 헤드라인 2']
+        : ['첫 번째 기사', '두 번째 기사', '세 번째 기사'];
+    slots.forEach((slot, i) => { slot.previousElementSibling.textContent = labels[i]; });
 }
 
 function publicPage(page, category) {
