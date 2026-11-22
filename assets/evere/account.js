@@ -5,10 +5,23 @@ import { renderBody, renderPhotos } from './article-content.js?v=inline-1';
 const roleNames = {
     owner: '총수', director: '국장급', department_head: '부장급', reporter: '평기자', citizen: '시민기자',
 };
+const editorialStates = [
+    ['draft', '작성중'], ['complete', '작성완료'], ['revising', '수정중'],
+    ['desked', '데스킹完'], ['released', '출고'],
+];
+const editorialLabels = new Map(editorialStates);
+const queueDate = new Intl.DateTimeFormat('ko-KR', {
+    dateStyle: 'short', timeStyle: 'short', timeZone: 'Asia/Seoul',
+});
+const numberFormat = new Intl.NumberFormat('ko-KR', { maximumFractionDigits: 2 });
 const limit = 20;
 const ui = (id) => document.getElementById(id);
 const accessForm = ui('access-form');
 const articleForm = ui('article-form');
+const articleDialog = ui('article-dialog');
+const statusFilter = ui('newsroom-status-filter');
+let dialogRequest = 0;
+let dialogEditor;
 const compose = articleForm && articleComposer(articleForm);
 const profileDetails = ui('profile-details-form');
 const avatarForm = ui('avatar-form');
@@ -27,8 +40,9 @@ let articleOffset = 0;
 let verificationEmail = '';
 
 function message(text = '', error = false) {
-    ui('status').textContent = text;
-    ui('status').dataset.error = String(error);
+    const status = articleDialog?.open ? ui('article-dialog-status') : ui('status');
+    status.textContent = text;
+    status.dataset.error = String(error);
 }
 
 function result(response) {
@@ -171,28 +185,30 @@ function actionButton(label, action) {
 }
 
 function articleEditor(article) {
-    const details = element('details');
-    details.append(element('summary', '기사 수정'));
-    details.addEventListener('toggle', () => {
-        if (!details.open || details.querySelector('form')) return;
-        const form = element('form', '', 'newsroom-compose');
-        const editor = articleComposer(form, article);
-        fillOptions(form.elements.sector, Object.entries(sectors).filter(([id]) => canEdit(id)), [article.sector]);
-        setCategories(form, article.category || '');
-        editor.setMember(member, members);
-        form.elements.sector.addEventListener('change', () => setCategories(form));
-        form.querySelector('button[type="submit"]').textContent = '수정 저장';
-        form.addEventListener('submit', handle(async () => {
-            if (!await editor.save(async (fields) => {
-                result(await supabase.from('evere_articles').update(fields).eq('id', article.id).select('id').single());
-            })) return;
-            editor.reset();
-            await loadArticles();
-            message('기사를 수정했습니다.');
-        }));
-        details.append(form);
-    });
-    return details;
+    const form = element('form', '', 'newsroom-compose');
+    const editor = articleComposer(form, article);
+    dialogEditor = editor;
+    fillOptions(form.elements.sector, Object.entries(sectors).filter(([id]) => canEdit(id)), [article.sector]);
+    setCategories(form, article.category || '');
+    editor.setMember(member, members);
+    form.elements.sector.addEventListener('change', () => setCategories(form));
+    const label = element('label', '상태');
+    const state = element('select');
+    fillOptions(state, editorialStates, [article.editorial_state]);
+    label.append(state);
+    form.querySelector('.compose-metadata').prepend(label);
+    form.querySelector('button[type="submit"]').textContent = '수정 저장';
+    form.addEventListener('submit', handle(async () => {
+        const nextState = state.value;
+        if (!await editor.save(async (fields) => {
+            result(await supabase.from('evere_articles').update({ ...fields, editorial_state: nextState })
+                .eq('id', article.id).select('id').single());
+        })) return;
+        articleDialog.close();
+        await loadArticles();
+        message('기사를 수정했습니다.');
+    }));
+    return form;
 }
 
 function commentPanel(article) {
@@ -248,60 +264,93 @@ function commentPanel(article) {
     return details;
 }
 
-function articleCard(article) {
-    const card = element('article', '', 'article');
-    const summary = element('p', [
-        sectors[article.sector], article.status === 'published' ? '게시됨' : '승인 대기',
-        article.byline_names.join(', '),
-    ].filter(Boolean).join(' · '), 'article-meta');
-    const body = element('details');
-    const copy = element('div', '', 'article-body');
-    const photos = element('div', '', 'article-photos');
-    renderBody(copy, article);
-    body.append(element('summary', '본문'), element('p', article.subtitle, 'article-subtitle'), photos, copy);
-    body.addEventListener('toggle', () => { if (body.open) void renderPhotos(photos, article.photo_paths, copy); });
-    const title = element('h3');
-    if (article.status === 'published') {
-        const link = element('a', article.title);
-        link.href = '../article/?id=' + encodeURIComponent(article.id);
-        title.append(link);
-    } else {
-        title.textContent = article.title;
-    }
-    card.append(title, summary, body);
-    if (canEdit(article.sector)) {
-        const actions = element('div', '', 'article-action');
-        if (article.status === 'pending') {
-            actions.append(actionButton('승인 및 게시', async () => {
-                result(await supabase.from('evere_articles').update({ status: 'published' })
-                    .eq('id', article.id).eq('status', 'pending').select('id').single());
+async function openArticle(id) {
+    const request = ++dialogRequest;
+    const content = ui('article-dialog-content');
+    content.replaceChildren();
+    articleDialog.showModal();
+    message('기사를 불러오는 중입니다.');
+    try {
+        const article = result(await supabase.from('evere_articles')
+            .select('id,title,subtitle,body,body_html,sector,category,series_id,byline,guest_byline,photo_paths,status,editorial_state')
+            .eq('id', id).single());
+        if (!articleDialog.open || request !== dialogRequest) return;
+        ui('article-dialog-title').textContent = article.title;
+        if (canEdit(article.sector)) {
+            content.append(articleEditor(article));
+        } else {
+            const copy = element('div', '', 'article-body');
+            const photos = element('div', '', 'article-photos');
+            renderBody(copy, article);
+            content.append(element('p', article.subtitle, 'article-subtitle'), photos, copy);
+            void renderPhotos(photos, article.photo_paths, copy);
+        }
+
+        const actions = element('div', '', 'article-action dialog-actions');
+        if (article.status === 'published') {
+            const link = element('a', '공개 기사 열기');
+            link.href = '../article/?id=' + encodeURIComponent(article.id);
+            actions.append(link);
+        }
+        if (canEdit(article.sector)) {
+            actions.append(actionButton('기사 삭제', async () => {
+                if (!window.confirm('이 기사와 댓글을 삭제할까요?')) return;
+                result(await supabase.from('evere_articles').delete().eq('id', id).select('id').single());
+                articleDialog.close();
                 await loadArticles();
-                message('기사를 승인하고 게시했습니다.');
+                message('기사를 삭제했습니다.');
             }));
         }
-        actions.append(actionButton('기사 삭제', async () => {
-            if (!window.confirm('이 기사와 댓글을 삭제할까요?')) return;
-            result(await supabase.from('evere_articles').delete().eq('id', article.id).select('id').single());
-            await loadArticles();
-            message('기사를 삭제했습니다.');
-        }));
-        card.append(actions, articleEditor(article));
+        if (actions.childElementCount) content.append(actions);
+        if (article.status === 'published') content.append(commentPanel(article));
+        message();
+    } catch (error) {
+        if (articleDialog.open && request === dialogRequest) message(getError(error), true);
     }
-    if (article.status === 'published') card.append(commentPanel(article));
-    return card;
+}
+
+function articleRow(article) {
+    const row = element('tr');
+    const status = element('td');
+    const badge = element('span', editorialLabels.get(article.editorial_state), 'queue-status');
+    badge.dataset.state = article.editorial_state;
+    status.append(badge);
+    const characters = Array.from(article.body).length;
+    const manuscript = element('td', numberFormat.format(characters / 200) + '매 (' +
+        numberFormat.format(characters) + '자)');
+    const date = element('td');
+    const time = element('time', queueDate.format(new Date(article.created_at)));
+    time.dateTime = article.created_at;
+    date.append(time);
+    const action = element('td');
+    const view = element('button', '보기');
+    view.type = 'button';
+    view.setAttribute('aria-label', article.title + ' 보기');
+    view.addEventListener('click', () => void openArticle(article.id));
+    action.append(view);
+    row.append(status, element('td', sectors[article.sector]), element('td', article.title, 'queue-title'),
+        element('td', displayName(article.created_by)), manuscript, date, action);
+    return row;
 }
 
 async function loadArticles() {
-    let query = supabase.from('evere_articles').select('id,title,subtitle,body,body_html,sector,category,series_id,byline,byline_names,guest_byline,photo_paths,status');
-    const status = ui('newsroom-status-filter')?.value;
-    if (status) query = query.eq('status', status);
+    let query = supabase.from('evere_articles').select('id,title,body,sector,editorial_state,created_by,created_at');
+    const state = statusFilter.value;
+    if (state) query = query.eq('editorial_state', state);
     const articles = result(await query.order('created_at', { ascending: false }).order('id').range(articleOffset, articleOffset + limit));
     if (!articles.length && articleOffset) {
         articleOffset -= limit;
         return loadArticles();
     }
-    ui('articles').replaceChildren(...articles.slice(0, limit).map(articleCard));
-    if (!articles.length) ui('articles').append(element('p', '표시할 기사가 없습니다.'));
+    const table = ui('articles');
+    table.replaceChildren(...articles.slice(0, limit).map(articleRow));
+    if (!articles.length) {
+        const row = element('tr');
+        const empty = element('td', '표시할 기사가 없습니다.', 'queue-empty');
+        empty.colSpan = 7;
+        row.append(empty);
+        table.append(row);
+    }
     ui('previous').disabled = articleOffset === 0;
     ui('next').disabled = articles.length <= limit;
 }
@@ -413,6 +462,22 @@ ui('remove-avatar').addEventListener('click', handle(async () => {
 }));
 
 if (articleForm && memberForm) {
+    fillOptions(statusFilter, [['', '전체'], ...editorialStates]);
+    const isSaving = () => Boolean(articleDialog.querySelector('form[inert]'));
+    ui('article-dialog-close').addEventListener('click', () => {
+        if (!isSaving()) articleDialog.close();
+    });
+    articleDialog.addEventListener('cancel', (event) => {
+        if (isSaving()) event.preventDefault();
+    });
+    articleDialog.addEventListener('close', () => {
+        dialogRequest++;
+        dialogEditor?.reset();
+        dialogEditor = null;
+        ui('article-dialog-content').replaceChildren();
+        ui('article-dialog-status').textContent = '';
+        ui('article-dialog-title').textContent = '기사 보기';
+    });
     fillOptions(articleForm.elements.sector, Object.entries(sectors));
     setCategories(articleForm);
     articleForm.elements.sector.addEventListener('change', () => setCategories(articleForm));
@@ -461,7 +526,7 @@ if (articleForm && memberForm) {
             }
         }));
     }
-    ui('newsroom-status-filter')?.addEventListener('change', () => {
+    statusFilter.addEventListener('change', () => {
         articleOffset = 0;
         loadArticles().catch((error) => message(getError(error), true));
     });
