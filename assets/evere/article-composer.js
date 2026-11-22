@@ -34,6 +34,10 @@ export function articleComposer(form, article = null) {
     }
 
     function preview() {
+        const copy = editor.innerText.trim();
+        find('[data-editor-count]').textContent =
+            Array.from(copy).length.toLocaleString('ko-KR') + '자 · ' +
+            (copy ? copy.split(/\s+/u).length : 0).toLocaleString('ko-KR') + '단어';
         find('[data-preview-sector]').textContent = sectors[sector.value] || '';
         find('[data-preview-title]').textContent = title.value.trim() || '기사 제목';
         find('[data-preview-subtitle]').textContent = subtitle.value.trim();
@@ -174,6 +178,10 @@ export function articleComposer(form, article = null) {
         if (event.target.closest('button')) event.preventDefault();
     });
     toolbar.addEventListener('click', (event) => {
+        if (event.target.closest('[data-insert-photo]')) {
+            fileInput.click();
+            return;
+        }
         const control = event.target.closest('[data-command]');
         if (control) applyFormat(control.dataset.command);
     });
@@ -186,10 +194,27 @@ export function articleComposer(form, article = null) {
         const plain = transfer?.getData('text/plain');
         if (plain) document.execCommand('insertText', false, plain);
     }
-    editor.addEventListener('paste', (event) => insertPlainText(event, event.clipboardData));
+    editor.addEventListener('paste', (event) => {
+        const files = event.clipboardData.files;
+        if (!files.length) return insertPlainText(event, event.clipboardData);
+        event.preventDefault();
+        rememberSelection();
+        addPhotos(files);
+    });
+    editor.addEventListener('dragover', (event) => {
+        if (event.dataTransfer.types.includes('Files')) event.preventDefault();
+    });
     editor.addEventListener('drop', (event) => {
         if (event.dataTransfer.files.length) {
             event.preventDefault();
+            const position = document.caretPositionFromPoint?.(event.clientX, event.clientY);
+            const target = document.caretRangeFromPoint?.(event.clientX, event.clientY);
+            const node = position?.offsetNode || target?.startContainer;
+            if (node && editor.contains(node) && !(node.parentElement?.closest('figure[data-photo]'))) {
+                selection = document.createRange();
+                selection.setStart(node, position?.offset ?? target.startOffset);
+                selection.collapse(true);
+            }
             addPhotos(event.dataTransfer.files);
         } else insertPlainText(event, event.dataTransfer);
     });
@@ -201,14 +226,23 @@ export function articleComposer(form, article = null) {
         return [...editor.querySelectorAll('figure[data-photo]')].find((item) => item.dataset.photo === photo.key);
     }
 
-    function locate(photo) {
+    function locate(photo, insertAtEnd = false) {
         if (!selection || !editor.contains(selection.startContainer)) {
-            notify('사진을 배치할 본문 위치에 먼저 커서를 놓아 주세요.');
-            editor.focus();
-            return;
+            if (!insertAtEnd) {
+                notify('사진을 배치할 본문 위치에 먼저 커서를 놓아 주세요.');
+                editor.focus();
+                return;
+            }
+            selection = document.createRange();
+            selection.selectNodeContents(editor);
+            selection.collapse(false);
         }
         const range = selection.cloneRange();
         range.collapse(true);
+        const container = range.startContainer;
+        const inlinePhoto = (container.nodeType === Node.ELEMENT_NODE ? container : container.parentElement)
+            ?.closest('figure[data-photo]');
+        if (inlinePhoto) range.setStartAfter(inlinePhoto);
         marker(photo)?.remove();
         const figure = photoFigure(photo.key, photo.position, photo.caption);
         figure.contentEditable = 'false';
@@ -234,8 +268,10 @@ export function articleComposer(form, article = null) {
         editor.focus();
         window.getSelection().removeAllRanges();
         window.getSelection().addRange(range);
-        notify();
-        showPhotos();
+        if (!insertAtEnd) {
+            notify();
+            showPhotos();
+        }
     }
 
     function discard(photo) {
@@ -248,6 +284,7 @@ export function articleComposer(form, article = null) {
     function showPhotos() {
         const items = photos.map((photo, index) => {
             const li = document.createElement('li');
+            li.dataset.photoKey = photo.key;
             const label = photo.file?.name || '첨부 사진 ' + (index + 1);
             if (photo.url) li.append(photoImage(photo.url, label));
             const name = document.createElement('span');
@@ -288,6 +325,13 @@ export function articleComposer(form, article = null) {
         preview();
     }
 
+    editor.addEventListener('click', (event) => {
+        const key = event.target.closest('figure[data-photo]')?.dataset.photo;
+        if (!key) return;
+        const item = [...photoList.children].find((entry) => entry.dataset.photoKey === key);
+        item?.querySelector('input')?.focus();
+    });
+
     function addPhotos(files) {
         if (saving) return;
         let warning = '';
@@ -297,7 +341,9 @@ export function articleComposer(form, article = null) {
                 warning = 'JPG, PNG, WebP 형식의 5MB 이하 사진만 첨부할 수 있습니다.';
                 continue;
             }
-            photos.push({ file, key: 'local-' + crypto.randomUUID(), url: URL.createObjectURL(file), position: 'center', caption: '' });
+            const photo = { file, key: 'local-' + crypto.randomUUID(), url: URL.createObjectURL(file), position: 'center', caption: '' };
+            photos.push(photo);
+            locate(photo, true);
         }
         notify(warning);
         showPhotos();
