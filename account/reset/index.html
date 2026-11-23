@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>비밀번호 초기화 | 이브레</title>
+  <link rel="icon" href="/assets/evere/favicon.svg">
+</head>
+<body>
+  <main>
+    <h1>이브레 비밀번호 초기화</h1>
+    <form id="reset-form">
+      <label>새 비밀번호 <input type="password" name="password" minlength="8" autocomplete="new-password" required></label>
+      <label>새 비밀번호 확인 <input type="password" name="confirmation" minlength="8" autocomplete="new-password" required></label>
+      <button type="submit">비밀번호 저장</button>
+    </form>
+    <p id="reset-status" role="status"></p>
+    <a href="/account/">이브레 로그인</a>
+  </main>
+  <script type="module" src="/assets/evere/member-reset.js"></script>
+</body>
+</html>
