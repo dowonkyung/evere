@@ -1,5 +1,7 @@
+@import url("/assets/evere/centered-ellipsis.css");
+
 :root {
-  font-family: "Pretendard Variable", Pretendard, sans-serif;
+  font-family: "Evere Centered Ellipsis", "Pretendard Variable", Pretendard, sans-serif;
   color: #151515;
   background: #fff;
   accent-color: #00b8b4;

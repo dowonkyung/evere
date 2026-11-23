@@ -1,3 +1,5 @@
+@import url("/assets/evere/centered-ellipsis.css");
+
 :root {
     --evere-content-width: 1216px;
     --evere-accent: #00B8B4;
@@ -8,7 +10,7 @@
 }
 
 body, main :where(button, input, select, textarea), footer :where(button, input) {
-    font-family: "Pretendard Variable", Pretendard, sans-serif;
+    font-family: "Evere Centered Ellipsis", "Pretendard Variable", Pretendard, sans-serif;
 }
 
 #evere-header {
