@@ -128,10 +128,35 @@
 @media (max-width: 1023px) {
   .reader-layout { grid-template-columns: minmax(0, 1fr); max-width: 592px; margin-inline: auto; }
   .reader-layout > * { grid-column: 1; grid-row: auto; }
-  .reader-actions { position: relative; display: flex; flex-wrap: wrap; gap: 4px; width: 100%; margin-bottom: 22px; padding: 6px; }
-  .reader-actions > :is(a, button), .reader-actions summary { width: 58px; font-size: 11px; }
-  .reader-actions details { position: static; }
-  .reader-tool-panel { inset: 100% auto auto 0; }
+  .reader-layout > .reader-actions { display: none; }
+  .reader-actions[slot="article-tools"] {
+    position: relative;
+    inset: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .reader-actions[slot="article-tools"] > a,
+  .reader-actions[slot="article-tools"] summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    width: auto;
+    min-height: 40px;
+  }
+  .reader-actions[slot="article-tools"] > a { margin-inline-end: auto; }
+  .reader-actions[slot="article-tools"] > button,
+  .reader-actions[slot="article-tools"] .reader-action-label { display: none; }
+  .reader-actions[slot="article-tools"] details { position: static; }
+  .reader-actions[slot="article-tools"] .reader-tool-panel { inset: 100% 16px auto auto; }
   .reader-related { margin-top: 40px; }
 }
 
@@ -149,7 +174,9 @@
   .reader-layout { display: block; }
 }
 
-.article-body figcaption .photo-caption-title { display: block; color: var(--text-primary, #151515); }
+.article-body figcaption .photo-caption-title { display: block; font-size: 15px; color: var(--text-primary, #151515); }
 .article-body figcaption .photo-caption-description { display: block; white-space: pre-line; }
 .article-body figcaption :is(.photo-caption-title, .photo-caption-description):empty { display: none; }
 .reader-dark .article-body figcaption .photo-caption-title { color: inherit; }
+
+.reader-type-icon small { font-size: .7em; }
