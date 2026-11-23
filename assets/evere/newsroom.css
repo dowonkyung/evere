@@ -287,13 +287,14 @@
 .newsroom .article-state-field legend { margin-bottom: 8px; font-weight: 700; }
 .article-state-buttons { display: flex; gap: 8px; overflow-x: auto; padding: 3px; }
 .newsroom .article-state-button, .queue-status { --state-color: #59616b; }
-.newsroom [data-state="revising"] { --state-color: #0078a5; }
-.newsroom [data-state="desked"] { --state-color: #926900; }
-.newsroom [data-state="released"] { --state-color: #2857c8; }
+.newsroom [data-state="revising"] { --state-color: #0098FF; }
+.newsroom [data-state="desked"] { --state-color: #feb01c; --state-on-color: #000; }
+.newsroom [data-state="released"] { --state-color: #0024ff; }
 .newsroom .article-state-button {
     flex: none;
+    inline-size: 76px;
     min-height: 34px;
-    padding: 5px 11px;
+    padding: 5px 8px;
     border: 1px solid var(--state-color);
     border-radius: 5px;
     background: #fff;
@@ -304,10 +305,9 @@
 }
 .newsroom .article-state-button[aria-pressed="true"], .newsroom .queue-status {
     background: var(--state-color);
-    color: #fff;
+    color: var(--state-on-color, #fff);
 }
 .newsroom .article-state-button:not(:disabled):hover { border-color: var(--state-color); box-shadow: 0 0 0 1px var(--state-color); }
 .newsroom .article-state-button:disabled { cursor: not-allowed; opacity: .6; }
 .queue-state-filter { display: grid; justify-items: start; gap: 8px; margin-bottom: 15px; min-width: 0; }
 #newsroom-status-filter { min-width: 0; max-width: 100%; }
-#newsroom-status-all[aria-pressed="true"] { background: #edf1f5; font-weight: 700; }

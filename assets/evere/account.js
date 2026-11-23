@@ -627,6 +627,7 @@ ui('remove-avatar').addEventListener('click', handle(async () => {
 if (articleForm && memberForm) {
     const clearStatus = ui('newsroom-status-all');
     const filter = stateButtons('', allStates, changeFilter);
+    filter.field.querySelector('.article-state-buttons').prepend(clearStatus);
     statusFilter.append(filter.field);
     function changeFilter(value) {
         listState = value;
