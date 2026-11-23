@@ -39,3 +39,11 @@
   .evere-compact-shell .nav-type11 .article-header-title { display: none; }
   .evere-compact-shell .nav-type11 > .logo-yna03 { height: 50px; }
 }
+
+@media (max-width: 1023px) {
+  .evere-compact-shell .nav-type11.article-tools-active > :is(.logo-yna21, .logo-yna03, .gnb-menu01, .utility-zone) {
+    display: none !important;
+  }
+  .evere-compact-shell .nav-type11.article-tools-active { min-height: 50px; }
+  .nav-type11.article-tools-active > slot[name="article-tools"] { display: contents; }
+}
