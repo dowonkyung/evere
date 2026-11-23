@@ -59,18 +59,41 @@ function enableReadingHeader(articleTitle) {
 ui('article-text-size').addEventListener('change', (event) => {
     ui('published-article').dataset.textSize = event.target.value;
 });
-ui('article-share').addEventListener('click', async () => {
+const articlePage = document.querySelector('.article-page');
+const theme = ui('article-theme');
+theme.addEventListener('click', () => {
+    const dark = articlePage.classList.toggle('reader-dark');
+    theme.setAttribute('aria-pressed', String(dark));
+});
+ui('article-print').addEventListener('click', () => window.print());
+ui('article-copy').addEventListener('click', async () => {
     if (!currentArticle) return;
-    const url = new URL(articlePath(currentArticle), location.origin);
     try {
-        if (navigator.share) {
-            await navigator.share({ title: ui('title').textContent, url: url.href });
-        } else {
-            await navigator.clipboard.writeText(url.href);
-            ui('article-share').textContent = '복사됨';
-        }
+        await navigator.clipboard.writeText(new URL(articlePath(currentArticle), location.origin).href);
+        ui('article-share-status').textContent = '주소를 복사했습니다.';
+    } catch {
+        ui('article-share-status').textContent = '주소를 복사하지 못했습니다.';
+    }
+});
+ui('article-native-share').hidden = !navigator.share;
+ui('article-native-share').addEventListener('click', async () => {
+    if (!currentArticle) return;
+    try {
+        await navigator.share({ title: currentArticle.title, url: new URL(articlePath(currentArticle), location.origin).href });
     } catch (error) {
-        if (error.name !== 'AbortError') ui('status').textContent = '기사 주소를 공유하지 못했습니다.';
+        if (error.name !== 'AbortError') ui('article-share-status').textContent = '공유하지 못했습니다.';
+    }
+});
+const toolPanels = [...ui('reader-actions').querySelectorAll('details')];
+document.addEventListener('click', (event) => {
+    for (const panel of toolPanels) if (!panel.contains(event.target)) panel.open = false;
+});
+ui('reader-actions').addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    const panel = event.target.closest('details[open]');
+    if (panel) {
+        panel.open = false;
+        panel.querySelector('summary').focus();
     }
 });
 
@@ -97,9 +120,11 @@ function checked(response) {
 }
 
 async function commentsAt(newOffset) {
-    const rows = checked(await supabase.from('evere_comments').select('author_name,body,created_at')
+    const response = await supabase.from('evere_comments').select('author_name,body,created_at', { count: 'exact' })
         .eq('article_id', articleId).order('created_at', { ascending: false }).order('id')
-        .range(newOffset, newOffset + pageSize));
+        .range(newOffset, newOffset + pageSize);
+    const rows = checked(response);
+    ui('article-comment-count').textContent = response.count ?? '';
     offset = newOffset;
     previous.disabled = offset === 0;
     next.disabled = rows.length <= pageSize;
@@ -167,6 +192,7 @@ async function render() {
     canonical.rel = 'canonical';
     canonical.href = canonicalURL.href;
     document.head.append(canonical);
+    ui('article-email').href = 'mailto:?subject=' + encodeURIComponent(data.title) + '&body=' + encodeURIComponent(canonicalURL.href);
     document.title = data.title + ' | 이브레';
     const sectionLink = document.createElement('a');
     sectionLink.href = '/' + data.sector + '/';
