@@ -217,7 +217,6 @@
 .newsroom .article-section, .newsroom :is(#profile-settings, #membership-admin) { margin-top: 0; }
 .newsroom .article, .board-post { border-color: var(--line); }
 .newsroom .article details { border-color: var(--line); border-width: 1px; }
-.queue-filter { max-width: 220px; margin-bottom: 15px; }
 .article-table-scroll { overflow: auto; border: 1px solid var(--line); border-radius: 9px; }
 .article-table { width: 100%; border-collapse: collapse; font-size: 14px; }
 .article-table :is(th, td) { padding: 10px 12px; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
@@ -227,9 +226,6 @@
 .article-table .queue-empty { color: var(--muted); padding: 24px; text-align: center; }
 .article-table button { padding: 5px 10px; }
 .queue-status { display: inline-block; padding: 4px 8px; border-radius: 6px; background: #eef1f5; color: #445268; font-size: 12px; font-weight: 700; }
-.queue-status[data-state="revising"] { background: #fff3df; color: #775000; }
-.queue-status[data-state="desked"] { background: #e8efff; color: #274789; }
-.queue-status[data-state="released"] { background: var(--tint); color: var(--accent-hover); }
 .queue-visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .article-dialog { width: min(calc(100% - 24px), 1100px); max-height: calc(100dvh - 32px); padding: 0; border: 1px solid var(--line); border-radius: var(--radius); background: var(--canvas); color: var(--ink); }
 .article-dialog::backdrop { background: #10283678; }
@@ -286,3 +282,32 @@
 .newsroom .tag { display: inline-block; vertical-align: .1em; padding: 0 4px; margin-inline-end: 8px; border-radius: 2px; font-size: 12px; font-weight: 600; line-height: 18px; color: #fff; }
 .newsroom .tag-red { background: #f25050; }
 .newsroom .tag-blue { background: #4c70e8; }
+
+.newsroom .article-state-field { margin: 0; padding: 0; min-width: 0; border: 0; }
+.newsroom .article-state-field legend { margin-bottom: 8px; font-weight: 700; }
+.article-state-buttons { display: flex; gap: 8px; overflow-x: auto; padding: 3px; }
+.newsroom .article-state-button, .queue-status { --state-color: #59616b; }
+.newsroom [data-state="revising"] { --state-color: #0078a5; }
+.newsroom [data-state="desked"] { --state-color: #926900; }
+.newsroom [data-state="released"] { --state-color: #2857c8; }
+.newsroom .article-state-button {
+    flex: none;
+    min-height: 34px;
+    padding: 5px 11px;
+    border: 1px solid var(--state-color);
+    border-radius: 5px;
+    background: #fff;
+    color: var(--state-color);
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.newsroom .article-state-button[aria-pressed="true"], .newsroom .queue-status {
+    background: var(--state-color);
+    color: #fff;
+}
+.newsroom .article-state-button:not(:disabled):hover { border-color: var(--state-color); box-shadow: 0 0 0 1px var(--state-color); }
+.newsroom .article-state-button:disabled { cursor: not-allowed; opacity: .6; }
+.queue-state-filter { display: grid; justify-items: start; gap: 8px; margin-bottom: 15px; min-width: 0; }
+#newsroom-status-filter { min-width: 0; max-width: 100%; }
+#newsroom-status-all[aria-pressed="true"] { background: #edf1f5; font-weight: 700; }

@@ -22,6 +22,8 @@ const accessForm = ui('access-form');
 const articleForm = ui('article-form');
 const articleDialog = ui('article-dialog');
 const statusFilter = ui('newsroom-status-filter');
+let listState = '';
+let articleListRequest = 0;
 let dialogRequest = 0;
 let dialogEditor;
 const compose = articleForm && articleComposer(articleForm);
@@ -283,6 +285,35 @@ function actionButton(label, action) {
     return button;
 }
 
+function stateButtons(selected, allowed, onChange) {
+    const field = element('fieldset', '', 'article-state-field');
+    field.append(element('legend', '상태'));
+    const group = element('div', '', 'article-state-buttons');
+    const buttons = editorialStates.map(([value, title]) => {
+        const button = element('button', title, 'article-state-button');
+        button.type = 'button';
+        button.dataset.state = value;
+        button.disabled = !allowed.has(value);
+        button.addEventListener('click', () => {
+            if (selected === value) return;
+            select(value);
+            onChange?.(value);
+        });
+        return button;
+    });
+    function select(value) {
+        selected = value;
+        for (const button of buttons) button.setAttribute('aria-pressed', String(button.dataset.state === value));
+    }
+    group.append(...buttons);
+    field.append(group);
+    select(selected);
+    return { field, select, get value() { return selected; } };
+}
+
+const authorStates = new Set(['draft', 'complete']);
+const allStates = new Set(editorialLabels.keys());
+
 function articleEditor(article, contentOnly) {
     const form = element('form', '', 'newsroom-compose');
     const editor = articleComposer(form, article, { contentOnly });
@@ -291,11 +322,8 @@ function articleEditor(article, contentOnly) {
     setCategories(form, article.category || '');
     editor.setMember(member, members);
     form.elements.sector.addEventListener('change', () => setCategories(form));
-    const label = element('label', '상태');
-    const state = element('select');
-    fillOptions(state, contentOnly ? editorialStates.slice(0, 2) : editorialStates, [article.editorial_state]);
-    label.append(state);
-    form.querySelector('.compose-metadata').prepend(label);
+    const state = stateButtons(article.editorial_state, contentOnly ? authorStates : allStates);
+    form.querySelector('.compose-heading').after(state.field);
     form.querySelector('button[type="submit"]').textContent = '수정 저장';
     form.addEventListener('submit', handle(async () => {
         const nextState = state.value;
@@ -448,9 +476,10 @@ function articleRow(article) {
 
 async function loadArticles() {
     let query = supabase.from('evere_articles').select('id,title,article_label,body,sector,editorial_state,created_by,created_at');
-    const state = statusFilter.value;
-    if (state) query = query.eq('editorial_state', state);
+    const request = ++articleListRequest;
+    if (listState) query = query.eq('editorial_state', listState);
     const articles = result(await query.order('created_at', { ascending: false }).order('id').range(articleOffset, articleOffset + limit));
+    if (request !== articleListRequest) return;
     if (!articles.length && articleOffset) {
         articleOffset -= limit;
         return loadArticles();
@@ -596,7 +625,22 @@ ui('remove-avatar').addEventListener('click', handle(async () => {
 }));
 
 if (articleForm && memberForm) {
-    fillOptions(statusFilter, [['', '전체'], ...editorialStates]);
+    const clearStatus = ui('newsroom-status-all');
+    const filter = stateButtons('', allStates, changeFilter);
+    statusFilter.append(filter.field);
+    function changeFilter(value) {
+        listState = value;
+        filter.select(value);
+        clearStatus.setAttribute('aria-pressed', String(!value));
+        articleOffset = 0;
+        loadArticles().catch((error) => message(getError(error), true));
+    }
+    clearStatus.addEventListener('click', () => changeFilter(''));
+    const writeSubmit = articleForm.querySelector('button[type="submit"]');
+    const writeState = stateButtons('complete', authorStates, value => {
+        writeSubmit.textContent = value === 'draft' ? '작성중 저장' : '승인 요청';
+    });
+    articleForm.querySelector('.compose-heading').after(writeState.field);
     const isSaving = () => Boolean(articleDialog.querySelector('form[inert]'));
     ui('article-dialog-close').addEventListener('click', () => {
         if (!isSaving()) articleDialog.close();
@@ -723,14 +767,17 @@ if (articleForm && memberForm) {
         });
     }
     articleForm.addEventListener('submit', handle(async () => {
+        const state = writeState.value;
         if (!await compose.save(async (fields) => {
-            result(await supabase.from('evere_articles').insert(fields));
+            result(await supabase.from('evere_articles').insert({ ...fields, editorial_state: state }));
         })) return;
         compose.reset();
+        writeState.select('complete');
+        writeSubmit.textContent = '승인 요청';
         setCategories(articleForm);
         articleOffset = 0;
         await loadArticles();
-        message('기사 승인을 요청했습니다.');
+        message(state === 'draft' ? '작성중으로 저장했습니다.' : '기사 승인을 요청했습니다.');
     }));
     for (const [id, distance] of [['previous', -limit], ['next', limit]]) {
         ui(id).addEventListener('click', handle(async () => {
@@ -746,10 +793,6 @@ if (articleForm && memberForm) {
     }
     window.addEventListener('hashchange', () => {
         if (!member || location.hash !== '#review') return;
-        articleOffset = 0;
-        loadArticles().catch((error) => message(getError(error), true));
-    });
-    statusFilter.addEventListener('change', () => {
         articleOffset = 0;
         loadArticles().catch((error) => message(getError(error), true));
     });
