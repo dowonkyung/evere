@@ -2,8 +2,8 @@ import { setArticleTitle } from './article-label.js';
 import { articlePath } from './routes.js?v=routes-1';
 import { supabase } from './supabase.js';
 import { sectors, articleCategories } from './article-taxonomy.js';
-import { articleComposer } from './article-composer.js?v=members-label-2';
-import { renderBody, renderPhotos } from './article-content.js?v=inline-1';
+import { articleComposer } from './article-composer.js?v=caption-1';
+import { renderBody, renderPhotos } from './article-content.js?v=caption-1';
 const roleNames = {
     owner: '총수', director: '국장급', department_head: '부장급', reporter: '평기자', citizen: '시민기자',
 };
