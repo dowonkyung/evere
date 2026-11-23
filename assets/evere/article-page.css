@@ -117,7 +117,8 @@
 .reader-related a:hover, .reader-comments a:hover { text-decoration: underline; }
 .reader-comments { margin-top: 56px; border-top: 2px solid #171717; scroll-margin-top: 80px; }
 .reader-comments form { display: grid; gap: 8px; margin-bottom: 15px; }
-.reader-comments textarea { border: 1px solid #aaa; padding: 10px; width: 100%; resize: vertical; }
+.reader-comments textarea { display: block; border: 1px solid #aaa; border-radius: 8px; padding: 10px; width: 100%; resize: vertical; }
+.reader-comments textarea:focus { outline: none; box-shadow: none; border-color: #aaa; }
 .reader-comments button { justify-self: start; padding: 7px 13px; border: 1px solid #bbb; border-radius: 4px; }
 .reader-comments button:disabled { opacity: .5; cursor: default; }
 .reader-comments button[type="submit"] { background: #00b8b4; border-color: #00b8b4; }
