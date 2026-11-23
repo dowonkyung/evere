@@ -8,8 +8,8 @@
   <link rel="icon" href="/assets/evere/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="/assets/evere/account.css?v=newsroom-4">
-  <link rel="stylesheet" href="/assets/evere/newsroom.css?v=issues-1">
-  <script type="module" src="/assets/evere/account.js?v=routes-1"></script>
+  <link rel="stylesheet" href="/assets/evere/newsroom.css?v=members-1">
+  <script type="module" src="/assets/evere/account.js?v=members-1"></script>
   <script type="module" src="/assets/evere/newsroom.js?v=routes-1"></script>
 <script type="module" src="/assets/evere/route-init.js?v=routes-1"></script>
 </head>
@@ -239,15 +239,28 @@
         </section>
         <section data-panel="members" data-owner hidden>
           <h1>회원 관리</h1>
-          <details id="membership-admin" open hidden>
-        <summary>회원 등급 및 섹터 관리</summary>
-        <form id="members-form">
-          <label>회원<select name="member" required></select></label>
-          <label>등급<select name="role" required></select></label>
-          <fieldset class="sector-fields" hidden><legend>승인된 섹터</legend><div class="checkbox-grid"></div></fieldset>
-          <button type="submit">권한 저장</button>
-        </form>
-      </details>
+          <section id="membership-admin" aria-label="회원 목록" hidden>
+            <div class="article-table-scroll" tabindex="0" role="region" aria-label="회원 목록 표">
+              <table class="article-table member-table">
+                <thead><tr><th scope="col">프로필 사진</th><th scope="col">아이디</th><th scope="col">이메일 주소</th><th scope="col">이름</th><th scope="col">직위</th><th scope="col">가입일</th><th scope="col">최근 로그인</th><th scope="col">관리</th></tr></thead>
+                <tbody id="member-rows"></tbody>
+              </table>
+            </div>
+          </section>
+          <dialog id="member-dialog" class="article-dialog" aria-labelledby="member-dialog-title">
+            <header><h2 id="member-dialog-title">회원 조회·수정</h2><form method="dialog"><button>닫기</button></form></header>
+            <form id="members-form">
+              <input type="hidden" name="member">
+              <label>아이디<input name="accountId" readonly></label>
+              <label>이메일 주소<input name="email" readonly></label>
+              <label>이름<input name="displayName" maxlength="40" required></label>
+              <label>직위<input name="positionTitle" maxlength="60"></label>
+              <label>등급<select name="role" required></select></label>
+              <fieldset class="sector-fields" hidden><legend>담당 섹터</legend><div class="checkbox-grid"></div></fieldset>
+              <button type="submit">회원 정보 저장</button>
+              <p id="member-dialog-status" role="status"></p>
+            </form>
+          </dialog>
         </section>
         <section data-panel="boards" data-owner hidden>
           <h1>게시판 관리</h1>

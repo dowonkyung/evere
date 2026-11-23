@@ -158,20 +158,81 @@ async function refreshMembers() {
     compose.setMember(member, members);
     const admin = member.role === 'owner';
     ui('membership-admin').hidden = !admin;
-    if (admin) {
-        const selection = memberSelect.value;
-        fillOptions(memberSelect, [['', '회원 선택'], ...members.filter((entry) => entry.id !== member.id)
-            .map((entry) => [entry.id, entry.display_name + ' · ' + roleNames[entry.role] + ' · ' + entry.id.slice(0, 8)])], [selection]);
-        updateMemberForm();
-    }
+    if (admin) void renderMemberTable().catch(() => memberTableMessage('회원 목록을 불러오지 못했습니다.'));
+    else ui('member-rows').replaceChildren();
 }
 
-function updateMemberForm() {
-    const target = members.find((entry) => entry.id === memberSelect.value);
-    memberRole.value = target?.role || 'citizen';
-    approvedSectors.hidden = memberRole.value !== 'department_head';
+const memberDate = new Intl.DateTimeFormat('ko-KR', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Asia/Seoul' });
+let memberTableRequest = 0;
+
+function memberTableMessage(message) {
+    const row = element('tr');
+    const cell = element('td', message, 'queue-empty');
+    cell.colSpan = 8;
+    row.append(cell);
+    ui('member-rows').replaceChildren(row);
+}
+
+function editMember(entry) {
+    memberForm.reset();
+    memberSelect.value = entry.id;
+    memberForm.elements.accountId.value = entry.id;
+    memberForm.elements.email.value = entry.email || '';
+    memberForm.elements.displayName.value = entry.display_name;
+    memberForm.elements.positionTitle.value = entry.position_title || '';
+    const roles = Object.entries(roleNames).filter(([id]) => entry.role === 'owner' ? id === 'owner' : id !== 'owner');
+    fillOptions(memberRole, roles, [entry.role]);
+    memberRole.disabled = entry.role === 'owner';
+    approvedSectors.hidden = entry.role !== 'department_head';
     for (const checkbox of approvedSectors.querySelectorAll('input')) {
-        checkbox.checked = target?.sectors.includes(checkbox.value) || false;
+        checkbox.checked = entry.sectors.includes(checkbox.value);
+    }
+    ui('member-dialog-status').textContent = '';
+    ui('member-dialog').showModal();
+}
+
+async function renderMemberTable() {
+    const request = ++memberTableRequest;
+    memberTableMessage('회원 목록을 불러오는 중입니다.');
+    const rows = [];
+    for (let offset = 0; ; offset += 200) {
+        const batch = result(await supabase.rpc('evere_owner_members').range(offset, offset + 199));
+        if (request !== memberTableRequest || member?.role !== 'owner') return;
+        rows.push(...batch);
+        if (batch.length < 200) break;
+    }
+    if (!rows.length) { memberTableMessage('등록된 회원이 없습니다.'); return; }
+    const photos = new Map();
+    ui('member-rows').replaceChildren(...rows.map(entry => {
+        const row = element('tr');
+        const avatar = element('td');
+        const placeholder = element('span', Array.from(entry.display_name)[0], 'member-avatar');
+        avatar.append(placeholder);
+        if (entry.avatar_path) photos.set(entry.avatar_path, avatar);
+        row.append(avatar);
+        for (const value of [entry.id, entry.email, entry.display_name, entry.position_title,
+            entry.joined_at && memberDate.format(new Date(entry.joined_at)),
+            entry.last_sign_in_at && memberDate.format(new Date(entry.last_sign_in_at))]) {
+            row.append(element('td', value || '—'));
+        }
+        const actions = element('td');
+        actions.append(actionButton('조회·수정', () => editMember(entry)));
+        row.append(actions);
+        return row;
+    }));
+    const paths = [...photos.keys()];
+    for (let offset = 0; offset < paths.length; offset += 100) {
+        const { data } = await Promise.resolve(avatarBucket.createSignedUrls(paths.slice(offset, offset + 100), 300)).catch(() => ({ data: null }));
+        if (request !== memberTableRequest || member?.role !== 'owner') return;
+        for (const item of data || []) {
+            if (!item.signedUrl || !photos.has(item.path)) continue;
+            const image = element('img', '', 'member-avatar');
+            image.alt = '';
+            image.loading = 'lazy';
+            const cell = photos.get(item.path);
+            image.addEventListener('load', () => cell.replaceChildren(image), { once: true });
+            image.src = item.signedUrl;
+        }
     }
 }
 
@@ -375,6 +436,12 @@ async function refresh() {
         if (headerAvatar) void loadAvatar(member.id).catch(() => {});
         if (articleForm) await loadArticles();
     } else {
+        if (memberForm) {
+            memberTableRequest++;
+            ui('member-dialog').close();
+            memberForm.reset();
+            ui('member-rows').replaceChildren();
+        }
         ui('profile-settings').open = false;
         profileDetails.reset();
         avatarForm.reset();
@@ -499,16 +566,34 @@ if (articleForm && memberForm) {
         label.prepend(input);
         approvedSectors.querySelector('.checkbox-grid').append(label);
     }
-    memberSelect.addEventListener('change', updateMemberForm);
     memberRole.addEventListener('change', () => { approvedSectors.hidden = memberRole.value !== 'department_head'; });
-    memberForm.addEventListener('submit', handle(async () => {
-        const role = memberRole.value;
-        const assigned = role === 'department_head' ? [...approvedSectors.querySelectorAll('input:checked')].map((item) => item.value) : [];
-        result(await supabase.from('evere_members').update({ role, sectors: assigned })
-            .eq('id', memberSelect.value).select('id').single());
-        await refreshMembers();
-        message('회원 권한을 저장했습니다.');
-    }));
+    memberForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const submit = event.submitter || memberForm.querySelector('[type="submit"]');
+        if (submit.disabled || member?.role !== 'owner') return;
+        const status = ui('member-dialog-status');
+        const dialog = ui('member-dialog');
+        submit.disabled = true;
+        status.textContent = '저장 중입니다.';
+        try {
+            const role = memberRole.value;
+            const assigned = role === 'department_head' ? [...approvedSectors.querySelectorAll('input:checked')].map(item => item.value) : [];
+            const name = memberForm.elements.displayName.value.trim();
+            result(await supabase.rpc('evere_owner_save_member', {
+                target: memberSelect.value, new_name: name, new_position: memberForm.elements.positionTitle.value.trim(),
+                new_role: role, new_sectors: assigned,
+            }));
+            if (memberSelect.value === member.id) member.display_name = name;
+            dialog.close();
+            await refreshMembers();
+            message('회원 정보를 저장했습니다.');
+        } catch (error) {
+            if (dialog.open) status.textContent = getError(error);
+            else message('회원 정보 저장 후 목록을 갱신하지 못했습니다.', true);
+        } finally {
+            submit.disabled = false;
+        }
+    });
     articleForm.addEventListener('submit', handle(async () => {
         if (!await compose.save(async (fields) => {
             result(await supabase.from('evere_articles').insert(fields));

@@ -270,3 +270,9 @@
 @media (max-width: 767px) {
     .home-issue-row { grid-template-columns: minmax(0, 1fr); }
 }
+
+.member-table .member-avatar { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; object-fit: cover; background: var(--canvas); color: var(--muted); font-weight: 700; }
+.member-table td:last-child { text-align: right; }
+#member-dialog #members-form { display: grid; gap: 12px; padding: 20px; }
+#member-dialog #members-form > button { justify-self: start; }
+#member-dialog input[readonly] { background: var(--canvas); color: var(--muted); }
