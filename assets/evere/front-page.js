@@ -4,7 +4,6 @@ import { supabase } from './supabase.js';
 import { photoBucket } from './article-content.js?v=inline-1';
 
 const head = document.querySelector('[data-home-articles]');
-const headline = head.querySelector('.headline');
 const primary = head.querySelector('[data-home-primary]');
 const secondary = head.querySelector('[data-home-secondary]');
 const latest = head.querySelector('aside');
@@ -38,7 +37,7 @@ function makeArticle(data, summary = false, thumbnailRatio = '700 / 467') {
 }
 
 async function renderArticles() {
-    const [saved, feed] = await Promise.all([
+    const [saved, feed] = await Promise.allSettled([
         supabase.from('evere_page_slots')
             .select('slot,evere_articles!inner(id,article_number,title,article_label,subtitle,body,status,photo_paths)')
             .eq('page', 'home').eq('category', '').eq('evere_articles.status', 'published').order('slot'),
@@ -46,37 +45,25 @@ async function renderArticles() {
             .eq('status', 'published').order('published_at', { ascending: false, nullsFirst: false })
             .order('id').limit(latestLimit + 3),
     ]);
-    if (saved.error || feed.error) return;
+    const placements = saved.status === 'fulfilled' ? saved.value.data || [] : [];
+    const recent = feed.status === 'fulfilled' ? feed.value.data || [] : [];
 
     const images = [];
     const secondaryList = secondary.querySelector('ul');
     const latestList = latest.querySelector('ul');
     const placed = new Set();
-    for (const { slot, evere_articles: article } of saved.data) {
+    for (const { slot, evere_articles: article } of placements) {
         placed.add(article.id);
         const rendered = makeArticle(article, slot === 1);
         images.push(rendered);
-        if (slot === 1) {
-            primary.append(rendered.article);
-            primary.hidden = false;
-        } else {
-            const item = document.createElement('li');
-            item.className = 'swiper-slide';
-            item.append(rendered.article);
-            secondaryList.append(item);
-        }
+        const item = slot === 1 ? primary : secondaryList.children[slot - 2];
+        item?.replaceChildren(rendered.article);
     }
-    secondary.hidden = !secondaryList.childElementCount;
-    for (const article of feed.data.filter(({ id }) => !placed.has(id)).slice(0, latestLimit)) {
-        const item = document.createElement('li');
+    recent.filter(({ id }) => !placed.has(id)).slice(0, latestLimit).forEach((article, index) => {
         const rendered = makeArticle(article, false, '300 / 200');
-        item.append(rendered.article);
-        latestList.append(item);
+        latestList.children[index].replaceChildren(rendered.article);
         images.push(rendered);
-    }
-    headline.hidden = !placed.size;
-    latest.hidden = !latestList.childElementCount;
-    head.hidden = headline.hidden && latest.hidden;
+    });
 
     const paths = [...new Set(images.map(({ path }) => path).filter(Boolean))];
     if (!paths.length) return;

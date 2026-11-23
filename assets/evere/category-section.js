@@ -20,7 +20,7 @@ if (selected || seriesFilter) {
     contents.classList.add('sub');
     if (selected) {
         const label = tabs.find((tab) => tab.dataset.categoryTab === selected).textContent;
-        document.title = label + ' | ' + document.title;
+        if (!document.title.startsWith(label + ' | ')) document.title = label + ' | ' + document.title;
     }
 
     for (const row of recentList.children) {

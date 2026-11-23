@@ -119,3 +119,14 @@ body > footer .evere-footer-sitemap .menu > ul > li > ul > li:last-child { paddi
     }
 }
 
+
+[data-home-articles] .home-article-placeholder picture {
+    display: block;
+    background: #eee;
+}
+[data-home-articles] .home-article-placeholder div {
+    min-height: 52px;
+    background: linear-gradient(#eee 0 0) left 12px / 78% 10px no-repeat,
+                linear-gradient(#eee 0 0) left 32px / 54% 10px no-repeat;
+}
+[data-home-primary] .home-article-placeholder div { min-height: 94px; }

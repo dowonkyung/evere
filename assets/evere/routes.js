@@ -9,13 +9,15 @@ export function articlePath(article) {
 export function categoryPath(sector, category = '') {
     if (!Object.hasOwn(articleCategories, sector)) throw new Error('Unknown section');
     if (category && !articleCategories[sector].some(([key]) => key === category)) throw new Error('Unknown category');
-    return '/' + sector + (category ? '/' + category : '/');
+    return '/' + sector + (category ? '/' + category + '/' : '/');
 }
 
 export function articleNumberFromURL(href = location.href) {
-    const match = /^\/article\/([1-9]\d*)\/?$/.exec(new URL(href).pathname);
-    if (!match) return null;
-    const number = Number(match[1]);
+    const url = new URL(href);
+    const match = /^\/article\/([1-9]\d*)\/?$/.exec(url.pathname);
+    const candidate = match?.[1] ?? (/^\/article\/(?:index\.html)?$/.test(url.pathname) ? url.searchParams.get('number') : null);
+    if (!/^[1-9]\d*$/.test(candidate ?? '')) return null;
+    const number = Number(candidate);
     return Number.isSafeInteger(number) ? number : null;
 }
 

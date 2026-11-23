@@ -1,0 +1,10 @@
+#evere-header[data-css-pending] {
+    visibility: hidden;
+    overflow: clip;
+    height: 160px;
+}
+#evere-header[data-css-pending][data-compact-only] { height: 62px; }
+@media (max-width: 1023px) {
+    #evere-header[data-css-pending] { height: 90px; }
+    #evere-header[data-css-pending][data-compact-only] { height: 50px; }
+}
