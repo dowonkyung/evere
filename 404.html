@@ -12,10 +12,12 @@
   <noscript>이 페이지를 보려면 JavaScript를 켜 주세요. <a href="/">이브레 홈</a></noscript>
   <script>
     const match = /^\/article\/([1-9]\d*)\/?$/.exec(location.pathname);
-    if (match && Number.isSafeInteger(Number(match[1]))) {
-      const target = new URL('/article/', location.origin);
+    const series = /^\/series\/articles\/([1-9]\d*)\/?$/.exec(location.pathname);
+    const route = match || series;
+    if (route && Number.isSafeInteger(Number(route[1]))) {
+      const target = new URL(series ? '/series/articles/' : '/article/', location.origin);
       target.search = location.search;
-      target.searchParams.set('number', match[1]);
+      target.searchParams.set('number', route[1]);
       target.hash = location.hash;
       location.replace(target);
     } else {

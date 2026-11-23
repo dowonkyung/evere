@@ -19,5 +19,11 @@ export async function recentSeries(sector) {
     const { supabase } = await import('./supabase.js');
     const { data, error } = await supabase.rpc('evere_recent_series', { news_sector: sector });
     if (error) throw error;
-    return data.length === 3 ? data.map(({ id, title }) => ({ id, title, href: seriesLink(sector, id) })) : [];
+    if (data.length !== 3) return [];
+    const { data: numbered, error: numberError } = await supabase.from('evere_series')
+        .select('id,series_number').in('id', data.map(({ id }) => id));
+    const keys = new Map((numbered || []).map(({ id, series_number }) => [id, series_number]));
+    return data.map(({ id, title }) => ({
+        id, title, href: !numberError && keys.has(id) ? '/series/articles/' + keys.get(id) : seriesLink(sector, id),
+    }));
 }

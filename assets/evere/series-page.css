@@ -1,0 +1,39 @@
+.evere-series-page .series-title {
+    padding: 64px 0;
+    margin-top: 21px;
+    border-top: 3px solid var(--stroke-primary);
+    color: var(--text-primary);
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 42px;
+    text-align: center;
+}
+.evere-series-page .contents > div > .info { padding: 24px 0 15px; }
+.evere-series-page .info ul { display: flex; justify-content: space-between; align-items: center; }
+.evere-series-page .info .status { font-size: 18px; line-height: 24px; font-weight: 700; }
+.evere-series-page .info em { color: var(--text-impact); }
+.evere-series-page [hidden] { display: none !important; }
+.evere-series-page #series-follow {
+    padding: 5px 8px;
+    color: #fff;
+    background: var(--surface-impact);
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 16px;
+    cursor: pointer;
+}
+.evere-series-page #series-follow[aria-pressed="true"] { color: var(--text-impact); background: var(--surface-impact-soft); }
+.evere-series-page .series-status:not(:empty) { padding: 20px 0 40px; color: var(--text-description); }
+.evere-series-page .series-pages ul { display: flex; justify-content: center; gap: 8px; padding: 20px 0 60px; }
+.evere-series-page .series-pages :is(a, span) { display: block; padding: 6px 10px; }
+.evere-series-page .series-pages [aria-current] { font-weight: 700; color: var(--text-impact); }
+.evere-series-page #series-recommended > li { border: 1px solid var(--stroke-framing); padding: 11px; border-radius: 8px; margin-bottom: 16px; }
+.evere-series-page #series-recommended article { flex-direction: row; gap: 12px; }
+.evere-series-page #series-recommended .series-bottom { border-top: 1px solid var(--stroke-separator); margin-top: 10px; padding-top: 9px; }
+.evere-series-page #series-recommended .series-bottom a { color: var(--text-impact); font-size: 15px; }
+.evere-series-page picture img { display: block; width: 100%; height: 100%; object-fit: cover; }
+@media (max-width: 767px) {
+    .evere-series-page .series-title { padding: 40px 0; margin-inline: 20px; font-size: 24px; line-height: 32px; }
+    .evere-series-page .contents > div > .info { padding-top: 16px; }
+}
