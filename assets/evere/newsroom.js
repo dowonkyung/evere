@@ -1,7 +1,7 @@
 import { categoryPath } from './routes.js?v=routes-1';
 import { supabase } from './supabase.js';
 import { sectors, articleCategories } from './article-taxonomy.js';
-import { seriesFor } from './series.js';
+import { seriesFor } from './series.js?v=numbered-link-1';
 import { issueUrl, loadHomeIssues, renderHomeIssues } from './home-issues.js?v=issues-1';
 
 const ui = (id) => document.getElementById(id);
@@ -112,7 +112,7 @@ async function loadSeries() {
     const request = ++seriesRequest;
     const rows = await seriesFor(seriesForm.elements.sector.value);
     if (request !== seriesRequest) return;
-    const items = (rows.length ? rows.map(({ title }) => title) : ['등록된 분류가 없습니다.']).map((title) => {
+    const items = (rows.length ? rows.map(({ title, series_number }) => `${series_number}번 · ${title}`) : ['등록된 분류가 없습니다.']).map((title) => {
         const item = document.createElement('li');
         item.textContent = title;
         return item;
@@ -127,13 +127,15 @@ seriesForm.addEventListener('submit', task(async () => {
     const sector = seriesForm.elements.sector.value;
     const title = seriesForm.elements.title.value.trim();
     if (!title) { notify('기획·연재 분류명을 입력해 주세요.', true); return; }
-    const { error } = await supabase.from('evere_series').insert({ sector, title });
+    const { data, error } = await supabase.from('evere_series').insert({ sector, title })
+        .select('series_number').single();
     if (error?.code === '23505') { notify('이 섹터에 같은 이름의 분류가 있습니다.', true); return; }
     if (error) throw error;
     seriesForm.elements.title.value = '';
     document.dispatchEvent(new CustomEvent('evere:series-change', { detail: sector }));
-    await loadSeries();
-    notify('기획·연재 분류를 만들었습니다.');
+    const created = `기획·연재 ${data.series_number}번을 만들었습니다.`;
+    notify(created);
+    await loadSeries().catch(() => notify(created + ' 목록을 갱신하지 못했습니다.', true));
 }));
 
 function resetCategories() {
