@@ -334,6 +334,9 @@ function commentPanel(article) {
 async function openArticle(id) {
     const request = ++dialogRequest;
     const content = ui('article-dialog-content');
+    const publicLink = ui('article-dialog-public');
+    publicLink.hidden = true;
+    publicLink.removeAttribute('href');
     content.replaceChildren();
     articleDialog.showModal();
     message('기사를 불러오는 중입니다.');
@@ -355,9 +358,8 @@ async function openArticle(id) {
 
         const actions = element('div', '', 'article-action dialog-actions');
         if (article.status === 'published') {
-            const link = element('a', '공개 기사 열기');
-            link.href = articlePath(article);
-            actions.append(link);
+            publicLink.href = articlePath(article);
+            publicLink.hidden = false;
         }
         if (canEdit(article.sector)) {
             actions.append(actionButton('기사 삭제', async () => {
