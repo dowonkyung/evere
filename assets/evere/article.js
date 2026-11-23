@@ -1,6 +1,6 @@
 import { articlePageTitle, setArticleTitle } from './article-label.js';
 import { articlePath, articleNumberFromURL } from './routes.js?v=routes-1';
-import { renderBody, renderPhotos, photoBucket } from './article-content.js?v=inline-1';
+import { renderBody, renderPhotos, photoBucket } from './article-content.js?v=caption-1';
 import { seriesFor, seriesLink } from './series.js';
 import { supabase } from './supabase.js';
 import { sectors } from './article-taxonomy.js';
