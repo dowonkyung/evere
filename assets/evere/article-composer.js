@@ -4,10 +4,70 @@ import { seriesFor } from './series.js';
 const photoTypes = new Map([['image/jpeg', 'jpg'], ['image/png', 'png'], ['image/webp', 'webp']]);
 const editors = new Set(['owner', 'director', 'department_head']);
 
+function smartQuote(mark, before) {
+    const opens = !before || /[\s([{<«‹“‘「『【〈《〔〖–—]/u.test(before);
+    return mark === "'" ? (opens ? '‘' : '’') : (opens ? '“' : '”');
+}
+
+function enableInputPunctuation(field) {
+    let ellipsisOffset = -1;
+    let replacing = false;
+
+    function replace(event, start, end, text) {
+        const length = field.value.length - (end - start) + text.length;
+        if (field.maxLength >= 0 && length > field.maxLength) return false;
+        event.preventDefault();
+        replacing = true;
+        try {
+            field.setSelectionRange(start, end);
+            if (!document.execCommand('insertText', false, text)) {
+                field.setRangeText(text, start, end, 'end');
+                field.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+        } finally {
+            replacing = false;
+        }
+        return true;
+    }
+
+    field.addEventListener('beforeinput', event => {
+        if (replacing) return;
+        const previous = ellipsisOffset;
+        ellipsisOffset = -1;
+        if (!event.cancelable || event.isComposing) return;
+
+        const { value, selectionStart: start, selectionEnd: end } = field;
+        if (start === null || end === null) return;
+        if (event.inputType === 'deleteContentBackward' && start === end && start === previous && value[start - 1] === '…') {
+            replace(event, start - 1, start, '...');
+            return;
+        }
+        if (event.inputType !== 'insertText') return;
+        if (event.data === '.' && start === end && start >= 2 && value.slice(start - 2, start) === '..') {
+            if ((field.maxLength < 0 || value.length < field.maxLength) && replace(event, start - 2, end, '…')) {
+                ellipsisOffset = field.selectionStart;
+            }
+            return;
+        }
+        if (event.data === "'" || event.data === '"') replace(event, start, end, smartQuote(event.data, value[start - 1]));
+    });
+
+    field.addEventListener('keydown', event => {
+        if (event.key !== 'Backspace') ellipsisOffset = -1;
+    });
+    for (const event of ['pointerdown', 'blur', 'compositionstart', 'input']) {
+        field.addEventListener(event, () => {
+            if (!replacing) ellipsisOffset = -1;
+        });
+    }
+}
+
 export function articleComposer(form, article = null, { contentOnly = false } = {}) {
     form.replaceChildren(document.getElementById('compose-fields').content.cloneNode(true));
     const find = (name) => form.querySelector(name);
     const { title, subtitle, sector, category, series, writer, guest, omitByline, photos: fileInput } = form.elements;
+    enableInputPunctuation(title);
+    enableInputPunctuation(subtitle);
     const editor = find('.compose-editor');
     const toolbar = find('.compose-toolbar');
     const photoList = find('[data-thumbs]');
@@ -249,9 +309,7 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
         }
         if (event.data !== "'" && event.data !== '"') return;
         const before = previousQuoteCharacter(range);
-        const opens = !before || /[\s([{<«‹“‘「『【〈《〔〖–—]/u.test(before);
-        const quote = event.data === "'" ? (opens ? '‘' : '’') : (opens ? '“' : '”');
-        replacePunctuation(event, range.cloneRange(), target, quote);
+        replacePunctuation(event, range.cloneRange(), target, smartQuote(event.data, before));
     });
     editor.addEventListener('keydown', (event) => {
         if (event.key !== 'Backspace') lastEllipsis = null;
