@@ -36,8 +36,9 @@ function enableReadingHeader(articleTitle) {
         const traveled = headerBottom - titleBottom;
         const fullDistance = traveled + article.getBoundingClientRect().bottom - window.innerHeight;
         const visible = traveled >= 0;
-        navigation.hidden = visible;
-        headline.hidden = !visible;
+        const showHeadline = visible && window.matchMedia('(min-width: 1024px)').matches;
+        navigation.hidden = showHeadline;
+        headline.hidden = !showHeadline;
         progress.hidden = !visible;
         const fraction = visible ? Math.min(1, traveled / Math.max(1, fullDistance)) : 0;
         progress.style.setProperty('--article-progress', fraction);
