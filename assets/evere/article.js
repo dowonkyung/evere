@@ -27,6 +27,10 @@ function enableReadingHeader(articleTitle) {
     const title = ui('title');
     if (!headline || !navigation || !progress) return;
     headline.textContent = articleTitle;
+    const actions = ui('reader-actions');
+    const layout = actions.parentElement;
+    const header = headline.parentElement;
+    const mobile = window.matchMedia('(max-width: 1023px)');
     let scheduled = false;
 
     function update() {
@@ -36,7 +40,19 @@ function enableReadingHeader(articleTitle) {
         const traveled = headerBottom - titleBottom;
         const fullDistance = traveled + article.getBoundingClientRect().bottom - window.innerHeight;
         const visible = traveled >= 0;
-        const showHeadline = visible && window.matchMedia('(min-width: 1024px)').matches;
+        const showTools = visible && mobile.matches;
+        const showHeadline = visible && !mobile.matches;
+        if (showTools !== header.classList.contains('article-tools-active')) {
+            header.classList.toggle('article-tools-active', showTools);
+            for (const panel of toolPanels) panel.open = false;
+            if (showTools) {
+                actions.slot = 'article-tools';
+                host.append(actions);
+            } else {
+                actions.removeAttribute('slot');
+                layout.prepend(actions);
+            }
+        }
         navigation.hidden = showHeadline;
         headline.hidden = !showHeadline;
         progress.hidden = !visible;
@@ -88,7 +104,7 @@ ui('article-native-share').addEventListener('click', async () => {
 });
 const toolPanels = [...ui('reader-actions').querySelectorAll('details')];
 document.addEventListener('click', (event) => {
-    for (const panel of toolPanels) if (!panel.contains(event.target)) panel.open = false;
+    for (const panel of toolPanels) if (!event.composedPath().includes(panel)) panel.open = false;
 });
 ui('reader-actions').addEventListener('keydown', (event) => {
     if (event.key !== 'Escape') return;
