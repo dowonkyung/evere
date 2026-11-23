@@ -235,7 +235,9 @@
 .article-dialog::backdrop { background: #10283678; }
 .article-dialog > header { position: sticky; top: 0; z-index: 1; display: flex; justify-content: space-between; align-items: center; gap: 14px; padding: 14px 18px; border-bottom: 1px solid var(--line); background: var(--surface); }
 .article-dialog h2 { margin: 0; overflow-wrap: anywhere; }
-.article-dialog > header button { flex: none; }
+.article-dialog-tools { display: flex; align-items: center; gap: 8px; flex: none; }
+.article-dialog-public { display: inline-flex; align-items: center; padding: 8px 12px; border-radius: 7px; background: var(--accent); color: #fff; font-size: 14px; font-weight: 650; text-decoration: none; white-space: nowrap; }
+.article-dialog-public:hover { background: var(--accent-hover); }
 #article-dialog-content { padding: clamp(12px, 2vw, 22px); }
 #article-dialog-status { margin: 14px 18px 0; color: var(--muted); }
 #article-dialog-status:empty { display: none; }
