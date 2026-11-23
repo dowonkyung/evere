@@ -2,7 +2,7 @@ import { setArticleTitle } from './article-label.js';
 import { articlePath } from './routes.js?v=routes-1';
 import { supabase } from './supabase.js';
 import { sectors, articleCategories } from './article-taxonomy.js';
-import { articleComposer } from './article-composer.js?v=caption-1';
+import { articleComposer } from './article-composer.js?v=author-draft-1';
 import { renderBody, renderPhotos } from './article-content.js?v=caption-1';
 const roleNames = {
     owner: '총수', director: '국장급', department_head: '부장급', reporter: '평기자', citizen: '시민기자',
@@ -54,6 +54,7 @@ function result(response) {
 
 function getError(error) {
     if (['user_already_exists', 'email_exists'].includes(error.code)) return '이미 등록된 이메일입니다. 로그인해 주세요.';
+    if (error.code === 'EV002') return '기사가 더 이상 작성중 상태가 아닙니다. 목록을 새로고침해 주세요.';
     if (error.code === 'EV001') return '삭제된 이브레 계정입니다.';
     if (error.code === 'weak_password') return '비밀번호가 보안 요건을 충족하지 않습니다.';
     if (error.code === 'email_not_confirmed') return '이메일 인증을 마친 뒤 로그인해 주세요.';
@@ -282,23 +283,31 @@ function actionButton(label, action) {
     return button;
 }
 
-function articleEditor(article) {
+function articleEditor(article, contentOnly) {
     const form = element('form', '', 'newsroom-compose');
-    const editor = articleComposer(form, article);
+    const editor = articleComposer(form, article, { contentOnly });
     dialogEditor = editor;
-    fillOptions(form.elements.sector, Object.entries(sectors).filter(([id]) => canEdit(id)), [article.sector]);
+    fillOptions(form.elements.sector, Object.entries(sectors).filter(([id]) => contentOnly ? id === article.sector : canEdit(id)), [article.sector]);
     setCategories(form, article.category || '');
     editor.setMember(member, members);
     form.elements.sector.addEventListener('change', () => setCategories(form));
     const label = element('label', '상태');
     const state = element('select');
-    fillOptions(state, editorialStates, [article.editorial_state]);
+    fillOptions(state, contentOnly ? editorialStates.slice(0, 2) : editorialStates, [article.editorial_state]);
     label.append(state);
     form.querySelector('.compose-metadata').prepend(label);
     form.querySelector('button[type="submit"]').textContent = '수정 저장';
     form.addEventListener('submit', handle(async () => {
         const nextState = state.value;
         if (!await editor.save(async (fields) => {
+            if (contentOnly) {
+                result(await supabase.rpc('evere_save_author_draft', {
+                    target: article.id, next_state: nextState, new_title: fields.title,
+                    new_subtitle: fields.subtitle, new_body: fields.body,
+                    new_body_html: fields.body_html, new_photo_paths: fields.photo_paths,
+                }));
+                return;
+            }
             result(await supabase.from('evere_articles').update({ ...fields, editorial_state: nextState })
                 .eq('id', article.id).select('id').single());
         })) return;
@@ -373,12 +382,14 @@ async function openArticle(id) {
     message('기사를 불러오는 중입니다.');
     try {
         const article = result(await supabase.from('evere_articles')
-            .select('id,article_number,title,article_label,subtitle,body,body_html,sector,category,series_id,byline,guest_byline,photo_paths,status,editorial_state')
+            .select('id,article_number,title,article_label,subtitle,body,body_html,sector,category,series_id,byline,guest_byline,photo_paths,status,editorial_state,created_by')
             .eq('id', id).single());
         if (!articleDialog.open || request !== dialogRequest) return;
         ui('article-dialog-title').textContent = article.title;
-        if (canEdit(article.sector)) {
-            content.append(articleEditor(article));
+        const editorialAccess = canEdit(article.sector);
+        const ownDraft = article.created_by === member.id && article.editorial_state === 'draft' && article.status === 'pending';
+        if (editorialAccess || ownDraft) {
+            content.append(articleEditor(article, !editorialAccess));
         } else {
             const copy = element('div', '', 'article-body');
             const photos = element('div', '', 'article-photos');
@@ -733,6 +744,11 @@ if (articleForm && memberForm) {
             }
         }));
     }
+    window.addEventListener('hashchange', () => {
+        if (!member || location.hash !== '#review') return;
+        articleOffset = 0;
+        loadArticles().catch((error) => message(getError(error), true));
+    });
     statusFilter.addEventListener('change', () => {
         articleOffset = 0;
         loadArticles().catch((error) => message(getError(error), true));
