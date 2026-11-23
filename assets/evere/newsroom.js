@@ -9,7 +9,27 @@ const panels = [...document.querySelectorAll('[data-panel]')];
 const nav = [...document.querySelectorAll('.newsroom-nav [data-view]')];
 const layout = ui('layout-form');
 const layoutSubmit = layout.querySelector('[type="submit"]');
-const slots = [layout.elements.slot1, layout.elements.slot2, layout.elements.slot3];
+const slots = [...ui('layout-slots').querySelectorAll('select')];
+
+function sectionHeadLayout(page, category) {
+    return page !== 'home' && page !== 'opinion' && category === '';
+}
+
+function configureLayoutSlots(page, category) {
+    const sectionHead = sectionHeadLayout(page, category);
+    const heading = page === 'home' ? '메인 헤드라인' : sectionHead ? '섹션 헤드 기사' : '기사 배치';
+    ui('layout-slot-heading').textContent = heading;
+    const labels = page === 'home' ? ['대표 헤드라인', '보조 헤드라인 1', '보조 헤드라인 2']
+        : sectionHead ? ['대표 기사', '보조 기사 1', '보조 기사 2', '보조 기사 3', '보조 기사 4']
+            : ['첫 번째 기사', '두 번째 기사', '세 번째 기사'];
+    slots.forEach((select, index) => {
+        const label = select.closest('label');
+        label.hidden = index >= labels.length;
+        select.disabled = true;
+        if (!label.hidden) select.previousElementSibling.textContent = labels[index];
+    });
+    return slots.slice(0, labels.length);
+}
 const boardForm = ui('board-form');
 const postForm = ui('board-post-form');
 const seriesForm = ui('series-form');
@@ -120,11 +140,7 @@ function resetCategories() {
     const page = layout.elements.page.value;
     optionList(layout.elements.category, [['', '전체'], ...(articleCategories[page] || [])]);
     layout.elements.category.disabled = page === 'home';
-    const home = page === 'home';
-    ui('layout-slot-heading').textContent = home ? '메인 헤드라인' : '기사 배치';
-    const labels = home ? ['대표 헤드라인', '보조 헤드라인 1', '보조 헤드라인 2']
-        : ['첫 번째 기사', '두 번째 기사', '세 번째 기사'];
-    slots.forEach((slot, i) => { slot.previousElementSibling.textContent = labels[i]; });
+    configureLayoutSlots(page, layout.elements.category.value);
 }
 
 function publicPage(page, category) {
@@ -138,7 +154,7 @@ async function loadLayout() {
     if (!page) return;
     const request = ++layoutRequest;
     layoutSubmit.disabled = true;
-    slots.forEach((select) => { select.disabled = true; });
+    const activeSlots = configureLayoutSlots(page, category);
     ui('public-page').href = publicPage(page, category);
     let articles = supabase.from('evere_articles').select('id,title').eq('status', 'published');
     if (page !== 'home') articles = articles.eq('sector', page);
@@ -155,7 +171,7 @@ async function loadLayout() {
         if (article?.status === 'published' && (page === 'home' || article.sector === page) &&
             (!category || article.category === category)) choices.set(article.id, article.title);
     }
-    slots.forEach((select, i) => {
+    activeSlots.forEach((select, i) => {
         const current = saved.find((item) => item.slot === i + 1)?.article_id;
         optionList(select, [['', '배치하지 않음'], ...choices], choices.has(current) ? current : '');
         select.disabled = false;
@@ -171,7 +187,7 @@ layout.elements.category.addEventListener('change', () => {
     loadLayout().catch(() => notify('화면 배치를 불러오지 못했습니다.', true));
 });
 layout.addEventListener('submit', task(async () => {
-    const articleIds = slots.map((select) => select.value || null);
+    const articleIds = slots.filter((select) => !select.closest('label').hidden).map((select) => select.value || null);
     const populated = articleIds.filter(Boolean);
     if (new Set(populated).size !== populated.length) {
         notify('같은 기사는 한 위치에만 배치해 주세요.', true);
