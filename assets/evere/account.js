@@ -53,6 +53,9 @@ function result(response) {
 }
 
 function getError(error) {
+    if (['user_already_exists', 'email_exists'].includes(error.code)) return '이미 등록된 이메일입니다. 로그인해 주세요.';
+    if (error.code === 'EV001') return '삭제된 이브레 계정입니다.';
+    if (error.code === 'weak_password') return '비밀번호가 보안 요건을 충족하지 않습니다.';
     if (error.code === 'email_not_confirmed') return '이메일 인증을 마친 뒤 로그인해 주세요.';
     if (error.code === 'invalid_credentials') return '이메일 또는 비밀번호를 확인해 주세요.';
     if (error.code === 'over_email_send_rate_limit') return '잠시 뒤 인증 이메일을 다시 요청해 주세요.';
@@ -213,6 +216,9 @@ function editMember(entry) {
         checkbox.checked = entry.sectors.includes(checkbox.value);
     }
     ui('member-dialog-status').textContent = '';
+    ui('member-remove').disabled = entry.role === 'owner';
+    ui('member-recovery-link').hidden = true;
+    ui('member-recovery-link').value = '';
     ui('member-photo-status').textContent = '';
     ui('member-dialog').showModal();
     void setMemberPhoto(entry.avatar_path, entry.id).catch(() => {});
@@ -454,10 +460,13 @@ async function loadArticles() {
 async function refresh() {
     const { session } = result(await supabase.auth.getSession());
     user = session ? result(await supabase.auth.getUser()).user : null;
-    member = user ? result(await supabase.from('evere_members').select('id,display_name,role,sectors').eq('id', user.id).maybeSingle()) : null;
+    member = user ? result(await supabase.from('evere_members').select('id,display_name,role,sectors,removed_at').eq('id', user.id).maybeSingle()) : null;
     ui('sign-out').hidden = !user;
     ui('access').hidden = Boolean(user);
-    ui('profile-setup').hidden = !user || Boolean(member);
+    const removed = Boolean(member?.removed_at);
+    if (removed) member = null;
+    ui('profile-setup').hidden = !user || Boolean(member) || removed;
+    if (removed) message('삭제된 이브레 계정입니다.', true);
     ui('workspace').hidden = !member;
     if (headerAvatar) ui('newsroom-identity').hidden = !member;
     if (user && !member) ui('profile-form').elements.displayName.value = user.user_metadata?.evere_display_name || '';
@@ -496,16 +505,28 @@ accessForm.addEventListener('submit', handle(async () => {
             accessForm.elements.displayName.focus();
             return;
         }
-        result(await supabase.auth.signUp({
+        const signup = await supabase.auth.signUp({
             email, password,
             options: {
                 emailRedirectTo: accountUrl(),
                 data: { evere_app: 'evere', evere_display_name: name },
             },
-        }));
+        });
+        if (['user_already_exists', 'email_exists'].includes(signup.error?.code)) {
+            isSignup = false;
+            setAccessMode();
+            accessForm.elements.password.value = '';
+            message(getError(signup.error), true);
+            return;
+        }
+        const { session } = result(signup);
         accessForm.elements.password.value = '';
+        if (session) {
+            await refresh();
+            return;
+        }
         ui('resend').hidden = false;
-        message('이메일 인증을 마친 뒤 이브레로 돌아와 로그인해 주세요. 이미 계정이 있다면 바로 로그인할 수 있습니다.');
+        message('이메일 인증을 마친 뒤 이브레로 돌아와 로그인해 주세요.');
     } else {
         const response = await supabase.auth.signInWithPassword({ email, password });
         if (response.error?.code === 'email_not_confirmed') ui('resend').hidden = false;
@@ -653,6 +674,43 @@ if (articleForm && memberForm) {
             submit.disabled = false;
         }
     });
+    for (const action of ['remove', 'recovery']) {
+        const button = ui('member-' + action);
+        button.addEventListener('click', async () => {
+            const target = memberSelect.value;
+            const dialog = ui('member-dialog');
+            const status = ui('member-dialog-status');
+            const link = ui('member-recovery-link');
+            if (!target || button.disabled) return;
+            const remove = action === 'remove';
+            if (remove && !window.confirm('이브레 계정을 삭제할까요? 작성한 기사와 댓글은 유지됩니다.')) return;
+            button.disabled = true;
+            link.hidden = true;
+            link.value = '';
+            status.textContent = '';
+            try {
+                if (remove) {
+                    result(await supabase.rpc('evere_owner_remove_member', { target }));
+                    if (dialog.open && memberSelect.value === target) dialog.close();
+                    await refreshMembers();
+                    message('이브레 계정을 삭제했습니다.');
+                } else {
+                    const data = result(await supabase.functions.invoke('evere-member-recovery', { body: { target } }));
+                    if (!dialog.open || memberSelect.value !== target) return;
+                    link.value = data.link;
+                    link.hidden = false;
+                    link.select();
+                    status.textContent = '일회용 링크를 복사해 해당 회원에게만 전달해 주세요.';
+                }
+            } catch (error) {
+                if (dialog.open && memberSelect.value === target) {
+                    status.textContent = remove ? getError(error) : '초기화 링크를 만들지 못했습니다. 다시 시도해 주세요.';
+                }
+            } finally {
+                if (memberSelect.value === target) button.disabled = false;
+            }
+        });
+    }
     articleForm.addEventListener('submit', handle(async () => {
         if (!await compose.save(async (fields) => {
             result(await supabase.from('evere_articles').insert(fields));
