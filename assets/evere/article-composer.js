@@ -171,6 +171,97 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
         rememberSelection();
         updateEditorCount();
     }
+    let lastEllipsis = null;
+    let replacingPunctuation = false;
+
+    function editorRange() {
+        const current = window.getSelection();
+        if (!current?.rangeCount) return null;
+        const range = current.getRangeAt(0);
+        return editor.contains(range.startContainer) && editor.contains(range.endContainer) ? range : null;
+    }
+
+    function replacePunctuation(event, original, target, text) {
+        const current = window.getSelection();
+        replacingPunctuation = true;
+        let inserted;
+        try {
+            current.removeAllRanges();
+            current.addRange(target);
+            inserted = document.execCommand('insertText', false, text);
+        } finally {
+            replacingPunctuation = false;
+        }
+        if (!inserted) {
+            current.removeAllRanges();
+            current.addRange(original);
+            return false;
+        }
+        event.preventDefault();
+        rememberSelection();
+        updateEditorCount();
+        return true;
+    }
+
+    function previousQuoteCharacter(range) {
+        const node = range.startContainer;
+        if (node.nodeType === Node.TEXT_NODE && range.startOffset > 0) {
+            return node.data.slice(range.startOffset - 1, range.startOffset);
+        }
+        const parent = node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
+        const block = parent.closest('p, div, blockquote, li');
+        const preceding = range.cloneRange();
+        preceding.selectNodeContents(block && editor.contains(block) ? block : editor);
+        preceding.setEnd(node, range.startOffset);
+        const end = preceding.cloneContents().lastChild;
+        if (end?.nodeName === 'BR' || end?.nodeName === 'DIV' || end?.nodeName === 'P') return '';
+        return preceding.toString().slice(-1);
+    }
+
+    editor.addEventListener('beforeinput', (event) => {
+        if (replacingPunctuation) return;
+        const previous = lastEllipsis;
+        lastEllipsis = null;
+        if (!event.cancelable || event.isComposing) return;
+
+        const range = editorRange();
+        if (!range) return;
+        const node = range.startContainer;
+        const offset = range.startOffset;
+        const textNode = node.nodeType === Node.TEXT_NODE;
+        const target = range.cloneRange();
+        if (event.inputType === 'deleteContentBackward' && previous && range.collapsed &&
+            node === previous.node && offset === previous.offset && node.data[offset - 1] === '…') {
+            target.setStart(node, offset - 1);
+            replacePunctuation(event, range.cloneRange(), target, '...');
+            return;
+        }
+        if (event.inputType !== 'insertText') return;
+        if (event.data === '.' && range.collapsed && textNode && offset >= 2 && node.data.slice(offset - 2, offset) === '..') {
+            target.setStart(node, offset - 2);
+            if (replacePunctuation(event, range.cloneRange(), target, '…')) {
+                const caret = editorRange();
+                if (caret?.collapsed && caret.startContainer.nodeType === Node.TEXT_NODE) {
+                    lastEllipsis = { node: caret.startContainer, offset: caret.startOffset };
+                }
+            }
+            return;
+        }
+        if (event.data !== "'" && event.data !== '"') return;
+        const before = previousQuoteCharacter(range);
+        const opens = !before || /[\s([{<«‹“‘「『【〈《〔〖–—]/u.test(before);
+        const quote = event.data === "'" ? (opens ? '‘' : '’') : (opens ? '“' : '”');
+        replacePunctuation(event, range.cloneRange(), target, quote);
+    });
+    editor.addEventListener('keydown', (event) => {
+        if (event.key !== 'Backspace') lastEllipsis = null;
+    });
+    for (const event of ['pointerdown', 'blur', 'compositionstart', 'input']) {
+        editor.addEventListener(event, () => {
+            if (!replacingPunctuation) lastEllipsis = null;
+        });
+    }
+
     toolbar.addEventListener('mousedown', (event) => {
         if (event.target.closest('button')) event.preventDefault();
     });
@@ -402,6 +493,7 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
             form.reset();
             editor.replaceChildren();
             selection = null;
+            lastEllipsis = null;
             byline = member ? [member.id] : [];
             guests = [];
             allowsOmission = false;
