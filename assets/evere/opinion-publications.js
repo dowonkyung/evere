@@ -1,4 +1,5 @@
 import { requestedSeries, seriesFor } from './series.js';
+import { setArticleTitle } from './article-label.js';
 
 const main = document.querySelector('main');
 const category = main.dataset.opinionCategory;
@@ -7,7 +8,7 @@ const series = requestedSeries();
 const dateFormat = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' });
 
 try {
-    const { publishedFeed } = await import('./published-feed.js?v=routes-1');
+    const { publishedFeed } = await import('./published-feed.js?v=article-label-1');
     const rows = await publishedFeed('opinion', category, series);
     if (series) {
         const name = (await seriesFor('opinion')).find(({ id }) => id === series)?.title || '기획·연재';
@@ -33,7 +34,7 @@ try {
         const info = document.createElement('div');
         const link = document.createElement('a');
         link.href = entry.href;
-        link.textContent = entry.title;
+        setArticleTitle(link, entry.title, entry.article_label);
         const description = document.createElement('p');
         description.className = 'desc';
         description.textContent = entry.summary;
@@ -50,4 +51,3 @@ try {
     // The saved list is still available.
 }
 if (category || series) await import('./opinion-list.js?v=categories-1');
-
