@@ -1,7 +1,7 @@
+import { setArticleTitle } from './article-label.js';
 import { formattedBody, photoBucket, photoFigure, photoImage, placePhotoImages, renderBody } from './article-content.js?v=inline-1';
 import { sectors } from './article-taxonomy.js';
 import { seriesFor } from './series.js';
-import { setArticleTitle } from './article-label.js';
 
 const photoTypes = new Map([['image/jpeg', 'jpg'], ['image/png', 'png'], ['image/webp', 'webp']]);
 const editors = new Set(['owner', 'director', 'department_head']);
@@ -27,8 +27,8 @@ export function articleComposer(form, article = null) {
     let allowsOmission = false;
 
     const label = form.elements.articleLabel;
-    title.value = article?.title || '';
     label.value = article?.article_label || '';
+    title.value = article?.title || '';
     subtitle.value = article?.subtitle || '';
     renderBody(editor, article || {});
 
@@ -417,8 +417,7 @@ export function articleComposer(form, article = null) {
             const safe = document.createElement('div');
             safe.append(formattedBody(editor.innerHTML));
             const fields = {
-                title: title.value.trim(), article_label: label.value,
-                subtitle: subtitle.value.trim(), body, body_html: safe.innerHTML,
+                title: title.value.trim(), article_label: label.value, subtitle: subtitle.value.trim(), body, body_html: safe.innerHTML,
                 sector: sector.value, category: form.elements.category.value || null, series_id: selectedSeries || null,
                 byline: omitByline.checked ? [] : [...byline],
                 guest_byline: omitByline.checked ? [] : [...guests], photo_paths: [],
