@@ -108,7 +108,7 @@
 .newsroom button:not(:disabled):hover { border-color: #a8c9ce; }
 .newsroom button[type="submit"] { background: var(--accent); border-color: var(--accent); color: #fff; }
 .newsroom button[type="submit"]:not(:disabled):hover { background: var(--accent-hover); }
-.newsroom :is(.compose-paper, .compose-media, .newsroom-preview, #layout-form, .newsroom-board-grid > form,
+.newsroom :is(.compose-paper, .compose-media, #layout-form, .newsroom-board-grid > form,
               .series-management > *, .article-section, #profile-settings, #membership-admin) {
   min-width: 0;
   padding: clamp(16px, 2vw, 24px);
@@ -121,8 +121,7 @@
 .newsroom-compose { display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(255px, 1fr); gap: 16px; align-items: start; }
 .newsroom .compose-paper { padding: 0; }
 .compose-metadata { display: grid; gap: 16px; padding: clamp(16px, 2vw, 25px); }
-.compose-heading, .compose-body h2, .compose-media h2, .newsroom-preview h2 { margin: 0; font-size: 15px; font-weight: 750; }
-.compose-title input { font-size: clamp(17px, 2vw, 21px); font-weight: 650; }
+.compose-heading, .compose-body h2, .compose-media h2 { margin: 0; font-size: 15px; font-weight: 750; }
 .compose-section-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(130px, 100%), 1fr)); gap: 10px; }
 .compose-byline { min-width: 0; margin: 0; padding: 12px; border: 1px solid var(--line); border-radius: 8px; }
 .compose-byline legend { padding-inline: 5px; }
@@ -165,17 +164,22 @@
 .compose-thumbs img { width: 48px; height: 42px; object-fit: cover; border-radius: 5px; }
 .compose-media-help { color: var(--muted); font-size: 13px; line-height: 1.45; margin-bottom: 0; }
 .photo-placement { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px; }
-.photo-placement input { grid-column: 1 / -1; }
+.photo-placement :is(input, textarea) { grid-column: 1 / -1; }
+.photo-placement textarea { background: var(--canvas); padding: 6px; }
+.compose-title-row { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 8px; }
+.compose-title-label { grid-column: 1 / -1; font-size: 15px; font-weight: 600; }
+.align-icon { display: grid; gap: 2px; width: 15px; justify-items: start; }
+.align-icon i { display: block; width: 100%; height: 1.5px; background: currentColor; }
+.align-icon:not(.align-justify) i:nth-child(even) { width: 65%; }
+.align-center { justify-items: center; }
+.align-right { justify-items: end; }
+.newsroom figcaption :is(.photo-caption-title, .photo-caption-description) { display: block; }
+.newsroom figcaption .photo-caption-description { color: var(--muted); white-space: pre-line; }
+.newsroom figcaption :is(.photo-caption-title, .photo-caption-description):empty { display: none; }
 .photo-placement button { border: 1px solid var(--line); background: var(--tint); padding: 6px; text-decoration: none; }
 .photo-placement select, .photo-placement input { padding: 6px; }
 .compose-feedback { grid-row: 1; margin: 0; padding: 10px; border-radius: 8px; background: #fff1ef; color: #94302e; font-size: 14px; }
 .compose-feedback:empty { display: none; }
-.newsroom-preview { min-height: 175px; }
-.newsroom-preview h2 { padding-bottom: 12px; border-bottom: 1px solid var(--line); }
-.newsroom-preview h3 { margin: 8px 0; font-size: 21px; overflow-wrap: anywhere; }
-.newsroom-preview p { color: var(--muted); overflow-wrap: anywhere; }
-.newsroom-preview [data-preview-sector] { color: var(--accent-hover); font-weight: 650; font-size: 13px; }
-.newsroom-preview [data-preview-byline]:empty { display: none; }
 
 .series-management { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 16px; }
 .series-management h2, .newsroom .article-section h2 { margin: 0 0 14px; font-size: 17px; }
@@ -277,7 +281,6 @@
 #member-dialog #members-form > button { justify-self: start; }
 #member-dialog input[readonly] { background: var(--canvas); color: var(--muted); }
 
-.compose-article-label { max-width: 180px; }
 .newsroom .tag { display: inline-block; vertical-align: .1em; padding: 0 4px; margin-inline-end: 8px; border-radius: 2px; font-size: 12px; font-weight: 600; line-height: 18px; color: #fff; }
 .newsroom .tag-red { background: #f25050; }
 .newsroom .tag-blue { background: #4c70e8; }
