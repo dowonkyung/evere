@@ -1,5 +1,5 @@
 import { articlePath, articleNumberFromURL } from './routes.js?v=routes-1';
-import { renderBody, renderPhotos } from './article-content.js?v=inline-1';
+import { renderBody, renderPhotos, photoBucket } from './article-content.js?v=inline-1';
 import { seriesFor, seriesLink } from './series.js';
 import { supabase } from './supabase.js';
 import { sectors } from './article-taxonomy.js';
@@ -97,21 +97,47 @@ ui('reader-actions').addEventListener('keydown', (event) => {
     }
 });
 
-async function showRelated(sector) {
-    const { data, error } = await supabase.from('evere_articles').select('id,article_number,title')
-        .eq('sector', sector).eq('status', 'published').neq('id', articleId)
-        .order('published_at', { ascending: false }).order('id').limit(5);
-    if (error || !data.length) return;
+async function showTopArticles() {
+    const fields = 'id,article_number,title,photo_paths';
+    const [featured, recent] = await Promise.all([
+        supabase.from('evere_page_slots').select('slot,evere_articles!inner(' + fields + ')')
+            .eq('page', 'home').eq('category', '').eq('evere_articles.status', 'published').order('slot'),
+        supabase.from('evere_articles').select(fields)
+            .eq('status', 'published').neq('id', articleId)
+            .order('published_at', { ascending: false, nullsFirst: false }).order('id').limit(5),
+    ]);
+    const entries = new Map();
+    for (const row of [...(featured.data || []).map(item => item.evere_articles), ...(recent.data || [])]) {
+        if (row && row.id !== articleId && !entries.has(row.id)) entries.set(row.id, row);
+    }
+    const rows = [...entries.values()].slice(0, 5);
+    if (!rows.length) return;
     const related = ui('article-related');
-    related.querySelector('ul').replaceChildren(...data.map(({ article_number, title }) => {
+    const links = rows.map((article) => {
         const item = document.createElement('li');
         const link = document.createElement('a');
-        link.href = articlePath({ article_number });
-        link.textContent = title;
+        link.href = articlePath(article);
+        const title = document.createElement('span');
+        title.textContent = article.title;
+        link.append(title);
         item.append(link);
-        return item;
-    }));
+        return { item, link, path: article.photo_paths?.[0] };
+    });
+    related.querySelector('ul').replaceChildren(...links.map(({ item }) => item));
     related.hidden = false;
+    const paths = [...new Set(links.map(({ path }) => path).filter(Boolean))];
+    if (!paths.length) return;
+    const { data } = await photoBucket.createSignedUrls(paths, 3600);
+    const urls = new Map((data || []).map(({ path, signedUrl }) => [path, signedUrl]));
+    for (const { link, path } of links) {
+        if (!urls.get(path)) continue;
+        const image = document.createElement('img');
+        image.alt = '';
+        image.loading = 'lazy';
+        image.src = urls.get(path);
+        image.addEventListener('error', () => image.remove(), { once: true });
+        link.append(image);
+    }
 }
 
 function checked(response) {
@@ -200,6 +226,7 @@ async function render() {
     ui('sector').replaceChildren(sectionLink);
     ui('title').textContent = data.title;
     ui('subtitle').textContent = data.subtitle;
+    ui('editor-subtitle').hidden = !data.subtitle?.trim();
     renderBody(ui('body'), data);
     void renderPhotos(ui('article-photos'), data.photo_paths, ui('body')).catch(() => {});
     if (data.published_at) {
@@ -213,7 +240,7 @@ async function render() {
     ui('reader-actions').hidden = false;
     // Optional reading controls must never turn a displayed article into a load failure.
     try { enableReadingHeader(data.title); } catch (error) { console.warn('Reading header unavailable', error); }
-    void showRelated(data.sector).catch(() => {});
+    void showTopArticles().catch(() => {});
     if (data.series_id) void seriesFor(data.sector).then((rows) => {
         const selected = rows.find(({ id }) => id === data.series_id);
         if (!selected) return;
