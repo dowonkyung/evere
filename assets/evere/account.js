@@ -255,7 +255,6 @@ async function renderMemberTable() {
             if (!item.signedUrl || !photos.has(item.path)) continue;
             const image = element('img', '', 'member-avatar');
             image.alt = '';
-            image.loading = 'lazy';
             const cell = photos.get(item.path);
             image.addEventListener('load', () => cell.replaceChildren(image), { once: true });
             image.src = item.signedUrl;
