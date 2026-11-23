@@ -1,7 +1,7 @@
 import { articlePageTitle, setArticleTitle } from './article-label.js';
 import { articlePath, articleNumberFromURL } from './routes.js?v=direct-route-1';
 import { renderBody, renderPhotos, photoBucket } from './article-content.js?v=caption-1';
-import { seriesFor, seriesLink } from './series.js';
+import { seriesFor, seriesLink } from './series.js?v=numbered-link-1';
 import { supabase } from './supabase.js';
 import { sectors } from './article-taxonomy.js';
 
@@ -276,8 +276,22 @@ async function render() {
         const selected = rows.find(({ id }) => id === data.series_id);
         if (!selected) return;
         const link = document.createElement('a');
-        link.href = seriesLink(data.sector, selected.id);
+        link.className = 'reader-series-link';
+        link.href = seriesLink(data.sector, selected.id, selected.series_number);
         link.textContent = selected.title;
+        const svgNamespace = 'http://www.w3.org/2000/svg';
+        const arrow = document.createElementNS(svgNamespace, 'svg');
+        for (const [name, value] of Object.entries({
+            width: '16', height: '16', viewBox: '0 0 16 16', fill: 'none',
+            'aria-hidden': 'true', focusable: 'false',
+        })) arrow.setAttribute(name, value);
+        const path = document.createElementNS(svgNamespace, 'path');
+        for (const [name, value] of Object.entries({
+            d: 'M6.5 3.5L11.5 8L6.5 12.5', stroke: 'currentColor', 'stroke-width': '1.5',
+            'stroke-linecap': 'round', 'stroke-linejoin': 'round',
+        })) path.setAttribute(name, value);
+        arrow.append(path);
+        link.append(arrow);
         ui('sector').append(link);
     }).catch(() => {});
     ui('comments-section').hidden = false;

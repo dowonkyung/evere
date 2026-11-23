@@ -180,3 +180,9 @@
 .reader-dark .article-body figcaption .photo-caption-title { color: inherit; }
 
 .reader-type-icon small { font-size: .7em; }
+
+.reader-sector:has(.reader-series-link) { column-gap: 4px; }
+.reader-sector:has(.reader-series-link) > :first-child { color: var(--text-primary, #151515); }
+.reader-dark .reader-sector:has(.reader-series-link) > :first-child { color: inherit; }
+.reader-sector .reader-series-link { display: inline-flex; align-items: center; color: var(--evere-accent, #00B8B4); }
+.reader-series-link svg { flex: none; }
