@@ -5,20 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#00B8B4">
   <title>이브레 뉴스룸</title>
-  <link rel="icon" href="/assets/evere/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../assets/evere/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
-  <link rel="stylesheet" href="/assets/evere/account.css?v=newsroom-4">
-  <link rel="stylesheet" href="/assets/evere/newsroom.css?v=members-1">
-  <script type="module" src="/assets/evere/account.js?v=members-1"></script>
-  <script type="module" src="/assets/evere/newsroom.js?v=routes-1"></script>
-<script type="module" src="/assets/evere/route-init.js?v=routes-1"></script>
+  <link rel="stylesheet" href="../assets/evere/account.css?v=newsroom-4">
+  <link rel="stylesheet" href="../assets/evere/newsroom.css?v=article-label-1">
+  <script type="module" src="../assets/evere/account.js?v=article-label-1"></script>
+  <script type="module" src="../assets/evere/newsroom.js?v=headlines-1"></script>
 </head>
 <body class="newsroom">
   <header class="newsroom-header">
-    <a class="newsroom-brand" href="/newsroom/" aria-label="이브레 뉴스룸"><img src="/assets/evere/newsroom-logo-white.svg" alt="이브레 뉴스룸"></a>
+    <a class="newsroom-brand" href="./" aria-label="이브레 뉴스룸"><img src="../assets/evere/newsroom-logo-white.svg" alt="이브레 뉴스룸"></a>
     <nav aria-label="뉴스룸 링크">
-      <a href="/">이브레 홈</a>
-      <a href="/boards/">게시판</a>
+      <a href="../">이브레 홈</a>
+      <a href="../boards/">게시판</a>
       <div class="newsroom-session">
         <div class="newsroom-identity" id="newsroom-identity" hidden>
           <img id="newsroom-avatar" width="30" height="30" alt="" hidden>
@@ -75,6 +74,13 @@
             <div class="compose-paper">
               <div class="compose-metadata">
                 <h2 class="compose-heading">기사 정보</h2>
+                <label class="compose-article-label">기사 표시
+                  <select name="articleLabel">
+                    <option value="">일반</option>
+                    <option value="exclusive">단독</option>
+                    <option value="breaking">속보</option>
+                  </select>
+                </label>
                 <label class="compose-title">제목<input name="title" maxlength="200" placeholder="기사 제목을 입력하세요" required></label>
                 <label>부제목<textarea name="subtitle" maxlength="500" rows="2" placeholder="부제목을 입력하세요"></textarea></label>
                 <div class="compose-section-fields">
@@ -197,21 +203,8 @@
             </fieldset>
             <div class="article-action">
               <button type="submit" disabled>화면 배치 저장</button>
-              <a id="public-page" href="/" target="_blank" rel="noopener">공개 페이지 열기</a>
+              <a id="public-page" href="../" target="_blank" rel="noopener">공개 페이지 열기</a>
             </div>
-          </form>
-          <form id="home-issues-form" hidden>
-            <h2>메인 이슈 링크</h2>
-            <p>표시 이름과 링크를 입력하세요. 추가한 순서대로 메인에 나란히 표시됩니다.</p>
-            <fieldset id="home-issues-fields" disabled>
-              <legend>이슈 항목</legend>
-              <div id="home-issues-rows"></div>
-              <button id="add-home-issue" type="button">이슈 추가</button>
-              <p>미리보기</p>
-              <ul id="home-issues-preview" aria-label="이슈 미리보기"></ul>
-              <button type="submit">이슈 링크 저장</button>
-            </fieldset>
-            <p id="home-issues-status" role="status" aria-live="polite"></p>
           </form>
         </section>
         <section data-panel="profile" hidden>
@@ -239,28 +232,15 @@
         </section>
         <section data-panel="members" data-owner hidden>
           <h1>회원 관리</h1>
-          <section id="membership-admin" aria-label="회원 목록" hidden>
-            <div class="article-table-scroll" tabindex="0" role="region" aria-label="회원 목록 표">
-              <table class="article-table member-table">
-                <thead><tr><th scope="col">프로필 사진</th><th scope="col">아이디</th><th scope="col">이메일 주소</th><th scope="col">이름</th><th scope="col">직위</th><th scope="col">가입일</th><th scope="col">최근 로그인</th><th scope="col">관리</th></tr></thead>
-                <tbody id="member-rows"></tbody>
-              </table>
-            </div>
-          </section>
-          <dialog id="member-dialog" class="article-dialog" aria-labelledby="member-dialog-title">
-            <header><h2 id="member-dialog-title">회원 조회·수정</h2><form method="dialog"><button>닫기</button></form></header>
-            <form id="members-form">
-              <input type="hidden" name="member">
-              <label>아이디<input name="accountId" readonly></label>
-              <label>이메일 주소<input name="email" readonly></label>
-              <label>이름<input name="displayName" maxlength="40" required></label>
-              <label>직위<input name="positionTitle" maxlength="60"></label>
-              <label>등급<select name="role" required></select></label>
-              <fieldset class="sector-fields" hidden><legend>담당 섹터</legend><div class="checkbox-grid"></div></fieldset>
-              <button type="submit">회원 정보 저장</button>
-              <p id="member-dialog-status" role="status"></p>
-            </form>
-          </dialog>
+          <details id="membership-admin" open hidden>
+        <summary>회원 등급 및 섹터 관리</summary>
+        <form id="members-form">
+          <label>회원<select name="member" required></select></label>
+          <label>등급<select name="role" required></select></label>
+          <fieldset class="sector-fields" hidden><legend>승인된 섹터</legend><div class="checkbox-grid"></div></fieldset>
+          <button type="submit">권한 저장</button>
+        </form>
+      </details>
         </section>
         <section data-panel="boards" data-owner hidden>
           <h1>게시판 관리</h1>
@@ -297,5 +277,3 @@
   </dialog>
 </body>
 </html>
-
-
