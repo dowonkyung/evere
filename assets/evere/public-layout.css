@@ -22,3 +22,13 @@
 @media (max-width: 767px) {
     .evere-front-placements { margin-inline: 20px; }
 }
+
+.evere-section .head + .contents.sub {
+    margin-block-start: 72px;
+}
+
+@media (max-width: 1023px) {
+    .evere-section .head + .contents.sub {
+        margin-block-start: 52px;
+    }
+}
