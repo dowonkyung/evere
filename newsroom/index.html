@@ -8,8 +8,8 @@
   <link rel="icon" href="/assets/evere/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="/assets/evere/account.css?v=newsroom-4">
-  <link rel="stylesheet" href="/assets/evere/newsroom.css?v=members-label-2">
-  <script type="module" src="/assets/evere/account.js?v=members-label-2"></script>
+  <link rel="stylesheet" href="/assets/evere/newsroom.css?v=caption-1">
+  <script type="module" src="/assets/evere/account.js?v=caption-1"></script>
   <script type="module" src="/assets/evere/newsroom.js?v=routes-1"></script>
 <script type="module" src="/assets/evere/route-init.js?v=routes-1"></script>
 </head>
@@ -75,10 +75,11 @@
             <div class="compose-paper">
               <div class="compose-metadata">
                 <h2 class="compose-heading">기사 정보</h2>
-                <label class="compose-article-label">기사 표시
-                  <select name="articleLabel"><option value="">일반</option><option value="exclusive">단독</option><option value="breaking">속보</option></select>
-                </label>
-                <label class="compose-title">제목<input name="title" maxlength="200" placeholder="기사 제목을 입력하세요" required></label>
+                <div class="compose-title-row">
+                  <span class="compose-title-label" aria-hidden="true">제목</span>
+                  <select name="articleLabel" aria-label="기사 표시"><option value="">일반</option><option value="exclusive">단독</option><option value="breaking">속보</option></select>
+                  <input name="title" aria-label="제목" maxlength="200" placeholder="기사 제목을 입력하세요" required>
+                </div>
                 <label>부제목<textarea name="subtitle" maxlength="500" rows="2" placeholder="부제목을 입력하세요"></textarea></label>
                 <div class="compose-section-fields">
                   <label>섹터<select name="sector" required></select></label>
@@ -114,10 +115,10 @@
                   <button type="button" data-command="italic" aria-label="기울임"><i>I</i></button>
                   <button type="button" data-command="underline" aria-label="밑줄"><u>U</u></button>
                   <button type="button" data-command="strikeThrough" aria-label="취소선"><s>S</s></button>
-                  <button type="button" data-command="justifyLeft">왼쪽맞춤</button>
-                  <button type="button" data-command="justifyCenter">가운데맞춤</button>
-                  <button type="button" data-command="justifyRight">오른쪽맞춤</button>
-                  <button type="button" data-command="justifyFull">양쪽맞춤</button>
+                  <button type="button" data-command="justifyLeft" title="왼쪽맞춤" aria-label="왼쪽맞춤"><span class="align-icon align-left" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button>
+                  <button type="button" data-command="justifyCenter" title="가운데맞춤" aria-label="가운데맞춤"><span class="align-icon align-center" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button>
+                  <button type="button" data-command="justifyRight" title="오른쪽맞춤" aria-label="오른쪽맞춤"><span class="align-icon align-right" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button>
+                  <button type="button" data-command="justifyFull" title="양쪽맞춤" aria-label="양쪽맞춤"><span class="align-icon align-justify" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button>
                   <label>글 색상<input type="color" data-format="foreColor" value="#151515"></label>
                   <label>글씨 크기<select data-format="fontSize">
                     <option value="">크기 선택</option>
@@ -140,15 +141,6 @@
                 </label>
                 <p class="compose-media-help">사진을 본문에 붙여넣거나 끌어놓을 수 있습니다. 삽입한 사진을 클릭하면 캡션과 정렬을 편집할 수 있습니다.</p>
                 <ul class="compose-thumbs" data-thumbs aria-label="첨부 사진"></ul>
-              </section>
-              <section class="newsroom-preview" aria-label="기사 미리보기">
-                <h2>미리보기</h2>
-                <p data-preview-sector></p>
-                <h3 data-preview-title>기사 제목</h3>
-                <p data-preview-subtitle class="article-subtitle"></p>
-                <p data-preview-byline class="article-meta"></p>
-                <div data-preview-photos class="article-photos"></div>
-                <div data-preview-body class="article-body"></div>
               </section>
               <p class="compose-feedback" data-compose-feedback role="status"></p>
             </aside>
