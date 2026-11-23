@@ -10,10 +10,11 @@
 <link rel="stylesheet" href="./assets/khan/swiper-bundle.min.css">
 <link rel="stylesheet" href="./assets/khan/common.css">
 <link rel="stylesheet" href="./assets/khan/home.css?v=opinion-1">
-<link rel="stylesheet" href="./assets/evere/home.css?v=headlines-1">
+<link rel="stylesheet" href="./assets/evere/home.css?v=issues-1">
 <script defer src="./assets/khan/swiper-bundle.min.js"></script>
 <script defer src="./assets/evere/home.js?v=khan-menu-2"></script>
 <script type="module" src="./assets/evere/front-page.js"></script>
+<script type="module" src="./assets/evere/home-issues.js?v=issues-1"></script>
 </head>
 <body>
 <div id="evere-header">
@@ -23,7 +24,7 @@
 <link rel="stylesheet" href="./assets/yna/common.css">
 <link rel="stylesheet" href="./assets/yna/style.css">
 <link rel="stylesheet" href="./assets/yna/layout.css">
-<link rel="stylesheet" href="./assets/evere/header.css?v=mobile-rule-2">
+<link rel="stylesheet" href="./assets/evere/header.css?v=issues-1">
 <div class="yna-shell page-main site-home-web">
 <div class="evere-category-dim" hidden></div>
 <header class="wrap-header02">
@@ -262,20 +263,9 @@
                 </div>
             </div>
 
-            <section class="issue">
-<div class="issue-wrap">
-                <div class="swiper-container swiper-initialized swiper-horizontal swiper-backface-hidden">
-                    <ul class="swiper-wrapper" id="swiper-wrapper-341cb4336b6959f9" aria-live="polite">
-                                                                    <li class="swiper-slide swiper-slide-active" role="group" aria-label="1 / 5"><a href="https://www.khan.co.kr/80th" target="_blank">📌창간 80년 특집</a></li>
-                                                                    <li class="swiper-slide swiper-slide-next" role="group" aria-label="2 / 5"><a href="https://www.khan.co.kr/introduce/kyunghyangtv/">📺경향티비</a></li>
-                                                                    <li class="swiper-slide" role="group" aria-label="3 / 5"><a href="https://www.khan.co.kr/issue/articles/ahd68">시험장 침투한 AI</a></li>
-                                                                    <li class="swiper-slide" role="group" aria-label="4 / 5"><a href="https://www.khan.co.kr/issue/articles/ahd67">젠슨 황 스캔들</a></li>
-                                                                    <li class="swiper-slide" role="group" aria-label="5 / 5"><a href="https://www.khan.co.kr/issue/articles/ahd69">2027 대입 수능</a></li>
-                                                                                        </ul>
-                <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
-            </div>
-        
-                <p>2026년 11월 20일 금요일</p>
+            <section class="issue evere-home-issues" aria-label="주요 이슈">
+                <div class="issue-wrap"><ul data-home-issues aria-label="이슈 링크"></ul></div>
+                <p>양심 있는 세상을 만드는 언론</p>
             </section>
 
             <section class="head" data-home-articles hidden>
@@ -917,3 +907,4 @@
     </footer>
 </body>
 </html>
+

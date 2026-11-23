@@ -8,9 +8,9 @@
   <link rel="icon" href="../assets/evere/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="../assets/evere/account.css?v=newsroom-4">
-  <link rel="stylesheet" href="../assets/evere/newsroom.css?v=queue-1">
+  <link rel="stylesheet" href="../assets/evere/newsroom.css?v=issues-1">
   <script type="module" src="../assets/evere/account.js?v=queue-2"></script>
-  <script type="module" src="../assets/evere/newsroom.js?v=headlines-1"></script>
+  <script type="module" src="../assets/evere/newsroom.js?v=issues-1"></script>
 </head>
 <body class="newsroom">
   <header class="newsroom-header">
@@ -199,6 +199,19 @@
               <a id="public-page" href="../" target="_blank" rel="noopener">공개 페이지 열기</a>
             </div>
           </form>
+          <form id="home-issues-form" hidden>
+            <h2>메인 이슈 링크</h2>
+            <p>표시 이름과 링크를 입력하세요. 추가한 순서대로 메인에 나란히 표시됩니다.</p>
+            <fieldset id="home-issues-fields" disabled>
+              <legend>이슈 항목</legend>
+              <div id="home-issues-rows"></div>
+              <button id="add-home-issue" type="button">이슈 추가</button>
+              <p>미리보기</p>
+              <ul id="home-issues-preview" aria-label="이슈 미리보기"></ul>
+              <button type="submit">이슈 링크 저장</button>
+            </fieldset>
+            <p id="home-issues-status" role="status" aria-live="polite"></p>
+          </form>
         </section>
         <section data-panel="profile" hidden>
           <h1>내 프로필</h1>
@@ -270,3 +283,4 @@
   </dialog>
 </body>
 </html>
+

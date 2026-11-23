@@ -1,6 +1,7 @@
 import { supabase } from './supabase.js';
 import { sectors, articleCategories } from './article-taxonomy.js';
 import { seriesFor } from './series.js';
+import { issueUrl, loadHomeIssues, renderHomeIssues } from './home-issues.js?v=issues-1';
 
 const ui = (id) => document.getElementById(id);
 const panels = [...document.querySelectorAll('[data-panel]')];
@@ -11,6 +12,9 @@ const slots = [layout.elements.slot1, layout.elements.slot2, layout.elements.slo
 const boardForm = ui('board-form');
 const postForm = ui('board-post-form');
 const seriesForm = ui('series-form');
+const issuesForm = ui('home-issues-form');
+const issuesFields = ui('home-issues-fields');
+let issuesRequest = 0;
 let member = null;
 let boards = [];
 let editingPost = null;
@@ -63,6 +67,7 @@ function selectView() {
         else link.removeAttribute('aria-current');
     }
     if (view === 'profile') ui('profile-settings').open = true;
+    if (view === 'layout') refreshIssues();
     if (view === 'layout') loadLayout().catch(() => notify('화면 배치를 불러오지 못했습니다.', true));
     if (view === 'series') loadSeries().catch(() => notify('기획·연재 분류를 불러오지 못했습니다.', true));
     if (view === 'boards') loadBoards().catch(() => notify('게시판을 불러오지 못했습니다.', true));
@@ -76,6 +81,7 @@ document.addEventListener('evere:member', (event) => {
     optionList(layout.elements.page, allowed, layout.elements.page.value);
     optionList(seriesForm.elements.sector, allowed.filter(([key]) => key !== 'home'), seriesForm.elements.sector.value);
     resetCategories();
+    if (!member) refreshIssues();
     if (member) selectView();
 });
 window.addEventListener('hashchange', selectView);
@@ -158,6 +164,7 @@ async function loadLayout() {
 }
 layout.elements.page.addEventListener('change', () => {
     resetCategories();
+    refreshIssues();
     loadLayout().catch(() => notify('화면 배치를 불러오지 못했습니다.', true));
 });
 layout.elements.category.addEventListener('change', () => {
@@ -192,6 +199,101 @@ function resetPostForm() {
     postForm.reset();
     postForm.querySelector('[type="submit"]').textContent = '게시글 등록';
 }
+
+function issuesStatus(message, failed = false) {
+    ui('home-issues-status').textContent = message;
+    ui('home-issues-status').dataset.error = String(failed);
+}
+
+function issueEntries() {
+    return [...ui('home-issues-rows').children].map((row) => ({
+        label: row.querySelector('[name="issueLabel"]').value.trim(),
+        url: row.querySelector('[name="issueUrl"]').value.trim(),
+    }));
+}
+
+function previewIssues() {
+    renderHomeIssues(ui('home-issues-preview'), issueEntries());
+}
+
+function addIssueRow(entry = { label: '', url: '' }) {
+    const row = document.createElement('div');
+    row.className = 'home-issue-row';
+    for (const [name, title, field, maxLength] of [
+        ['issueLabel', '표시 이름', 'label', 100],
+        ['issueUrl', '링크 (https://… 또는 /경로)', 'url', 2048],
+    ]) {
+        const label = document.createElement('label');
+        label.textContent = title;
+        const input = document.createElement('input');
+        input.name = name;
+        input.value = entry[field];
+        input.required = true;
+        input.maxLength = maxLength;
+        input.addEventListener('input', () => { input.setCustomValidity(''); previewIssues(); });
+        label.append(input);
+        row.append(label);
+    }
+    row.append(button('삭제', () => {
+        row.remove();
+        previewIssues();
+        ui('add-home-issue').focus();
+    }));
+    ui('home-issues-rows').append(row);
+    return row;
+}
+
+async function refreshIssues() {
+    const request = ++issuesRequest;
+    const allowed = ['owner', 'director'].includes(member?.role) && layout.elements.page.value === 'home';
+    issuesForm.hidden = !allowed;
+    issuesFields.disabled = true;
+    if (!allowed) return;
+    issuesStatus('이슈 링크를 불러오는 중입니다.');
+    try {
+        const entries = await loadHomeIssues();
+        if (request !== issuesRequest) return;
+        ui('home-issues-rows').replaceChildren();
+        entries.forEach(addIssueRow);
+        previewIssues();
+        issuesFields.disabled = false;
+        issuesStatus('');
+    } catch {
+        if (request === issuesRequest) issuesStatus('이슈 링크를 불러오지 못했습니다. 화면 편집을 다시 열어 주세요.', true);
+    }
+}
+
+ui('add-home-issue').addEventListener('click', () => {
+    const row = addIssueRow();
+    previewIssues();
+    row.querySelector('input').focus();
+});
+issuesForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (issuesFields.disabled || !['owner', 'director'].includes(member?.role)) return;
+    const entries = issueEntries();
+    const rows = [...ui('home-issues-rows').children];
+    for (const [index, entry] of entries.entries()) {
+        const input = rows[index].querySelector(entry.label ? '[name="issueUrl"]' : '[name="issueLabel"]');
+        if (!entry.label || !issueUrl(entry.url)) {
+            input.setCustomValidity(entry.label ? 'http://, https:// 또는 /로 시작하는 올바른 링크를 입력해 주세요.' : '표시 이름을 입력해 주세요.');
+            input.reportValidity();
+            return;
+        }
+        entry.url = issueUrl(entry.url);
+    }
+    const request = issuesRequest;
+    issuesFields.disabled = true;
+    issuesStatus('저장 중입니다.');
+    try {
+        value(await supabase.rpc('evere_save_home_issues', { items: entries }));
+        if (request === issuesRequest) issuesStatus('메인페이지에 이슈 링크를 저장했습니다.');
+    } catch {
+        if (request === issuesRequest) issuesStatus('저장하지 못했습니다. 입력 내용은 유지됩니다. 다시 시도해 주세요.', true);
+    } finally {
+        if (request === issuesRequest) issuesFields.disabled = false;
+    }
+});
 
 async function showBoard() {
     const selected = boards.find((board) => board.id === boardForm.elements.board.value);
@@ -268,3 +370,4 @@ postForm.addEventListener('submit', task(async () => {
     await showBoard();
     notify('게시글을 저장했습니다.');
 }));
+
