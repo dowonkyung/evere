@@ -1,6 +1,4 @@
-import { setArticleTitle } from './article-label.js';
-import { formattedBody, photoBucket, photoFigure, photoImage, placePhotoImages, renderBody } from './article-content.js?v=inline-1';
-import { sectors } from './article-taxonomy.js';
+import { formattedBody, photoBucket, photoFigure, photoImage, readPhotoCaption, renderBody, setPhotoCaption } from './article-content.js?v=caption-1';
 import { seriesFor } from './series.js';
 
 const photoTypes = new Map([['image/jpeg', 'jpg'], ['image/png', 'png'], ['image/webp', 'webp']]);
@@ -13,7 +11,6 @@ export function articleComposer(form, article = null) {
     const editor = find('.compose-editor');
     const toolbar = find('.compose-toolbar');
     const photoList = find('[data-thumbs]');
-    const previewPhotos = find('[data-preview-photos]');
     const feedback = find('[data-compose-feedback]');
     let member;
     let people = [];
@@ -31,22 +28,17 @@ export function articleComposer(form, article = null) {
     title.value = article?.title || '';
     subtitle.value = article?.subtitle || '';
     renderBody(editor, article || {});
+    updateEditorCount();
 
     function notify(message = '') {
         feedback.textContent = message;
     }
 
-    function preview() {
+    function updateEditorCount() {
         const copy = editor.innerText.trim();
         find('[data-editor-count]').textContent =
             Array.from(copy).length.toLocaleString('ko-KR') + '자 · ' +
             (copy ? copy.split(/\s+/u).length : 0).toLocaleString('ko-KR') + '단어';
-        find('[data-preview-sector]').textContent = sectors[sector.value] || '';
-        setArticleTitle(find('[data-preview-title]'), title.value.trim() || '기사 제목', label.value);
-        find('[data-preview-subtitle]').textContent = subtitle.value.trim();
-        find('[data-preview-byline]').textContent = omitByline.checked ? '' : [...byline.map(displayName), ...guests].join(', ');
-        find('[data-preview-body]').replaceChildren(formattedBody(editor.innerHTML));
-        placePhotoImages(find('[data-preview-body]'), previewPhotos, new Map(photos.map((photo) => [photo.key, photo.url])));
     }
 
     async function refreshSeries(chosen = selectedSeries) {
@@ -115,7 +107,6 @@ export function articleComposer(form, article = null) {
             append(name + ' · 외부 기고', () => { guests = guests.filter((value) => value !== name); });
         }
         find('[data-byline-list]').replaceChildren(chips);
-        preview();
     }
 
     function addWriter(value, list) {
@@ -175,7 +166,7 @@ export function articleComposer(form, article = null) {
         }
         document.execCommand(command, false, value);
         rememberSelection();
-        preview();
+        updateEditorCount();
     }
     toolbar.addEventListener('mousedown', (event) => {
         if (event.target.closest('button')) event.preventDefault();
@@ -221,9 +212,7 @@ export function articleComposer(form, article = null) {
             addPhotos(event.dataTransfer.files);
         } else insertPlainText(event, event.dataTransfer);
     });
-    form.addEventListener('input', (event) => {
-        if (!event.target.closest('[data-thumbs]')) preview();
-    });
+    editor.addEventListener('input', updateEditorCount);
 
     function marker(photo) {
         return [...editor.querySelectorAll('figure[data-photo]')].find((item) => item.dataset.photo === photo.key);
@@ -247,9 +236,9 @@ export function articleComposer(form, article = null) {
             ?.closest('figure[data-photo]');
         if (inlinePhoto) range.setStartAfter(inlinePhoto);
         marker(photo)?.remove();
-        const figure = photoFigure(photo.key, photo.position, photo.caption);
+        const figure = photoFigure(photo.key, photo.position, photo);
         figure.contentEditable = 'false';
-        if (photo.url) figure.prepend(photoImage(photo.url, photo.caption || undefined));
+        if (photo.url) figure.prepend(photoImage(photo.url, photo.captionTitle || photo.caption || undefined));
         let block = range.startContainer;
         while (block !== editor && block.parentNode !== editor) block = block.parentNode;
         if (block === editor || block.nodeType === Node.TEXT_NODE) {
@@ -307,25 +296,37 @@ export function articleComposer(form, article = null) {
                 photo.position = alignment.value;
                 const figure = marker(photo);
                 if (figure) figure.dataset.position = photo.position;
-                preview();
             });
-            const caption = document.createElement('input');
+            const heading = document.createElement('input');
+            heading.maxLength = 200;
+            heading.placeholder = '사진 제목';
+            heading.setAttribute('aria-label', label + ' 제목');
+            heading.value = photo.captionTitle || '';
+            const caption = document.createElement('textarea');
             caption.maxLength = 500;
-            caption.placeholder = '사진 캡션';
-            caption.setAttribute('aria-label', label + ' 캡션');
+            caption.rows = 2;
+            caption.placeholder = '사진 설명';
+            caption.setAttribute('aria-label', label + ' 설명');
             caption.value = photo.caption;
-            caption.addEventListener('input', () => {
+            const syncCaption = () => {
+                photo.captionTitle = heading.value;
                 photo.caption = caption.value;
                 const figure = marker(photo);
-                if (figure) figure.querySelector('figcaption').textContent = photo.caption;
-                preview();
-            });
-            placement.append(button, alignment, caption);
+                if (figure) {
+                    setPhotoCaption(figure.querySelector('figcaption'), photo);
+                    const img = figure.querySelector('img');
+                    if (img) img.alt = photo.captionTitle || photo.caption || '기사 첨부 사진';
+                }
+                updateEditorCount();
+            };
+            heading.addEventListener('input', syncCaption);
+            caption.addEventListener('input', syncCaption);
+            placement.append(button, alignment, heading, caption);
             li.append(placement);
             return li;
         });
         photoList.replaceChildren(...items);
-        preview();
+        updateEditorCount();
     }
 
     editor.addEventListener('click', (event) => {
@@ -367,7 +368,7 @@ export function articleComposer(form, article = null) {
             const figure = marker(photo);
             if (figure) {
                 photo.position = figure.dataset.position;
-                photo.caption = figure.textContent;
+                Object.assign(photo, readPhotoCaption(figure));
                 figure.contentEditable = 'false';
             }
         }
@@ -375,7 +376,7 @@ export function articleComposer(form, article = null) {
             for (const photo of photos) {
                 photo.url ||= data?.find(({ path }) => path === photo.path)?.signedUrl;
                 const figure = marker(photo);
-                if (figure && photo.url) figure.prepend(photoImage(photo.url, photo.caption || undefined));
+                if (figure && photo.url) figure.prepend(photoImage(photo.url, photo.captionTitle || photo.caption || undefined));
             }
             showPhotos();
         });
@@ -429,7 +430,7 @@ export function articleComposer(form, article = null) {
             if (!allowsOmission && !byline.length && !guests.length) {
                 notify('기자 또는 외부 기고자를 한 명 이상 추가해 주세요.'); return false;
             }
-            if (photos.some((photo) => (photo.file || photo.caption) && !marker(photo))) {
+            if (photos.some((photo) => (photo.file || photo.caption || photo.captionTitle) && !marker(photo))) {
                 notify('첨부 사진을 본문에 배치해 주세요. 본문에 커서를 놓고 사진의 삽입 버튼을 누르면 됩니다.');
                 return false;
             }
