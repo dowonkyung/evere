@@ -15,8 +15,9 @@ export function articleListPicture(entry) {
     return picture;
 }
 
-export async function loadArticleListPhotos(contents) {
-    const images = [...contents.querySelectorAll('img[data-list-photo]')];
+export async function loadArticleListPhotos(contents, { visibleOnly = false } = {}) {
+    const images = [...contents.querySelectorAll('img[data-list-photo]')]
+        .filter(image => !image.dataset.photoSigned && (!visibleOnly || !image.closest('[hidden]')));
     const paths = [...new Set(images.map(image => image.dataset.listPhoto))];
     if (!paths.length) return;
 
@@ -26,6 +27,7 @@ export async function loadArticleListPhotos(contents) {
     for (const image of images) {
         const url = urls.get(image.dataset.listPhoto);
         if (!url) continue;
+        image.dataset.photoSigned = 'true';
         image.addEventListener('error', () => {
             image.classList.add('evere-media-placeholder');
             image.src = placeholder;

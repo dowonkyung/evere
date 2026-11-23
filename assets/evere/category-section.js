@@ -1,4 +1,4 @@
-import { articleListPicture, loadArticleListPhotos, renderMajorArticles } from './article-list-media.js';
+import { articleListPicture, loadArticleListPhotos, renderMajorArticles } from './article-list-media.js?v=category-pages-1';
 import { setArticleTitle } from './article-label.js';
 import { categoryFromURL } from './routes.js?v=routes-1';
 import { articles, latestSeries } from './section-data.js';
@@ -76,8 +76,8 @@ if (series.length) {
 const dateFormat = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' });
 let live = [];
 try {
-    const { publishedFeed } = await import('./published-feed.js?v=article-thumbs-1');
-    live = await publishedFeed(section, selected, seriesFilter);
+    const { publishedFeed } = await import('./published-feed.js?v=category-pages-1');
+    live = await publishedFeed(section, selected, seriesFilter, { all: true });
     if (seriesFilter) {
         const name = (await seriesFor(section)).find(({ id }) => id === seriesFilter)?.title || '기획·연재';
         const heading = document.createElement('h2');
@@ -115,7 +115,9 @@ for (const item of published) {
 }
 recentList.prepend(rows);
 renderMajorArticles(contents, live);
-void loadArticleListPhotos(contents).catch(() => {});
+contents.addEventListener('evere:list-page', () => {
+    void loadArticleListPhotos(contents, { visibleOnly: true }).catch(() => {});
+});
 
-await import('./opinion-list.js?v=categories-1');
+await import('./opinion-list.js?v=category-pages-1');
 

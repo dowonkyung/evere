@@ -14,7 +14,7 @@
 <script defer src="/assets/khan/swiper-bundle.min.js"></script>
 <script defer src="/assets/evere/home.js?v=routes-1"></script>
 <link rel="stylesheet" href="/assets/evere/opinion.css?v=categories-1">
-<script type="module" src="/assets/evere/category-section.js?v=article-thumbs-1"></script>
+<script type="module" src="/assets/evere/category-section.js?v=category-pages-1"></script>
 <link rel="stylesheet" href="/assets/evere/public-layout.css?v=section-gap-1">
 <script type="module" src="/assets/evere/public-layout.js?v=section-head-1" data-layout-page="sports"></script>
 <script type="module" src="/assets/evere/route-init.js?v=direct-route-1"></script>
@@ -215,42 +215,7 @@
 <li class="swiper-slide"><a data-category-tab="basketball-volleyball" href="/sports/basketball-volleyball/"{% if include.category == 'basketball-volleyball' %} class="active" aria-current="page"{% endif %}>농구·배구</a></li>
 <li class="swiper-slide"><a data-category-tab="golf" href="/sports/golf/"{% if include.category == 'golf' %} class="active" aria-current="page"{% endif %}>골프</a></li>
 </ul></nav>
-<section class="contents sub" id="section-contents">
-                <div>
-					<div class="section-series" hidden><h3>연재</h3><div class="series"><ul class="swiper-wrapper"></ul></div></div>
-<div class="date" id="recent">
-						<div class="btn-left"><input type="date" id="opinion-date-picker" aria-label="기사 목록 날짜">
-                            <button type="button" class="btn-calendar" aria-label="날짜 선택">
-                                <span class="txt">달력</span>
-                            </button>
-                        </div>
-						<div class="date-wrap" id="cont_date">
-							<a href="#recent" class="btn-prev prev dateMove" title="이전" data-mode="prev"><span class="txt">이전</span></a>
-							<span id="selected-date" class="disabled">2026.11.20</span>
-                            
-							<a href="#recent" class="btn-next next dateMove disabled" title="다음" data-mode="next"><span class="txt">다음</span></a>
-						</div>
-						<div class="btn-right">
-                            <button class="btn-date-all " id="all" title="전체기간">전체기간</button>
-                        </div>
-						<div id="datepicker-container" style="display: none;">
-							<a class="datepicker_close"><span>닫기</span></a>
-						</div>
-					</div>
-                    <div class="list">
-                        <ul id="recentList"></ul>
-                    </div>
-                    <div class="page" hidden></div>
-                    <div class="none" id="no_result" style="display: none;">
-                        <p>
-                            <span class="txt">글 없음</span>
-                            등록된 글이 없습니다.
-                            <button class="btn-reset">초기화</button>
-                        </p>
-                    </div>
-				</div>
-                
-			</section>
+{% include evere-sections/category-contents.html sector="sports" category=include.category %}
 </div></main>
 <footer ep_page_scrollarea="{&quot;1024&quot;:7,&quot;768&quot;:9,&quot;393&quot;:9}" class="appuse">
         <div class="expand evere-footer-sitemap">

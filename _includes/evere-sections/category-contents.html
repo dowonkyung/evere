@@ -1,0 +1,66 @@
+<section class="contents{% if include.category %} sub{% endif %}" id="section-contents">
+                <div>
+					<div class="section-series" hidden><h3>연재</h3><div class="series"><ul class="swiper-wrapper"></ul></div></div>
+<div class="date" id="recent">
+						<div class="btn-left"><input type="date" id="opinion-date-picker" aria-label="기사 목록 날짜">
+                            <button type="button" class="btn-calendar" aria-label="날짜 선택">
+                                <span class="txt">달력</span>
+                            </button>
+                        </div>
+						<div class="date-wrap" id="cont_date">
+							<a href="#recent" class="btn-prev prev dateMove" title="이전" data-mode="prev"><span class="txt">이전</span></a>
+							<span id="selected-date" class="disabled">전체기간</span>
+                            
+							<a href="#recent" class="btn-next next dateMove disabled" title="다음" data-mode="next"><span class="txt">다음</span></a>
+						</div>
+						<div class="btn-right">
+                            <button class="btn-date-all " id="all" title="전체기간">전체기간</button>
+                        </div>
+						<div id="datepicker-container" style="display: none;">
+							<a class="datepicker_close"><span>닫기</span></a>
+						</div>
+					</div>
+                    <div class="list">
+                        <ul id="recentList">{% if include.sector == 'politics' and include.category == nil %}{% include evere-sections/politics-preview.html %}{% endif %}</ul>
+                    </div>
+                    <div class="page" hidden><ul id="paging" aria-label="기사 목록 페이지"></ul></div>
+                    <div class="none" id="no_result" style="display: none;">
+                        <p>
+                            <span class="txt">글 없음</span>
+                            등록된 글이 없습니다.
+                            <button class="btn-reset">초기화</button>
+                        </p>
+                    </div>
+				</div>
+                
+			<aside>
+
+                    <ul class="aside-wrap">
+                        <li>
+                            <div class="banner-aside-top-middle">
+                                <div class="ad-wrapper type-pc">
+                                    <div class="ad-inner-wrap" style="width:300px;height:250px;">
+<!-- KH_View_MRD_25 -->
+                                    <!-- [pc-AD] 섹션면/기사면 우측 배너 (300x250) -->
+                                    <div id="ads21">
+                                        <!-- newscode_KSS_300250_RM 2026.07.06 ~ -->
+
+                                    </div>
+                                    <!--// [pc-AD] 섹션면/기사면 우측 배너 (300x250) -->                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+
+
+                        <li class="">
+                            
+                        <div class="area-tit">주요 기사</div>
+                        <ul class="list major-art-wrap m-major"></ul>
+
+
+                        
+                        </li>
+                    </ul>
+
+                </aside></section>

@@ -110,13 +110,51 @@ window.addEventListener('hashchange', selectView);
 let seriesRequest = 0;
 async function loadSeries() {
     const request = ++seriesRequest;
-    const rows = await seriesFor(seriesForm.elements.sector.value);
+    const sector = seriesForm.elements.sector.value;
+    const rows = await seriesFor(sector);
     if (request !== seriesRequest) return;
-    const items = (rows.length ? rows.map(({ title, series_number }) => `${series_number}번 · ${title}`) : ['등록된 분류가 없습니다.']).map((title) => {
+    const items = rows.map(({ id, title, series_number }) => {
         const item = document.createElement('li');
-        item.textContent = title;
+        const label = document.createElement('span');
+        label.textContent = `${series_number}번 · ${title}`;
+        const form = document.createElement('form');
+        form.hidden = true;
+        const name = document.createElement('input');
+        name.required = true;
+        name.maxLength = 100;
+        name.setAttribute('aria-label', '새 기획·연재 분류명');
+        const save = document.createElement('button');
+        save.textContent = '저장';
+        const rename = button('이름 수정', () => {
+            name.value = title;
+            form.hidden = false;
+            rename.hidden = true;
+            name.focus();
+        });
+        form.append(name, save, button('취소', () => {
+            form.hidden = true;
+            rename.hidden = false;
+            rename.focus();
+        }));
+        form.addEventListener('submit', task(async () => {
+            const next = name.value.trim();
+            if (!next) { notify('기획·연재 분류명을 입력해 주세요.', true); return; }
+            const { error } = await supabase.from('evere_series').update({ title: next }).eq('id', id).select('id').single();
+            if (error?.code === '23505') { notify('이 섹터에 같은 이름의 분류가 있습니다.', true); return; }
+            if (error) throw error;
+            label.textContent = `${series_number}번 · ${next}`;
+            document.dispatchEvent(new CustomEvent('evere:series-change', { detail: sector }));
+            notify(`기획·연재 ${series_number}번의 이름을 저장했습니다.`);
+            await loadSeries();
+        }));
+        item.append(label, ' ', rename, form);
         return item;
     });
+    if (!items.length) {
+        const empty = document.createElement('li');
+        empty.textContent = '등록된 분류가 없습니다.';
+        items.push(empty);
+    }
     ui('series-list').replaceChildren(...items);
 }
 
