@@ -122,7 +122,7 @@ async function recommend(current) {
 
 async function loadDetail() {
     if (!Number.isSafeInteger(number) || number < 1 || number > 2147483647) {
-        ui('series-status').textContent = '연재를 찾을 수 없습니다.';
+        ui('series-title').textContent = '등록된 연재를 찾을 수 없습니다.';
         return;
     }
     const path = seriesPath(number);
@@ -131,7 +131,7 @@ async function loadDetail() {
     const { data: series, error } = await supabase.rpc('evere_series_by_number', { requested_number: number }).maybeSingle();
     if (error) throw error;
     if (!series) {
-        ui('series-status').textContent = '등록된 연재를 찾을 수 없습니다.';
+        ui('series-title').textContent = '등록된 연재를 찾을 수 없습니다.';
         return;
     }
     ui('series-title').textContent = series.title;

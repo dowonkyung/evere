@@ -18,6 +18,7 @@
       const target = new URL(series ? '/series/articles/' : '/article/', location.origin);
       target.search = location.search;
       target.searchParams.set('number', route[1]);
+      if (series) target.searchParams.set('rev', 'series-title-2');
       target.hash = location.hash;
       location.replace(target);
     } else {
