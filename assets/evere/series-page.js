@@ -128,10 +128,10 @@ async function loadDetail() {
     const path = seriesPath(number);
     history.replaceState(null, '', path + (page > 1 ? '?page=' + page : '') + location.hash);
     document.head.append(Object.assign(node('link'), { rel: 'canonical', href: new URL(path, location.origin).href }));
-    const { data: series, error } = await seriesQuery().eq('series_number', number).maybeSingle();
+    const { data: series, error } = await supabase.rpc('evere_series_by_number', { requested_number: number }).maybeSingle();
     if (error) throw error;
     if (!series) {
-        ui('series-status').textContent = '공개된 연재를 찾을 수 없습니다.';
+        ui('series-status').textContent = '등록된 연재를 찾을 수 없습니다.';
         return;
     }
     ui('series-title').textContent = series.title;
@@ -148,7 +148,7 @@ async function loadDetail() {
         list.append(row);
     }
     renderPages(count, path);
-    ui('series-status').textContent = data.length ? '' : '이 페이지에 표시할 기사가 없습니다.';
+    ui('series-status').textContent = data.length ? '' : count ? '이 페이지에 표시할 기사가 없습니다.' : '아직 출고된 기사가 없습니다.';
     void loadArticleListPhotos(list).catch(() => {});
 }
 
