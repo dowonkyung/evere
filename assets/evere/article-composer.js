@@ -4,7 +4,7 @@ import { seriesFor } from './series.js';
 const photoTypes = new Map([['image/jpeg', 'jpg'], ['image/png', 'png'], ['image/webp', 'webp']]);
 const editors = new Set(['owner', 'director', 'department_head']);
 
-export function articleComposer(form, article = null) {
+export function articleComposer(form, article = null, { contentOnly = false } = {}) {
     form.replaceChildren(document.getElementById('compose-fields').content.cloneNode(true));
     const find = (name) => form.querySelector(name);
     const { title, subtitle, sector, category, series, writer, guest, omitByline, photos: fileInput } = form.elements;
@@ -24,6 +24,9 @@ export function articleComposer(form, article = null) {
     let allowsOmission = false;
 
     const label = form.elements.articleLabel;
+    if (contentOnly) {
+        for (const field of [label, find('.compose-section-fields'), find('.compose-byline')]) field.hidden = true;
+    }
     label.value = article?.article_label || '';
     title.value = article?.title || '';
     subtitle.value = article?.subtitle || '';
@@ -412,7 +415,7 @@ export function articleComposer(form, article = null) {
             notify();
         },
         async save(commit) {
-            if (saving || series.disabled) return false;
+            if (saving || (!contentOnly && series.disabled)) return false;
             notify();
             const body = editor.innerText.trim();
             const safe = document.createElement('div');
@@ -427,15 +430,15 @@ export function articleComposer(form, article = null) {
                 notify('제목과 본문을 입력해 주세요. 본문은 5만 자까지 입력할 수 있습니다.');
                 return false;
             }
-            if (!allowsOmission && !byline.length && !guests.length) {
+            if (!contentOnly && !allowsOmission && !byline.length && !guests.length) {
                 notify('기자 또는 외부 기고자를 한 명 이상 추가해 주세요.'); return false;
             }
             if (photos.some((photo) => (photo.file || photo.caption || photo.captionTitle) && !marker(photo))) {
                 notify('첨부 사진을 본문에 배치해 주세요. 본문에 커서를 놓고 사진의 삽입 버튼을 누르면 됩니다.');
                 return false;
             }
-            if (fields.guest_byline.length && !canAddGuest()) { notify('이 섹터의 외부 기고자를 등록할 권한이 없습니다.'); return false; }
-            if (!omitByline.checked && (guest.value.trim() || writer.value)) {
+            if (!contentOnly && fields.guest_byline.length && !canAddGuest()) { notify('이 섹터의 외부 기고자를 등록할 권한이 없습니다.'); return false; }
+            if (!contentOnly && !omitByline.checked && (guest.value.trim() || writer.value)) {
                 notify('입력하거나 선택한 이름은 추가 버튼을 눌러 등록해 주세요.'); return false;
             }
             const uploaded = [];
