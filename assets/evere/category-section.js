@@ -1,3 +1,4 @@
+import { articleListPicture, loadArticleListPhotos, renderMajorArticles } from './article-list-media.js';
 import { setArticleTitle } from './article-label.js';
 import { categoryFromURL } from './routes.js?v=routes-1';
 import { articles, latestSeries } from './section-data.js';
@@ -75,7 +76,7 @@ if (series.length) {
 const dateFormat = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' });
 let live = [];
 try {
-    const { publishedFeed } = await import('./published-feed.js?v=routes-label-2');
+    const { publishedFeed } = await import('./published-feed.js?v=article-thumbs-1');
     live = await publishedFeed(section, selected, seriesFilter);
     if (seriesFilter) {
         const name = (await seriesFor(section)).find(({ id }) => id === seriesFilter)?.title || '기획·연재';
@@ -108,11 +109,13 @@ for (const item of published) {
     date.className = 'date';
     date.textContent = row.dataset.articleDate.replaceAll('-', '.');
     copy.append(link, summary, date);
-    article.append(makePicture(item.image, item.image ? '' : 'evere-media-placeholder'), copy);
+    article.append(articleListPicture(item), copy);
     row.append(article);
     rows.append(row);
 }
 recentList.prepend(rows);
+renderMajorArticles(contents, live);
+void loadArticleListPhotos(contents).catch(() => {});
 
 await import('./opinion-list.js?v=categories-1');
 

@@ -1,15 +1,18 @@
+import { articleListPicture, loadArticleListPhotos, renderMajorArticles } from './article-list-media.js';
 import { setArticleTitle } from './article-label.js';
 import { requestedSeries, seriesFor } from './series.js';
 
 const main = document.querySelector('main');
 const category = main.dataset.opinionCategory;
 const list = main.querySelector('#recentList');
+const contents = list.closest('section.contents');
+let rows = [];
 const series = requestedSeries();
 const dateFormat = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' });
 
 try {
-    const { publishedFeed } = await import('./published-feed.js?v=routes-label-2');
-    const rows = await publishedFeed('opinion', category, series);
+    const { publishedFeed } = await import('./published-feed.js?v=article-thumbs-1');
+    rows = await publishedFeed('opinion', category, series);
     if (series) {
         const name = (await seriesFor('opinion')).find(({ id }) => id === series)?.title || '기획·연재';
         main.querySelector('.head')?.remove();
@@ -24,13 +27,7 @@ try {
         const row = document.createElement('li');
         row.dataset.articleDate = dateFormat.format(new Date(entry.publishedAt));
         const article = document.createElement('article');
-        const picture = document.createElement('picture');
-        const img = document.createElement('img');
-        img.alt = '';
-        img.src = new URL('./media-placeholder.svg', import.meta.url).href;
-        img.className = 'evere-media-placeholder';
-        img.loading = 'lazy';
-        picture.append(img);
+        const picture = articleListPicture(entry);
         const info = document.createElement('div');
         const link = document.createElement('a');
         link.href = entry.href;
@@ -49,6 +46,10 @@ try {
     list.prepend(fragment);
 } catch {
     // The saved list is still available.
+}
+if (contents) {
+    renderMajorArticles(contents, rows);
+    void loadArticleListPhotos(contents).catch(() => {});
 }
 if (category || series) await import('./opinion-list.js?v=categories-1');
 
