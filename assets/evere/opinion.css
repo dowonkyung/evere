@@ -38,3 +38,6 @@
 .evere-section .section-series .swiper-slide > a { z-index: 1; }
 .evere-section .section-series .swiper-slide > a::after { inset: auto; }
 .evere-section .contents .none { min-height: 180px; }
+
+.inside-editor .opinion-writer-name { font-size: 18px; font-weight: 600; line-height: 24px; }
+.inside-editor img[data-opinion-portrait] { display: block; width: 100%; height: 100%; object-fit: cover; }
