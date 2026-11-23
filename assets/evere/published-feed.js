@@ -1,8 +1,7 @@
-import { articlePath } from './routes.js?v=routes-1';
 import { supabase } from './supabase.js';
 
 export async function publishedFeed(section, category = '', series = '') {
-    let query = supabase.from('evere_articles').select('id,article_number,title,body,sector,category,published_at')
+    let query = supabase.from('evere_articles').select('id,title,article_label,body,sector,category,published_at')
         .eq('sector', section).eq('status', 'published')
         .order('published_at', { ascending: false }).order('id').limit(30);
     if (category) query = query.eq('category', category);
@@ -11,8 +10,7 @@ export async function publishedFeed(section, category = '', series = '') {
     if (error) throw error;
     return data.map((entry) => ({
         section: entry.sector, category: entry.category, publishedAt: entry.published_at,
-        title: entry.title, summary: entry.body.slice(0, 220),
-        href: articlePath(entry),
+        title: entry.title, article_label: entry.article_label, summary: entry.body.slice(0, 220),
+        href: new URL('../../article/?id=' + entry.id, import.meta.url).href,
     }));
 }
-
