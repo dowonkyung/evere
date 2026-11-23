@@ -239,14 +239,15 @@ async function render() {
     }
     const names = data.byline_names;
     const byline = ui('byline');
-    byline.textContent = names.join(', ');
+    const reporterName = (name) => /\s기자$/.test(name) ? name : name + ' 기자';
+    byline.textContent = names.map(reporterName).join(', ');
     if (names.length) void Promise.resolve(supabase.rpc('evere_article_byline_positions', { target_article: data.id }))
         .then(({ data: positions, error }) => {
             if (error || !positions?.length) return;
             const titles = new Map(positions.map(row => [row.byline_index, row.position_title.trim()]));
             byline.textContent = names.map((name, index) => {
                 const title = titles.get(index + 1);
-                return title ? name + ' ' + title : name;
+                return title ? name + ' ' + title : reporterName(name);
             }).join(', ');
         }).catch(() => {});
     ui('status').replaceChildren();
