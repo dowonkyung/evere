@@ -1,15 +1,24 @@
 .article-header-title[hidden], .article-reading-progress[hidden],
 .nav-type11 .gnb-menu01[hidden] { display: none !important; }
-.nav-type11 .article-header-title {
-  flex: 1 1 auto;
-  min-width: 0;
+.evere-compact-shell .nav-type11 .article-header-title {
+  position: absolute;
+  inset-inline-start: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(600px, calc(100% - 256px));
   margin: 0;
+  padding: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 19px;
+  text-align: center;
+  font-size: 16px;
+  line-height: 24px;
   font-weight: 700;
   color: #151515;
+}
+.evere-compact-shell .nav-type11:has(.article-header-title:not([hidden])) > .utility-zone {
+  margin-inline-start: auto;
 }
 .article-reading-progress {
   position: absolute;
@@ -25,9 +34,6 @@
   transform: scaleX(var(--article-progress, 0));
   transform-origin: left;
 }
-@media (max-width: 1023px) {
-  .nav-type11 .article-header-title { margin-inline: 102px 12px; font-size: 16px; }
-}
-@media (max-width: 420px) {
-  .nav-type11 .article-header-title { margin-inline: 91px 5px; font-size: 14px; }
+@media (max-width: 767px) {
+  .evere-compact-shell .nav-type11 .article-header-title { width: max(0px, calc(100% - 216px)); }
 }

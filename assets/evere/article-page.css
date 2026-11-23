@@ -108,8 +108,12 @@
 }
 .reader-dark .reader-comments textarea { background: var(--reader-panel); color: inherit; }
 .reader-related { grid-column: 4; grid-row: 1; margin-top: 0; border-top: 2px solid #171717; }
-.reader-related h2, .reader-comments h2 { margin: 0; padding-block: 13px; font-size: 20px; font-weight: 700; }
-.reader-related li { padding-block: 12px; border-top: 1px solid #e8e8e8; font-size: 16px; line-height: 1.45; }
+.reader-comments h2 { margin: 0; padding-block: 13px; font-size: 20px; font-weight: 700; }
+.reader-related h2 { margin: 0; padding: 14px 0 16px; font-size: 18px; font-weight: 700; line-height: 24px; }
+.reader-related ul { margin: 0; padding: 0; list-style: none; }
+.reader-related li { padding: 11px 0 12px; border-top: 1px solid #e8e8e8; font-size: 16px; font-weight: 600; line-height: 24px; }
+.reader-related li:nth-child(5) { padding-bottom: 0; }
+.reader-related li a > span { min-width: 0; overflow: hidden; overflow-wrap: anywhere; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .reader-related a:hover, .reader-comments a:hover { text-decoration: underline; }
 .reader-comments { margin-top: 56px; border-top: 2px solid #171717; scroll-margin-top: 80px; }
 .reader-comments form { display: grid; gap: 8px; margin-bottom: 15px; }
@@ -137,8 +141,8 @@
   .reader-head h1 { font-size: 24px; line-height: 34px; }
 }
 .reader-related { border-top-color: currentColor; }
-.reader-related li a { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.reader-related img { flex: none; width: 88px; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 6px; }
+.reader-related li a { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.reader-related img { flex: none; width: 96px; height: 64px; object-fit: cover; border-radius: 4px; }
 @media print {
   #evere-header, .reader-actions, .reader-related, .reader-comments, .evere-article > footer, .btn-top { display: none !important; }
   #evere-header + .article-page { width: 100%; padding: 0; color: #000 !important; background: #fff !important; box-shadow: none !important; }
