@@ -8,12 +8,29 @@ const fontSizes = ['', '10px', '13px', '16px', '18px', '24px', '32px', '48px'];
 const colors = /^(?:#[\da-f]{3,8}|rgba?\([\d.,% /]+\))$/i;
 const photoKey = /^(?:local-)?[a-f\d-]{36}(?:\/[a-f\d-]{36}\.(?:jpg|png|webp))?$/;
 
+export function readPhotoCaption(figure) {
+    const caption = figure.querySelector('figcaption');
+    const title = caption?.querySelector('.photo-caption-title');
+    const description = caption?.querySelector('.photo-caption-description');
+    return { captionTitle: title?.textContent || '', caption: description?.textContent ?? caption?.textContent ?? '' };
+}
+
+export function setPhotoCaption(label, { captionTitle = '', caption = '' }) {
+    const title = document.createElement('strong');
+    title.className = 'photo-caption-title';
+    title.textContent = captionTitle.slice(0, 200);
+    const description = document.createElement('span');
+    description.className = 'photo-caption-description';
+    description.textContent = caption.slice(0, 500);
+    label.replaceChildren(title, description);
+}
+
 export function photoFigure(key, position, caption) {
     const figure = document.createElement('figure');
     figure.dataset.photo = key;
     figure.dataset.position = ['left', 'center', 'right'].includes(position) ? position : 'center';
     const label = document.createElement('figcaption');
-    label.textContent = caption.slice(0, 500);
+    setPhotoCaption(label, caption);
     figure.append(label);
     return figure;
 }
@@ -26,7 +43,7 @@ export function formattedBody(html) {
             target.append(document.createTextNode(node.data));
         } else if (node.tagName === 'FIGURE' && photoKey.test(node.dataset.photo || '')) {
             target.append(photoFigure(node.dataset.photo, node.dataset.position,
-                node.querySelector('figcaption')?.textContent || ''));
+                readPhotoCaption(node)));
         } else if (allowed.has(node.tagName)) {
             const child = document.createElement(node.tagName === 'FONT' ? 'span' : node.tagName.toLowerCase());
             const alignment = node.style.textAlign || node.getAttribute('align');
