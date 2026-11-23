@@ -5,15 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#00B8B4">
   <title>회원 계정 | 이브레</title>
-  <link rel="icon" href="../assets/evere/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/assets/evere/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
-  <link rel="stylesheet" href="../assets/evere/account.css?v=newsroom-1">
-  <script type="module" src="../assets/evere/account.js?v=newsroom-1"></script>
+  <link rel="stylesheet" href="/assets/evere/account.css?v=newsroom-1">
+  <script type="module" src="/assets/evere/account.js?v=routes-1"></script>
+<script type="module" src="/assets/evere/route-init.js?v=routes-1"></script>
 </head>
 <body>
   <header class="account-header">
-    <a href="../" aria-label="이브레 홈"><img src="../assets/evere/wordmark.svg" alt="이브레" width="110"></a>
-    <nav class="account-links" aria-label="회원 메뉴"><a href="../newsroom/">이브레 뉴스룸</a>
+    <a href="/" aria-label="이브레 홈"><img src="/assets/evere/wordmark.svg" alt="이브레" width="110"></a>
+    <nav class="account-links" aria-label="회원 메뉴"><a href="/newsroom/">이브레 뉴스룸</a>
     <button id="sign-out" type="button" hidden>로그아웃</button></nav>
   </header>
   <main>
@@ -39,7 +40,7 @@
     <section id="workspace" hidden>
       <h1>회원 계정</h1>
       <p id="member-summary"></p>
-      <p><a href="../newsroom/">이브레 뉴스룸 열기</a></p>
+      <p><a href="/newsroom/">이브레 뉴스룸 열기</a></p>
       <details id="profile-settings">
         <summary>내 프로필</summary>
         <div class="profile-settings">
@@ -66,3 +67,4 @@
   </main>
 </body>
 </html>
+

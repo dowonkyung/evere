@@ -5,19 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#00B8B4">
   <title>이브레 뉴스룸</title>
-  <link rel="icon" href="../assets/evere/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/assets/evere/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
-  <link rel="stylesheet" href="../assets/evere/account.css?v=newsroom-4">
-  <link rel="stylesheet" href="../assets/evere/newsroom.css?v=issues-1">
-  <script type="module" src="../assets/evere/account.js?v=queue-2"></script>
-  <script type="module" src="../assets/evere/newsroom.js?v=issues-1"></script>
+  <link rel="stylesheet" href="/assets/evere/account.css?v=newsroom-4">
+  <link rel="stylesheet" href="/assets/evere/newsroom.css?v=issues-1">
+  <script type="module" src="/assets/evere/account.js?v=routes-1"></script>
+  <script type="module" src="/assets/evere/newsroom.js?v=routes-1"></script>
+<script type="module" src="/assets/evere/route-init.js?v=routes-1"></script>
 </head>
 <body class="newsroom">
   <header class="newsroom-header">
-    <a class="newsroom-brand" href="./" aria-label="이브레 뉴스룸"><img src="../assets/evere/newsroom-logo-white.svg" alt="이브레 뉴스룸"></a>
+    <a class="newsroom-brand" href="/newsroom/" aria-label="이브레 뉴스룸"><img src="/assets/evere/newsroom-logo-white.svg" alt="이브레 뉴스룸"></a>
     <nav aria-label="뉴스룸 링크">
-      <a href="../">이브레 홈</a>
-      <a href="../boards/">게시판</a>
+      <a href="/">이브레 홈</a>
+      <a href="/boards/">게시판</a>
       <div class="newsroom-session">
         <div class="newsroom-identity" id="newsroom-identity" hidden>
           <img id="newsroom-avatar" width="30" height="30" alt="" hidden>
@@ -196,7 +197,7 @@
             </fieldset>
             <div class="article-action">
               <button type="submit" disabled>화면 배치 저장</button>
-              <a id="public-page" href="../" target="_blank" rel="noopener">공개 페이지 열기</a>
+              <a id="public-page" href="/" target="_blank" rel="noopener">공개 페이지 열기</a>
             </div>
           </form>
           <form id="home-issues-form" hidden>
@@ -283,4 +284,5 @@
   </dialog>
 </body>
 </html>
+
 

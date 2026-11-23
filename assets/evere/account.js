@@ -1,3 +1,4 @@
+import { articlePath } from './routes.js?v=routes-1';
 import { supabase } from './supabase.js';
 import { sectors, articleCategories } from './article-taxonomy.js';
 import { articleComposer } from './article-composer.js?v=editor-1';
@@ -276,7 +277,7 @@ async function openArticle(id) {
     message('기사를 불러오는 중입니다.');
     try {
         const article = result(await supabase.from('evere_articles')
-            .select('id,title,subtitle,body,body_html,sector,category,series_id,byline,guest_byline,photo_paths,status,editorial_state')
+            .select('id,article_number,title,subtitle,body,body_html,sector,category,series_id,byline,guest_byline,photo_paths,status,editorial_state')
             .eq('id', id).single());
         if (!articleDialog.open || request !== dialogRequest) return;
         ui('article-dialog-title').textContent = article.title;
@@ -293,7 +294,7 @@ async function openArticle(id) {
         const actions = element('div', '', 'article-action dialog-actions');
         if (article.status === 'published') {
             const link = element('a', '공개 기사 열기');
-            link.href = '../article/?id=' + encodeURIComponent(article.id);
+            link.href = articlePath(article);
             actions.append(link);
         }
         if (canEdit(article.sector)) {
@@ -541,3 +542,4 @@ refresh().catch((error) => {
     ui('access').hidden = false;
     message(getError(error), true);
 });
+

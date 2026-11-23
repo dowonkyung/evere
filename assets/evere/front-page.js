@@ -1,3 +1,4 @@
+import { articlePath } from './routes.js?v=routes-1';
 import { supabase } from './supabase.js';
 import { photoBucket } from './article-content.js?v=inline-1';
 
@@ -22,7 +23,7 @@ function makeArticle(data, summary = false, thumbnailRatio = '700 / 467') {
 
     const text = document.createElement('div');
     const title = document.createElement('a');
-    title.href = new URL('../../article/?id=' + encodeURIComponent(data.id), import.meta.url).href;
+    title.href = articlePath(data);
     title.textContent = data.title;
     text.append(title);
     if (summary) {
@@ -38,9 +39,9 @@ function makeArticle(data, summary = false, thumbnailRatio = '700 / 467') {
 async function renderArticles() {
     const [saved, feed] = await Promise.all([
         supabase.from('evere_page_slots')
-            .select('slot,evere_articles!inner(id,title,subtitle,body,status,photo_paths)')
+            .select('slot,evere_articles!inner(id,article_number,title,subtitle,body,status,photo_paths)')
             .eq('page', 'home').eq('category', '').eq('evere_articles.status', 'published').order('slot'),
-        supabase.from('evere_articles').select('id,title,photo_paths')
+        supabase.from('evere_articles').select('id,article_number,title,photo_paths')
             .eq('status', 'published').order('published_at', { ascending: false, nullsFirst: false })
             .order('id').limit(latestLimit + 3),
     ]);
@@ -93,3 +94,4 @@ async function renderArticles() {
 }
 
 void renderArticles().catch(() => {});
+

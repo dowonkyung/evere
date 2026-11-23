@@ -1,10 +1,13 @@
+import { articlePath, articleNumberFromURL } from './routes.js?v=routes-1';
 import { renderBody, renderPhotos } from './article-content.js?v=inline-1';
 import { seriesFor, seriesLink } from './series.js';
 import { supabase } from './supabase.js';
 import { sectors } from './article-taxonomy.js';
 
 const ui = (id) => document.getElementById(id);
-const articleId = new URLSearchParams(location.search).get('id');
+let articleId = new URLSearchParams(location.search).get('id');
+const articleNumber = articleNumberFromURL();
+let currentArticle = null;
 const form = ui('comment-form');
 const previous = ui('comments-previous');
 const next = ui('comments-next');
@@ -55,8 +58,8 @@ ui('article-text-size').addEventListener('change', (event) => {
     ui('published-article').dataset.textSize = event.target.value;
 });
 ui('article-share').addEventListener('click', async () => {
-    const url = new URL(location.pathname, location.origin);
-    url.searchParams.set('id', articleId);
+    if (!currentArticle) return;
+    const url = new URL(articlePath(currentArticle), location.origin);
     try {
         if (navigator.share) {
             await navigator.share({ title: ui('title').textContent, url: url.href });
@@ -70,15 +73,15 @@ ui('article-share').addEventListener('click', async () => {
 });
 
 async function showRelated(sector) {
-    const { data, error } = await supabase.from('evere_articles').select('id,title')
+    const { data, error } = await supabase.from('evere_articles').select('id,article_number,title')
         .eq('sector', sector).eq('status', 'published').neq('id', articleId)
         .order('published_at', { ascending: false }).order('id').limit(5);
     if (error || !data.length) return;
     const related = ui('article-related');
-    related.querySelector('ul').replaceChildren(...data.map(({ id, title }) => {
+    related.querySelector('ul').replaceChildren(...data.map(({ article_number, title }) => {
         const item = document.createElement('li');
         const link = document.createElement('a');
-        link.href = '?id=' + encodeURIComponent(id);
+        link.href = articlePath({ article_number });
         link.textContent = title;
         item.append(link);
         return item;
@@ -145,19 +148,29 @@ form.addEventListener('submit', async (event) => {
 });
 
 async function render() {
-    if (!articleId || !/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(articleId)) {
+    if (!articleNumber && (!articleId || !/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(articleId))) {
         ui('status').textContent = '기사를 찾을 수 없습니다.';
         return;
     }
-    const data = checked(await supabase.from('evere_articles').select('title,subtitle,body,body_html,photo_paths,sector,series_id,byline_names,published_at')
-        .eq('id', articleId).eq('status', 'published').maybeSingle());
+    let query = supabase.from('evere_articles').select('id,article_number,title,subtitle,body,body_html,photo_paths,sector,series_id,byline_names,published_at')
+        .eq('status', 'published');
+    query = articleNumber ? query.eq('article_number', articleNumber) : query.eq('id', articleId);
+    const data = checked(await query.maybeSingle());
     if (!data) {
         ui('status').textContent = '게시된 기사를 찾을 수 없습니다.';
         return;
     }
+    articleId = data.id;
+    currentArticle = data;
+    const canonicalURL = new URL(articlePath(data), location.origin);
+    history.replaceState(null, '', canonicalURL.pathname + location.hash);
+    const canonical = document.querySelector('link[rel="canonical"]') || document.createElement('link');
+    canonical.rel = 'canonical';
+    canonical.href = canonicalURL.href;
+    document.head.append(canonical);
     document.title = data.title + ' | 이브레';
     const sectionLink = document.createElement('a');
-    sectionLink.href = '../' + data.sector + '/';
+    sectionLink.href = '/' + data.sector + '/';
     sectionLink.textContent = sectors[data.sector];
     ui('sector').replaceChildren(sectionLink);
     ui('title').textContent = data.title;
@@ -195,3 +208,4 @@ async function render() {
 }
 
 render().catch(() => { ui('status').textContent = '기사를 불러오지 못했습니다.'; });
+

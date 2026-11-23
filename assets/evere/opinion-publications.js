@@ -7,7 +7,7 @@ const series = requestedSeries();
 const dateFormat = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' });
 
 try {
-    const { publishedFeed } = await import('./published-feed.js?v=series-1');
+    const { publishedFeed } = await import('./published-feed.js?v=routes-1');
     const rows = await publishedFeed('opinion', category, series);
     if (series) {
         const name = (await seriesFor('opinion')).find(({ id }) => id === series)?.title || '기획·연재';
@@ -50,3 +50,4 @@ try {
     // The saved list is still available.
 }
 if (category || series) await import('./opinion-list.js?v=categories-1');
+

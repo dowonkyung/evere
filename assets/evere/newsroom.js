@@ -1,3 +1,4 @@
+import { categoryPath } from './routes.js?v=routes-1';
 import { supabase } from './supabase.js';
 import { sectors, articleCategories } from './article-taxonomy.js';
 import { seriesFor } from './series.js';
@@ -128,8 +129,7 @@ function resetCategories() {
 
 function publicPage(page, category) {
     if (page === 'home') return '../';
-    if (page === 'opinion') return '../opinion/' + (category ? category + '/' : '');
-    return '../' + page + '/' + (category ? '?category=' + encodeURIComponent(category) : '');
+    return categoryPath(page, category);
 }
 
 async function loadLayout() {
@@ -370,4 +370,5 @@ postForm.addEventListener('submit', task(async () => {
     await showBoard();
     notify('게시글을 저장했습니다.');
 }));
+
 
