@@ -180,7 +180,7 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
             return;
         }
         const control = event.target.closest('[data-command]');
-        if (control) applyFormat(control.dataset.command);
+        if (control) applyFormat(control.dataset.command, control.dataset.text);
     });
     toolbar.addEventListener('change', (event) => {
         const control = event.target;

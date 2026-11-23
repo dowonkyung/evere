@@ -266,3 +266,6 @@
     .evere-category-popup .category-partners { padding-top: 20px; }
 }
 
+
+.header02 .lang-zone01 .lang-list li a { font-size: 13px; }
+.header02 .lang-zone01 [data-newsroom-shortcut][hidden] { display: none !important; }
