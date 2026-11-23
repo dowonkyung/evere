@@ -17,12 +17,14 @@ let offset = 0;
 
 function enableReadingHeader(articleTitle) {
     const host = ui('evere-header');
-    const shadow = host.shadowRoot;
+    const shadow = host?.shadowRoot;
+    if (!shadow) return;
     const headline = shadow.querySelector('.article-header-title');
     const navigation = shadow.querySelector('.gnb-menu01');
     const progress = shadow.querySelector('.article-reading-progress');
     const article = ui('published-article');
     const title = ui('title');
+    if (!headline || !navigation || !progress) return;
     headline.textContent = articleTitle;
     let scheduled = false;
 
@@ -152,10 +154,7 @@ async function render() {
         ui('status').textContent = '기사를 찾을 수 없습니다.';
         return;
     }
-    let query = supabase.from('evere_articles').select('id,article_number,title,subtitle,body,body_html,photo_paths,sector,series_id,byline_names,published_at')
-        .eq('status', 'published');
-    query = articleNumber ? query.eq('article_number', articleNumber) : query.eq('id', articleId);
-    const data = checked(await query.maybeSingle());
+    const data = await readArticle();
     if (!data) {
         ui('status').textContent = '게시된 기사를 찾을 수 없습니다.';
         return;
@@ -176,17 +175,19 @@ async function render() {
     ui('title').textContent = data.title;
     ui('subtitle').textContent = data.subtitle;
     renderBody(ui('body'), data);
-    void renderPhotos(ui('article-photos'), data.photo_paths, ui('body'));
+    void renderPhotos(ui('article-photos'), data.photo_paths, ui('body')).catch(() => {});
     if (data.published_at) {
         const time = ui('published-time');
         time.dateTime = data.published_at;
         time.textContent = '입력 ' + dateFormat.format(new Date(data.published_at));
     }
     ui('byline').textContent = data.byline_names.join(', ');
+    ui('status').replaceChildren();
     ui('published-article').hidden = false;
     ui('reader-actions').hidden = false;
-    enableReadingHeader(data.title);
-    void showRelated(data.sector);
+    // Optional reading controls must never turn a displayed article into a load failure.
+    try { enableReadingHeader(data.title); } catch (error) { console.warn('Reading header unavailable', error); }
+    void showRelated(data.sector).catch(() => {});
     if (data.series_id) void seriesFor(data.sector).then((rows) => {
         const selected = rows.find(({ id }) => id === data.series_id);
         if (!selected) return;
@@ -196,8 +197,20 @@ async function render() {
         ui('sector').append(link);
     }).catch(() => {});
     ui('comments-section').hidden = false;
-    await commentsAt(0);
+    void commentsAt(0).catch(() => {
+        const message = document.createElement('li');
+        message.textContent = '댓글을 불러오지 못했습니다.';
+        const retry = document.createElement('button');
+        retry.type = 'button';
+        retry.textContent = '댓글 다시 불러오기';
+        retry.addEventListener('click', () => navigateComments(retry, 0));
+        message.append(retry);
+        ui('comments').replaceChildren(message);
+    });
+    void updateCommentSession().catch(() => {});
+}
 
+async function updateCommentSession() {
     const { data: sessionData } = await supabase.auth.getSession();
     if (sessionData?.session) {
         const { data: profile } = await supabase.from('evere_members').select('id')
@@ -207,5 +220,42 @@ async function render() {
     }
 }
 
-render().catch(() => { ui('status').textContent = '기사를 불러오지 못했습니다.'; });
+async function readArticle() {
+    for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+            let query = supabase.from('evere_articles').select('id,article_number,title,subtitle,body,body_html,photo_paths,sector,series_id,byline_names,published_at')
+                .eq('status', 'published');
+            query = articleNumber ? query.eq('article_number', articleNumber) : query.eq('id', articleId);
+            const response = await query.maybeSingle();
+            if (!response.error) return response.data;
+            const error = Object.assign(new Error(response.error.message), response.error, { status: response.status });
+            throw error;
+        } catch (error) {
+            // Retry transport failures and temporary server errors, not permissions or invalid queries.
+            const retryable = !error.status || error.status >= 500 || error.status === 408 || error.status === 429;
+            if (!retryable || attempt === 2) throw error;
+            await new Promise((resolve) => setTimeout(resolve, 300 * (attempt + 1)));
+        }
+    }
+}
+
+async function loadArticle() {
+    try {
+        await render();
+    } catch (error) {
+        console.error('Article load failed', error);
+        const status = ui('status');
+        status.textContent = '기사를 불러오지 못했습니다. ';
+        const retry = document.createElement('button');
+        retry.type = 'button';
+        retry.textContent = '다시 불러오기';
+        retry.addEventListener('click', () => {
+            retry.disabled = true;
+            status.textContent = '기사를 불러오는 중입니다.';
+            void loadArticle();
+        });
+        status.append(retry);
+    }
+}
+void loadArticle();
 
