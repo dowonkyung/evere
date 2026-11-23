@@ -148,3 +148,8 @@
   #evere-header + .article-page { width: 100%; padding: 0; color: #000 !important; background: #fff !important; box-shadow: none !important; }
   .reader-layout { display: block; }
 }
+
+.article-body figcaption .photo-caption-title { display: block; color: var(--text-primary, #151515); }
+.article-body figcaption .photo-caption-description { display: block; white-space: pre-line; }
+.article-body figcaption :is(.photo-caption-title, .photo-caption-description):empty { display: none; }
+.reader-dark .article-body figcaption .photo-caption-title { color: inherit; }
