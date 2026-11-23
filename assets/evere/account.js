@@ -174,6 +174,30 @@ function memberTableMessage(message) {
     ui('member-rows').replaceChildren(row);
 }
 
+let memberPhotoRequest = 0;
+
+async function setMemberPhoto(path, target) {
+    const request = ++memberPhotoRequest;
+    const image = ui('member-photo-preview');
+    image.hidden = true;
+    image.removeAttribute('src');
+    if (!path) return;
+    const { data, error } = await avatarBucket.createSignedUrl(path, 300);
+    if (error) throw error;
+    if (request === memberPhotoRequest && ui('member-dialog').open && memberSelect.value === target) {
+        image.src = data.signedUrl;
+        image.hidden = false;
+    }
+}
+
+function validAvatar(photo) {
+    return photo && avatarTypes.has(photo.type) && photo.size > 0 && photo.size <= 3 * 1024 * 1024;
+}
+
+async function uploadAvatar(path, photo) {
+    result(await avatarBucket.upload(path, photo, { upsert: true, contentType: photo.type, cacheControl: '60' }));
+}
+
 function editMember(entry) {
     memberForm.reset();
     memberSelect.value = entry.id;
@@ -189,7 +213,9 @@ function editMember(entry) {
         checkbox.checked = entry.sectors.includes(checkbox.value);
     }
     ui('member-dialog-status').textContent = '';
+    ui('member-photo-status').textContent = '';
     ui('member-dialog').showModal();
+    void setMemberPhoto(entry.avatar_path, entry.id).catch(() => {});
 }
 
 async function renderMemberTable() {
@@ -211,7 +237,7 @@ async function renderMemberTable() {
         avatar.append(placeholder);
         if (entry.avatar_path) photos.set(entry.avatar_path, avatar);
         row.append(avatar);
-        for (const value of [entry.id, entry.email, entry.display_name, entry.position_title,
+        for (const value of [entry.email, entry.display_name, entry.position_title,
             entry.joined_at && memberDate.format(new Date(entry.joined_at)),
             entry.last_sign_in_at && memberDate.format(new Date(entry.last_sign_in_at))]) {
             row.append(element('td', value || '—'));
@@ -521,11 +547,11 @@ profileDetails.addEventListener('submit', handle(async () => {
 }));
 avatarForm.addEventListener('submit', handle(async () => {
     const photo = avatarForm.elements.avatar.files[0];
-    if (!photo || !avatarTypes.has(photo.type) || photo.size === 0 || photo.size > 3 * 1024 * 1024) {
+    if (!validAvatar(photo)) {
         message('3MB 이하의 JPG, PNG 또는 WebP 사진을 선택해 주세요.', true);
         return;
     }
-    result(await avatarBucket.upload(avatarPath(), photo, { upsert: true, contentType: photo.type, cacheControl: '60' }));
+    await uploadAvatar(avatarPath(), photo);
     avatarForm.reset();
     const signed = result(await avatarBucket.createSignedUrl(avatarPath(), 3600));
     showAvatar(signed.signedUrl);
@@ -572,6 +598,35 @@ if (articleForm && memberForm) {
         approvedSectors.querySelector('.checkbox-grid').append(label);
     }
     memberRole.addEventListener('change', () => { approvedSectors.hidden = memberRole.value !== 'department_head'; });
+    const memberPhotoSave = ui('member-photo-save');
+    memberPhotoSave.addEventListener('click', async () => {
+        if (member?.role !== 'owner' || memberPhotoSave.disabled) return;
+        const target = memberSelect.value;
+        const input = memberForm.elements.memberPhoto;
+        const status = ui('member-photo-status');
+        const photo = input.files[0];
+        if (!target || !validAvatar(photo)) {
+            status.textContent = '3MB 이하의 JPG, PNG 또는 WebP 사진을 선택해 주세요.';
+            return;
+        }
+        const path = target + '/profile';
+        memberPhotoSave.disabled = true;
+        status.textContent = '사진을 저장하는 중입니다.';
+        try {
+            await uploadAvatar(path, photo);
+            if (target === member?.id) void loadAvatar(target).catch(() => {});
+            if (ui('member-dialog').open && memberSelect.value === target) {
+                input.value = '';
+                status.textContent = '프로필 사진을 저장했습니다.';
+                void setMemberPhoto(path, target).catch(() => {});
+            }
+            void renderMemberTable().catch(() => memberTableMessage('회원 목록을 갱신하지 못했습니다.'));
+        } catch (error) {
+            if (ui('member-dialog').open && memberSelect.value === target) status.textContent = getError(error);
+        } finally {
+            memberPhotoSave.disabled = false;
+        }
+    });
     memberForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         const submit = event.submitter || memberForm.querySelector('[type="submit"]');
