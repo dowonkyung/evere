@@ -19,7 +19,7 @@
 .reader-sector a:hover { text-decoration: underline; }
 .reader-head h1 { margin: 0 0 15px; font-size: 32px; line-height: 44px; font-weight: 700; word-break: keep-all; overflow-wrap: anywhere; }
 .reader-head time { color: #686868; font-size: 14px; }
-.article-byline { margin: 16px 0 0; font-size: 15px; font-weight: 600; }
+.article-byline { margin: 16px 0 0; font-size: 15px; font-weight: 600; text-decoration: underline; text-underline-offset: 4px; }
 .reader-article .editor-subtitle { border-inline-start: 3px solid currentColor; padding-inline-start: 13px; margin: 0 0 32px; }
 .reader-article .editor-subtitle > p { margin: 0; white-space: pre-line; font-size: 17px; font-weight: 550; line-height: 28px; }
 .article-byline:empty, .article-photos:empty { display: none; }

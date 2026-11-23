@@ -234,7 +234,18 @@ async function render() {
         time.dateTime = data.published_at;
         time.textContent = '입력 ' + dateFormat.format(new Date(data.published_at));
     }
-    ui('byline').textContent = data.byline_names.join(', ');
+    const names = data.byline_names;
+    const byline = ui('byline');
+    byline.textContent = names.join(', ');
+    if (names.length) void Promise.resolve(supabase.rpc('evere_article_byline_positions', { target_article: data.id }))
+        .then(({ data: positions, error }) => {
+            if (error || !positions?.length) return;
+            const titles = new Map(positions.map(row => [row.byline_index, row.position_title.trim()]));
+            byline.textContent = names.map((name, index) => {
+                const title = titles.get(index + 1);
+                return title ? name + ' ' + title : name;
+            }).join(', ');
+        }).catch(() => {});
     ui('status').replaceChildren();
     ui('published-article').hidden = false;
     ui('reader-actions').hidden = false;
