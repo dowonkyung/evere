@@ -34,6 +34,8 @@
   transform: scaleX(var(--article-progress, 0));
   transform-origin: left;
 }
-@media (max-width: 767px) {
-  .evere-compact-shell .nav-type11 .article-header-title { width: max(0px, calc(100% - 216px)); }
+@media (max-width: 1023px) {
+  .evere-compact-shell .nav-type11 .article-header-title { display: none; }
+  .evere-compact-shell .nav-type11 .logo-yna03 img { width: 87px; }
+  .evere-compact-shell .nav-type11 > .logo-yna03 { height: 50px; }
 }
