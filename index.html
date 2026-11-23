@@ -5,30 +5,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#00B8B4">
 <title>이브레</title>
-<link rel="icon" type="image/svg+xml" href="./assets/evere/favicon.svg">
+<link rel="icon" type="image/svg+xml" href="/assets/evere/favicon.svg">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
-<link rel="stylesheet" href="./assets/khan/swiper-bundle.min.css">
-<link rel="stylesheet" href="./assets/khan/common.css">
-<link rel="stylesheet" href="./assets/khan/home.css?v=opinion-1">
-<link rel="stylesheet" href="./assets/evere/home.css?v=headlines-1">
-<script defer src="./assets/khan/swiper-bundle.min.js"></script>
-<script defer src="./assets/evere/home.js?v=khan-menu-2"></script>
-<script type="module" src="./assets/evere/front-page.js?v=article-label-1"></script>
+<link rel="stylesheet" href="/assets/khan/swiper-bundle.min.css">
+<link rel="stylesheet" href="/assets/khan/common.css">
+<link rel="stylesheet" href="/assets/khan/home.css?v=opinion-1">
+<link rel="stylesheet" href="/assets/evere/home.css?v=issues-1">
+<script defer src="/assets/khan/swiper-bundle.min.js"></script>
+<script defer src="/assets/evere/home.js?v=routes-1"></script>
+<script type="module" src="/assets/evere/front-page.js?v=routes-label-2"></script>
+<script type="module" src="/assets/evere/home-issues.js?v=routes-1"></script>
+<script type="module" src="/assets/evere/route-init.js?v=routes-1"></script>
 </head>
 <body>
 <div id="evere-header">
 <template shadowrootmode="open">
-<link rel="stylesheet" href="./assets/yna/default.css">
-<link rel="stylesheet" href="./assets/yna/variables.css">
-<link rel="stylesheet" href="./assets/yna/common.css">
-<link rel="stylesheet" href="./assets/yna/style.css">
-<link rel="stylesheet" href="./assets/yna/layout.css">
-<link rel="stylesheet" href="./assets/evere/header.css?v=mobile-rule-2">
+<link rel="stylesheet" href="/assets/yna/default.css">
+<link rel="stylesheet" href="/assets/yna/variables.css">
+<link rel="stylesheet" href="/assets/yna/common.css">
+<link rel="stylesheet" href="/assets/yna/style.css">
+<link rel="stylesheet" href="/assets/yna/layout.css">
+<link rel="stylesheet" href="/assets/evere/header.css?v=issues-1">
 <div class="yna-shell page-main site-home-web">
 <div class="evere-category-dim" hidden></div>
 <header class="wrap-header02">
 <div class="header02">
-<a class="logo-yna01" href="./" aria-label="이브레 홈"><img src="./assets/evere/logo.svg" alt="이브레" width="218" height="56"></a>
+<a class="logo-yna01" href="/" aria-label="이브레 홈"><img src="/assets/evere/logo.svg" alt="이브레" width="218" height="56"></a>
 <nav class="lang-zone01" aria-label="지면 및 후원">
 <ul class="lang-list">
 <li><a aria-disabled="true">지면보기</a></li>
@@ -43,7 +45,7 @@
 <a href="https://www.yna.co.kr/my-page/index?site=header_mypage" class="btn-type200 my01" rel="nofollow" data-stat-code="header_mypage">
 <span class="txt01">마이페이지</span>
 </a>
-<a href="./account/" class="btn-type004 login01 active" aria-label="로그인" rel="nofollow" data-stat-code="header_login"></a>
+<a href="/account/" class="btn-type004 login01 active" aria-label="로그인" rel="nofollow" data-stat-code="header_login"></a>
 <button type="button" aria-controls="evere-search" aria-expanded="false" class="btn-type004-toggle btn-srch-switch a11y-search-toggle01" data-a11y-txt="검색창 닫기;검색창 열기" data-stat-code="search_btn_toggle">
 <span class="ir-txt01">검색창 열기</span>
 <i class="pick01 ico-type01-srch01"></i>
@@ -59,16 +61,16 @@
 <div class="nav-type01 main-navigation">
 <nav id="nav01" class="gnb-menu01" aria-label="뉴스 섹션">
 <ul class="list01 evere-news-links">
-<li><a href="./opinion/" aria-label="오피니언">오피니언</a></li>
-<li><a href="./wiki/">위키</a></li>
-<li><a href="./virtual-nations/">가상국가</a></li>
-<li><a href="./politics/">정치</a></li>
-<li><a href="./economy/">경제</a></li>
-<li><a href="./society/">사회</a></li>
-<li><a href="./international/">국제</a></li>
-<li><a href="./health/">건강</a></li>
-<li><a href="./sports/">스포츠</a></li>
-<li><a href="./culture/">문화</a></li>
+<li><a href="/opinion/" aria-label="오피니언">오피니언</a></li>
+<li><a href="/wiki/">위키</a></li>
+<li><a href="/virtual-nations/">가상국가</a></li>
+<li><a href="/politics/">정치</a></li>
+<li><a href="/economy/">경제</a></li>
+<li><a href="/society/">사회</a></li>
+<li><a href="/international/">국제</a></li>
+<li><a href="/health/">건강</a></li>
+<li><a href="/sports/">스포츠</a></li>
+<li><a href="/culture/">문화</a></li>
 </ul>
 <ul class="list01 evere-partner-links">
 <li class="evewiki"><a href="https://evewiki.kr/">이브위키</a></li>
@@ -81,114 +83,114 @@
 <div class="evere-category-popup" id="evere-menu" role="region" aria-label="전체 메뉴" tabindex="-1" hidden>
 <nav class="wrap category" aria-label="뉴스 사이트맵">
 <div class="title-m">
-<a href="./" aria-label="이브레 홈"><img src="./assets/evere/wordmark.svg" alt="이브레"></a>
+<a href="/" aria-label="이브레 홈"><img src="/assets/evere/wordmark.svg" alt="이브레"></a>
 <button type="button" class="category-expand-all" data-expand-categories aria-expanded="false">메뉴 펼치기</button>
 <button type="button" class="category-close" data-close-sitemap aria-label="전체메뉴 닫기"></button>
 </div>
 <ul>
 <li id="sitemap-opinion"><dl>
-<dt tabindex="-1"><a href="./opinion/">오피니언</a><button type="button" class="category-toggle" data-category-toggle aria-label="오피니언 하위 메뉴" aria-expanded="false" aria-controls="category-opinion"></button></dt>
+<dt tabindex="-1"><a href="/opinion/">오피니언</a><button type="button" class="category-toggle" data-category-toggle aria-label="오피니언 하위 메뉴" aria-expanded="false" aria-controls="category-opinion"></button></dt>
 <dd id="category-opinion"><ul>
-<li><a href="./opinion/editorial/">사설</a></li>
-<li><a href="./opinion/column/">칼럼</a></li>
-<li><a href="./opinion/contributions/">기고</a></li>
+<li><a href="/opinion/editorial">사설</a></li>
+<li><a href="/opinion/column">칼럼</a></li>
+<li><a href="/opinion/contributions">기고</a></li>
 </ul></dd>
 </dl></li>
 <li id="sitemap-wiki"><dl>
-<dt tabindex="-1"><a href="./wiki/">위키</a><button type="button" class="category-toggle" data-category-toggle aria-label="위키 하위 메뉴" aria-expanded="false" aria-controls="category-wiki"></button></dt>
+<dt tabindex="-1"><a href="/wiki/">위키</a><button type="button" class="category-toggle" data-category-toggle aria-label="위키 하위 메뉴" aria-expanded="false" aria-controls="category-wiki"></button></dt>
 <dd id="category-wiki"><ul>
-<li><a href="./wiki/?category=general">위키일반</a></li>
-<li><a href="./wiki/?category=council">운영협의회</a></li>
-<li><a href="./wiki/?category=informal-groups">비공식단체</a></li>
-<li><a href="./wiki/?category=chair">의장동정</a></li>
+<li><a href="/wiki/general">위키일반</a></li>
+<li><a href="/wiki/council">운영협의회</a></li>
+<li><a href="/wiki/informal-groups">비공식단체</a></li>
+<li><a href="/wiki/chair">의장동정</a></li>
 </ul></dd>
 </dl></li>
 <li id="sitemap-virtual-nations"><dl>
-<dt tabindex="-1"><a href="./virtual-nations/">가상국가</a><button type="button" class="category-toggle" data-category-toggle aria-label="가상국가 하위 메뉴" aria-expanded="false" aria-controls="category-virtual-nations"></button></dt>
+<dt tabindex="-1"><a href="/virtual-nations/">가상국가</a><button type="button" class="category-toggle" data-category-toggle aria-label="가상국가 하위 메뉴" aria-expanded="false" aria-controls="category-virtual-nations"></button></dt>
 <dd id="category-virtual-nations"><ul>
-<li><a href="./virtual-nations/?category=general">가상국가일반</a></li>
-<li><a href="./virtual-nations/?category=nations">네이션즈</a></li>
-<li><a href="./virtual-nations/?category=virtual-united-nations">가상국제연합</a></li>
-<li><a href="./virtual-nations/?category=hangaker-wolbon">한가커·월본</a></li>
-<li><a href="./virtual-nations/?category=kaguk-diguk">카국·디국·저능아</a></li>
+<li><a href="/virtual-nations/general">가상국가일반</a></li>
+<li><a href="/virtual-nations/nations">네이션즈</a></li>
+<li><a href="/virtual-nations/virtual-united-nations">가상국제연합</a></li>
+<li><a href="/virtual-nations/hangaker-wolbon">한가커·월본</a></li>
+<li><a href="/virtual-nations/kaguk-diguk">카국·디국·저능아</a></li>
 </ul></dd>
 </dl></li>
 <li id="sitemap-politics"><dl>
-<dt tabindex="-1"><a href="./politics/">정치</a><button type="button" class="category-toggle" data-category-toggle aria-label="정치 하위 메뉴" aria-expanded="false" aria-controls="category-politics"></button></dt>
+<dt tabindex="-1"><a href="/politics/">정치</a><button type="button" class="category-toggle" data-category-toggle aria-label="정치 하위 메뉴" aria-expanded="false" aria-controls="category-politics"></button></dt>
 <dd id="category-politics"><ul>
-<li><a href="./politics/?category=general">정치일반</a></li>
-<li><a href="./politics/?category=president">청와대</a></li>
-<li><a href="./politics/?category=assembly">국회·정당</a></li>
-<li><a href="./politics/?category=legal">법비</a></li>
-<li><a href="./politics/?category=north-korea">북한</a></li>
-<li><a href="./politics/?category=foreign-defense">외교·국방</a></li>
-<li><a href="./politics/?category=administration">행정</a></li>
+<li><a href="/politics/general">정치일반</a></li>
+<li><a href="/politics/president">청와대</a></li>
+<li><a href="/politics/assembly">국회·정당</a></li>
+<li><a href="/politics/legal">법비</a></li>
+<li><a href="/politics/north-korea">북한</a></li>
+<li><a href="/politics/foreign-defense">외교·국방</a></li>
+<li><a href="/politics/administration">행정</a></li>
 </ul></dd>
 </dl></li>
 <li id="sitemap-economy"><dl>
-<dt tabindex="-1"><a href="./economy/">경제</a><button type="button" class="category-toggle" data-category-toggle aria-label="경제 하위 메뉴" aria-expanded="false" aria-controls="category-economy"></button></dt>
+<dt tabindex="-1"><a href="/economy/">경제</a><button type="button" class="category-toggle" data-category-toggle aria-label="경제 하위 메뉴" aria-expanded="false" aria-controls="category-economy"></button></dt>
 <dd id="category-economy"><ul>
-<li><a href="./economy/?category=general">경제일반</a></li>
-<li><a href="./economy/?category=policy">경제정책</a></li>
-<li><a href="./economy/?category=industry">산업</a></li>
-<li><a href="./economy/?category=finance">금융/증권</a></li>
-<li><a href="./economy/?category=real-estate">부동산</a></li>
-<li><a href="./economy/?category=technology">IT/과학</a></li>
-<li><a href="./economy/?category=automotive">자동차</a></li>
+<li><a href="/economy/general">경제일반</a></li>
+<li><a href="/economy/policy">경제정책</a></li>
+<li><a href="/economy/industry">산업</a></li>
+<li><a href="/economy/finance">금융/증권</a></li>
+<li><a href="/economy/real-estate">부동산</a></li>
+<li><a href="/economy/technology">IT/과학</a></li>
+<li><a href="/economy/automotive">자동차</a></li>
 </ul></dd>
 </dl></li>
 <li id="sitemap-society"><dl>
-<dt tabindex="-1"><a href="./society/">사회</a><button type="button" class="category-toggle" data-category-toggle aria-label="사회 하위 메뉴" aria-expanded="false" aria-controls="category-society"></button></dt>
+<dt tabindex="-1"><a href="/society/">사회</a><button type="button" class="category-toggle" data-category-toggle aria-label="사회 하위 메뉴" aria-expanded="false" aria-controls="category-society"></button></dt>
 <dd id="category-society"><ul>
-<li><a href="./society/?category=general">사회일반</a></li>
-<li><a href="./society/?category=incidents">사건·사고</a></li>
-<li><a href="./society/?category=justice">법원·경찰</a></li>
-<li><a href="./society/?category=education">교육</a></li>
-<li><a href="./society/?category=labor">노동</a></li>
-<li><a href="./society/?category=health-welfare">보건·복지</a></li>
-<li><a href="./society/?category=environment">날씨·환경</a></li>
+<li><a href="/society/general">사회일반</a></li>
+<li><a href="/society/incidents">사건·사고</a></li>
+<li><a href="/society/justice">법원·경찰</a></li>
+<li><a href="/society/education">교육</a></li>
+<li><a href="/society/labor">노동</a></li>
+<li><a href="/society/health-welfare">보건·복지</a></li>
+<li><a href="/society/environment">날씨·환경</a></li>
 </ul></dd>
 </dl></li>
 <li id="sitemap-international"><dl>
-<dt tabindex="-1"><a href="./international/">국제</a><button type="button" class="category-toggle" data-category-toggle aria-label="국제 하위 메뉴" aria-expanded="false" aria-controls="category-international"></button></dt>
+<dt tabindex="-1"><a href="/international/">국제</a><button type="button" class="category-toggle" data-category-toggle aria-label="국제 하위 메뉴" aria-expanded="false" aria-controls="category-international"></button></dt>
 <dd id="category-international"><ul>
-<li><a href="./international/?category=general">국제일반</a></li>
-<li><a href="./international/?category=china">중국</a></li>
-<li><a href="./international/?category=japan">일본</a></li>
-<li><a href="./international/?category=asia-oceania">아시아·호주</a></li>
-<li><a href="./international/?category=americas">미국·중남미</a></li>
-<li><a href="./international/?category=europe">유럽</a></li>
-<li><a href="./international/?category=middle-east-africa">중동·아프리카</a></li>
+<li><a href="/international/general">국제일반</a></li>
+<li><a href="/international/china">중국</a></li>
+<li><a href="/international/japan">일본</a></li>
+<li><a href="/international/asia-oceania">아시아·호주</a></li>
+<li><a href="/international/americas">미국·중남미</a></li>
+<li><a href="/international/europe">유럽</a></li>
+<li><a href="/international/middle-east-africa">중동·아프리카</a></li>
 </ul></dd>
 </dl></li>
 <li id="sitemap-health"><dl>
-<dt tabindex="-1"><a href="./health/">건강</a><button type="button" class="category-toggle" data-category-toggle aria-label="건강 하위 메뉴" aria-expanded="false" aria-controls="category-health"></button></dt>
+<dt tabindex="-1"><a href="/health/">건강</a><button type="button" class="category-toggle" data-category-toggle aria-label="건강 하위 메뉴" aria-expanded="false" aria-controls="category-health"></button></dt>
 <dd id="category-health"><ul>
-<li><a href="./health/?category=general">건강일반</a></li>
-<li><a href="./health/?category=living">리빙포인트</a></li>
-<li><a href="./health/?category=obituaries">궂긴소식</a></li>
-<li><a href="./health/?category=gukjim">국짐소식</a></li>
+<li><a href="/health/general">건강일반</a></li>
+<li><a href="/health/living">리빙포인트</a></li>
+<li><a href="/health/obituaries">궂긴소식</a></li>
+<li><a href="/health/gukjim">국짐소식</a></li>
 </ul></dd>
 </dl></li>
 <li id="sitemap-sports"><dl>
-<dt tabindex="-1"><a href="./sports/">스포츠</a><button type="button" class="category-toggle" data-category-toggle aria-label="스포츠 하위 메뉴" aria-expanded="false" aria-controls="category-sports"></button></dt>
+<dt tabindex="-1"><a href="/sports/">스포츠</a><button type="button" class="category-toggle" data-category-toggle aria-label="스포츠 하위 메뉴" aria-expanded="false" aria-controls="category-sports"></button></dt>
 <dd id="category-sports"><ul>
-<li><a href="./sports/?category=general">스포츠일반</a></li>
-<li><a href="./sports/?category=baseball">야구</a></li>
-<li><a href="./sports/?category=football">축구</a></li>
-<li><a href="./sports/?category=basketball-volleyball">농구·배구</a></li>
-<li><a href="./sports/?category=golf">골프</a></li>
+<li><a href="/sports/general">스포츠일반</a></li>
+<li><a href="/sports/baseball">야구</a></li>
+<li><a href="/sports/football">축구</a></li>
+<li><a href="/sports/basketball-volleyball">농구·배구</a></li>
+<li><a href="/sports/golf">골프</a></li>
 </ul></dd>
 </dl></li>
 <li id="sitemap-culture"><dl>
-<dt tabindex="-1"><a href="./culture/">문화</a><button type="button" class="category-toggle" data-category-toggle aria-label="문화 하위 메뉴" aria-expanded="false" aria-controls="category-culture"></button></dt>
+<dt tabindex="-1"><a href="/culture/">문화</a><button type="button" class="category-toggle" data-category-toggle aria-label="문화 하위 메뉴" aria-expanded="false" aria-controls="category-culture"></button></dt>
 <dd id="category-culture"><ul>
-<li><a href="./culture/?category=general">문화일반</a></li>
-<li><a href="./culture/?category=k-pop">K-POP</a></li>
-<li><a href="./culture/?category=religion">종교</a></li>
-<li><a href="./culture/?category=nam-gwang-hui">남광희</a></li>
-<li><a href="./culture/?category=film-music">영화·음악</a></li>
-<li><a href="./culture/?category=arts">미술·전시·공연</a></li>
+<li><a href="/culture/general">문화일반</a></li>
+<li><a href="/culture/k-pop">K-POP</a></li>
+<li><a href="/culture/religion">종교</a></li>
+<li><a href="/culture/nam-gwang-hui">남광희</a></li>
+<li><a href="/culture/film-music">영화·음악</a></li>
+<li><a href="/culture/arts">미술·전시·공연</a></li>
 </ul></dd>
 </dl></li>
 </ul>
@@ -201,20 +203,20 @@
 </header>
 <div class="wrap-header21 hide-appview">
 <div class="nav-type11 fixed-navigation01">
-<a class="logo-yna21" href="./" aria-label="이브레 홈"><img src="./assets/evere/wordmark.svg" alt="이브레"></a>
-<a class="logo-yna03" href="./" aria-label="이브레 홈"><img src="./assets/evere/wordmark.svg" alt="이브레"></a>
+<a class="logo-yna21" href="/" aria-label="이브레 홈"><img src="/assets/evere/wordmark.svg" alt="이브레"></a>
+<a class="logo-yna03" href="/" aria-label="이브레 홈"><img src="/assets/evere/wordmark.svg" alt="이브레"></a>
 <nav id="nav02" class="gnb-menu01" aria-label="뉴스 섹션">
 <ul class="list01 evere-news-links">
-<li><a href="./opinion/" aria-label="오피니언">오피니언</a></li>
-<li><a href="./wiki/">위키</a></li>
-<li><a href="./virtual-nations/">가상국가</a></li>
-<li><a href="./politics/">정치</a></li>
-<li><a href="./economy/">경제</a></li>
-<li><a href="./society/">사회</a></li>
-<li><a href="./international/">국제</a></li>
-<li><a href="./health/">건강</a></li>
-<li><a href="./sports/">스포츠</a></li>
-<li><a href="./culture/">문화</a></li>
+<li><a href="/opinion/" aria-label="오피니언">오피니언</a></li>
+<li><a href="/wiki/">위키</a></li>
+<li><a href="/virtual-nations/">가상국가</a></li>
+<li><a href="/politics/">정치</a></li>
+<li><a href="/economy/">경제</a></li>
+<li><a href="/society/">사회</a></li>
+<li><a href="/international/">국제</a></li>
+<li><a href="/health/">건강</a></li>
+<li><a href="/sports/">스포츠</a></li>
+<li><a href="/culture/">문화</a></li>
 </ul>
 <ul class="list01 evere-partner-links">
 <li class="evewiki"><a href="https://evewiki.kr/">이브위키</a></li>
@@ -225,7 +227,7 @@
 <a href="https://www.yna.co.kr/my-page/index?site=header_mypage" class="btn-type200 my01" rel="nofollow" data-stat-code="header_mypage">
 <span class="txt01">마이페이지</span>
 </a>
-<a href="./account/" class="btn-type004 login01 active" aria-label="로그인" rel="nofollow" data-stat-code="header_login"></a>
+<a href="/account/" class="btn-type004 login01 active" aria-label="로그인" rel="nofollow" data-stat-code="header_login"></a>
 <button type="button" aria-controls="evere-search" aria-expanded="false" class="btn-type004-toggle btn-srch-switch a11y-search-toggle01" data-a11y-txt="검색창 닫기;검색창 열기" data-stat-code="search_btn_toggle">
 <span class="ir-txt01">검색창 열기</span>
 <i class="pick01 ico-type01-srch01"></i>
@@ -262,20 +264,9 @@
                 </div>
             </div>
 
-            <section class="issue">
-<div class="issue-wrap">
-                <div class="swiper-container swiper-initialized swiper-horizontal swiper-backface-hidden">
-                    <ul class="swiper-wrapper" id="swiper-wrapper-341cb4336b6959f9" aria-live="polite">
-                                                                    <li class="swiper-slide swiper-slide-active" role="group" aria-label="1 / 5"><a href="https://www.khan.co.kr/80th" target="_blank">📌창간 80년 특집</a></li>
-                                                                    <li class="swiper-slide swiper-slide-next" role="group" aria-label="2 / 5"><a href="https://www.khan.co.kr/introduce/kyunghyangtv/">📺경향티비</a></li>
-                                                                    <li class="swiper-slide" role="group" aria-label="3 / 5"><a href="https://www.khan.co.kr/issue/articles/ahd68">시험장 침투한 AI</a></li>
-                                                                    <li class="swiper-slide" role="group" aria-label="4 / 5"><a href="https://www.khan.co.kr/issue/articles/ahd67">젠슨 황 스캔들</a></li>
-                                                                    <li class="swiper-slide" role="group" aria-label="5 / 5"><a href="https://www.khan.co.kr/issue/articles/ahd69">2027 대입 수능</a></li>
-                                                                                        </ul>
-                <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
-            </div>
-        
-                <p>2026년 11월 20일 금요일</p>
+            <section class="issue evere-home-issues" aria-label="주요 이슈">
+                <div class="issue-wrap"><ul data-home-issues aria-label="이슈 링크"></ul></div>
+                <p>양심 있는 세상을 만드는 언론</p>
             </section>
 
             <section class="head" data-home-articles hidden>
@@ -377,7 +368,7 @@
                             <article>
                                 <picture>
                                                                     
-                                                                    <img class="evere-media-placeholder" src="./assets/evere/media-placeholder.svg" alt="" style="--media-ratio: 700 / 467" loading="lazy">
+                                                                    <img class="evere-media-placeholder" src="/assets/evere/media-placeholder.svg" alt="" style="--media-ratio: 700 / 467" loading="lazy">
                                                                 </picture>
                                 <div>
                                                                     <a href="https://www.khan.co.kr/article/202611201439001" title="'윤석열 변호사 소개 의혹’ 윤우진 뇌물 사건, 2심서 무죄···재판부 “공소시효 지났다”"><span class="tag tag-red">속보</span>'윤석열 변호사 소개 의혹’ 윤우진 뇌물 사건, 2심서 무죄···재판부 “공소시효 지났다”</a>
@@ -395,7 +386,7 @@
                                         <picture>
                                                                                     
                                             
-                                                                                    <img class="evere-media-placeholder" src="./assets/evere/media-placeholder.svg" alt="" style="--media-ratio: 300 / 200" loading="lazy">
+                                                                                    <img class="evere-media-placeholder" src="/assets/evere/media-placeholder.svg" alt="" style="--media-ratio: 300 / 200" loading="lazy">
                                                                                 </picture>
                                         <div>
                                                                                     <a href="https://www.khan.co.kr/article/202611201812001" title="정동영, 스틸·브런슨 연쇄 회담…미국·유엔사와 협력 강조">정동영, 스틸·브런슨 연쇄 회담…미국·유엔사와 협력 강조</a>
@@ -410,7 +401,7 @@
                                         <picture>
                                                                                     
                                             
-                                                                                    <img class="evere-media-placeholder" src="./assets/evere/media-placeholder.svg" alt="" style="--media-ratio: 300 / 200" loading="lazy">
+                                                                                    <img class="evere-media-placeholder" src="/assets/evere/media-placeholder.svg" alt="" style="--media-ratio: 300 / 200" loading="lazy">
                                                                                 </picture>
                                         <div>
                                                                                     <a href="https://www.khan.co.kr/article/202611201601001" title="김건희, 도이치 주가조작 유죄에 격앙 “난 죽어도 이해 못 해···대법관들이 내 사건 봤는지 의문”">김건희, 도이치 주가조작 유죄에 격앙 “난 죽어도 이해 못 해···대법관들이 내 사건 봤는지 의문”</a>
@@ -425,7 +416,7 @@
                                         <picture>
                                                                                     
                                             
-                                                                                    <img class="evere-media-placeholder" src="./assets/evere/media-placeholder.svg" alt="" style="--media-ratio: 300 / 200" loading="lazy">
+                                                                                    <img class="evere-media-placeholder" src="/assets/evere/media-placeholder.svg" alt="" style="--media-ratio: 300 / 200" loading="lazy">
                                                                                 </picture>
                                         <div>
                                                                                     <a href="https://www.khan.co.kr/article/202611201402001" title="‘단추에 스티커’ 이러다 시험장 국룰 될라···28일 교사 임용시험도 수능 못잖은 ‘AI 커닝’ 방지책">‘단추에 스티커’ 이러다 시험장 국룰 될라···28일 교사 임용시험도 수능 못잖은 ‘AI 커닝’ 방지책</a>
@@ -442,7 +433,7 @@
                                                                                             <picture>
                                                                     
                                     
-                                                                    <img class="evere-media-placeholder" src="./assets/evere/media-placeholder.svg" alt="" style="--media-ratio: 300 / 200" loading="lazy">
+                                                                    <img class="evere-media-placeholder" src="/assets/evere/media-placeholder.svg" alt="" style="--media-ratio: 300 / 200" loading="lazy">
                                                                 </picture>
                                                             <div>
                                     <a href="https://www.khan.co.kr/article/202611201536001" title="민주유공자법, 여당 주도 국회 본회의 통과···박종철·이한열 열사도 유공자된다">민주유공자법, 여당 주도 국회 본회의 통과···박종철·이한열 열사도 유공자된다</a>
@@ -499,7 +490,7 @@
                                 <picture>
                                     
                                     
-                                    <img class="evere-media-placeholder" src="./assets/evere/media-placeholder.svg" alt="" style="--media-ratio: 140 / 140" loading="lazy">
+                                    <img class="evere-media-placeholder" src="/assets/evere/media-placeholder.svg" alt="" style="--media-ratio: 140 / 140" loading="lazy">
                                 </picture>
                                 <div>
                                     <a href="https://www.khan.co.kr/article/202611191815001" title="[여적]‘옛날 옛적에’"><span>여적</span>‘옛날 옛적에’</a>
@@ -510,7 +501,7 @@
                 <article>
                                         <picture>
                                                 
-                                                <img class="evere-media-placeholder" src="./assets/evere/media-placeholder.svg" alt="" style="--media-ratio: 140 / 140" loading="lazy">
+                                                <img class="evere-media-placeholder" src="/assets/evere/media-placeholder.svg" alt="" style="--media-ratio: 140 / 140" loading="lazy">
                     </picture>
                                         <div>
                                             <p class="issue">에디터의 창</p>
@@ -522,7 +513,7 @@
                 <article>
                                         <picture>
                                                 
-                                                <img class="evere-media-placeholder" src="./assets/evere/media-placeholder.svg" alt="" style="--media-ratio: 140 / 140" loading="lazy">
+                                                <img class="evere-media-placeholder" src="/assets/evere/media-placeholder.svg" alt="" style="--media-ratio: 140 / 140" loading="lazy">
                     </picture>
                                         <div>
                                             <p class="issue">김학균의 쓰고 달콤한 경제</p>
@@ -534,7 +525,7 @@
                 <article>
                                         <picture>
                                                 
-                                                <img class="evere-media-placeholder" src="./assets/evere/media-placeholder.svg" alt="" style="--media-ratio: 140 / 140" loading="lazy">
+                                                <img class="evere-media-placeholder" src="/assets/evere/media-placeholder.svg" alt="" style="--media-ratio: 140 / 140" loading="lazy">
                     </picture>
                                         <div>
                                             <p class="issue">고병권의 묵묵</p>
@@ -546,7 +537,7 @@
                 <article>
                                         <picture>
                                                 
-                                                <img class="evere-media-placeholder" src="./assets/evere/media-placeholder.svg" alt="" style="--media-ratio: 140 / 140" loading="lazy">
+                                                <img class="evere-media-placeholder" src="/assets/evere/media-placeholder.svg" alt="" style="--media-ratio: 140 / 140" loading="lazy">
                     </picture>
                                         <div>
                                             <p class="issue">정동칼럼</p>
@@ -558,7 +549,7 @@
                 <article>
                                         <picture>
                                                 
-                                                <img class="evere-media-placeholder" src="./assets/evere/media-placeholder.svg" alt="" style="--media-ratio: 140 / 140" loading="lazy">
+                                                <img class="evere-media-placeholder" src="/assets/evere/media-placeholder.svg" alt="" style="--media-ratio: 140 / 140" loading="lazy">
                     </picture>
                                         <div>
                                             <p class="issue">사유와 성찰</p>
@@ -570,7 +561,7 @@
                 <article>
                                         <picture>
                                                 
-                                                <img class="evere-media-placeholder" src="./assets/evere/media-placeholder.svg" alt="" style="--media-ratio: 140 / 140" loading="lazy">
+                                                <img class="evere-media-placeholder" src="/assets/evere/media-placeholder.svg" alt="" style="--media-ratio: 140 / 140" loading="lazy">
                     </picture>
                                         <div>
                                             <p class="issue">세상 읽기</p>
@@ -688,108 +679,108 @@
             <div class="wrap menu">
                 <ul>
 <li id="footer-opinion">
-<strong><a href="./opinion/">오피니언</a></strong>
+<strong><a href="/opinion/">오피니언</a></strong>
 <ul>
-<li><a href="./opinion/editorial/">사설</a></li>
-<li><a href="./opinion/column/">칼럼</a></li>
-<li><a href="./opinion/contributions/">기고</a></li>
+<li><a href="/opinion/editorial">사설</a></li>
+<li><a href="/opinion/column">칼럼</a></li>
+<li><a href="/opinion/contributions">기고</a></li>
 </ul>
 </li>
 <li id="footer-wiki">
-<strong><a href="./wiki/">위키</a></strong>
+<strong><a href="/wiki/">위키</a></strong>
 <ul>
-<li><a href="./wiki/?category=general">위키일반</a></li>
-<li><a href="./wiki/?category=council">운영협의회</a></li>
-<li><a href="./wiki/?category=informal-groups">비공식단체</a></li>
-<li><a href="./wiki/?category=chair">의장동정</a></li>
+<li><a href="/wiki/general">위키일반</a></li>
+<li><a href="/wiki/council">운영협의회</a></li>
+<li><a href="/wiki/informal-groups">비공식단체</a></li>
+<li><a href="/wiki/chair">의장동정</a></li>
 </ul>
 </li>
 <li id="footer-virtual-nations">
-<strong><a href="./virtual-nations/">가상국가</a></strong>
+<strong><a href="/virtual-nations/">가상국가</a></strong>
 <ul>
-<li><a href="./virtual-nations/?category=general">가상국가일반</a></li>
-<li><a href="./virtual-nations/?category=nations">네이션즈</a></li>
-<li><a href="./virtual-nations/?category=virtual-united-nations">가상국제연합</a></li>
-<li><a href="./virtual-nations/?category=hangaker-wolbon">한가커·월본</a></li>
-<li><a href="./virtual-nations/?category=kaguk-diguk">카국·디국·저능아</a></li>
+<li><a href="/virtual-nations/general">가상국가일반</a></li>
+<li><a href="/virtual-nations/nations">네이션즈</a></li>
+<li><a href="/virtual-nations/virtual-united-nations">가상국제연합</a></li>
+<li><a href="/virtual-nations/hangaker-wolbon">한가커·월본</a></li>
+<li><a href="/virtual-nations/kaguk-diguk">카국·디국·저능아</a></li>
 </ul>
 </li>
 <li id="footer-politics">
-<strong><a href="./politics/">정치</a></strong>
+<strong><a href="/politics/">정치</a></strong>
 <ul>
-<li><a href="./politics/?category=general">정치일반</a></li>
-<li><a href="./politics/?category=president">청와대</a></li>
-<li><a href="./politics/?category=assembly">국회·정당</a></li>
-<li><a href="./politics/?category=legal">법비</a></li>
-<li><a href="./politics/?category=north-korea">북한</a></li>
-<li><a href="./politics/?category=foreign-defense">외교·국방</a></li>
-<li><a href="./politics/?category=administration">행정</a></li>
+<li><a href="/politics/general">정치일반</a></li>
+<li><a href="/politics/president">청와대</a></li>
+<li><a href="/politics/assembly">국회·정당</a></li>
+<li><a href="/politics/legal">법비</a></li>
+<li><a href="/politics/north-korea">북한</a></li>
+<li><a href="/politics/foreign-defense">외교·국방</a></li>
+<li><a href="/politics/administration">행정</a></li>
 </ul>
 </li>
 <li id="footer-economy">
-<strong><a href="./economy/">경제</a></strong>
+<strong><a href="/economy/">경제</a></strong>
 <ul>
-<li><a href="./economy/?category=general">경제일반</a></li>
-<li><a href="./economy/?category=policy">경제정책</a></li>
-<li><a href="./economy/?category=industry">산업</a></li>
-<li><a href="./economy/?category=finance">금융/증권</a></li>
-<li><a href="./economy/?category=real-estate">부동산</a></li>
-<li><a href="./economy/?category=technology">IT/과학</a></li>
-<li><a href="./economy/?category=automotive">자동차</a></li>
+<li><a href="/economy/general">경제일반</a></li>
+<li><a href="/economy/policy">경제정책</a></li>
+<li><a href="/economy/industry">산업</a></li>
+<li><a href="/economy/finance">금융/증권</a></li>
+<li><a href="/economy/real-estate">부동산</a></li>
+<li><a href="/economy/technology">IT/과학</a></li>
+<li><a href="/economy/automotive">자동차</a></li>
 </ul>
 </li>
 <li id="footer-society">
-<strong><a href="./society/">사회</a></strong>
+<strong><a href="/society/">사회</a></strong>
 <ul>
-<li><a href="./society/?category=general">사회일반</a></li>
-<li><a href="./society/?category=incidents">사건·사고</a></li>
-<li><a href="./society/?category=justice">법원·경찰</a></li>
-<li><a href="./society/?category=education">교육</a></li>
-<li><a href="./society/?category=labor">노동</a></li>
-<li><a href="./society/?category=health-welfare">보건·복지</a></li>
-<li><a href="./society/?category=environment">날씨·환경</a></li>
+<li><a href="/society/general">사회일반</a></li>
+<li><a href="/society/incidents">사건·사고</a></li>
+<li><a href="/society/justice">법원·경찰</a></li>
+<li><a href="/society/education">교육</a></li>
+<li><a href="/society/labor">노동</a></li>
+<li><a href="/society/health-welfare">보건·복지</a></li>
+<li><a href="/society/environment">날씨·환경</a></li>
 </ul>
 </li>
 <li id="footer-international">
-<strong><a href="./international/">국제</a></strong>
+<strong><a href="/international/">국제</a></strong>
 <ul>
-<li><a href="./international/?category=general">국제일반</a></li>
-<li><a href="./international/?category=china">중국</a></li>
-<li><a href="./international/?category=japan">일본</a></li>
-<li><a href="./international/?category=asia-oceania">아시아·호주</a></li>
-<li><a href="./international/?category=americas">미국·중남미</a></li>
-<li><a href="./international/?category=europe">유럽</a></li>
-<li><a href="./international/?category=middle-east-africa">중동·아프리카</a></li>
+<li><a href="/international/general">국제일반</a></li>
+<li><a href="/international/china">중국</a></li>
+<li><a href="/international/japan">일본</a></li>
+<li><a href="/international/asia-oceania">아시아·호주</a></li>
+<li><a href="/international/americas">미국·중남미</a></li>
+<li><a href="/international/europe">유럽</a></li>
+<li><a href="/international/middle-east-africa">중동·아프리카</a></li>
 </ul>
 </li>
 <li id="footer-health">
-<strong><a href="./health/">건강</a></strong>
+<strong><a href="/health/">건강</a></strong>
 <ul>
-<li><a href="./health/?category=general">건강일반</a></li>
-<li><a href="./health/?category=living">리빙포인트</a></li>
-<li><a href="./health/?category=obituaries">궂긴소식</a></li>
-<li><a href="./health/?category=gukjim">국짐소식</a></li>
+<li><a href="/health/general">건강일반</a></li>
+<li><a href="/health/living">리빙포인트</a></li>
+<li><a href="/health/obituaries">궂긴소식</a></li>
+<li><a href="/health/gukjim">국짐소식</a></li>
 </ul>
 </li>
 <li id="footer-sports">
-<strong><a href="./sports/">스포츠</a></strong>
+<strong><a href="/sports/">스포츠</a></strong>
 <ul>
-<li><a href="./sports/?category=general">스포츠일반</a></li>
-<li><a href="./sports/?category=baseball">야구</a></li>
-<li><a href="./sports/?category=football">축구</a></li>
-<li><a href="./sports/?category=basketball-volleyball">농구·배구</a></li>
-<li><a href="./sports/?category=golf">골프</a></li>
+<li><a href="/sports/general">스포츠일반</a></li>
+<li><a href="/sports/baseball">야구</a></li>
+<li><a href="/sports/football">축구</a></li>
+<li><a href="/sports/basketball-volleyball">농구·배구</a></li>
+<li><a href="/sports/golf">골프</a></li>
 </ul>
 </li>
 <li id="footer-culture">
-<strong><a href="./culture/">문화</a></strong>
+<strong><a href="/culture/">문화</a></strong>
 <ul>
-<li><a href="./culture/?category=general">문화일반</a></li>
-<li><a href="./culture/?category=k-pop">K-POP</a></li>
-<li><a href="./culture/?category=religion">종교</a></li>
-<li><a href="./culture/?category=nam-gwang-hui">남광희</a></li>
-<li><a href="./culture/?category=film-music">영화·음악</a></li>
-<li><a href="./culture/?category=arts">미술·전시·공연</a></li>
+<li><a href="/culture/general">문화일반</a></li>
+<li><a href="/culture/k-pop">K-POP</a></li>
+<li><a href="/culture/religion">종교</a></li>
+<li><a href="/culture/nam-gwang-hui">남광희</a></li>
+<li><a href="/culture/film-music">영화·음악</a></li>
+<li><a href="/culture/arts">미술·전시·공연</a></li>
 </ul>
 </li>
                 </ul>
@@ -861,7 +852,7 @@
             <div class="wrap info" ep_page_scrollarea="{&quot;1280&quot;:6}">
                 <ul>
                     <li>
-                        <a class="evere-footer-logo" href="./"><img src="./assets/evere/wordmark.svg" alt="이브레"></a>
+                        <a class="evere-footer-logo" href="/"><img src="/assets/evere/wordmark.svg" alt="이브레"></a>
                     </li>
                     <li>
                         <ul class="menu">
@@ -874,7 +865,7 @@
                             <li>
                                 <a href="#footer-opinion" title="사이트맵">사이트맵</a>
                             </li>
-                            <li><a href="./boards/">게시판</a></li>
+                            <li><a href="/boards/">게시판</a></li>
                         </ul>
                         
                         
@@ -917,3 +908,5 @@
     </footer>
 </body>
 </html>
+
+
