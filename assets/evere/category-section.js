@@ -1,10 +1,11 @@
-import { articles, latestSeries } from './section-data.js';
 import { setArticleTitle } from './article-label.js';
+import { categoryFromURL } from './routes.js?v=routes-1';
+import { articles, latestSeries } from './section-data.js';
 import { recentSeries, requestedSeries, seriesFor } from './series.js';
 
 const main = document.querySelector('[data-news-section]');
 const section = main.dataset.newsSection;
-const requested = new URLSearchParams(location.search).get('category');
+const requested = categoryFromURL(section);
 const tabs = [...main.querySelectorAll('[data-category-tab]')];
 const selected = tabs.some((tab) => tab.dataset.categoryTab === requested) ? requested : '';
 const contents = main.querySelector('#section-contents');
@@ -74,7 +75,7 @@ if (series.length) {
 const dateFormat = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' });
 let live = [];
 try {
-    const { publishedFeed } = await import('./published-feed.js?v=article-label-1');
+    const { publishedFeed } = await import('./published-feed.js?v=routes-label-2');
     live = await publishedFeed(section, selected, seriesFilter);
     if (seriesFilter) {
         const name = (await seriesFor(section)).find(({ id }) => id === seriesFilter)?.title || '기획·연재';
@@ -114,3 +115,4 @@ for (const item of published) {
 recentList.prepend(rows);
 
 await import('./opinion-list.js?v=categories-1');
+
