@@ -14,6 +14,8 @@ if (photos.length) {
             photo.src = placeholder;
         }, { once: true });
         photo.classList.remove('evere-media-placeholder');
-        photo.src = url;
+        const signed = new URL(url);
+        signed.searchParams.set('cacheNonce', photo.dataset.portraitVersion);
+        photo.src = signed.href;
     }
 }
