@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="/assets/evere/account.css?v=newsroom-4">
   <link rel="stylesheet" href="/assets/evere/newsroom.css?v=article-shortcut-1">
-  <script type="module" src="/assets/evere/account.js?v=article-shortcut-1"></script>
+  <script type="module" src="/assets/evere/account.js?v=member-photo-1"></script>
   <script type="module" src="/assets/evere/newsroom.js?v=routes-1"></script>
 <script type="module" src="/assets/evere/route-init.js?v=routes-1"></script>
 </head>
@@ -237,7 +237,7 @@
           <section id="membership-admin" aria-label="회원 목록" hidden>
             <div class="article-table-scroll" tabindex="0" role="region" aria-label="회원 목록 표">
               <table class="article-table member-table">
-                <thead><tr><th scope="col">프로필 사진</th><th scope="col">아이디</th><th scope="col">이메일 주소</th><th scope="col">이름</th><th scope="col">직위</th><th scope="col">가입일</th><th scope="col">최근 로그인</th><th scope="col">관리</th></tr></thead>
+                <thead><tr><th scope="col">프로필 사진</th><th scope="col">이메일 주소</th><th scope="col">이름</th><th scope="col">직위</th><th scope="col">가입일</th><th scope="col">최근 로그인</th><th scope="col">관리</th></tr></thead>
                 <tbody id="member-rows"></tbody>
               </table>
             </div>
@@ -250,6 +250,14 @@
               <label>이메일 주소<input name="email" readonly></label>
               <label>이름<input name="displayName" maxlength="40" required></label>
               <label>직위<input name="positionTitle" maxlength="60"></label>
+              <fieldset>
+                <legend>프로필 사진</legend>
+                <img id="member-photo-preview" class="member-avatar" width="48" height="48" alt="현재 프로필 사진" hidden>
+                <label>새 사진<input name="memberPhoto" type="file" accept="image/jpeg,image/png,image/webp"></label>
+                <p class="profile-note">JPG, PNG, WebP · 3MB 이하</p>
+                <button id="member-photo-save" type="button">프로필 사진 저장</button>
+                <p id="member-photo-status" role="status"></p>
+              </fieldset>
               <label>등급<select name="role" required></select></label>
               <fieldset class="sector-fields" hidden><legend>담당 섹터</legend><div class="checkbox-grid"></div></fieldset>
               <button type="submit">회원 정보 저장</button>
