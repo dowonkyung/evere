@@ -1,6 +1,7 @@
 import { formattedBody, photoBucket, photoFigure, photoImage, placePhotoImages, renderBody } from './article-content.js?v=inline-1';
 import { sectors } from './article-taxonomy.js';
 import { seriesFor } from './series.js';
+import { setArticleTitle } from './article-label.js';
 
 const photoTypes = new Map([['image/jpeg', 'jpg'], ['image/png', 'png'], ['image/webp', 'webp']]);
 const editors = new Set(['owner', 'director', 'department_head']);
@@ -25,7 +26,9 @@ export function articleComposer(form, article = null) {
     let selectedSeries = article?.series_id || '';
     let allowsOmission = false;
 
+    const label = form.elements.articleLabel;
     title.value = article?.title || '';
+    label.value = article?.article_label || '';
     subtitle.value = article?.subtitle || '';
     renderBody(editor, article || {});
 
@@ -39,7 +42,7 @@ export function articleComposer(form, article = null) {
             Array.from(copy).length.toLocaleString('ko-KR') + '자 · ' +
             (copy ? copy.split(/\s+/u).length : 0).toLocaleString('ko-KR') + '단어';
         find('[data-preview-sector]').textContent = sectors[sector.value] || '';
-        find('[data-preview-title]').textContent = title.value.trim() || '기사 제목';
+        setArticleTitle(find('[data-preview-title]'), title.value.trim() || '기사 제목', label.value);
         find('[data-preview-subtitle]').textContent = subtitle.value.trim();
         find('[data-preview-byline]').textContent = omitByline.checked ? '' : [...byline.map(displayName), ...guests].join(', ');
         find('[data-preview-body]').replaceChildren(formattedBody(editor.innerHTML));
@@ -414,7 +417,8 @@ export function articleComposer(form, article = null) {
             const safe = document.createElement('div');
             safe.append(formattedBody(editor.innerHTML));
             const fields = {
-                title: title.value.trim(), subtitle: subtitle.value.trim(), body, body_html: safe.innerHTML,
+                title: title.value.trim(), article_label: label.value,
+                subtitle: subtitle.value.trim(), body, body_html: safe.innerHTML,
                 sector: sector.value, category: form.elements.category.value || null, series_id: selectedSeries || null,
                 byline: omitByline.checked ? [] : [...byline],
                 guest_byline: omitByline.checked ? [] : [...guests], photo_paths: [],
