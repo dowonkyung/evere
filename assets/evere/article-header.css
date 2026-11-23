@@ -35,6 +35,7 @@
   transform-origin: left;
 }
 @media (max-width: 1023px) {
+  .evere-compact-shell .nav-type11 { width: 100%; }
   .evere-compact-shell .nav-type11 .article-header-title { display: none; }
   .evere-compact-shell .nav-type11 .logo-yna03 img { width: 87px; }
   .evere-compact-shell .nav-type11 > .logo-yna03 { height: 50px; }
