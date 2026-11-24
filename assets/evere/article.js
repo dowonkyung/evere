@@ -5,7 +5,7 @@ import { articlePath, articleNumberFromURL } from './routes.js?v=direct-route-1'
 import { renderBody, renderPhotos, photoBucket } from './article-content.js?v=paragraph-breaks-2';
 import { seriesFor, seriesLink } from './series.js?v=numbered-link-1';
 import { supabase } from './supabase.js';
-import { sectors } from './article-taxonomy.js?v=notice-1';
+import { sectors } from './article-taxonomy.js?v=corrections-1';
 
 const ui = (id) => document.getElementById(id);
 let articleId = new URLSearchParams(location.search).get('id');
@@ -297,6 +297,32 @@ form.addEventListener('submit', async (event) => {
     }
 });
 
+function splitPlainParagraphs(body) {
+    for (const paragraph of body.querySelectorAll('p, div')) {
+        if (paragraph.querySelector('p, div, figure, ul, ol, blockquote') || !/\S[ \t]*\r?\n\s*\S/.test(paragraph.textContent)) continue;
+        const walker = document.createTreeWalker(paragraph, NodeFilter.SHOW_TEXT);
+        const range = document.createRange();
+        range.selectNodeContents(paragraph);
+        const parts = [];
+        for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+            for (const match of node.data.matchAll(/\r\n?|\n/g)) {
+                range.setEnd(node, match.index);
+                parts.push(range.cloneContents());
+                range.collapse(false);
+                range.setStart(node, match.index + match[0].length);
+            }
+        }
+        if (!parts.length) continue;
+        range.setEnd(paragraph, paragraph.childNodes.length);
+        parts.push(range.cloneContents());
+        paragraph.replaceWith(...parts.filter(part => part.textContent.trim()).map(part => {
+            const block = paragraph.cloneNode(false);
+            block.append(part);
+            return block;
+        }));
+    }
+}
+
 async function render() {
     if (!articleNumber && (!articleId || !/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(articleId))) {
         ui('status').textContent = '기사를 찾을 수 없습니다.';
@@ -331,6 +357,7 @@ async function render() {
     ui('editor-subtitle').hidden = !subtitle;
     const body = ui('body');
     renderBody(body, data, { legacyLineBreaks: true });
+    splitPlainParagraphs(body);
     while (body.firstElementChild?.matches('p, div')) {
         const paragraph = body.firstElementChild;
         if (paragraph.textContent.trim() || paragraph.querySelector('figure[data-photo]')) break;

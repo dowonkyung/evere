@@ -1,14 +1,13 @@
 import { supabase } from './supabase.js';
 
 const groups = [
-    { name: '이벤트 기사', slots: [9, 10, 11, 12], targets: ['[data-home-events]'] },
     { name: '대표 헤드라인', slots: [1], targets: ['[data-home-primary]'] },
     { name: '보조 헤드라인 1·2', slots: [2, 3], targets: ['[data-home-secondary]'] },
     { name: '하단 대표 기사와 아래 기사', slots: [4, 8], targets: ['[data-home-slot="4"]', '[data-home-slot="8"]'] },
     { name: '하단 오른쪽 기사 3개', slots: [5, 6, 7], targets: ['[data-home-sub-list] .sub-block'] },
 ];
 const labels = ['대표 헤드라인', '보조 헤드라인 1', '보조 헤드라인 2', '하단 대표 기사',
-    '하단 오른쪽 기사 1', '하단 오른쪽 기사 2', '하단 오른쪽 기사 3', '하단 대표 기사 바로 아래', '이벤트 기사 1', '이벤트 기사 2', '이벤트 기사 3', '이벤트 기사 4'];
+    '하단 오른쪽 기사 1', '하단 오른쪽 기사 2', '하단 오른쪽 기사 3', '하단 대표 기사 바로 아래'];
 const batchSize = 20;
 
 export function configureHomeVisualEditor(isHomeSelected, openIssues) {
@@ -196,7 +195,7 @@ export function configureHomeVisualEditor(isHomeSelected, openIssues) {
             [data-home-slot="4"]:empty { min-height: 220px; }
             [data-home-slot]:empty::after { content: "배치된 기사 없음"; display: block; padding: 18px 10px; color: #606666; }
             [data-home-list] { min-height: 350px; }
-            [data-home-events], [data-home-event-links-region], [data-home-service-cards] { min-height: 42px; }
+            [data-home-event-links-region], [data-home-service-cards] { min-height: 42px; }
             .home-preview-region { position: absolute; box-sizing: border-box; border: 2px dashed #007a79;
                 border-radius: 6px; pointer-events: none; z-index: 151; }
             .home-preview-region button {

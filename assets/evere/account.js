@@ -1,7 +1,7 @@
 import { setArticleTitle } from './article-label.js';
 import { articlePath } from './routes.js?v=routes-1';
 import { supabase } from './supabase.js';
-import { sectors, articleCategories } from './article-taxonomy.js?v=notice-1';
+import { sectors, articleCategories } from './article-taxonomy.js?v=corrections-1';
 import { articleComposer } from './article-composer.js?v=first-paragraph-1';
 import { renderBody, renderPhotos } from './article-content.js?v=paragraph-breaks-1';
 const roleNames = {

@@ -9,11 +9,13 @@ export const sectors = {
     "health": "건강",
     "sports": "스포츠",
     "culture": "문화",
-    "notice": "알림"
+    "notice": "알림",
+    "corrections": "바로잡습니다"
 };
 
 export const articleCategories = {
     "notice": [],
+    "corrections": [],
     "opinion": [
         [
             "editorial",

@@ -5,6 +5,8 @@ import { setArticleTitle } from './article-label.js';
 
 const list = document.getElementById('recentList');
 const contents = list.closest('.contents');
+const sector = list.closest('[data-board-sector]').dataset.boardSector;
+const boardPath = '/' + sector + '/';
 
 async function showMajorArticles() {
     const { data, error } = await supabase.from('evere_articles')
@@ -25,7 +27,7 @@ void showMajorArticles().catch(() => {});
 const status = document.getElementById('notice-status');
 const pages = document.getElementById('notice-pages');
 const empty = document.getElementById('no_result');
-empty.querySelector('.btn-reset').onclick = () => location.assign('/notice/');
+empty.querySelector('.btn-reset').onclick = () => location.assign(boardPath);
 const pageSize = 20;
 const requestedPage = Number(new URLSearchParams(location.search).get('page'));
 const page = Number.isSafeInteger(requestedPage) && requestedPage > 0 && requestedPage <= Math.floor(Number.MAX_SAFE_INTEGER / pageSize)
@@ -36,7 +38,7 @@ const dateFormat = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' });
 function pageLink(number, label) {
     const item = document.createElement('li');
     const link = document.createElement('a');
-    link.href = number === 1 ? '/notice/' : '/notice/?page=' + number;
+    link.href = number === 1 ? boardPath : boardPath + '?page=' + number;
     link.textContent = label;
     if (number === page) {
         item.className = 'active';
@@ -49,7 +51,7 @@ function pageLink(number, label) {
 try {
     const { data, count, error } = await supabase.from('evere_articles')
         .select('article_number,title,article_label,published_at', { count: 'exact' })
-        .eq('sector', 'notice').eq('status', 'published')
+        .eq('sector', sector).eq('status', 'published')
         .order('published_at', { ascending: false }).order('id')
         .range(offset, offset + pageSize - 1);
     if (error) throw error;
@@ -78,5 +80,5 @@ try {
     if (page < pageCount) pageLink(page + 1, '다음');
     pages.parentElement.hidden = !pages.childElementCount;
 } catch {
-    status.textContent = '알림을 불러오지 못했습니다.';
+    status.textContent = '게시글을 불러오지 못했습니다.';
 }
