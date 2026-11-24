@@ -70,7 +70,7 @@
 }
 .reader-actions summary::-webkit-details-marker { display: none; }
 .reader-actions details { position: relative; }
-.reader-type-icon { font-size: 22px; line-height: 24px; font-weight: 750; }
+.reader-type-icon { display: block; flex: none; }
 .reader-tool-panel {
   position: absolute;
   inset: 50% auto auto calc(100% + 16px);
@@ -172,8 +172,6 @@
 .article-body figcaption .photo-caption-title { display: block; font-size: 15px; color: var(--text-primary, #151515); }
 .article-body figcaption .photo-caption-description { display: block; white-space: pre-line; }
 .article-body figcaption :is(.photo-caption-title, .photo-caption-description):empty { display: none; }
-
-.reader-type-icon small { font-size: .7em; }
 
 .reader-sector:has(.reader-series-link) { column-gap: 4px; }
 .reader-sector .reader-series-link { display: inline-flex; align-items: center; color: #4c70e8; }
