@@ -97,7 +97,7 @@ function configureSectionHeader() {
     ui('reporter-sticky-share').onclick = () => ui('reporter-share').click();
 
     function updateHeader() {
-        const top = Number.parseFloat(getComputedStyle(header).top) || 0;
+        const top = Number.parseFloat(getComputedStyle(header).getPropertyValue('--reporter-sticky-top')) || 0;
         header.classList.toggle('sticky_top', window.scrollY > 0 &&
             profile.getBoundingClientRect().bottom <= top + header.offsetHeight);
     }
