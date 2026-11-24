@@ -16,7 +16,6 @@
 .reader-head { border-bottom: 1px solid #e1e1e1; padding-bottom: 24px; margin-bottom: 24px; }
 .reader-sector { display: flex; flex-wrap: wrap; gap: 8px 15px; margin-bottom: 8px; font-size: 15px; line-height: 24px; font-weight: 600; color: var(--text-primary, #151515); }
 .reader-sector a:hover { text-decoration: underline; }
-.reader-head:has(+ .editor-subtitle[hidden]) { margin-bottom: 0; }
 .reader-head h1 { margin: 0; font-size: 32px; line-height: 44px; font-weight: 700; word-break: keep-all; overflow-wrap: anywhere; }
 .reader-head time { display: block; margin-top: 16px; color: #686868; font-size: 14px; font-weight: 500; line-height: 18px; }
 .reader-head time:empty { display: none; }
