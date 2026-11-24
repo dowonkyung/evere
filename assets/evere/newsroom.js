@@ -17,9 +17,9 @@ function sectionHeadLayout(page, category) {
 
 function configureLayoutSlots(page, category) {
     const sectionHead = sectionHeadLayout(page, category);
-    const heading = page === 'home' ? '메인 헤드라인' : sectionHead ? '섹션 헤드 기사' : '기사 배치';
+    const heading = page === 'home' ? '메인 기사 배치' : sectionHead ? '섹션 헤드 기사' : '기사 배치';
     ui('layout-slot-heading').textContent = heading;
-    const labels = page === 'home' ? ['대표 헤드라인', '보조 헤드라인 1', '보조 헤드라인 2']
+    const labels = page === 'home' ? ['대표 헤드라인', '보조 헤드라인 1', '보조 헤드라인 2', '하단 대표 기사', '하단 보조 기사 1', '하단 보조 기사 2', '하단 보조 기사 3', '하단 마지막 기사']
         : sectionHead ? ['대표 기사', '보조 기사 1', '보조 기사 2', '보조 기사 3', '보조 기사 4']
             : ['첫 번째 기사', '두 번째 기사', '세 번째 기사'];
     slots.forEach((select, index) => {

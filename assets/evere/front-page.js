@@ -9,6 +9,8 @@ const secondary = head.querySelector('[data-home-secondary]');
 const latest = head.querySelector('aside');
 const placeholder = new URL('./media-placeholder.svg', import.meta.url).href;
 const latestLimit = 6;
+const lowerList = document.querySelector('[data-home-list]');
+const opinionList = document.querySelector('[data-home-opinion]');
 
 function makeArticle(data, summary = false, thumbnailRatio = '700 / 467') {
     const article = document.createElement('article');
@@ -29,7 +31,7 @@ function makeArticle(data, summary = false, thumbnailRatio = '700 / 467') {
     if (summary) {
         const description = document.createElement('p');
         description.className = 'desc';
-        description.textContent = data.subtitle || Array.from(data.body).slice(0, 120).join('');
+        description.textContent = data.subtitle || Array.from(data.body || '').slice(0, 120).join('');
         text.append(description);
     }
     article.append(picture, text);
@@ -65,7 +67,7 @@ async function renderArticles() {
             .eq('page', 'home').eq('category', '').eq('evere_articles.status', 'published').order('slot'),
         supabase.from('evere_articles').select('id,article_number,title,article_label,photo_paths')
             .eq('status', 'published').order('published_at', { ascending: false, nullsFirst: false })
-            .order('id').limit(latestLimit + 3),
+            .order('id').limit(latestLimit + 8),
     ]);
     const placements = saved.status === 'fulfilled' ? saved.value.data || [] : [];
     const recent = feed.status === 'fulfilled' ? feed.value.data || [] : [];
@@ -74,13 +76,22 @@ async function renderArticles() {
     const secondaryList = secondary.querySelector('ul');
     const latestList = latest.querySelector('ul');
     const placed = new Set();
+    const lowerItems = new Map([...lowerList.querySelectorAll('[data-home-slot]')]
+        .map(item => [Number(item.dataset.homeSlot), item]));
     for (const { slot, evere_articles: article } of placements) {
         placed.add(article.id);
-        const rendered = makeArticle(article, slot === 1);
+        const rendered = makeArticle(article, slot === 1 || slot >= 4, slot >= 5 ? '300 / 200' : undefined);
         images.push(rendered);
-        const item = slot === 1 ? primary : secondaryList.children[slot - 2];
-        item?.replaceChildren(rendered.article);
+        const item = lowerItems.get(slot) || (slot === 1 ? primary : secondaryList.children[slot - 2]);
+        if (item) {
+            item.replaceChildren(rendered.article);
+            item.hidden = false;
+        }
     }
+    const hasLower = [...lowerItems.values()].some(item => !item.hidden);
+    lowerList.querySelector('.main-block').hidden = !hasLower;
+    lowerList.querySelector('[data-home-list-empty]').hidden = hasLower;
+    lowerList.querySelector('[data-home-sub-list]').hidden = ![5, 6, 7].some(slot => !lowerItems.get(slot).hidden);
     recent.filter(({ id }) => !placed.has(id)).slice(0, latestLimit).forEach((article, index) => {
         const rendered = makeArticle(article, false, '300 / 200');
         latestList.children[index].replaceChildren(rendered.article);
@@ -107,3 +118,84 @@ async function renderArticles() {
 
 void renderArticles().catch(() => {});
 
+
+async function loadOpinion(editorial) {
+    const query = () => supabase.from('evere_articles')
+        .select('article_number,title,byline,evere_series(title)')
+        .eq('status', 'published').eq('sector', 'opinion')
+        .not('article_number', 'is', null)
+        .order('published_at', { ascending: false, nullsFirst: false }).order('id');
+
+    if (editorial) {
+        const { data, error } = await query().eq('category', 'editorial').limit(3);
+        if (error) throw error;
+        return data;
+    }
+    const rows = [];
+    const size = 100;
+    for (let start = 0; ; start += size) {
+        const { data, error } = await query().or('category.neq.editorial,category.is.null')
+            .range(start, start + size - 1);
+        if (error) throw error;
+        rows.push(...data);
+        if (data.length < size) return rows;
+    }
+}
+
+function opinionItem(row, editorial) {
+    const item = document.createElement('li');
+    const article = document.createElement('article');
+    const text = document.createElement('div');
+    const link = document.createElement('a');
+    link.href = articlePath(row);
+    const name = editorial ? '사설' : row.evere_series?.title;
+    if (name) {
+        const label = document.createElement('span');
+        label.textContent = name;
+        link.append(label);
+    }
+    link.append(row.title);
+    text.append(link);
+    article.append(text);
+    item.append(article);
+    const reporter = !editorial && row.byline?.[0];
+    return { item, article, avatarPath: reporter ? reporter + '/profile' : null };
+}
+
+async function renderOpinion() {
+    const [editorials, others] = await Promise.all([loadOpinion(true), loadOpinion(false)]);
+    const entries = [...editorials.map(row => opinionItem(row, true)), ...others.map(row => opinionItem(row, false))];
+    if (!entries.length) return;
+    opinionList.replaceChildren(...entries.map(({ item }) => item));
+    scheduleTitleCheck();
+
+    const paths = [...new Set(entries.map(({ avatarPath }) => avatarPath).filter(Boolean))];
+    const bucket = supabase.storage.from('evere-avatars');
+    for (let offset = 0; offset < paths.length; offset += 100) {
+        const { data } = await bucket.createSignedUrls(paths.slice(offset, offset + 100), 3600);
+        const urls = new Map((data || []).map(({ path, signedUrl }) => [path, signedUrl]));
+        for (const { item, article, avatarPath } of entries) {
+            const url = urls.get(avatarPath);
+            if (!url) continue;
+            const picture = document.createElement('picture');
+            const image = document.createElement('img');
+            image.alt = '';
+            image.loading = 'lazy';
+            image.addEventListener('error', () => {
+                picture.remove();
+                item.classList.remove('editor');
+                scheduleTitleCheck();
+            }, { once: true });
+            image.src = url;
+            picture.append(image);
+            item.classList.add('editor');
+            article.prepend(picture);
+        }
+    }
+    scheduleTitleCheck();
+}
+
+void renderOpinion().catch(() => {
+    if (opinionList.querySelector('article')) return;
+    opinionList.firstElementChild.textContent = '오피니언을 불러오지 못했습니다.';
+});

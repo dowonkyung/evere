@@ -137,3 +137,9 @@ main article > div > a.home-title-fits {
     -webkit-line-clamp: unset !important;
     text-overflow: clip !important;
 }
+
+[data-home-list] [hidden] { display: none !important; }
+[data-home-list-empty] { padding: 20px 0; color: var(--text-secondary, #666); }
+[data-home-opinion] li:not(:has(article)) { padding: 16px 0; color: var(--text-secondary, #666); }
+[data-home-opinion] article > div { min-width: 0; }
+[data-home-opinion] article picture img { width: 100%; height: 100%; object-fit: cover; }
