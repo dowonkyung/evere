@@ -48,7 +48,9 @@ export async function showReporterCards(articleId) {
         const position = node('p', 'reporter-card-position', reporter.position_title?.trim() || '기자');
         const heading = node('div', 'reporter-card-heading');
         heading.append(name, position);
-        content.append(heading);
+        const top = node('div', 'reporter-card-top');
+        top.append(heading);
+        content.append(top);
         if (reporter.public_email) {
             const email = node('a', 'reporter-card-email', reporter.public_email);
             email.href = 'mailto:' + encodeURIComponent(reporter.public_email).replace('%40', '@');
@@ -60,7 +62,8 @@ export async function showReporterCards(articleId) {
         follow.type = 'button';
         follow.hidden = true;
         actions.append(follow);
-        card.append(avatar, content, actions);
+        top.append(actions);
+        card.append(avatar, content);
         list.append(card);
         void collectionButton(follow, 'reporters', reporter.reporter_id, ['구독', '구독 취소'], actions).catch(() => {});
     }
