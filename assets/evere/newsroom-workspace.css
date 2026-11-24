@@ -114,11 +114,13 @@
     .newsroom .has-compact-nav .newsroom-nav a[data-view] { width: 36px; }
 }
 
-.newsroom-nav-brand-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 42px; margin-bottom: 21px; }
-.newsroom .newsroom-nav-brand-row .newsroom-brand { display: inline-flex; margin: 0; padding: 0; background: transparent; }
+.newsroom-nav-brand-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 8px; margin-bottom: 21px; }
+.newsroom .newsroom-nav-brand-row .newsroom-brand { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin: 0; padding: 0; background: transparent; }
+.newsroom-nav-brand-row .newsroom-brand-wordmark { width: 90px; max-height: none; }
+.newsroom-nav-brand-row .newsroom-brand span { padding: 0; border: 0; font-size: 22px; line-height: 28px; white-space: nowrap; }
 .newsroom .newsroom-nav-brand-row .newsroom-nav-toggle { margin: 0; }
 .newsroom-brand-symbol { display: none !important; }
-.newsroom .has-compact-nav .newsroom-nav-brand-row { flex-direction: column; justify-content: center; }
+.newsroom .has-compact-nav .newsroom-nav-brand-row { grid-template-columns: 1fr; justify-items: center; }
 .newsroom .has-compact-nav .newsroom-brand-wordmark,
 .newsroom .has-compact-nav .newsroom-nav-brand-row .newsroom-brand span { display: none; }
 .newsroom .has-compact-nav .newsroom-brand-symbol { display: block !important; width: 25px; }
@@ -126,6 +128,8 @@
 .newsroom-main > :is(#access, #profile-setup) > .newsroom-brand { margin-bottom: 20px; }
 @media (max-width: 720px) {
     .newsroom-nav-brand-row { flex: none; margin: 0 6px 0 0; }
-    .newsroom .has-compact-nav .newsroom-nav-brand-row { flex-direction: row; }
+    .newsroom .has-compact-nav .newsroom-nav-brand-row { grid-template-columns: auto auto; align-items: center; }
+    .newsroom-nav-brand-row .newsroom-brand-wordmark { width: 70px; }
+    .newsroom-nav-brand-row .newsroom-brand span { font-size: 17px; line-height: 22px; }
     .newsroom-tools { min-height: 48px; margin-bottom: 10px; flex-wrap: wrap; }
 }
