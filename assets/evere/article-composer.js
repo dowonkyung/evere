@@ -1,6 +1,6 @@
 import { formattedBody, photoBucket, photoFigure, photoImage, readPhotoCaption, renderBody, setPhotoCaption, setPhotoOptions } from './article-content.js?v=photo-options-1';
 import { openPhotoDialog } from './photo-dialog.js?v=photo-sidebar-1';
-import { connectPhotoLibrary } from './photo-library.js';
+import { connectPhotoLibrary } from './photo-library.js?v=more-1';
 import { seriesFor } from './series.js';
 
 const photoTypes = new Map([['image/jpeg', 'jpg'], ['image/png', 'png'], ['image/webp', 'webp']]);

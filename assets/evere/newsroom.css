@@ -382,3 +382,35 @@
 .newsroom :is(.compose-editor, .article-body) figure[data-position="left"] { margin-inline-start: 0; }
 .newsroom :is(.compose-editor, .article-body) figure[data-position="right"] { margin-inline-end: 0; }
 .newsroom :is(.compose-editor, .article-body) figure[data-photo] img { max-width: 100%; }
+
+.newsroom [data-photo-library] {
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+}
+[data-photo-library] > :not(.photo-library-results) { flex-shrink: 0; }
+[data-photo-library] .photo-library-results { min-height: 0; overflow: auto; }
+.newsroom .photo-library-results button { position: relative; min-width: 0; }
+.photo-library-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+    padding: 8px;
+    background: rgb(0 0 0 / .45);
+    color: #fff;
+    font-size: 12px;
+    line-height: 1.35;
+    text-align: start;
+    opacity: 0;
+    transition: opacity .15s ease;
+}
+.photo-library-overlay strong { max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.photo-library-results button:is(:hover, :focus-visible) .photo-library-overlay { opacity: 1; }
+.newsroom .photo-library-more { width: 100%; margin-top: 10px; }
+.newsroom .photo-library-more[hidden] { display: none !important; }
+@media (prefers-reduced-motion: reduce) {
+    .photo-library-overlay { transition: none; }
+}
