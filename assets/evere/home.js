@@ -38,22 +38,84 @@ const categoryButtons = [...menu.querySelectorAll('[data-category-toggle]')];
 const expandCategories = menu.querySelector('[data-expand-categories]');
 expandCategories.setAttribute('aria-controls', categoryButtons.map(button => button.getAttribute('aria-controls')).join(' '));
 let activeHeader = mainHeader || compactHeader;
+let menuOpen = false;
+let menuMotion;
+let dimMotion;
+menu.inert = true;
+
+const category = menu.querySelector('.wrap.category');
+const utility = document.createElement('div');
+utility.className = 'etc';
+const partners = category.querySelector('.category-partners');
+if (partners) utility.append(partners);
+const services = document.createElement('ul');
+services.className = 'category-services';
+services.setAttribute('aria-label', '이브레 서비스');
+for (const name of ['구독신청', '기사제보', '지면보기', 'RSS', '알림']) {
+    const item = document.createElement('li');
+    const label = document.createElement('span');
+    label.textContent = name;
+    item.append(label);
+    services.append(item);
+}
+utility.append(services);
+category.append(utility);
 
 function togglePanel(panel, button, open) {
     panel.hidden = !open;
     menuDim.hidden = search.hidden && menu.hidden;
     shell.classList.toggle('evere-search-open', !search.hidden);
+    setPanelButton(button, open);
+}
+
+function setPanelButton(button, open) {
     button.classList.toggle('active', open);
     button.setAttribute('aria-expanded', String(open));
     button.querySelector('.ir-txt01').textContent =
         button.dataset.a11yTxt.split(';')[open ? 0 : 1];
 }
 
-function setMenuOpen(open, section) {
+function setMenuOpen(open, section, animate = true) {
     const button = activeHeader.querySelector('button.menu01');
-    togglePanel(menu, button, open);
-    menu.classList.toggle('active', open);
-    document.documentElement.classList.toggle('evere-sitemap-open', open);
+    const changed = menuOpen !== open;
+    const slide = changed && animate && !reduceMenuMotion.matches && typeof menu.animate === 'function';
+    const full = 'inset(0% 0 0% 0)';
+    const closed = 'inset(0% 0 100% 0)';
+    const from = menuMotion ? getComputedStyle(menu).clipPath : open ? closed : full;
+    if (changed || !animate) {
+        const dimFrom = dimMotion ? getComputedStyle(menuDim).opacity : menuDim.hidden ? 0 : 1;
+        menuMotion?.cancel();
+        dimMotion?.cancel();
+        menuMotion = dimMotion = null;
+        menuOpen = open;
+        menu.inert = !open;
+        setPanelButton(button, open);
+        const finish = () => {
+            menu.hidden = !open;
+            menu.classList.toggle('active', open);
+            menuDim.hidden = search.hidden && menu.hidden;
+            document.documentElement.classList.toggle('evere-sitemap-open', open);
+        };
+        if (open || slide) {
+            menu.hidden = false;
+            menu.classList.add('active');
+            menuDim.hidden = false;
+            document.documentElement.classList.add('evere-sitemap-open');
+        }
+        if (slide) {
+            const timing = { duration: 200, easing: 'ease-in-out' };
+            const animation = menu.animate([{ clipPath: from }, { clipPath: open ? full : closed }], timing);
+            menuMotion = animation;
+            if (search.hidden) dimMotion = menuDim.animate([{ opacity: dimFrom }, { opacity: open ? 1 : 0 }], timing);
+            animation.onfinish = () => {
+                if (menuMotion !== animation) return;
+                menuMotion = dimMotion = null;
+                finish();
+            };
+        } else {
+            finish();
+        }
+    }
     if (open) {
         menu.scrollTop = 0;
         const title = section ? menu.querySelector('#sitemap-' + section + ' dt') : null;
@@ -84,7 +146,7 @@ for (const container of [mainHeader, compactHeader].filter(Boolean)) {
 
     menuToggle.addEventListener('click', () => {
         togglePanel(search, searchToggle, false);
-        setMenuOpen(menu.hidden);
+        setMenuOpen(!menuOpen);
     });
 
     container.querySelector('.evere-news-links').addEventListener('click', (event) => {
@@ -173,7 +235,7 @@ function closeCategoryMenu() {
 
 closeMenu.addEventListener('click', closeCategoryMenu);
 menuDim.addEventListener('click', () => {
-    if (!menu.hidden) {
+    if (menuOpen) {
         closeCategoryMenu();
     } else if (!search.hidden) {
         const button = activeHeader.querySelector('.btn-srch-switch');
@@ -192,12 +254,12 @@ document.querySelector('footer .info a[title="사이트맵"]')?.addEventListener
 
 document.addEventListener('click', (event) => {
     if (event.defaultPrevented) return;
-    if (!menu.hidden && !event.composedPath().includes(header.host)) setMenuOpen(false);
+    if (menuOpen && !event.composedPath().includes(header.host)) setMenuOpen(false);
 });
 
 header.addEventListener('keydown', (event) => {
-    if (event.key !== 'Escape' || (search.hidden && menu.hidden)) return;
-    if (!menu.hidden) {
+    if (event.key !== 'Escape' || (search.hidden && !menuOpen)) return;
+    if (menuOpen) {
         setMenuOpen(false);
         activeHeader.querySelector('button.menu01').focus({ preventScroll: true });
     } else {
@@ -214,7 +276,7 @@ function syncScrollHeader() {
     if (nextHeader === activeHeader) return;
 
     togglePanel(search, activeHeader.querySelector('.btn-srch-switch'), false);
-    setMenuOpen(false);
+    setMenuOpen(false, undefined, false);
     activeHeader = nextHeader;
     activeHeader.append(search, menu);
     mainHeader.inert = showCompact;
