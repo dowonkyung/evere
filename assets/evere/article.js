@@ -269,18 +269,8 @@ async function render() {
         }).catch(() => {});
     ui('status').replaceChildren();
     ui('published-article').hidden = false;
-    void collectionButton(ui('article-bookmark'), 'bookmarks', data.id, ['북마크', '북마크 해제']).catch(() => {});
-    const follows = ui('reporter-follows');
-    follows.replaceChildren();
-    const reporters = new Map((data.byline || []).map((id, index) => [id, names[index]]));
-    for (const [id, name] of reporters) {
-        if (!name) continue;
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.hidden = true;
-        follows.append(button);
-        void collectionButton(button, 'reporters', id, [reporterName(name) + ' 구독', reporterName(name) + ' 구독 취소']).catch(() => {});
-    }
+    void collectionButton(ui('article-bookmark'), 'bookmarks', data.id, ['북마크', '북마크']).catch(() => {});
+
     ui('reader-actions').hidden = false;
     // Optional reading controls must never turn a displayed article into a load failure.
     try { enableReadingHeader(title); } catch (error) { console.warn('Reading header unavailable', error); }
@@ -334,7 +324,7 @@ async function updateCommentSession() {
 async function readArticle() {
     for (let attempt = 0; attempt < 3; attempt++) {
         try {
-            let query = supabase.from('evere_articles').select('id,article_number,title,article_label,subtitle,body,body_html,photo_paths,sector,series_id,byline,byline_names,published_at')
+            let query = supabase.from('evere_articles').select('id,article_number,title,article_label,subtitle,body,body_html,photo_paths,sector,series_id,byline_names,published_at')
                 .eq('status', 'published');
             query = articleNumber ? query.eq('article_number', articleNumber) : query.eq('id', articleId);
             const response = await query.maybeSingle();
