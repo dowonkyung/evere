@@ -70,6 +70,7 @@ function setZoom(value) {
 function showPanel(name) {
     activePanel = name === activePanel ? '' : name;
     ui('panel').hidden = !activePanel;
+    ui('panel').closest('.viewer-main').classList.toggle('has-panel', Boolean(activePanel));
     ui('panel-title').textContent = ({ issues: '발행호', search: '검색', thumbnails: '썸네일', contents: '목차' })[activePanel] || '';
     for (const panel of document.querySelectorAll('[data-panel-content]')) panel.hidden = panel.dataset.panelContent !== activePanel;
     for (const button of document.querySelectorAll('[data-viewer-panel]')) {
@@ -136,7 +137,14 @@ function render(issueNumber, pageNumber, updateHistory = '') {
     }
     ui('image-scroll').classList.toggle('is-spread', hasSpread);
     ui('print').disabled = !photo && !pdf;
-    ui('page-count').textContent = page + '/' + (edition.pageCount || Math.max(...edition.pages)) + '면';
+    const totalPages = edition.pageCount || Math.max(...edition.pages);
+    ui('page-count').textContent = page + '/' + totalPages + '면';
+    const weekday = edition.date
+        ? new Intl.DateTimeFormat('ko-KR', { weekday: 'short', timeZone: 'Asia/Seoul' })
+            .format(new Date(edition.date + 'T00:00:00+09:00'))
+        : '';
+    ui('thumbnail-summary').textContent =
+        [edition.date ? displayDate(edition.date) + ' (' + weekday + ')' : '', totalPages + '면'].filter(Boolean).join(' · ');
     setZoom(1);
     if (photo) {
         ui('image').alt = issueNumber + '호 ' + page + '면 원본 지면';
@@ -147,31 +155,50 @@ function render(issueNumber, pageNumber, updateHistory = '') {
     ui('editions').querySelector('[data-issue="' + issueNumber + '"]')?.setAttribute('aria-current', 'true');
     ui('pages').replaceChildren(...edition.pages.map(number => {
         const item = document.createElement('li');
-        const link = makeLink(issueNumber, number, number + '면', number === page ? 'page' : '');
+        const pageLabel = String(number).padStart(2, '0') + '면';
+        const link = makeLink(issueNumber, number, '', number === page ? 'page' : '');
         const thumbnail = sameSiteAsset(edition.previews?.[number], '.png');
         if (thumbnail) {
             const image = document.createElement('img');
             image.src = thumbnail;
             image.alt = '';
             image.loading = 'lazy';
-            link.prepend(image);
+            link.append(image);
         }
+        const label = document.createElement('span');
+        label.textContent = pageLabel;
+        link.append(label);
         item.append(link);
         return item;
     }));
 
     ui('prev').disabled = index === 0;
     ui('next').disabled = index === edition.pages.length - 1;
-    const articles = edition.articles.filter(row => row.print_page === page);
-    ui('articles').replaceChildren(...articles.map(row => {
-        const item = document.createElement('li');
-        const link = document.createElement('a');
-        link.href = articlePath(row);
-        setArticleTitle(link, row.title, row.article_label);
-        item.append(link);
-        return item;
+    const groups = new Map();
+    for (const article of edition.articles) {
+        if (!article.print_page) continue;
+        if (!groups.has(article.print_page)) groups.set(article.print_page, []);
+        groups.get(article.print_page).push(article);
+    }
+    ui('articles').replaceChildren(...edition.pages.filter(number => groups.has(number)).map(number => {
+        const group = document.createElement('li');
+        const heading = document.createElement('h3');
+        const jump = makeLink(issueNumber, number, String(number).padStart(2, '0') + '면', number === page ? 'page' : '');
+        jump.dataset.contentsPage = number;
+        heading.append(jump);
+        const list = document.createElement('ul');
+        for (const row of groups.get(number)) {
+            const item = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = articlePath(row);
+            setArticleTitle(link, row.title, row.article_label);
+            item.append(link);
+            list.append(item);
+        }
+        group.append(heading, list);
+        return group;
     }));
-    ui('articles-empty').hidden = articles.length > 0;
+    ui('articles-empty').hidden = groups.size > 0;
 }
 
 async function start() {
@@ -259,6 +286,18 @@ for (const button of document.querySelectorAll('[data-viewer-panel]')) {
     button.onclick = () => showPanel(button.dataset.viewerPanel);
 }
 ui('panel-close').onclick = () => showPanel('');
+ui('date-toggle').onclick = () => {
+    const collapsed = ui('date-details').hidden = !ui('date-details').hidden;
+    ui('date-toggle').setAttribute('aria-expanded', String(!collapsed));
+    ui('date-toggle').setAttribute('aria-label', collapsed ? '날짜와 로고 펼치기' : '날짜와 로고 접기');
+    if (collapsed && activePanel === 'issues') showPanel('');
+};
+ui('articles').addEventListener('click', event => {
+    const link = event.target.closest('[data-contents-page]');
+    if (!link || !current || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
+    event.preventDefault();
+    render(current.issueNumber, Number(link.dataset.contentsPage), 'pushState');
+});
 ui('search').oninput = () => {
     const term = ui('search').value.trim().toLocaleLowerCase('ko-KR');
     const matches = term ? [...issues.values()].flatMap(edition => edition.articles)

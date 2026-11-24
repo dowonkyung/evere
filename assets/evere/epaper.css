@@ -74,3 +74,33 @@ button:not(:disabled) { cursor: pointer; }
     .viewer-layout, .viewer-main, .viewer-reading, .viewer-stage, .viewer-paper-scroll { display: block; position: static; height: auto; overflow: visible; }
     .viewer-paper-scroll img { width: auto; max-width: 100%; height: auto; max-height: 95vh; }
 }
+
+.viewer-main { --panel-width: 300px; }
+.viewer-main.has-panel .viewer-reading { margin-inline-start: var(--panel-width); }
+.viewer-panel { width: var(--panel-width); padding: 16px 17px; box-shadow: none; }
+.viewer-panel header { margin-bottom: 18px; }
+.viewer-panel header button { display: grid; place-items: center; padding: 2px; }
+.viewer-date { padding: 0; }
+.viewer-date-details { display: flex; align-items: center; padding: 6px 10px 6px 0; }
+.viewer-date-details button { border-right: 1px solid var(--separator); }
+#epaper-date-toggle { display: grid; place-items: center; width: 44px; height: 42px; padding: 0; color: #737373; }
+#epaper-date-toggle[aria-expanded="false"] svg { transform: rotate(180deg); }
+#epaper-thumbnail-summary { margin: 0 0 18px; color: #626b70; font-size: 14px; }
+#epaper-pages { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 5px; }
+#epaper-pages > li:first-child { grid-column: 1 / -1; width: calc((100% - 5px) / 2); }
+#epaper-pages a { position: relative; display: grid; align-content: end; min-height: 0; aspect-ratio: .71; overflow: hidden;
+    padding: 0; border: 1px solid var(--separator); border-radius: 4px; background: var(--separator); text-align: center; }
+#epaper-pages a img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+#epaper-pages a span { position: relative; display: block; padding: 14px 4px 7px;
+    background: linear-gradient(transparent, var(--panel) 69%); font-weight: 700; }
+#epaper-pages a[aria-current="page"] { border: 2px solid var(--accent); color: #007c79; }
+#epaper-articles { gap: 0; padding-inline: 4px 12px; }
+#epaper-articles > li { padding-bottom: 15px; margin-bottom: 14px; border-bottom: 1px solid var(--separator); }
+#epaper-articles h3 { margin: 0 0 8px; padding-inline-start: 5px; border-inline-start: 4px solid var(--accent); font-size: 15px; line-height: 18px; }
+#epaper-articles h3 a { padding: 0; border: 0; background: transparent; font-size: inherit; }
+#epaper-articles ul { gap: 0; }
+#epaper-articles ul a { display: block; padding: 6px 3px; overflow: hidden; border: 0; color: #626b70; white-space: nowrap; text-overflow: ellipsis; }
+@media (max-width: 760px) {
+    .viewer-main { --panel-width: min(300px, calc(100vw - var(--rail-width))); }
+    .viewer-main.has-panel .viewer-reading { margin-inline-start: 0; }
+}
