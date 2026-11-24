@@ -2,7 +2,7 @@ import { setArticleTitle } from './article-label.js';
 import { articlePath } from './routes.js?v=routes-1';
 import { supabase } from './supabase.js';
 import { sectors, articleCategories } from './article-taxonomy.js?v=corrections-1';
-import { articleComposer } from './article-composer.js?v=guest-position-1';
+import { articleComposer } from './article-composer.js?v=print-placement-1';
 import { renderBody, renderPhotos } from './article-content.js?v=paragraph-breaks-1';
 const roleNames = {
     owner: '총수', director: '국장급', department_head: '부장급', reporter: '평기자', citizen: '시민기자',
@@ -359,6 +359,7 @@ function articleEditor(article, contentOnly) {
                     target: article.id, next_state: nextState, new_title: fields.title,
                     new_subtitle: fields.subtitle, new_body: fields.body,
                     new_body_html: fields.body_html, new_photo_paths: fields.photo_paths,
+                    new_print_issue: fields.print_issue, new_print_page: fields.print_page,
                 }));
                 return;
             }
@@ -436,7 +437,7 @@ async function openArticle(id) {
     message('기사를 불러오는 중입니다.');
     try {
         const article = result(await supabase.from('evere_articles')
-            .select('id,article_number,title,article_label,subtitle,body,body_html,sector,category,series_id,byline,guest_byline,guest_byline_positions,photo_paths,status,editorial_state,created_by')
+            .select('id,article_number,title,article_label,subtitle,body,body_html,sector,category,series_id,byline,guest_byline,guest_byline_positions,photo_paths,print_issue,print_page,status,editorial_state,created_by')
             .eq('id', id).single());
         if (!articleDialog.open || request !== dialogRequest) return;
         ui('article-dialog-title').textContent = article.title;

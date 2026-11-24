@@ -67,7 +67,7 @@ function enableInputPunctuation(field) {
 export function articleComposer(form, article = null, { contentOnly = false } = {}) {
     form.replaceChildren(document.getElementById('compose-fields').content.cloneNode(true));
     const find = (name) => form.querySelector(name);
-    const { title, subtitle, sector, category, series, writer, guest, guestPosition, omitByline } = form.elements;
+    const { title, subtitle, sector, category, series, writer, guest, guestPosition, omitByline, printIssue, printPage } = form.elements;
     enableInputPunctuation(title);
     enableInputPunctuation(subtitle);
     const editor = find('.compose-editor');
@@ -94,6 +94,8 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
     label.value = article?.article_label || '';
     title.value = article?.title || '';
     subtitle.value = article?.subtitle || '';
+    printIssue.value = article?.print_issue ?? '';
+    printPage.value = article?.print_page ?? '';
     renderBody(editor, article || {});
     if (!editor.hasChildNodes()) seedEditor();
     editor.addEventListener('focus', () => {
@@ -609,7 +611,17 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
             const body = editor.innerText.trim();
             const safe = document.createElement('div');
             safe.append(formattedBody(editor.innerHTML));
+            for (const [input, name] of [[printIssue, '호수'], [printPage, '면수']]) {
+                const number = input.value.trim();
+                if (number && (!/^[0-9]+$/.test(number) || Number(number) < 1 || Number(number) > 2147483647)) {
+                    notify(name + '는 1 이상의 정수로 입력해 주세요.');
+                    input.focus();
+                    return false;
+                }
+            }
             const fields = {
+                print_issue: printIssue.value.trim() ? Number(printIssue.value) : null,
+                print_page: printPage.value.trim() ? Number(printPage.value) : null,
                 title: title.value.trim(), article_label: label.value, subtitle: subtitle.value.trim(), body, body_html: safe.innerHTML,
                 sector: sector.value, category: form.elements.category.value || null, series_id: selectedSeries || null,
                 byline: omitByline.checked ? [] : [...byline],
