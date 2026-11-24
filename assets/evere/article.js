@@ -75,15 +75,20 @@ function enableReadingHeader(articleTitle) {
     schedule();
 }
 
-ui('article-text-size').addEventListener('change', (event) => {
-    ui('published-article').dataset.textSize = event.target.value;
-});
 const articlePage = document.querySelector('.article-page');
-const theme = ui('article-theme');
-theme.addEventListener('click', () => {
-    const dark = articlePage.classList.toggle('reader-dark');
-    theme.setAttribute('aria-pressed', String(dark));
-});
+for (const button of document.querySelectorAll('[data-reader-size], [data-reader-theme]')) {
+    button.addEventListener('click', () => {
+        const { readerSize, readerTheme } = button.dataset;
+        if (readerSize) ui('published-article').dataset.textSize = readerSize;
+        else {
+            articlePage.dataset.readerTheme = readerTheme;
+            articlePage.classList.toggle('reader-dark', readerTheme === 'dark' || readerTheme === 'green');
+        }
+        for (const option of button.parentElement.children) {
+            option.setAttribute('aria-pressed', String(option === button));
+        }
+    });
+}
 ui('article-print').addEventListener('click', () => window.print());
 ui('article-copy').addEventListener('click', async () => {
     if (!currentArticle) return;
@@ -104,6 +109,12 @@ ui('article-native-share').addEventListener('click', async () => {
     }
 });
 const toolPanels = [...ui('reader-actions').querySelectorAll('details')];
+for (const panel of toolPanels) {
+    panel.querySelector('.reader-panel-close').addEventListener('click', () => {
+        panel.open = false;
+        panel.querySelector('summary').focus();
+    });
+}
 document.addEventListener('click', (event) => {
     for (const panel of toolPanels) if (!event.composedPath().includes(panel)) panel.open = false;
 });
@@ -237,6 +248,9 @@ async function render() {
     canonical.rel = 'canonical';
     canonical.href = canonicalURL.href;
     document.head.append(canonical);
+    const shareURL = encodeURIComponent(canonicalURL.href);
+    ui('article-facebook').href = 'https://www.facebook.com/sharer/sharer.php?u=' + shareURL;
+    ui('article-x').href = 'https://twitter.com/intent/tweet?url=' + shareURL + '&text=' + encodeURIComponent(data.title);
     ui('article-email').href = 'mailto:?subject=' + encodeURIComponent(data.title) + '&body=' + encodeURIComponent(canonicalURL.href);
     const title = articlePageTitle(data.title, data.article_label);
     document.title = title + ' | 이브레';

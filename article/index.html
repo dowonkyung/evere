@@ -8,10 +8,10 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="/assets/khan/common.css">
   <link rel="stylesheet" href="/assets/evere/home.css?v=evere-ellipsis-1">
-  <link rel="stylesheet" href="/assets/evere/article-page.css?v=reader-tools-2">
+  <link rel="stylesheet" href="/assets/evere/article-page.css?v=reader-panels-1">
   <script defer src="/assets/khan/swiper-bundle.min.js"></script>
   <script defer src="/assets/evere/home.js?v=account-dot-1"></script>
-  <script type="module" src="/assets/evere/article.js?v=reader-tools-2"></script>
+  <script type="module" src="/assets/evere/article.js?v=reader-panels-1"></script>
 <script type="module" src="/assets/evere/route-init.js?v=direct-route-1"></script>
 <link rel="preload" as="style" href="/assets/yna/default.css">
 <link rel="preload" as="style" href="/assets/yna/variables.css">
@@ -211,28 +211,9 @@
       <aside class="reader-actions function-wrap" id="reader-actions" aria-label="기사 도구" hidden>
         <a href="#comments-section" aria-label="댓글"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v12H9l-5 4z M8 10h.01 M12 10h.01 M16 10h.01"/></svg><span><span class="reader-action-label">댓글</span> <b id="article-comment-count"></b></span></a>
         <button id="article-bookmark" type="button" aria-pressed="false" aria-label="북마크" hidden><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg><span class="reader-action-label" data-collection-label>북마크</span></button>
-        <details>
-          <summary aria-label="글자 크기"><span class="reader-type-icon" aria-hidden="true"><small>가</small>가</span><span class="reader-action-label">글자 크기</span></summary>
-          <div class="reader-tool-panel">
-            <label for="article-text-size">본문 글자 크기</label>
-            <select id="article-text-size">
-              <option value="normal">보통</option>
-              <option value="large">크게</option>
-              <option value="xlarge">아주 크게</option>
-            </select>
-          </div>
-        </details>
-        <button type="button" id="article-theme" aria-pressed="false"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/></svg>컬러 모드</button>
-        <details id="article-share">
-          <summary aria-label="공유하기"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3 M7 8l5-5 5 5 M4 13v7h16v-7"/></svg><span class="reader-action-label">공유하기</span></summary>
-          <div class="reader-tool-panel reader-share-panel">
-            <strong>기사 공유</strong>
-            <button type="button" id="article-copy">URL 복사</button>
-            <a id="article-email">이메일</a>
-            <button type="button" id="article-native-share" hidden>앱으로 공유</button>
-            <span id="article-share-status" role="status"></span>
-          </div>
-        </details>
+        <details id="article-text-size"><summary aria-label="글자 크기"><span class="reader-type-icon" aria-hidden="true"><small>가</small>가</span><span class="reader-action-label">글자 크기</span></summary><div class="reader-tool-panel"><div class="reader-panel-heading"><strong>글자 크기 설정</strong><button type="button" class="reader-panel-close" aria-label="글자 크기 설정 닫기">×</button></div><div class="reader-options"><button type="button" data-reader-size="normal" aria-pressed="true"><span class="reader-option-icon" aria-hidden="true">가</span><span>보통</span></button><button type="button" data-reader-size="large" aria-pressed="false"><span class="reader-option-icon" aria-hidden="true">가</span><span>크게</span></button><button type="button" data-reader-size="xlarge" aria-pressed="false"><span class="reader-option-icon" aria-hidden="true">가</span><span>아주 크게</span></button></div></div></details>
+        <details id="article-theme"><summary aria-label="컬러 모드"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z"/></svg><span class="reader-action-label">컬러 모드</span></summary><div class="reader-tool-panel"><div class="reader-panel-heading"><strong>컬러 모드 설정</strong><button type="button" class="reader-panel-close" aria-label="컬러 모드 설정 닫기">×</button></div><div class="reader-options"><button type="button" data-reader-theme="light" aria-pressed="true"><span class="reader-option-icon" aria-hidden="true"></span><span>라이트</span></button><button type="button" data-reader-theme="dark" aria-pressed="false"><span class="reader-option-icon" aria-hidden="true"></span><span>다크</span></button><button type="button" data-reader-theme="beige" aria-pressed="false"><span class="reader-option-icon" aria-hidden="true"></span><span>베이지</span></button><button type="button" data-reader-theme="green" aria-pressed="false"><span class="reader-option-icon" aria-hidden="true"></span><span>그린</span></button></div></div></details>
+        <details id="article-share"><summary aria-label="공유하기"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3 M7 8l5-5 5 5 M4 13v7h16v-7"/></svg><span class="reader-action-label">공유하기</span></summary><div class="reader-tool-panel"><div class="reader-panel-heading"><strong>공유하기</strong><button type="button" class="reader-panel-close" aria-label="공유하기 닫기">×</button></div><div class="reader-options"><button type="button" id="article-native-share" hidden><span class="reader-option-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14 M12 5v14"/></svg></span><span>앱으로 공유</span></button><a id="article-facebook" target="_blank" rel="noopener noreferrer"><span class="reader-option-icon" aria-hidden="true">f</span><span>페이스북</span></a><a id="article-x" target="_blank" rel="noopener noreferrer"><span class="reader-option-icon" aria-hidden="true">𝕏</span><span>X</span></a><button type="button" id="article-copy"><span class="reader-option-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14l4-4 M8 16l-1 1a3 3 0 0 1-4-4l4-4a3 3 0 0 1 4 0 M16 8l1-1a3 3 0 0 1 4 4l-4 4a3 3 0 0 1-4 0"/></svg></span><span>URL 복사</span></button><a id="article-email"><span class="reader-option-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18v14H3z M3 6l9 7 9-7"/></svg></span><span>이메일</span></a></div><span id="article-share-status" role="status"></span></div></details>
         <button type="button" id="article-print"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 8V3h10v5 M7 17H4V8h16v9h-3 M7 14h10v7H7z M17 11h.01"/></svg>인쇄하기</button>
       </aside>
       <article id="published-article" class="reader-article" hidden>
