@@ -8,10 +8,10 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="/assets/khan/common.css">
   <link rel="stylesheet" href="/assets/evere/home.css?v=evere-ellipsis-1">
-  <link rel="stylesheet" href="/assets/evere/article-page.css?v=comment-list-1">
+  <link rel="stylesheet" href="/assets/evere/article-page.css?v=comment-byline-1">
   <script defer src="/assets/khan/swiper-bundle.min.js"></script>
   <script defer src="/assets/evere/home.js?v=account-dot-1"></script>
-  <script type="module" src="/assets/evere/article.js?v=comment-list-1"></script>
+  <script type="module" src="/assets/evere/article.js?v=comment-byline-1"></script>
 <script type="module" src="/assets/evere/route-init.js?v=direct-route-1"></script>
 <link rel="preload" as="style" href="/assets/yna/default.css">
 <link rel="preload" as="style" href="/assets/yna/variables.css">
@@ -241,13 +241,9 @@
         <form id="comment-form" hidden>
           <div class="comment-composer-heading">
             <strong id="comment-writer"></strong>
-            <details class="comment-guide">
-              <summary>댓글 작성 안내 <span aria-hidden="true">ⓘ</span></summary>
-              <p>다른 독자를 존중하고 욕설이나 비방은 삼가 주세요.</p>
-            </details>
           </div>
           <div class="comment-composer">
-            <textarea id="comment-text" name="comment" aria-label="댓글" rows="4" maxlength="500" placeholder="댓글을 남겨주세요. 다른 독자를 존중하고 욕설이나 비방은 삼가 주세요." required></textarea>
+            <textarea id="comment-text" name="comment" aria-label="댓글" rows="3" maxlength="500" placeholder="댓글을 남겨주세요. 상대방을 불쾌하게 하는 댓글이나 욕설, 비방 등 글은 삼가해주세요. 관련 규정 미준수 시 제재될 수 있어요." required></textarea>
             <div class="comment-composer-actions">
               <span><output id="comment-length" for="comment-text" aria-label="입력한 글자 수">0</output><span aria-hidden="true">/500</span></span>
               <button type="submit" disabled>등록</button>

@@ -312,15 +312,20 @@ async function render() {
     const names = data.byline_names;
     const byline = ui('byline');
     const reporterName = (name) => /\s기자$/.test(name) ? name : name + ' 기자';
-    byline.textContent = names.map(reporterName).join(', ');
+    const setByline = (titles = new Map()) => {
+        byline.replaceChildren(...names.map((name, index) => {
+            const person = document.createElement('span');
+            const title = titles.get(index + 1);
+            person.textContent = title ? name + ' ' + title : reporterName(name);
+            return person;
+        }));
+    };
+    setByline();
     if (names.length) void Promise.resolve(supabase.rpc('evere_article_byline_positions', { target_article: data.id }))
         .then(({ data: positions, error }) => {
             if (error || !positions?.length) return;
             const titles = new Map(positions.map(row => [row.byline_index, row.position_title.trim()]));
-            byline.textContent = names.map((name, index) => {
-                const title = titles.get(index + 1);
-                return title ? name + ' ' + title : reporterName(name);
-            }).join(', ');
+            setByline(titles);
         }).catch(() => {});
     ui('status').replaceChildren();
     ui('published-article').hidden = false;

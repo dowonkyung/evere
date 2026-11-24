@@ -19,7 +19,8 @@
 .reader-head h1 { margin: 0; font-size: 32px; line-height: 44px; font-weight: 700; word-break: keep-all; overflow-wrap: anywhere; }
 .reader-head time { display: block; margin-top: 16px; color: #686868; font-size: 14px; font-weight: 500; line-height: 18px; }
 .reader-head time:empty { display: none; }
-.article-byline { margin: 16px 0 0; font-size: 14px; line-height: 20px; font-weight: 600; text-decoration: underline; text-underline-offset: 4px; }
+.article-byline { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; color: var(--text-strong, #333); font-size: 14px; line-height: 19px; font-weight: 600; }
+.article-byline > span { border-bottom: 1px solid var(--text-secondary, #666); }
 .reader-article .editor-subtitle { border-inline-start: 3px solid currentColor; padding-inline-start: 13px; margin: 0 0 32px; }
 .reader-article .editor-subtitle > p { margin: 0; white-space: pre-line; font-size: 17px; font-weight: 550; line-height: 28px; }
 .article-byline:empty, .article-photos:empty { display: none; }
@@ -282,18 +283,64 @@
   gap: 12px;
 }
 .comment-composer-heading { margin-bottom: 8px; }
-.comment-guide { position: relative; font-size: 13px; }
-.comment-guide summary { cursor: pointer; color: var(--text-secondary, #666); }
-.comment-guide p { position: absolute; inset: 100% 0 auto auto; z-index: 1; width: min(240px, 75vw); padding: 10px; background: var(--background-default, #fff); border: 1px solid var(--stroke-framing, #ddd); border-radius: 6px; }
-.comment-composer { padding: 14px 16px; border: 1px solid var(--stroke-framing, #ddd); border-radius: 10px; background: var(--surface-soft, #f2f2f2); }
+
+
+
+.comment-composer {
+  --composer-bg: #f9fafb;
+  --composer-border: #e5e8eb;
+  --composer-muted: #8b95a1;
+  --composer-placeholder: #6b7684;
+  --composer-focus: #4e5968;
+  --composer-strong: #333d4b;
+  --composer-text: #191f28;
+  padding: 16px;
+  border: 1px solid var(--composer-border);
+  border-radius: 10px;
+  background: var(--composer-bg);
+  transition: background-color .15s, border-color .15s;
+}
+.evere-article[data-reader-palette] .comment-composer {
+  --composer-bg: var(--surface-soft);
+  --composer-border: var(--stroke-framing);
+  --composer-muted: var(--text-secondary);
+  --composer-placeholder: var(--text-secondary);
+  --composer-focus: var(--text-secondary);
+  --composer-text: var(--text-primary);
+}
+.comment-composer:focus-within { border-color: var(--composer-focus); background: transparent; }
 .reader-comments .comment-composer textarea,
-.evere-article[data-reader-palette] .reader-comments .comment-composer textarea { padding: 0; border: 0; background: transparent; color: inherit; line-height: 1.55; }
-.comment-composer textarea::placeholder { color: var(--text-secondary, #666); opacity: 1; }
-.reader-comments .comment-composer textarea:focus-visible { outline: 2px solid #00b8b4; outline-offset: 3px; }
-.comment-composer-actions { margin-top: 16px; color: var(--text-secondary, #666); font-size: 14px; }
-.comment-composer-actions output { color: var(--text-primary, #151515); }
-.reader-comments .comment-composer button { border-radius: 8px; font-weight: 650; }
-.evere-article .reader-comments .comment-composer button:disabled { opacity: 1; background: var(--stroke-framing, #ddd); border-color: transparent; color: var(--text-primary, #151515); }
+.evere-article[data-reader-palette] .reader-comments .comment-composer textarea {
+  min-height: 80px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--composer-text);
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.reader-comments .comment-composer textarea:focus { outline: none; box-shadow: none; }
+.comment-composer textarea::placeholder { color: var(--composer-placeholder); opacity: 1; }
+.comment-composer-actions { margin-top: 20px; gap: 20px; color: var(--composer-muted); font-size: 13px; }
+.comment-composer-actions output { color: var(--composer-text); }
+.evere-article .reader-comments .comment-composer button[type="submit"] {
+  margin-inline-start: auto;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--composer-strong);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background-color .15s, color .15s;
+}
+.evere-article .reader-comments .comment-composer button[type="submit"]:disabled {
+  opacity: 1;
+  background: var(--composer-border);
+  color: var(--composer-focus);
+}
 
 .comment-section-heading { display: flex; align-items: center; gap: 8px; margin-bottom: 38px; }
 .reader-comments #comments-refresh { display: grid; place-items: center; padding: 4px; border: 0; background: transparent; color: inherit; }
