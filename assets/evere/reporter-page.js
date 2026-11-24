@@ -82,7 +82,7 @@ async function refreshSubscriberCount() {
 
 function configureSectionHeader() {
     const header = ui('reporter-section-header');
-    const start = ui('reporter-section-start');
+    const profile = ui('reporter-details').querySelector('.journalist_header');
     const follow = ui('reporter-follow');
     const stickyFollow = ui('reporter-sticky-follow');
     const syncFollow = () => {
@@ -98,7 +98,8 @@ function configureSectionHeader() {
 
     function updateHeader() {
         const top = Number.parseFloat(getComputedStyle(header).top) || 0;
-        header.classList.toggle('sticky_top', start.getBoundingClientRect().top < top);
+        header.classList.toggle('sticky_top', window.scrollY > 0 &&
+            profile.getBoundingClientRect().bottom <= top + header.offsetHeight);
     }
     window.addEventListener('scroll', updateHeader, { passive: true });
     window.addEventListener('resize', updateHeader);
