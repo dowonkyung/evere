@@ -1,8 +1,27 @@
 import { supabase } from './supabase.js';
 import { articlePath } from './routes.js?v=routes-1';
+import { loadArticleListPhotos, renderMajorArticles } from './article-list-media.js?v=category-pages-1';
 import { setArticleTitle } from './article-label.js';
 
 const list = document.getElementById('recentList');
+const contents = list.closest('.contents');
+
+async function showMajorArticles() {
+    const { data, error } = await supabase.from('evere_articles')
+        .select('article_number,title,article_label,photo_paths')
+        .eq('status', 'published')
+        .order('published_at', { ascending: false, nullsFirst: false }).order('id').limit(5);
+    if (error) {
+        contents.querySelector('.major-art-wrap').textContent = '주요 기사를 불러오지 못했습니다.';
+        return;
+    }
+    renderMajorArticles(contents, data.map(article => ({
+        ...article, href: articlePath(article), photoPath: article.photo_paths?.[0],
+    })));
+    await loadArticleListPhotos(contents);
+}
+
+void showMajorArticles().catch(() => {});
 const status = document.getElementById('notice-status');
 const pages = document.getElementById('notice-pages');
 const empty = document.getElementById('no_result');
