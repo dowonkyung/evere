@@ -170,6 +170,7 @@ button:not(:disabled) { cursor: pointer; }
 .viewer-article-panel h2 { margin: 0 0 12px; font-size: 26px; line-height: 1.35; }
 .viewer-article-font { justify-content: flex-end; margin-bottom: 24px; }
 .viewer-article-font button { padding: 5px 8px; background: #181818; color: #fff; }
+.viewer-article-font button svg { display: block; width: auto; height: 13px; }
 .viewer-article-font button:first-child { border-radius: 6px 0 0 6px; }
 .viewer-article-font button:last-child { border-radius: 0 6px 6px 0; }
 #epaper-article-subtitle { margin: 0 0 24px; white-space: pre-wrap; }

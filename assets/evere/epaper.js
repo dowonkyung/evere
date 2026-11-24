@@ -72,7 +72,7 @@ async function loadImageRegions() {
 void supabase.auth.getUser().then(async ({ data }) => {
     if (!data?.user) return;
     const { data: member } = await supabase.from('evere_members').select('role').eq('id', data.user.id).maybeSingle();
-    canEditRegions = member?.role === 'owner';
+    canEditRegions = ['owner', 'director'].includes(member?.role);
     if (canEditRegions && current) render(current.issueNumber, current.page);
 }).catch(() => {});
 
