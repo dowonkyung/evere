@@ -196,15 +196,22 @@ export function configureHomeVisualEditor(isHomeSelected) {
             [data-home-list] { min-height: 350px; }
             .home-preview-region { position: absolute; box-sizing: border-box; border: 2px dashed #007a79;
                 border-radius: 6px; pointer-events: none; z-index: 151; }
-            .home-preview-region button { position: absolute; top: 6px; left: 6px; pointer-events: auto; background: #007a79;
-                color: white; font: 700 13px/1.2 sans-serif; border: 0; border-radius: 5px; padding: 7px 9px; cursor: pointer; }
+            .home-preview-region button {
+                position: absolute; top: 6px; left: 6px; pointer-events: auto;
+                display: grid; place-items: center; box-sizing: border-box;
+                width: 30px; height: 30px; padding: 4px; border: 1px solid #aaa;
+                border-radius: 50%; background: #fff; color: #444; cursor: pointer;
+            }
+            .home-preview-region button svg { display: block; width: 20px; height: 20px; }
         `;
         doc.head.append(style);
         const overlays = groups.map(group => {
             const targets = group.targets.map(selector => doc.querySelector(selector)).filter(Boolean);
             const overlay = doc.createElement('div');
             overlay.className = 'home-preview-region';
-            const edit = button('편집 · ' + group.name, () => void openGroup(group), doc);
+            const edit = button('', () => void openGroup(group), doc);
+            edit.setAttribute('aria-label', group.name + ' 편집');
+            edit.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" stroke-width="1.5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M13.0207 5.82839L15.8491 2.99996L20.7988 7.94971L17.9704 10.7781M13.0207 5.82839L3.41405 15.435C3.22652 15.6225 3.12116 15.8769 3.12116 16.1421V20.6776H7.65669C7.92191 20.6776 8.17626 20.5723 8.3638 20.3847L17.9704 10.7781M13.0207 5.82839L17.9704 10.7781" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>';
             overlay.append(edit);
             doc.body.append(overlay);
             return { targets, overlay };
