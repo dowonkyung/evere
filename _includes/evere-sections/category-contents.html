@@ -1,7 +1,7 @@
 <section class="contents{% if include.category %} sub{% endif %}" id="section-contents">
                 <div>
 					<div class="section-series" hidden><h3>연재</h3><div class="series"><ul class="swiper-wrapper"></ul></div></div>
-<div class="date" id="recent">
+<div class="date" hidden style="display: none;">
 						<div class="btn-left"><input type="date" id="opinion-date-picker" aria-label="기사 목록 날짜">
                             <button type="button" class="btn-calendar" aria-label="날짜 선택">
                                 <span class="txt">달력</span>
@@ -20,7 +20,7 @@
 							<a class="datepicker_close"><span>닫기</span></a>
 						</div>
 					</div>
-                    <div class="list">
+                    <div class="list" id="recent">
                         <ul id="recentList">{% if include.sector == 'politics' and include.category == nil %}{% include evere-sections/politics-preview.html %}{% endif %}</ul>
                     </div>
                     <div class="page" hidden><ul id="paging" aria-label="기사 목록 페이지"></ul></div>
