@@ -1,3 +1,4 @@
+import { configureHomeVisualEditor } from './newsroom-home-layout.js';
 import { categoryPath } from './routes.js?v=routes-1';
 import { supabase } from './supabase.js';
 import { sectors, articleCategories } from './article-taxonomy.js';
@@ -10,6 +11,7 @@ const nav = [...document.querySelectorAll('.newsroom-nav [data-view]')];
 const layout = ui('layout-form');
 const layoutSubmit = layout.querySelector('[type="submit"]');
 const slots = [...ui('layout-slots').querySelectorAll('select')];
+const showHomeVisualEditor = configureHomeVisualEditor(() => layout.elements.page.value === 'home');
 
 function sectionHeadLayout(page, category) {
     return page !== 'home' && page !== 'opinion' && category === '';
@@ -194,6 +196,14 @@ async function loadLayout() {
     if (!page) return;
     const request = ++layoutRequest;
     layoutSubmit.disabled = true;
+    const isHome = page === 'home';
+    ui('layout-slots').hidden = isHome;
+    layoutSubmit.hidden = isHome;
+    showHomeVisualEditor(isHome);
+    if (isHome) {
+        ui('public-page').href = publicPage(page, category);
+        return;
+    }
     const activeSlots = configureLayoutSlots(page, category);
     ui('public-page').href = publicPage(page, category);
     let articles = supabase.from('evere_articles').select('id,title').eq('status', 'published');
@@ -227,6 +237,7 @@ layout.elements.category.addEventListener('change', () => {
     loadLayout().catch(() => notify('화면 배치를 불러오지 못했습니다.', true));
 });
 layout.addEventListener('submit', task(async () => {
+    if (layout.elements.page.value === 'home') return;
     const articleIds = slots.filter((select) => !select.closest('label').hidden).map((select) => select.value || null);
     const populated = articleIds.filter(Boolean);
     if (new Set(populated).size !== populated.length) {
