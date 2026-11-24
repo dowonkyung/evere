@@ -86,8 +86,30 @@ export function formattedBody(html) {
     return body;
 }
 
-export function renderBody(target, article) {
-    const content = formattedBody(article.body_html || '');
+export function renderBody(target, article, { legacyLineBreaks = false } = {}) {
+    const html = article.body_html || '';
+    const content = formattedBody(html);
+    // Older editors saved paragraphs as a single inline run with line breaks.
+    if (legacyLineBreaks && !/<(?:p|div|h[23]|figure|ul|ol|blockquote)\b/i.test(html)) {
+        const inline = content.firstElementChild;
+        if (inline?.querySelector(':scope > br')) {
+            const paragraphs = document.createDocumentFragment();
+            let paragraph = document.createElement('p');
+            for (const node of [...inline.childNodes]) {
+                if (node.nodeName === 'BR') {
+                    if (paragraph.hasChildNodes()) paragraphs.append(paragraph);
+                    paragraph = document.createElement('p');
+                } else {
+                    paragraph.append(node);
+                }
+            }
+            if (paragraph.hasChildNodes()) paragraphs.append(paragraph);
+            if (paragraphs.textContent.trim()) {
+                target.replaceChildren(paragraphs);
+                return;
+            }
+        }
+    }
     if (content.textContent.trim() || content.querySelector('figure[data-photo]')) {
         target.replaceChildren(content);
         return;

@@ -2,7 +2,7 @@ import { showReporterCards } from './reporter-cards.js?v=profile-email-gap-1';
 import { collectionButton } from './reader-collections.js';
 import { articlePageTitle, setArticleTitle } from './article-label.js';
 import { articlePath, articleNumberFromURL } from './routes.js?v=direct-route-1';
-import { renderBody, renderPhotos, photoBucket } from './article-content.js?v=paragraph-breaks-1';
+import { renderBody, renderPhotos, photoBucket } from './article-content.js?v=paragraph-breaks-2';
 import { seriesFor, seriesLink } from './series.js?v=numbered-link-1';
 import { supabase } from './supabase.js';
 import { sectors } from './article-taxonomy.js';
@@ -328,7 +328,7 @@ async function render() {
     ui('title').textContent = title;
     ui('subtitle').textContent = data.subtitle;
     ui('editor-subtitle').hidden = !data.subtitle?.trim();
-    renderBody(ui('body'), data);
+    renderBody(ui('body'), data, { legacyLineBreaks: true });
     void showReporterCards(data.id).catch(() => {});
     void renderPhotos(ui('article-photos'), data.photo_paths, ui('body')).catch(() => {});
     if (data.published_at) {
