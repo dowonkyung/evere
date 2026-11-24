@@ -53,8 +53,6 @@ function configureLayoutSlots(page, category) {
     });
     return slots.slice(0, labels.length);
 }
-const boardForm = ui('board-form');
-const postForm = ui('board-post-form');
 const seriesForm = ui('series-form');
 const issuesForm = ui('home-issues-form');
 const issuesDialog = ui('home-issues-dialog');
@@ -63,10 +61,7 @@ let linkArea = '';
 const issuesFields = ui('home-issues-fields');
 let issuesRequest = 0;
 let member = null;
-let boards = [];
-let editingPost = null;
 let layoutRequest = 0;
-let boardRequest = 0;
 
 function notify(text, failed = false) {
     const status = ui('status');
@@ -117,7 +112,6 @@ function selectView() {
 
     if (view === 'layout') loadLayout().catch(() => notify('화면 배치를 불러오지 못했습니다.', true));
     if (view === 'series') loadSeries().catch(() => notify('기획·연재 분류를 불러오지 못했습니다.', true));
-    if (view === 'boards') loadBoards().catch(() => notify('게시판을 불러오지 못했습니다.', true));
 }
 
 document.addEventListener('evere:member', (event) => {
@@ -284,12 +278,6 @@ function button(label, run) {
     return el;
 }
 
-function resetPostForm() {
-    editingPost = null;
-    postForm.reset();
-    postForm.querySelector('[type="submit"]').textContent = '게시글 등록';
-}
-
 function issuesStatus(message, failed = false) {
     ui('home-issues-status').textContent = message;
     ui('home-issues-status').dataset.error = String(failed);
@@ -394,81 +382,3 @@ issuesForm.addEventListener('submit', async (event) => {
         if (request === issuesRequest) issuesFields.disabled = false;
     }
 });
-
-async function showBoard() {
-    const selected = boards.find((board) => board.id === boardForm.elements.board.value);
-    const request = ++boardRequest;
-    boardForm.elements.name.value = selected?.name || '';
-    boardForm.elements.description.value = selected?.description || '';
-    boardForm.elements.visible.checked = Boolean(selected?.visible);
-    ui('remove-board').hidden = !selected;
-    postForm.hidden = !selected;
-    resetPostForm();
-    ui('board-posts').replaceChildren();
-    if (!selected) return;
-    const posts = value(await supabase.from('evere_board_posts').select('id,title,body')
-        .eq('board_id', selected.id).order('created_at', { ascending: false }).limit(100));
-    if (request !== boardRequest) return;
-    ui('board-posts').replaceChildren(...posts.map((post) => {
-        const card = document.createElement('article');
-        card.className = 'board-post';
-        const title = document.createElement('strong');
-        title.textContent = post.title;
-        const body = document.createElement('p');
-        body.textContent = post.body;
-        card.append(title, body, button('수정', () => {
-            editingPost = post.id;
-            postForm.elements.title.value = post.title;
-            postForm.elements.body.value = post.body;
-            postForm.querySelector('[type="submit"]').textContent = '수정 저장';
-            postForm.elements.title.focus();
-        }), button('삭제', async () => {
-            if (!window.confirm('게시글을 삭제할까요?')) return;
-            value(await supabase.from('evere_board_posts').delete().eq('id', post.id).select('id').single());
-            await showBoard();
-            notify('게시글을 삭제했습니다.');
-        }));
-        return card;
-    }));
-}
-
-async function loadBoards(selected = boardForm.elements.board.value) {
-    boards = value(await supabase.from('evere_boards').select('id,name,description,visible').order('name'));
-    optionList(boardForm.elements.board, [['', '새 게시판'], ...boards.map((board) => [board.id, board.name])], selected);
-    await showBoard();
-}
-
-boardForm.elements.board.addEventListener('change', () => {
-    showBoard().catch(() => notify('게시글을 불러오지 못했습니다.', true));
-});
-boardForm.addEventListener('submit', task(async () => {
-    const id = boardForm.elements.board.value;
-    const fields = {
-        name: boardForm.elements.name.value.trim(),
-        description: boardForm.elements.description.value.trim(),
-        visible: boardForm.elements.visible.checked,
-    };
-    const table = supabase.from('evere_boards');
-    const query = id ? table.update(fields).eq('id', id) : table.insert(fields);
-    const saved = value(await query.select('id').single());
-    await loadBoards(saved.id);
-    notify('게시판을 저장했습니다.');
-}));
-ui('remove-board').addEventListener('click', task(async () => {
-    if (!window.confirm('게시판과 그 안의 모든 글을 삭제할까요?')) return;
-    value(await supabase.from('evere_boards').delete().eq('id', boardForm.elements.board.value).select('id').single());
-    await loadBoards('');
-    notify('게시판을 삭제했습니다.');
-}));
-postForm.addEventListener('submit', task(async () => {
-    const fields = { title: postForm.elements.title.value.trim(), body: postForm.elements.body.value.trim() };
-    const table = supabase.from('evere_board_posts');
-    const query = editingPost
-        ? table.update(fields).eq('id', editingPost)
-        : table.insert({ ...fields, board_id: boardForm.elements.board.value });
-    value(await query.select('id').single());
-    await showBoard();
-    notify('게시글을 저장했습니다.');
-}));
-
-
