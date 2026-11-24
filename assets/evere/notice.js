@@ -5,6 +5,8 @@ import { setArticleTitle } from './article-label.js';
 const list = document.getElementById('recentList');
 const status = document.getElementById('notice-status');
 const pages = document.getElementById('notice-pages');
+const empty = document.getElementById('no_result');
+empty.querySelector('.btn-reset').onclick = () => location.assign('/notice/');
 const pageSize = 20;
 const requestedPage = Number(new URLSearchParams(location.search).get('page'));
 const page = Number.isSafeInteger(requestedPage) && requestedPage > 0 && requestedPage <= Math.floor(Number.MAX_SAFE_INTEGER / pageSize)
@@ -17,7 +19,10 @@ function pageLink(number, label) {
     const link = document.createElement('a');
     link.href = number === 1 ? '/notice/' : '/notice/?page=' + number;
     link.textContent = label;
-    if (number === page) link.setAttribute('aria-current', 'page');
+    if (number === page) {
+        item.className = 'active';
+        link.setAttribute('aria-current', 'page');
+    }
     item.append(link);
     pages.append(item);
 }
@@ -39,12 +44,15 @@ try {
         const date = document.createElement('p');
         date.className = 'date';
         if (notice.published_at) date.textContent = dateFormat.format(new Date(notice.published_at)).replaceAll('-', '.');
-        copy.append(link, date);
+        const description = document.createElement('p');
+        description.className = 'desc';
+        copy.append(link, description, date);
         article.append(copy);
         row.append(article);
         list.append(row);
     }
-    status.textContent = data.length ? '' : '등록된 알림이 없습니다.';
+    status.textContent = '';
+    empty.hidden = data.length > 0;
     const pageCount = Math.ceil(count / pageSize);
     if (page > 1) pageLink(data.length ? page - 1 : 1, data.length ? '이전' : '첫 페이지');
     if (pageCount > 1 && data.length) pageLink(page, String(page));

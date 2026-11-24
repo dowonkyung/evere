@@ -1,0 +1,31 @@
+.evere-notice main .child-section { height: 35px; }
+.evere-notice main section.contents.sub { display: flex; padding-top: 0; border-top: 3px solid var(--stroke-primary); }
+.evere-notice main section.contents.sub > div { width: min(884px, 100%); border-top: 0; }
+.evere-notice .contents.sub .list-pd { position: relative; bottom: -1px; padding: 12px 0 0; background: var(--background-default); }
+.evere-notice #recentList > li { padding: 19px 0 20px; border-top: 1px solid var(--stroke-separator); }
+.evere-notice #recentList > li:last-child { padding: 19px 0; border-bottom: 1px solid var(--stroke-separator); }
+.evere-notice #recentList article { display: flex; gap: 20px; }
+.evere-notice #recentList article > div { position: relative; flex: 1; }
+.evere-notice #recentList a { font-size: 20px; font-weight: 700; line-height: 28px; }
+.evere-notice #recentList .desc { display: block; padding-top: 8px; margin-bottom: 32px; }
+.evere-notice #recentList .date { position: absolute; bottom: 0; color: var(--text-description); font-size: 14px; font-weight: 500; line-height: 22px; }
+.evere-notice .contents .page { padding: 20px 0 84px; }
+.evere-notice .contents [hidden] { display: none; }
+.evere-notice #notice-status:not(:empty) { padding: 24px 20px; }
+@media (max-width: 1023px) {
+    .evere-notice main .child-section { height: 29px; }
+    .evere-notice main section.contents.sub > div { width: 100%; }
+    .evere-notice #recentList > li { padding: 15px 0 16px; }
+    .evere-notice #recentList > li:last-child { padding: 15px 0; }
+    .evere-notice #recentList a { font-size: 18px; line-height: 26px; }
+    .evere-notice .contents .page { padding-bottom: 0; }
+}
+@media (max-width: 767px) {
+    .evere-notice main .child-section { height: 19px; }
+    .evere-notice main section.contents.sub { margin-inline: 20px; padding-inline: 0; }
+    .evere-notice #recentList > li { padding: 11px 0 12px; }
+    .evere-notice #recentList > li:last-child { padding: 11px 0; }
+    .evere-notice #recentList a { display: block; font-weight: 600; margin-bottom: 24px; }
+    .evere-notice #recentList .desc { display: none; }
+    .evere-notice #recentList .date { font-size: 13px; line-height: 20px; }
+}

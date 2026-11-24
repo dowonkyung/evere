@@ -26,12 +26,8 @@
 <link rel="preload" as="style" href="/assets/evere/header.css?v=evere-ellipsis-1">
 <link rel="stylesheet" href="/assets/evere/header-first-paint.css">
 <script defer src="/assets/evere/header-first-paint.js"></script>
-<script type="module" src="/assets/evere/notice.js"></script>
-<style>
-.evere-notice .contents.sub { grid-template-columns: minmax(0, 1fr); }
-.evere-notice .contents.sub > div { width: 100%; }
-.evere-notice #notice-status:not(:empty) { padding: 24px 20px; }
-</style>
+<script type="module" src="/assets/evere/notice.js?v=original-spacing-1"></script>
+<link rel="stylesheet" href="/assets/evere/notice.css?v=original-spacing-1">
 </head>
 <body class="evere-opinion-list evere-section evere-notice">
 <div id="evere-header" data-css-pending data-compact-only>
@@ -212,13 +208,19 @@
 </template>
 </div>
 <main><div class="wrap">
-<h1 class="opinion-title">알림</h1>
+<h1 class="opinion-title"><a href="/notice/">알림</a></h1>
+<div class="child-section" aria-hidden="true"></div>
 <section class="contents sub" aria-label="알림 목록">
     <div>
         <div class="list-pd"></div>
         <div class="list"><ul id="recentList"></ul></div>
         <p id="notice-status" role="status">알림을 불러오는 중입니다.</p>
         <div class="page" hidden><ul id="notice-pages" aria-label="알림 목록 페이지"></ul></div>
+        <div class="none" id="no_result" hidden>
+            <p><span class="txt">글 없음</span>등록된 글이 없습니다.
+                <button class="btn-reset" type="button">초기화</button>
+            </p>
+        </div>
     </div>
 </section>
 </div></main>
