@@ -1,4 +1,4 @@
-import { formattedBody, photoBucket, photoFigure, photoImage, readPhotoCaption, renderBody, setPhotoCaption, setPhotoOptions } from './article-content.js?v=photo-options-1';
+import { formattedBody, photoBucket, photoFigure, photoImage, readPhotoCaption, renderBody, setPhotoCaption, setPhotoOptions } from './article-content.js?v=paragraph-breaks-1';
 import { openPhotoDialog } from './photo-dialog.js?v=photo-sidebar-1';
 import { connectPhotoLibrary } from './photo-library.js?v=more-1';
 import { seriesFor } from './series.js';
@@ -93,6 +93,14 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
     title.value = article?.title || '';
     subtitle.value = article?.subtitle || '';
     renderBody(editor, article || {});
+    if (!editor.hasChildNodes()) {
+        const paragraph = document.createElement('p');
+        paragraph.append(document.createElement('br'));
+        editor.append(paragraph);
+    }
+    editor.addEventListener('focus', () => {
+        document.execCommand('defaultParagraphSeparator', false, 'p');
+    });
     updateEditorCount();
 
     function notify(message = '') {
@@ -101,6 +109,7 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
 
     function updateEditorCount() {
         const copy = editor.innerText.trim();
+        editor.dataset.empty = String(!copy && !editor.querySelector('figure[data-photo]'));
         find('[data-editor-count]').textContent =
             Array.from(copy).length.toLocaleString('ko-KR') + '자 · ' +
             (copy ? copy.split(/\s+/u).length : 0).toLocaleString('ko-KR') + '단어';

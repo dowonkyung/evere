@@ -70,12 +70,35 @@ export function formattedBody(html) {
     };
     const fragment = document.createDocumentFragment();
     for (const node of template.content.childNodes) copy(node, fragment);
-    return fragment;
+    const body = document.createDocumentFragment();
+    const blocks = new Set(['P', 'DIV', 'H2', 'H3', 'FIGURE', 'UL', 'OL', 'BLOCKQUOTE']);
+    let paragraph = document.createElement('p');
+    for (const node of [...fragment.childNodes]) {
+        if (blocks.has(node.tagName)) {
+            if (paragraph.textContent.trim() || paragraph.querySelector('br')) body.append(paragraph);
+            paragraph = document.createElement('p');
+            body.append(node);
+        } else {
+            paragraph.append(node);
+        }
+    }
+    if (paragraph.textContent.trim() || paragraph.querySelector('br')) body.append(paragraph);
+    return body;
 }
 
 export function renderBody(target, article) {
     const content = formattedBody(article.body_html || '');
-    target.replaceChildren(content.textContent.trim() ? content : article.body || '');
+    if (content.textContent.trim() || content.querySelector('figure[data-photo]')) {
+        target.replaceChildren(content);
+        return;
+    }
+    const paragraphs = article.body ? article.body.split(/\r\n?|\n/).map((line) => {
+        const paragraph = document.createElement('p');
+        if (line) paragraph.textContent = line;
+        else paragraph.append(document.createElement('br'));
+        return paragraph;
+    }) : [];
+    target.replaceChildren(...paragraphs);
 }
 
 export function photoImage(src, description = '기사 첨부 사진') {

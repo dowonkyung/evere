@@ -27,7 +27,9 @@
 .reader-article .article-body { font-size: 18px; line-height: 32px; white-space: pre-wrap; overflow-wrap: anywhere; }
 .reader-article[data-text-size="large"] .article-body { font-size: 22px; line-height: 38px; }
 .reader-article[data-text-size="xlarge"] .article-body { font-size: 26px; line-height: 44px; }
-.article-body :is(p, ul, ol, blockquote) { margin-block: 0 32px; }
+.article-body :is(p, ul, ol, blockquote),
+.article-body > div { margin-block: 0 32px; }
+.article-body > :is(p, div):last-child { margin-block-end: 0; }
 .article-body :is(ul, ol) { padding-inline-start: 1.5em; }
 .article-body ul { list-style: disc; }
 .article-body ol { list-style: decimal; }
