@@ -37,6 +37,21 @@ function withPdfPage(pdf, number, usePage) {
     return withPdf(pdf, async document => usePage(await document.getPage(number)));
 }
 
+export function renderPdfPreview(pdf, number) {
+    return withPdfPage(pdf, number, async page => {
+        const base = page.getViewport({ scale: 1 });
+        const viewport = page.getViewport({ scale: Math.min(2400 / base.width, 8800 / base.height) });
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.ceil(viewport.width);
+        canvas.height = Math.ceil(viewport.height);
+        await page.render({ canvasContext: canvas.getContext('2d', { alpha: false }), viewport }).promise;
+        return new Promise((resolve, reject) => canvas.toBlob(blob => {
+            if (blob) resolve(blob);
+            else reject(new Error('지면 이미지 렌더링 실패'));
+        }, 'image/png'));
+    });
+}
+
 export function indexPdf(pdf) {
     return withPdf(pdf, async document => {
         const pages = [];
@@ -702,5 +717,5 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
         main.classList.add('print-article');
         try { window.print(); } finally { main.classList.remove('print-article'); }
     };
-    return { setSheets, track, openArticle, closeArticle: () => { if (selection) close(false); }, closeEditor: stopEditing, isEditing: () => Boolean(editing) };
+    return { setSheets, track, openArticle, closeArticle: () => { if (selection) close(false); }, selectedArticle: () => selection?.row.article_number, closeEditor: stopEditing, isEditing: () => Boolean(editing) };
 }

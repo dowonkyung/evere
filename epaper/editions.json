@@ -82,6 +82,77 @@
       "thumbnails": {
         "1": "/epaper/files/1/page-1.png"
       }
+    },
+    {
+      "issue": 2,
+      "date": "2023-12-02",
+      "pdf": "/epaper/files/2/231202.pdf",
+      "pageCount": 8,
+      "renderPreviews": true,
+      "thumbnails": {
+        "1": "/epaper/files/2/thumb-1.png",
+        "2": "/epaper/files/2/thumb-2.png",
+        "3": "/epaper/files/2/thumb-3.png",
+        "4": "/epaper/files/2/thumb-4.png",
+        "5": "/epaper/files/2/thumb-5.png",
+        "6": "/epaper/files/2/thumb-6.png",
+        "7": "/epaper/files/2/thumb-7.png",
+        "8": "/epaper/files/2/thumb-8.png"
+      }
+    },
+    {
+      "issue": 3,
+      "date": "2023-12-09",
+      "pdf": "/epaper/files/3/231209.pdf",
+      "pageCount": 4,
+      "renderPreviews": true,
+      "thumbnails": {
+        "1": "/epaper/files/3/thumb-1.png",
+        "2": "/epaper/files/3/thumb-2.png",
+        "3": "/epaper/files/3/thumb-3.png",
+        "4": "/epaper/files/3/thumb-4.png"
+      }
+    },
+    {
+      "issue": 4,
+      "date": "2023-12-16",
+      "pdf": "/epaper/files/4/231216.pdf",
+      "pageCount": 6,
+      "renderPreviews": true,
+      "thumbnails": {
+        "1": "/epaper/files/4/thumb-1.png",
+        "2": "/epaper/files/4/thumb-2.png",
+        "3": "/epaper/files/4/thumb-3.png",
+        "4": "/epaper/files/4/thumb-4.png",
+        "5": "/epaper/files/4/thumb-5.png",
+        "6": "/epaper/files/4/thumb-6.png"
+      }
+    },
+    {
+      "issue": 5,
+      "date": "2023-12-23",
+      "pdf": "/epaper/files/5/231223.pdf",
+      "pageCount": 4,
+      "renderPreviews": true,
+      "thumbnails": {
+        "1": "/epaper/files/5/thumb-1.png",
+        "2": "/epaper/files/5/thumb-2.png",
+        "3": "/epaper/files/5/thumb-3.png",
+        "4": "/epaper/files/5/thumb-4.png"
+      }
+    },
+    {
+      "issue": 6,
+      "date": "2023-12-30",
+      "pdf": "/epaper/files/6/231230.pdf",
+      "pageCount": 4,
+      "renderPreviews": true,
+      "thumbnails": {
+        "1": "/epaper/files/6/thumb-1.png",
+        "2": "/epaper/files/6/thumb-2.png",
+        "3": "/epaper/files/6/thumb-3.png",
+        "4": "/epaper/files/6/thumb-4.png"
+      }
     }
   ]
 }

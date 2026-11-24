@@ -1,4 +1,4 @@
-import { configureArticleViewer, indexPdf } from './epaper-article.js?v=region-drag-1';
+import { configureArticleViewer, indexPdf, renderPdfPreview } from './epaper-article.js?v=multi-issue-1';
 import { configurePrintSearch } from './epaper-search.js?v=2';
 import { supabase } from './supabase.js';
 import { setArticleTitle } from './article-label.js';
@@ -244,6 +244,46 @@ function setPageImage(src, label) {
     });
 }
 
+const pdfPreviews = new Map();
+const pendingPreviews = new Map();
+const failedPreviews = new Set();
+const previewKey = (pdf, page) => pdf + '#' + page;
+
+function resolvePreview(edition, pdf, page) {
+    const existing = sameSiteAsset(edition.previews?.[page], '.png');
+    if (existing || !edition.renderPreviews || !pdf || !page) return existing;
+    return pdfPreviews.get(previewKey(pdf, page)) || '';
+}
+
+function requestPreviews(edition, pdf, pages) {
+    if (!edition.renderPreviews || !pdf) return;
+    for (const page of pages) {
+        const key = previewKey(pdf, page);
+        if (!page || resolvePreview(edition, pdf, page) || pendingPreviews.has(key) || failedPreviews.has(key)) continue;
+        const pending = renderPdfPreview(pdf, page).then(blob => {
+            pdfPreviews.set(key, URL.createObjectURL(blob));
+            if (pdfPreviews.size > 12) {
+                const active = current?.edition === edition ? [current.page, current.page + 1] : [];
+                for (const [oldKey, url] of pdfPreviews) {
+                    if (oldKey === key || active.some(number => oldKey === previewKey(pdf, number))) continue;
+                    URL.revokeObjectURL(url);
+                    pdfPreviews.delete(oldKey);
+                    break;
+                }
+            }
+        }).catch(() => failedPreviews.add(key)).finally(() => {
+            pendingPreviews.delete(key);
+            if (current?.edition !== edition || (current.page !== page &&
+                (!spread || edition.pages[edition.pages.indexOf(current.page) + 1] !== page))) return;
+            const selected = articleViewer.selectedArticle();
+            const item = edition.articles.find(row => row.article_number === selected);
+            render(current.issueNumber, current.page);
+            if (item) articleViewer.openArticle(item, item.print_page);
+        });
+        pendingPreviews.set(key, pending);
+    }
+}
+
 function render(issueNumber, pageNumber, updateHistory = '') {
     const edition = issues.get(issueNumber);
     if (!edition) {
@@ -282,8 +322,9 @@ function render(issueNumber, pageNumber, updateHistory = '') {
     ui('stage').hidden = false;
     ui('pagination').hidden = false;
 
-    const photo = sameSiteAsset(edition.previews?.[page], '.png');
     const pdf = sameSiteAsset(edition.pdf, '.pdf');
+    const photo = resolvePreview(edition, pdf, page);
+    const loadingPreview = edition.renderPreviews && pdf && !photo && !failedPreviews.has(previewKey(pdf, page));
     const pdfLink = pdf && pdf + '#page=' + page;
     ui('paper').hidden = Boolean(photo || pdf);
     const download = ui('download');
@@ -295,15 +336,17 @@ function render(issueNumber, pageNumber, updateHistory = '') {
         download.removeAttribute('href');
     }
     ui('print').dataset.pdf = pdfLink || '';
-    ui('pdf').hidden = Boolean(photo) || !pdf;
-    if (!photo && pdf) ui('pdf').src = pdfLink;
+    ui('pdf').hidden = Boolean(photo) || !pdf || loadingPreview;
+    if (!photo && pdf && !loadingPreview) ui('pdf').src = pdfLink;
     else ui('pdf').removeAttribute('src');
     ui('image-scroll').hidden = !photo;
     const index = edition.pages.indexOf(page);
     const nextPage = edition.pages[index + 1];
-    const nextPhoto = sameSiteAsset(edition.previews?.[nextPage], '.png');
+    const nextPhoto = resolvePreview(edition, pdf, nextPage);
+    requestPreviews(edition, pdf, spread ? [page, nextPage] : [page]);
+    if (loadingPreview) ui('status').textContent = '원본 PDF에서 지면을 표시하는 중입니다.';
     const hasSpread = Boolean(spread && photo && nextPhoto);
-    ui('spread').disabled = !(photo && nextPhoto);
+    ui('spread').disabled = !nextPage || !(photo && nextPhoto || edition.renderPreviews && pdf);
     ui('spread').setAttribute('aria-pressed', String(hasSpread));
     ui('spread').querySelector('span').textContent = hasSpread ? '양면 보기' : '단면 보기';
     ui('second-image').hidden = !hasSpread;
@@ -391,7 +434,7 @@ function render(issueNumber, pageNumber, updateHistory = '') {
 
 async function start() {
     const [manifest, articles] = await Promise.all([
-        fetch('/epaper/editions.json?v=page-2400-1').then(response => response.ok ? response.json() : null).catch(() => null),
+        fetch('/epaper/editions.json?v=multi-issue-1').then(response => response.ok ? response.json() : null).catch(() => null),
         loadPrintArticles().catch(() => null),
         loadSavedRegions().catch(() => {}),
         loadImageRegions().catch(() => {}),
@@ -536,7 +579,7 @@ const printSearch = configurePrintSearch(indexPdf, () => current, (page, match, 
         if (current?.issueNumber !== issue || current.page !== page) return;
         setZoom(2.5, true, { side, x:(left + right) / 2000, y:(firstY + firstLine[0][3] / 2) / 1000 });
     };
-    if (image.complete && image.naturalWidth) requestAnimationFrame(focus);
+    if (!ui('image-scroll').hidden && image.complete && image.naturalWidth) requestAnimationFrame(focus);
     else image.addEventListener('load', focus, { once:true });
 }, () => articleViewer.track(350));
 document.addEventListener('keydown', event => {
