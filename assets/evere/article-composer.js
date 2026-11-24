@@ -1,4 +1,5 @@
-import { formattedBody, photoBucket, photoFigure, photoImage, readPhotoCaption, renderBody, setPhotoCaption } from './article-content.js?v=caption-1';
+import { formattedBody, photoBucket, photoFigure, photoImage, readPhotoCaption, renderBody, setPhotoCaption, setPhotoOptions } from './article-content.js?v=photo-options-1';
+import { openPhotoDialog } from './photo-dialog.js';
 import { seriesFor } from './series.js';
 
 const photoTypes = new Map([['image/jpeg', 'jpg'], ['image/png', 'png'], ['image/webp', 'webp']]);
@@ -325,7 +326,7 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
     });
     toolbar.addEventListener('click', (event) => {
         if (event.target.closest('[data-insert-photo]')) {
-            fileInput.click();
+            void configurePhoto();
             return;
         }
         const control = event.target.closest('[data-command]');
@@ -440,40 +441,11 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
             button.type = 'button';
             button.textContent = marker(photo) ? '커서 위치로 이동' : '커서 위치에 삽입';
             button.addEventListener('click', () => locate(photo));
-            const alignment = document.createElement('select');
-            alignment.setAttribute('aria-label', label + ' 배치 정렬');
-            alignment.replaceChildren(...[['left', '왼쪽'], ['center', '가운데'], ['right', '오른쪽']]
-                .map(([value, text]) => new Option(text, value, false, value === photo.position)));
-            alignment.addEventListener('change', () => {
-                photo.position = alignment.value;
-                const figure = marker(photo);
-                if (figure) figure.dataset.position = photo.position;
-            });
-            const heading = document.createElement('input');
-            heading.maxLength = 200;
-            heading.placeholder = '사진 제목';
-            heading.setAttribute('aria-label', label + ' 제목');
-            heading.value = photo.captionTitle || '';
-            const caption = document.createElement('textarea');
-            caption.maxLength = 500;
-            caption.rows = 2;
-            caption.placeholder = '사진 설명';
-            caption.setAttribute('aria-label', label + ' 설명');
-            caption.value = photo.caption;
-            const syncCaption = () => {
-                photo.captionTitle = heading.value;
-                photo.caption = caption.value;
-                const figure = marker(photo);
-                if (figure) {
-                    setPhotoCaption(figure.querySelector('figcaption'), photo);
-                    const img = figure.querySelector('img');
-                    if (img) img.alt = photo.captionTitle || photo.caption || '기사 첨부 사진';
-                }
-                updateEditorCount();
-            };
-            heading.addEventListener('input', syncCaption);
-            caption.addEventListener('input', syncCaption);
-            placement.append(button, alignment, heading, caption);
+            const options = document.createElement('button');
+            options.type = 'button';
+            options.textContent = '사진 옵션';
+            options.addEventListener('click', () => void configurePhoto({ photo }));
+            placement.append(button, options);
             li.append(placement);
             return li;
         });
@@ -484,27 +456,50 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
     editor.addEventListener('click', (event) => {
         const key = event.target.closest('figure[data-photo]')?.dataset.photo;
         if (!key) return;
-        const item = [...photoList.children].find((entry) => entry.dataset.photoKey === key);
-        item?.querySelector('input')?.focus();
+        const photo = photos.find(item => item.key === key);
+        if (photo) void configurePhoto({ photo });
     });
 
-    function addPhotos(files) {
-        if (saving) return;
-        let warning = '';
-        for (const file of files) {
-            if (photos.length >= 8) { warning = '사진은 최대 8장까지 첨부할 수 있습니다.'; break; }
-            if (!photoTypes.has(file.type) || !file.size || file.size > 5242880) {
-                warning = 'JPG, PNG, WebP 형식의 5MB 이하 사진만 첨부할 수 있습니다.';
-                continue;
+    let activePhotoDialog;
+    let photoBatch = 0;
+    async function configurePhoto({ file, photo } = {}) {
+        if (saving || activePhotoDialog) return false;
+        if (!photo && photos.length >= 8) { notify('사진은 최대 8장까지 첨부할 수 있습니다.'); return false; }
+        const dialog = openPhotoDialog({ file, photo });
+        activePhotoDialog = dialog;
+        const options = await dialog.result;
+        if (activePhotoDialog !== dialog) return false;
+        activePhotoDialog = null;
+        if (!options) return false;
+
+        if (photo) {
+            Object.assign(photo, options, { file: photo.file });
+            const figure = marker(photo);
+            if (figure) {
+                setPhotoOptions(figure, photo);
+                setPhotoCaption(figure.querySelector('figcaption'), photo);
+                const image = figure.querySelector('img');
+                if (image) image.alt = photo.captionTitle || photo.caption || '기사 첨부 사진';
             }
-            const photo = { file, key: 'local-' + crypto.randomUUID(), url: URL.createObjectURL(file), position: 'center', caption: '' };
-            photos.push(photo);
-            locate(photo, true);
+        } else {
+            const next = { ...options, key: 'local-' + crypto.randomUUID(), url: URL.createObjectURL(options.file) };
+            photos.push(next);
+            if (options.insert) locate(next, true);
         }
-        notify(warning);
+        notify();
         showPhotos();
+        return true;
     }
 
+    async function addPhotos(files) {
+        if (saving || activePhotoDialog) return;
+        const current = ++photoBatch;
+        for (const file of Array.from(files)) {
+            if (current !== photoBatch || !await configurePhoto({ file })) break;
+        }
+    }
+
+    find('[data-open-photo-options]').addEventListener('click', () => void configurePhoto());
     fileInput.addEventListener('change', () => { addPhotos(fileInput.files); fileInput.value = ''; });
     const drop = find('.compose-drop');
     drop.addEventListener('dragover', (event) => { event.preventDefault(); drop.classList.add('drag-over'); });
@@ -520,6 +515,8 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
             const figure = marker(photo);
             if (figure) {
                 photo.position = figure.dataset.position;
+                photo.size = figure.dataset.photoWidth || 'original';
+                photo.captionAlign = figure.dataset.captionAlign || 'left';
                 Object.assign(photo, readPhotoCaption(figure));
                 figure.contentEditable = 'false';
             }
@@ -548,6 +545,9 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
         },
         refreshSeries,
         reset() {
+            photoBatch++;
+            activePhotoDialog?.close();
+            activePhotoDialog = null;
             form.reset();
             editor.replaceChildren();
             selection = null;

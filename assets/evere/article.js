@@ -2,7 +2,7 @@ import { showReporterCards } from './reporter-cards.js?v=profile-email-gap-1';
 import { collectionButton } from './reader-collections.js';
 import { articlePageTitle, setArticleTitle } from './article-label.js';
 import { articlePath, articleNumberFromURL } from './routes.js?v=direct-route-1';
-import { renderBody, renderPhotos, photoBucket } from './article-content.js?v=caption-1';
+import { renderBody, renderPhotos, photoBucket } from './article-content.js?v=photo-options-1';
 import { seriesFor, seriesLink } from './series.js?v=numbered-link-1';
 import { supabase } from './supabase.js';
 import { sectors } from './article-taxonomy.js';

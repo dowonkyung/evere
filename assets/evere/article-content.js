@@ -25,10 +25,22 @@ export function setPhotoCaption(label, { captionTitle = '', caption = '' }) {
     label.replaceChildren(title, description);
 }
 
+export function setPhotoOptions(figure, { position, size, captionAlign } = {}) {
+    figure.dataset.position = ['left', 'center', 'right'].includes(position) ? position : 'center';
+    if (['180', '250', '600', '960', '1280'].includes(size)) {
+        figure.dataset.photoWidth = size;
+        figure.style.setProperty('--photo-width', size + 'px');
+    } else {
+        delete figure.dataset.photoWidth;
+        figure.style.removeProperty('--photo-width');
+    }
+    figure.dataset.captionAlign = ['left', 'center', 'right'].includes(captionAlign) ? captionAlign : 'left';
+}
+
 export function photoFigure(key, position, caption) {
     const figure = document.createElement('figure');
     figure.dataset.photo = key;
-    figure.dataset.position = ['left', 'center', 'right'].includes(position) ? position : 'center';
+    setPhotoOptions(figure, { ...caption, position });
     const label = document.createElement('figcaption');
     setPhotoCaption(label, caption);
     figure.append(label);
@@ -43,7 +55,7 @@ export function formattedBody(html) {
             target.append(document.createTextNode(node.data));
         } else if (node.tagName === 'FIGURE' && photoKey.test(node.dataset.photo || '')) {
             target.append(photoFigure(node.dataset.photo, node.dataset.position,
-                readPhotoCaption(node)));
+                { ...readPhotoCaption(node), size: node.dataset.photoWidth, captionAlign: node.dataset.captionAlign }));
         } else if (allowed.has(node.tagName)) {
             const child = document.createElement(node.tagName === 'FONT' ? 'span' : node.tagName.toLowerCase());
             const alignment = node.style.textAlign || node.getAttribute('align');

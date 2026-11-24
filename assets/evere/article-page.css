@@ -479,3 +479,8 @@
   .profile-next { inset-inline-end: -6px; }
 }
 
+
+.article-body figure[data-photo-width] { width: min(var(--photo-width), 100%); }
+.article-body figure[data-photo-width] > img { width: 100%; height: auto; }
+.article-body figure[data-caption-align="center"] figcaption { text-align: center; }
+.article-body figure[data-caption-align="right"] figcaption { text-align: right; }
