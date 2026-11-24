@@ -11,11 +11,10 @@ let articleId = new URLSearchParams(location.search).get('id');
 const articleNumber = articleNumberFromURL();
 let currentArticle = null;
 const form = ui('comment-form');
-const previous = ui('comments-previous');
-const next = ui('comments-next');
-const pageSize = 25;
+const commentMore = ui('comments-more');
+const pageSize = 5;
 const dateFormat = new Intl.DateTimeFormat('ko-KR', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Asia/Seoul' });
-let offset = 0;
+let shownComments = 0;
 
 function enableReadingHeader(articleTitle) {
     const host = ui('evere-header');
@@ -191,18 +190,20 @@ function commentTime(date) {
 
 async function commentsAt(newOffset) {
     const request = ++commentRequest;
+    if (newOffset === 0) commentMore.hidden = true;
     const ascending = commentOrder.value === 'oldest';
     const response = await supabase.from('evere_comments').select('author_name,body,created_at', { count: 'exact' })
         .eq('article_id', articleId).order('created_at', { ascending }).order('id', { ascending })
-        .range(newOffset, newOffset + pageSize);
+        .range(newOffset, newOffset + pageSize - 1);
     if (request !== commentRequest) return;
     const rows = checked(response);
     ui('comment-list-status').textContent = '';
     ui('article-comment-count').textContent = response.count ?? '';
-    offset = newOffset;
-    previous.disabled = offset === 0;
-    next.disabled = rows.length <= pageSize;
-    ui('comments').replaceChildren(...rows.slice(0, pageSize).map((row) => {
+    shownComments = newOffset + rows.length;
+    const remaining = Math.max(0, (response.count ?? shownComments) - shownComments);
+    ui('comments-remaining').textContent = remaining.toLocaleString('ko-KR');
+    commentMore.hidden = remaining === 0;
+    const items = rows.map((row) => {
         const item = document.createElement('li');
         const meta = document.createElement('p');
         meta.className = 'comment-meta';
@@ -219,8 +220,11 @@ async function commentsAt(newOffset) {
         body.textContent = row.body;
         item.append(meta, body);
         return item;
-    }));
-    if (!rows.length) {
+    });
+    const list = ui('comments');
+    if (newOffset === 0) list.replaceChildren(...items);
+    else list.append(...items);
+    if (shownComments === 0) {
         const empty = document.createElement('li');
         empty.className = 'comment-empty';
         empty.textContent = '아직 댓글이 없습니다.';
@@ -236,14 +240,13 @@ async function navigateComments(button, newOffset) {
         button.disabled = false;
         ui('comment-list-status').textContent = '댓글을 불러오지 못했습니다.';
     } finally {
-        if (button === commentRefresh) button.disabled = false;
+        button.disabled = false;
     }
 }
 
 commentRefresh.addEventListener('click', () => navigateComments(commentRefresh, 0));
 commentOrder.addEventListener('change', () => navigateComments(commentRefresh, 0));
-previous.addEventListener('click', () => navigateComments(previous, Math.max(0, offset - pageSize)));
-next.addEventListener('click', () => navigateComments(next, offset + pageSize));
+commentMore.addEventListener('click', () => navigateComments(commentMore, shownComments));
 const commentInput = form.elements.comment;
 const commentSubmit = form.querySelector('[type="submit"]');
 let commentSaving = false;
