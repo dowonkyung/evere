@@ -19,18 +19,16 @@ function searchState(term) {
 
 async function fillPhotos(state, count, active, exactTitle = '') {
     while (active() && !state.exhausted && state.pending.length < count) {
-        let request = supabase.from('evere_articles')
-            .select('id,title,body_html,photo_paths,published_at')
-            .neq('photo_paths', '{}');
-        if (state.term) request = request.ilike('body_html', '%' + state.escaped + '%');
-        const { data, error } = await request.order('published_at', { ascending: false, nullsFirst: false })
-            .order('created_at', { ascending: false }).order('id')
+        let request = supabase.rpc('evere_newsroom_photo_library');
+        if (state.term) request = request.ilike('photo_html', '%' + state.escaped + '%');
+        const { data, error } = await request.order('library_date', { ascending: false })
+            .order('id')
             .range(state.offset, state.offset + batchSize - 1);
         if (error) throw error;
         if (!active()) return;
         for (const entry of data || []) {
             const template = document.createElement('template');
-            template.innerHTML = entry.body_html || '';
+            template.innerHTML = entry.photo_html || '';
             const figures = new Map([...template.content.querySelectorAll('figure[data-photo]')]
                 .map(figure => [figure.dataset.photo, figure]));
             for (const path of entry.photo_paths || []) {
