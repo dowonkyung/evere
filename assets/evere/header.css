@@ -51,14 +51,6 @@
     background: var(--background-default, #fff);
     color: var(--text-primary, #151515);
 }
-.evere-search::before {
-    content: "";
-    position: absolute;
-    inset: 0 24px auto;
-    max-width: var(--evere-content-width, 1216px);
-    margin-inline: auto;
-    border-top: 2px solid currentColor;
-}
 .evere-search form {
     display: flex;
     align-items: center;
@@ -113,7 +105,6 @@
 .evere-search > :is(ul, [aria-live]) { display: none; }
 @media (max-width: 767px) {
     .evere-search { padding: 16px 12px; }
-    .evere-search::before { inset-inline: 12px; border-top-width: 1px; }
     .evere-search form { padding-inline: 16px 8px; }
 }
 :focus-visible { outline: 2px solid #00B8B4; outline-offset: 3px; }
