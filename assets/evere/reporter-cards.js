@@ -45,10 +45,9 @@ export async function showReporterCards(articleId) {
         if (reporter.avatar_path) photos.set(reporter.avatar_path, avatar);
         const content = node('div', 'reporter-card-content');
         const name = node('h2', 'reporter-card-name', reporter.display_name);
-        const position = node('p', 'reporter-card-position', reporter.position_title);
+        const position = node('p', 'reporter-card-position', reporter.position_title?.trim() || '기자');
         const heading = node('div', 'reporter-card-heading');
-        heading.append(name);
-        if (reporter.position_title) heading.append(position);
+        heading.append(name, position);
         content.append(heading);
         if (reporter.public_email) {
             const email = node('a', 'reporter-card-email', reporter.public_email);

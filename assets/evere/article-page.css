@@ -441,7 +441,7 @@
 .reporter-card-name { margin: 0; font-size: 20px; font-weight: 750; line-height: 26px; }
 .reporter-card-position, .reporter-card-bio { color: var(--text-secondary, #666); font-size: 14px; line-height: 1.55; overflow-wrap: anywhere; }
 .reporter-card-position { margin: 0; }
-.reporter-card-bio { margin: 8px 0 0; white-space: pre-wrap; }
+.reporter-card-bio { margin: 5px 0 0; white-space: pre-wrap; }
 .reporter-card-actions { display: grid; gap: 6px; }
 .evere-article .article-page .reporter-card-follow { padding: 6px 10px; color: #fff; background: #007a79; border-radius: 6px; font-size: 13px; font-weight: 700; white-space: nowrap; }
 .reporter-card-follow[aria-pressed="true"] { box-shadow: inset 0 0 0 2px #ffffff88; }
@@ -451,15 +451,24 @@
 .profile-next svg { transform: rotate(180deg); }
 @media (max-width: 480px) {
   .profile_wrap {
-    grid-template-columns: clamp(44px, 14vw, 64px) minmax(0, 1fr) auto;
+    --reporter-avatar-size: clamp(44px, 14vw, 64px);
+    --reporter-card-padding: 14px;
+    position: relative;
+    box-sizing: border-box;
+    grid-template-columns: var(--reporter-avatar-size) minmax(0, 1fr) auto;
     grid-template-rows: auto auto auto;
     align-content: start;
     gap: 0 10px;
     flex-basis: calc(100% - 25px);
-    min-height: 0;
-    padding: 14px;
+    min-height: calc(var(--reporter-avatar-size) + 2 * var(--reporter-card-padding) + 2px);
+    padding: var(--reporter-card-padding);
   }
-  .reporter-avatar { grid-area: 1 / 1 / 4; width: 100%; height: auto; aspect-ratio: 1; }
+  .reporter-avatar {
+    position: absolute;
+    inset: var(--reporter-card-padding) auto auto var(--reporter-card-padding);
+    width: var(--reporter-avatar-size);
+    height: var(--reporter-avatar-size);
+  }
   .reporter-card-content { display: contents; }
   .reporter-card-heading { grid-area: 1 / 2; gap: 2px 6px; }
   .reporter-card-name { font-size: 18px; line-height: 24px; overflow-wrap: anywhere; }
@@ -471,5 +480,5 @@
   .profile-next { inset-inline-end: -6px; }
 }
 
-.evere-article .article-page .reporter-card-email { display: inline-block; margin-top: 5px; color: var(--text-secondary, #666); font-size: 14px; line-height: 1.55; overflow-wrap: anywhere; }
+.evere-article .article-page .reporter-card-email { display: inline-block; margin-top: 3px; color: var(--text-secondary, #666); font-size: 14px; line-height: 1.55; overflow-wrap: anywhere; }
 .reporter-card-email:hover { text-decoration: underline; }
