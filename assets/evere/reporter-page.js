@@ -80,6 +80,31 @@ async function refreshSubscriberCount() {
     }
 }
 
+function configureSectionHeader() {
+    const header = ui('reporter-section-header');
+    const start = ui('reporter-section-start');
+    const follow = ui('reporter-follow');
+    const stickyFollow = ui('reporter-sticky-follow');
+    const syncFollow = () => {
+        stickyFollow.hidden = follow.hidden;
+        stickyFollow.textContent = follow.textContent;
+        stickyFollow.setAttribute('aria-pressed', follow.getAttribute('aria-pressed') || 'false');
+        stickyFollow.disabled = follow.disabled;
+    };
+    new MutationObserver(syncFollow).observe(follow, { attributes: true, childList: true, characterData: true, subtree: true });
+    syncFollow();
+    stickyFollow.onclick = () => follow.click();
+    ui('reporter-sticky-share').onclick = () => ui('reporter-share').click();
+
+    function updateHeader() {
+        const top = Number.parseFloat(getComputedStyle(header).top) || 0;
+        header.classList.toggle('sticky_top', start.getBoundingClientRect().top < top);
+    }
+    window.addEventListener('scroll', updateHeader, { passive: true });
+    window.addEventListener('resize', updateHeader);
+    updateHeader();
+}
+
 async function render() {
     if (!Number.isSafeInteger(number) || number < 1) {
         ui('reporter-status').textContent = '기자 페이지를 찾을 수 없습니다.';
@@ -96,12 +121,15 @@ async function render() {
     }
     document.title = data.display_name + ' | 기자 | 이브레';
     ui('reporter-name').textContent = data.display_name;
-    ui('reporter-position').textContent = '이브레 ' + (data.position_title.trim() || '기자');
+    const position = '이브레 ' + (data.position_title.trim() || '기자');
+    ui('reporter-position').textContent = position;
+    ui('reporter-sticky-name').textContent = data.display_name;
+    ui('reporter-sticky-position').textContent = position;
     ui('reporter-bio').textContent = data.bio;
     ui('reporter-bio').hidden = !data.bio.trim();
     if (data.public_email) {
         const email = ui('reporter-email');
-        email.textContent = data.public_email;
+        ui('reporter-email-text').textContent = data.public_email;
         email.href = 'mailto:' + encodeURIComponent(data.public_email).replace('%40', '@');
         ui('reporter-contact').hidden = false;
     }
@@ -119,6 +147,7 @@ async function render() {
     };
     ui('reporter-status').hidden = true;
     ui('reporter-details').hidden = false;
+    configureSectionHeader();
     void setAvatar(data.avatar_path, data.display_name).catch(() => {});
     const refreshCount = () => void refreshSubscriberCount().catch(() => {});
     refreshCount();
