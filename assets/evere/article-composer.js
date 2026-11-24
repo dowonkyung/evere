@@ -67,7 +67,7 @@ function enableInputPunctuation(field) {
 export function articleComposer(form, article = null, { contentOnly = false } = {}) {
     form.replaceChildren(document.getElementById('compose-fields').content.cloneNode(true));
     const find = (name) => form.querySelector(name);
-    const { title, subtitle, sector, category, series, writer, guest, omitByline } = form.elements;
+    const { title, subtitle, sector, category, series, writer, guest, guestPosition, omitByline } = form.elements;
     enableInputPunctuation(title);
     enableInputPunctuation(subtitle);
     const editor = find('.compose-editor');
@@ -77,7 +77,9 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
     let member;
     let people = [];
     let byline = [...(article?.byline || [])];
-    let guests = [...(article?.guest_byline || [])];
+    let guests = (article?.guest_byline || []).map((name, index) => ({
+        name, position: article.guest_byline_positions?.[index] || '',
+    }));
     let photos = (article?.photo_paths || []).map((path) => ({ path, key: path, position: 'center', caption: '' }));
     let selection;
     let saving = false;
@@ -191,8 +193,9 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
             append(displayName(id), () => { byline = byline.filter((value) => value !== id); },
                 !article && id === member.id && ['citizen', 'reporter'].includes(member.role));
         }
-        for (const name of guests) {
-            append(name + ' · 외부 기고', () => { guests = guests.filter((value) => value !== name); });
+        for (const entry of guests) {
+            const label = [entry.name, entry.position].filter(Boolean).join(' ');
+            append(label + ' · 외부 기고', () => { guests = guests.filter(value => value !== entry); });
         }
         find('[data-byline-list]').replaceChildren(chips);
     }
@@ -211,12 +214,26 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
 
     find('[data-add-member]').addEventListener('click', () => addWriter(writer.value, byline));
     function addGuest() {
-        if (canAddGuest() && addWriter(guest.value.trim(), guests)) guest.value = '';
+        if (!canAddGuest()) return;
+        const name = guest.value.trim();
+        const position = guestPosition.value.trim();
+        if (!name || !position) {
+            notify('외부 기고자의 이름과 직책을 입력해 주세요.');
+            (name ? guestPosition : guest).focus();
+            return;
+        }
+        if (guests.some(entry => entry.name === name && entry.position === position)) return;
+        if (addWriter({ name, position }, guests)) {
+            guest.value = '';
+            guestPosition.value = '';
+        }
     }
     find('[data-add-guest]').addEventListener('click', addGuest);
-    guest.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') { event.preventDefault(); addGuest(); }
-    });
+    for (const field of [guest, guestPosition]) {
+        field.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' && !event.isComposing) { event.preventDefault(); addGuest(); }
+        });
+    }
     function refreshOmission(defaultOmit = true) {
         const eligible = (sector.value === 'opinion' && category.value === 'editorial') ||
             (sector.value === 'health' && category.value === 'obituaries');
@@ -596,7 +613,10 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
                 title: title.value.trim(), article_label: label.value, subtitle: subtitle.value.trim(), body, body_html: safe.innerHTML,
                 sector: sector.value, category: form.elements.category.value || null, series_id: selectedSeries || null,
                 byline: omitByline.checked ? [] : [...byline],
-                guest_byline: omitByline.checked ? [] : [...guests], photo_paths: [],
+                guest_byline: omitByline.checked ? [] : guests.map(entry => entry.name),
+                guest_byline_positions: omitByline.checked || !guests.some(entry => entry.position)
+                    ? [] : guests.map(entry => entry.position),
+                photo_paths: [],
             };
             if (!fields.title || !body || body.length > 50000 || new Blob([fields.body_html]).size > 400000) {
                 notify('제목과 본문을 입력해 주세요. 본문은 5만 자까지 입력할 수 있습니다.');
@@ -610,7 +630,7 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
                 return false;
             }
             if (!contentOnly && fields.guest_byline.length && !canAddGuest()) { notify('이 섹터의 외부 기고자를 등록할 권한이 없습니다.'); return false; }
-            if (!contentOnly && !omitByline.checked && (guest.value.trim() || writer.value)) {
+            if (!contentOnly && !omitByline.checked && (guest.value.trim() || guestPosition.value.trim() || writer.value)) {
                 notify('입력하거나 선택한 이름은 추가 버튼을 눌러 등록해 주세요.'); return false;
             }
             const uploaded = [];
