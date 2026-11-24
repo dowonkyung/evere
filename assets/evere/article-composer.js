@@ -93,15 +93,29 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
     title.value = article?.title || '';
     subtitle.value = article?.subtitle || '';
     renderBody(editor, article || {});
-    if (!editor.hasChildNodes()) {
-        const paragraph = document.createElement('p');
-        paragraph.append(document.createElement('br'));
-        editor.append(paragraph);
-    }
+    if (!editor.hasChildNodes()) seedEditor();
     editor.addEventListener('focus', () => {
         document.execCommand('defaultParagraphSeparator', false, 'p');
     });
     updateEditorCount();
+
+    function seedEditor() {
+        const paragraph = document.createElement('p');
+        paragraph.append(document.createElement('br'));
+        editor.replaceChildren(paragraph);
+    }
+
+    function wrapLeadingText() {
+        const firstBlock = [...editor.children].find(node =>
+            node.matches('p, div, figure, blockquote, ul, ol, h2, h3'));
+        if (!firstBlock || editor.firstChild === firstBlock) return;
+
+        const paragraph = document.createElement('p');
+        while (editor.firstChild !== firstBlock) paragraph.append(editor.firstChild);
+        if (paragraph.textContent.trim() || paragraph.querySelector('br')) {
+            editor.prepend(paragraph);
+        }
+    }
 
     function notify(message = '') {
         feedback.textContent = message;
@@ -375,7 +389,13 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
             addPhotos(event.dataTransfer.files);
         } else insertPlainText(event, event.dataTransfer);
     });
-    editor.addEventListener('input', updateEditorCount);
+    editor.addEventListener('input', event => {
+        if (event.inputType === 'insertParagraph') {
+            wrapLeadingText();
+            rememberSelection();
+        }
+        updateEditorCount();
+    });
 
     function marker(photo) {
         return [...editor.querySelectorAll('figure[data-photo]')].find((item) => item.dataset.photo === photo.key);
@@ -551,7 +571,7 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
             activePhotoDialog?.close();
             activePhotoDialog = null;
             form.reset();
-            editor.replaceChildren();
+            seedEditor();
             selection = null;
             lastEllipsis = null;
             byline = member ? [member.id] : [];
