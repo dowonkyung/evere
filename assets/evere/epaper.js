@@ -11,6 +11,7 @@ let zoom = 1;
 let spread = false;
 let activePanel = '';
 let imageRequest = 0;
+let zoomAnimations = [];
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 let defaultIssue;
 
@@ -59,14 +60,42 @@ function makeLink(issue, page, label, active) {
     return link;
 }
 
-function setZoom(value) {
-    zoom = Math.max(1, Math.min(3, value));
+function setZoom(value, animate = false) {
+    const nextZoom = Math.max(1, Math.min(3, value));
     const scroll = ui('image-scroll');
+    const images = [...scroll.querySelectorAll('img:not([hidden])')];
+    const animateChange = animate && nextZoom !== zoom && !reduceMotion.matches;
+    const previous = animateChange ? images.map(image => image.getBoundingClientRect()) : [];
+    for (const animation of zoomAnimations) animation.cancel();
+    zoomAnimations = [];
+    const viewport = scroll.getBoundingClientRect();
+    const centerX = viewport.left + scroll.clientWidth / 2;
+    const centerY = viewport.top + scroll.clientHeight / 2;
+    zoom = nextZoom;
     scroll.style.setProperty('--zoom', String(zoom));
     scroll.classList.toggle('is-zoomed', zoom > 1);
-    ui('zoom-out').disabled = ui('image-scroll').hidden || zoom === 1;
-    ui('zoom').disabled = ui('image-scroll').hidden || zoom === 3;
-    if (zoom === 1) { scroll.scrollTop = 0; scroll.scrollLeft = 0; }
+    ui('zoom-out').disabled = scroll.hidden || zoom === 1;
+    ui('zoom').disabled = scroll.hidden || zoom === 3;
+    if (zoom === 1) {
+        scroll.scrollTop = 0;
+        scroll.scrollLeft = 0;
+    } else if (previous.length && previous[0].width && previous[0].height) {
+        const target = images[0].getBoundingClientRect();
+        scroll.scrollLeft += target.left + (centerX - previous[0].left) * target.width / previous[0].width - centerX;
+        scroll.scrollTop += target.top + (centerY - previous[0].top) * target.height / previous[0].height - centerY;
+    }
+    if (!animateChange) return;
+    for (const [index, image] of images.entries()) {
+        const from = previous[index];
+        const to = image.getBoundingClientRect();
+        if (!from.width || !from.height || !to.width || !to.height) continue;
+        const scaleX = from.width / to.width;
+        const scaleY = from.height / to.height;
+        zoomAnimations.push(image.animate([
+            { transformOrigin: '0 0', transform: 'translate(' + (from.left - to.left) + 'px,' + (from.top - to.top) + 'px) scale(' + scaleX + ',' + scaleY + ')' },
+            { transformOrigin: '0 0', transform: 'translate(0,0) scale(1)' },
+        ], { duration: 250, easing: 'cubic-bezier(.2,0,0,1)' }));
+    }
 }
 
 function showPanel(name) {
@@ -136,7 +165,7 @@ function render(issueNumber, pageNumber, updateHistory = '') {
         ui('heading').textContent = '지면보기';
         ui('date').textContent = '';
         ui('status').textContent = issueNumber ? '해당 발행호를 찾을 수 없습니다.' : '등록된 지면이 없습니다.';
-        for (const key of ['stage', 'pagination', 'open-pdf']) ui(key).hidden = true;
+        for (const key of ['stage', 'pagination', 'download']) ui(key).hidden = true;
         for (const key of ['zoom', 'zoom-out', 'spread', 'print']) ui(key).disabled = true;
         ui('page-count').textContent = '—';
         ui('articles').replaceChildren();
@@ -168,8 +197,15 @@ function render(issueNumber, pageNumber, updateHistory = '') {
     const pdf = sameSiteAsset(edition.pdf, '.pdf');
     const pdfLink = pdf && pdf + '#page=' + page;
     ui('paper').hidden = Boolean(photo || pdf);
-    ui('open-pdf').hidden = !pdf;
-    if (pdf) ui('open-pdf').href = pdfLink;
+    const download = ui('download');
+    download.hidden = !photo;
+    if (photo) {
+        download.href = photo;
+        download.download = '이브레-' + issueNumber + '호-' + page + '면.png';
+    } else {
+        download.removeAttribute('href');
+    }
+    ui('print').dataset.pdf = pdfLink || '';
     ui('pdf').hidden = Boolean(photo) || !pdf;
     if (!photo && pdf) ui('pdf').src = pdfLink;
     else ui('pdf').removeAttribute('src');
@@ -310,8 +346,8 @@ function movePage(step) {
 
 ui('prev').onclick = () => movePage(-1);
 ui('next').onclick = () => movePage(1);
-ui('zoom').onclick = () => setZoom(zoom + .25);
-ui('zoom-out').onclick = () => setZoom(zoom - .25);
+ui('zoom').onclick = () => setZoom(zoom + .25, true);
+ui('zoom-out').onclick = () => setZoom(zoom - .25, true);
 ui('spread').onclick = () => {
     if (!current) return;
     spread = !spread;
@@ -323,7 +359,7 @@ ui('dark').onclick = () => {
 };
 ui('print').onclick = () => {
     if (!ui('image-scroll').hidden) window.print();
-    else if (!ui('open-pdf').hidden) window.open(ui('open-pdf').href, '_blank', 'noopener');
+    else if (ui('print').dataset.pdf) window.open(ui('print').dataset.pdf, '_blank', 'noopener');
 };
 ui('fullscreen').disabled = !document.fullscreenEnabled;
 ui('fullscreen').onclick = () => {

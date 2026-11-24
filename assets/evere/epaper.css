@@ -44,7 +44,7 @@ button:not(:disabled) { cursor: pointer; }
 .viewer-dock > span { padding: 5px 14px 5px 10px; border-right: 1px solid var(--separator); font-size: 17px; font-weight: 700; }
 .viewer-dock :is(button, a) { display: grid; justify-items: center; align-content: center; gap: 3px; min-width: 58px; height: 42px; padding: 3px 4px; border-radius: 7px; font-size: 11px; font-weight: 500; }
 .viewer-dock :is(button:not(:disabled), a):hover, .viewer-dock button[aria-pressed="true"]:not(#epaper-pin) { background: #00b8b41c; }
-.viewer-dock svg { width: 19px; height: 19px; }
+.viewer-dock svg { width: 20px; height: 20px; }
 .viewer-dock-wrap.is-unpinned:not(:hover):not(:focus-within) { translate: -50% calc(100% - 14px); }
 .viewer-panel { position: absolute; z-index: 3; inset: 0 auto 0 0; width: min(330px, calc(100vw - var(--rail-width))); overflow: auto; padding: 18px; background: var(--panel); box-shadow: 5px 0 18px #0002; }
 .viewer-panel header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
@@ -137,7 +137,6 @@ button:not(:disabled) { cursor: pointer; }
 #epaper-date-toggle svg { transition: transform var(--motion-panel) var(--motion-in-out); }
 .viewer-date:has(.viewer-date-details[data-collapsed]) #epaper-date-toggle { border-right-color: transparent; }
 .viewer-dock-wrap { transition: translate var(--motion-panel) var(--motion-in-out); }
-.viewer-paper-scroll img { transition: height var(--motion-base) var(--motion-standard); }
 .viewer-stage { perspective: 9000px; }
 .viewer-stage .viewer-page-flip { position: absolute; z-index: 1; margin: 0; pointer-events: none; backface-visibility: hidden; box-shadow: 5px 0 12px #0003; }
 .viewer-stage.is-loading::after {
@@ -152,4 +151,8 @@ button:not(:disabled) { cursor: pointer; }
 .viewer-arrows svg { width: 20px; height: 20px; display: block; margin: auto; }
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0s !important; transition-duration: 0s !important; transition-delay: 0s !important; }
+}
+
+.viewer-rail svg, .viewer-date svg, .viewer-panel svg, .viewer-arrows svg, .viewer-dock svg {
+    width: 20px; height: 20px; flex-shrink: 0; stroke-width: 1.6px;
 }
