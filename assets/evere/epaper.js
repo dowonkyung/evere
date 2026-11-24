@@ -1,4 +1,4 @@
-import { configureArticleViewer } from './epaper-article.js?v=region-editor-2';
+import { configureArticleViewer } from './epaper-article.js?v=print-reader-1';
 import { supabase } from './supabase.js';
 import { articlePath } from './routes.js?v=routes-1';
 import { setArticleTitle } from './article-label.js';
@@ -13,8 +13,29 @@ let spread = false;
 let activePanel = '';
 let imageRequest = 0;
 let zoomAnimations = [];
-const articleViewer = configureArticleViewer(() => {}, (issue, page, regions) => {
+function linkedArticles() {
+    return (current?.edition.articles || []).filter(row => row.print_page).sort((a, b) =>
+        a.print_page - b.print_page || a.article_number - b.article_number);
+}
+const articleViewer = configureArticleViewer(id => {
+    const rows = linkedArticles();
+    const index = rows.findIndex(row => row.article_number === id);
+    ui('linked-prev').hidden = index <= 0;
+    ui('linked-next').hidden = index < 0 || index >= rows.length - 1;
+    for (const link of ui('articles').querySelectorAll('[data-print-article]')) {
+        if (Number(link.dataset.printArticle) === id) link.setAttribute('aria-current', 'true');
+        else link.removeAttribute('aria-current');
+    }
+}, (issue, page, regions) => {
     savedRegions.set(regionKey(issue, page), regions);
+}, direction => {
+    const rows = linkedArticles();
+    const index = rows.findIndex(row => row.article_number === articleViewer.selectedId());
+    const next = rows[index + direction];
+    if (index < 0 || !next) return false;
+    if (current.page !== next.print_page) render(current.issueNumber, next.print_page, 'pushState');
+    articleViewer.openArticle(next);
+    return true;
 });
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 let defaultIssue;
@@ -276,8 +297,8 @@ function render(issueNumber, pageNumber, updateHistory = '') {
         ui('stage').classList.remove('is-loading', 'page-loaded');
     }
     articleViewer.setSheets([
-        { image: ui('image'), src: photo, pdf, page, issue: issueNumber, editable: canEditRegions, regions: regionsFor(edition, issueNumber, page), articles: edition.articles.filter(row => row.print_page === page) },
-        { image: ui('second-image'), src: hasSpread ? nextPhoto : '', pdf, page: nextPage, issue: issueNumber, regions: regionsFor(edition, issueNumber, nextPage), articles: edition.articles.filter(row => row.print_page === nextPage) },
+        { image: ui('image'), src: photo, pdf, printText: sameSiteAsset(edition.printText, '.json'), page, issue: issueNumber, editable: canEditRegions, regions: regionsFor(edition, issueNumber, page), articles: edition.articles.filter(row => row.print_page === page) },
+        { image: ui('second-image'), src: hasSpread ? nextPhoto : '', pdf, printText: sameSiteAsset(edition.printText, '.json'), page: nextPage, issue: issueNumber, regions: regionsFor(edition, issueNumber, nextPage), articles: edition.articles.filter(row => row.print_page === nextPage) },
     ]);
 
     for (const link of ui('editions').querySelectorAll('a[aria-current]')) link.removeAttribute('aria-current');
@@ -319,7 +340,9 @@ function render(issueNumber, pageNumber, updateHistory = '') {
         for (const row of groups.get(number)) {
             const item = document.createElement('li');
             const link = document.createElement('a');
-            link.href = articlePath(row);
+            link.href = toPath(issueNumber, number);
+            link.dataset.contentsPage = number;
+            link.dataset.printArticle = row.article_number;
             setArticleTitle(link, row.title, row.article_label);
             item.append(link);
             list.append(item);
@@ -332,7 +355,7 @@ function render(issueNumber, pageNumber, updateHistory = '') {
 
 async function start() {
     const [manifest, articles] = await Promise.all([
-        fetch('/epaper/editions.json?v=article-regions-2').then(response => response.ok ? response.json() : null).catch(() => null),
+        fetch('/epaper/editions.json?v=print-reader-1').then(response => response.ok ? response.json() : null).catch(() => null),
         loadPrintArticles().catch(() => null),
         loadSavedRegions().catch(() => {}),
     ]);
@@ -387,6 +410,13 @@ function movePage(step) {
 
 ui('prev').onclick = () => movePage(-1);
 ui('next').onclick = () => movePage(1);
+ui('stage').addEventListener('dblclick', event => {
+    if (!current || articleViewer.isEditing() || event.target.closest('button, a')) return;
+    event.preventDefault();
+    setZoom(zoom > 1 ? 1 : 2, true);
+});
+ui('stage').addEventListener('contextmenu', event => event.preventDefault());
+ui('stage').addEventListener('dragstart', event => event.preventDefault());
 ui('zoom').onclick = () => setZoom(zoom + .25, true);
 ui('zoom-out').onclick = () => setZoom(zoom - .25, true);
 ui('spread').onclick = () => {
@@ -441,7 +471,10 @@ ui('articles').addEventListener('click', event => {
     const link = event.target.closest('[data-contents-page]');
     if (!link || !current || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
     event.preventDefault();
-    render(current.issueNumber, Number(link.dataset.contentsPage), 'pushState');
+    const number = Number(link.dataset.contentsPage);
+    if (current.page !== number) render(current.issueNumber, number, 'pushState');
+    const row = current.edition.articles.find(article => article.article_number === Number(link.dataset.printArticle));
+    if (row) articleViewer.openArticle(row);
 });
 ui('search').oninput = () => {
     const term = ui('search').value.trim().toLocaleLowerCase('ko-KR');

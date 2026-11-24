@@ -19,7 +19,7 @@ function orthogonal(points) {
 
 const pdfModule = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/';
 let pdfLibrary;
-async function cropRegion(pdf, number, points) {
+async function withPdfPage(pdf, number, usePage) {
     if (!pdf) throw new Error('원본 PDF 없음');
     pdfLibrary ??= import(pdfModule + 'pdf.min.mjs');
     const library = await pdfLibrary.catch(error => { pdfLibrary = undefined; throw error; });
@@ -28,11 +28,67 @@ async function cropRegion(pdf, number, points) {
     try {
         const document = await task.promise;
         const page = await document.getPage(number);
-        const viewport = page.getViewport({ scale: 300 / 72 });
-        return await renderCrop(page, viewport, points);
+        return await usePage(page);
     } finally {
         await task.destroy();
     }
+}
+
+function cropRegion(pdf, number, points) {
+    return withPdfPage(pdf, number, page => renderCrop(page, page.getViewport({ scale: 300 / 72 }), points));
+}
+
+function containsPoint(points, x, y) {
+    let inside = false;
+    for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
+        const [x1, y1] = points[i], [x2, y2] = points[j];
+        if ((y1 > y) !== (y2 > y) && x < x1 + (x2 - x1) * (y - y1) / (y2 - y1)) inside = !inside;
+    }
+    return inside;
+}
+
+async function readPrintText(selection) {
+    const { points, pdf, page, printText, pngPath, row } = selection;
+    if (printText && pngPath?.startsWith('/epaper/files/')) {
+        const response = await fetch(printText);
+        if (response.ok) {
+            const entries = await response.json();
+            if (entries[row.article_number]) return entries[row.article_number];
+        }
+    }
+    if (!points || !pdf) return null;
+    return withPdfPage(pdf, page, async pdfPage => {
+        const viewport = pdfPage.getViewport({ scale: 1 });
+        const { items } = await pdfPage.getTextContent({ disableNormalization: true });
+        const lines = [];
+        let line = '';
+        for (const item of items) {
+            if (typeof item.str !== 'string') continue;
+            const [x, y] = viewport.convertToViewportPoint(item.transform[4] + item.width / 2, item.transform[5] + item.height / 3);
+            if (!containsPoint(points, x * 1000 / viewport.width, y * 1000 / viewport.height)) continue;
+            if (/^　/.test(item.str) && line.trim()) { lines.push(line.trim()); line = ''; }
+            line += item.str;
+            if (item.hasEOL) line += '\n';
+        }
+        if (line.trim()) lines.push(line.trim());
+        const body = lines.join('\n\n').trim();
+        return body ? { body } : null;
+    });
+}
+
+function closeBoundary(points) {
+    if (points.length < 3) return null;
+    const boundary = points.map(point => [...point]);
+    const [first, second] = boundary;
+    const last = boundary.at(-1), previous = boundary.at(-2);
+    const closeVertically = first[0] !== second[0];
+    const incomingHorizontal = last[1] === previous[1];
+    if (closeVertically === incomingHorizontal) {
+        last[closeVertically ? 0 : 1] = first[closeVertically ? 0 : 1];
+    } else {
+        boundary.push(incomingHorizontal ? [last[0], first[1]] : [first[0], last[1]]);
+    }
+    return boundary.length <= 64 && orthogonal(boundary) ? boundary : null;
 }
 
 async function renderCrop(page, viewport, points) {
@@ -60,7 +116,7 @@ async function renderCrop(page, viewport, points) {
     return new Promise((resolve, reject) => canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('이미지 생성 실패')), 'image/png'));
 }
 
-export function configureArticleViewer(onOpen, onSave) {
+export function configureArticleViewer(onOpen, onSave, onMove) {
     const layer = ui('hotspots');
     const panel = ui('article-panel');
     const main = panel.closest('.viewer-main');
@@ -78,9 +134,20 @@ export function configureArticleViewer(onOpen, onSave) {
     let points = [];
     let sketch;
     let saving = false;
+    let closed = false;
+    let contexts = [];
+    const targets = new Map();
+    const badge = ui('linked-article');
+    let hovered;
+    let pendingClick;
+    let printText;
+    let textReady = false;
+    let onlineReady = false;
 
     function outline() {
-        sketch?.setAttribute('points', points.map(point => point.join(',')).join(' '));
+        const preview = closed ? [...points, points[0]] : points;
+        sketch?.setAttribute('points', preview.map(point => point.join(',')).join(' '));
+        sketch?.classList.toggle('is-closed', closed);
     }
 
     function stopEditing() {
@@ -88,6 +155,7 @@ export function configureArticleViewer(onOpen, onSave) {
         sketch?.remove();
         sketch = editing = undefined;
         points = [];
+        closed = false;
         form.hidden = true;
         toggle.setAttribute('aria-expanded', 'false');
     }
@@ -95,6 +163,7 @@ export function configureArticleViewer(onOpen, onSave) {
     function loadPoints() {
         const region = editing.regions.find(entry => entry.article === Number(picker.value));
         points = region ? region.points.map(point => [...point]) : [];
+        closed = Boolean(region);
         message.textContent = '';
         outline();
     }
@@ -116,22 +185,28 @@ export function configureArticleViewer(onOpen, onSave) {
     };
     picker.onchange = loadPoints;
     ui('region-close').onclick = stopEditing;
-    ui('region-undo').onclick = () => { points.pop(); outline(); };
-    ui('region-reset').onclick = () => { points = []; outline(); };
+    ui('region-undo').onclick = () => { closed = false; points.pop(); outline(); };
+    ui('region-reset').onclick = () => { closed = false; points = []; outline(); };
+    function finishBoundary() {
+        const boundary = closeBoundary(points);
+        if (!boundary) {
+            message.textContent = '가로와 세로로 이어지는 꼭짓점을 더 찍어 주세요.';
+            return;
+        }
+        points = boundary;
+        closed = true;
+        message.textContent = '영역을 닫았습니다. 저장하거나 점을 다시 조정할 수 있습니다.';
+        outline();
+    }
+    ui('region-finish').onclick = finishBoundary;
 
     form.onsubmit = async event => {
         event.preventDefault();
         if (saving || !editing) return;
         const sheet = editing;
         const article = Number(picker.value);
-        const boundary = points.map(point => [...point]);
-        const first = boundary[0];
-        const last = boundary.at(-1);
-        if (boundary.length >= 3 && first[0] !== last[0] && first[1] !== last[1]) {
-            const previous = boundary.at(-2);
-            boundary.push(previous[0] === last[0] ? [first[0], last[1]] : [last[0], first[1]]);
-        }
-        if (boundary.length > 64 || !orthogonal(boundary)) {
+        const boundary = closed ? points : closeBoundary(points);
+        if (!boundary) {
             message.textContent = '꼭짓점을 네 개 이상 찍어 직각으로 닫히는 영역을 만드세요.';
             return;
         }
@@ -174,6 +249,22 @@ export function configureArticleViewer(onOpen, onSave) {
     let fontSize = 17;
     let lastTrigger;
 
+    function placeBadge() {
+        const polygon = targets.get(hovered)?.polygon;
+        if (!polygon || editing) { badge.hidden = true; return; }
+        const rect = polygon.getBoundingClientRect();
+        const base = stage.getBoundingClientRect();
+        badge.hidden = false;
+        badge.style.left = Math.max(0, rect.right - base.left - badge.offsetWidth - 8) + 'px';
+        badge.style.top = Math.max(0, rect.bottom - base.top - badge.offsetHeight - 6) + 'px';
+    }
+    badge.onclick = () => {
+        const row = targets.get(hovered)?.details.row;
+        if (row) openArticle(row);
+    };
+    badge.onpointerleave = () => { hovered = undefined; badge.hidden = true; };
+    ui('linked-prev').onclick = () => onMove(-1);
+    ui('linked-next').onclick = () => onMove(1);
     function layout() {
         frameRequest = 0;
         const base = stage.getBoundingClientRect();
@@ -190,6 +281,7 @@ export function configureArticleViewer(onOpen, onSave) {
                 width: width + 'px', height: height + 'px',
             });
         }
+        if (hovered) placeBadge();
         if (performance.now() < trackUntil) schedule();
     }
 
@@ -217,6 +309,8 @@ export function configureArticleViewer(onOpen, onSave) {
     function close(restoreFocus = true) {
         job++;
         selection = undefined;
+        onOpen(undefined);
+        badge.hidden = true;
         article = undefined;
         clearCrop();
         panel.inert = true;
@@ -237,11 +331,27 @@ export function configureArticleViewer(onOpen, onSave) {
             if (active && focus) button.focus();
         }
         const online = tab === 'online';
+        download.disabled = !selection?.pngPath;
+        print.disabled = tab === 'image' ? !cropUrl : online ? !article : !printText;
+        if (tab === 'text') {
+            ui('article-title').textContent = printText?.title || selection?.row.title || '';
+            ui('article-copy').textContent = printText?.body || '';
+            ui('article-subtitle').hidden = true;
+            status.textContent = textReady ? printText ? '' : '이 기사에서 읽을 수 있는 지면 텍스트가 없습니다.' : '지면 텍스트를 불러오는 중입니다.';
+        }
+        if (online) {
+            ui('article-title').textContent = article?.title || selection?.row.title || '';
+            ui('article-subtitle').textContent = article?.subtitle || '';
+            ui('article-subtitle').hidden = !article?.subtitle?.trim();
+            const copy = ui('article-copy');
+            copy.replaceChildren();
+            if (article) renderBody(copy, article, { legacyLineBreaks: true });
+            copy.querySelectorAll('figure').forEach(figure => figure.remove());
+            status.textContent = onlineReady ? article ? '' : '온라인 기사를 불러오지 못했습니다.' : '온라인 기사를 불러오는 중입니다.';
+        }
         if (tab !== 'image') ui('article-' + tab).append(content);
         ui('online-meta').hidden = !online;
         ui('article-link').hidden = !online;
-        download.disabled = tab === 'image' ? !cropUrl : !article;
-        print.disabled = download.disabled;
         if (!selection) return;
         if (tab === 'image' && !cropUrl) {
             const current = job;
@@ -267,17 +377,18 @@ export function configureArticleViewer(onOpen, onSave) {
             }, () => {
                 if (job === current && activeTab === 'image') status.textContent = '지면 이미지를 만들지 못했습니다.';
             });
-        } else if (article || tab === 'image') status.textContent = '';
+        } else if (tab === 'image') status.textContent = '';
     }
 
     async function open(next, trigger) {
         const current = ++job;
-        article = undefined;
+        article = printText = undefined;
+        textReady = onlineReady = false;
         clearCrop();
         selection = next;
         lastTrigger = trigger;
         for (const polygon of layer.querySelectorAll('polygon')) polygon.setAttribute('aria-pressed', String(polygon === trigger));
-        onOpen();
+        onOpen(next.row.article_number);
         panel.inert = false;
         main.classList.add('has-article');
         panel.scrollTop = 0;
@@ -291,11 +402,22 @@ export function configureArticleViewer(onOpen, onSave) {
         switchTab('text');
         ui('tab-text').focus({ preventScroll: true });
         track(320);
+        void readPrintText(next).then(result => {
+            if (job !== current) return;
+            printText = result;
+            textReady = true;
+            if (activeTab === 'text') switchTab('text');
+        }, () => {
+            if (job !== current) return;
+            textReady = true;
+            if (activeTab === 'text') switchTab('text');
+        });
         const { data, error } = await supabase.from('evere_articles').select('title,subtitle,body,body_html,published_at,byline_names')
             .eq('article_number', next.row.article_number).eq('status', 'published').maybeSingle();
         if (job !== current) return;
+        onlineReady = true;
         if (error || !data) {
-            if (activeTab !== 'image') status.textContent = '기사를 불러오지 못했습니다.';
+            if (activeTab === 'online') switchTab('online');
             return;
         }
         article = data;
@@ -304,27 +426,29 @@ export function configureArticleViewer(onOpen, onSave) {
             timeZone: 'Asia/Seoul', dateStyle: 'short', timeStyle: 'short',
         }).format(new Date(data.published_at)) : '';
         ui('online-byline').textContent = (data.byline_names || []).join(', ');
-        ui('article-title').textContent = data.title;
-        ui('article-subtitle').textContent = data.subtitle || '';
-        ui('article-subtitle').hidden = !data.subtitle?.trim();
-        const copy = ui('article-copy');
-        renderBody(copy, data, { legacyLineBreaks: true });
-        copy.querySelectorAll('figure').forEach(figure => figure.remove());
-        if (activeTab !== 'image') {
-            status.textContent = '';
-            download.disabled = false;
-            print.disabled = false;
-        }
+        if (activeTab === 'online') switchTab('online');
     }
 
+    function openArticle(row) {
+        const target = targets.get(row.article_number);
+        const sheet = contexts.find(item => item.page === row.print_page);
+        void open(target?.details || { row, pdf: sheet?.pdf, page: row.print_page }, target?.polygon).catch(() => {
+            status.textContent = '기사를 불러오지 못했습니다.';
+        });
+    }
     function setSheets(nextSheets) {
         stopEditing();
+        clearTimeout(pendingClick);
+        badge.hidden = true;
+        hovered = undefined;
+        targets.clear();
+        contexts = nextSheets;
         toggle.hidden = !nextSheets.some(sheet => sheet.editable && sheet.src && sheet.pdf && sheet.articles.length);
         if (selection) close(false);
         sheets = [];
         layer.replaceChildren();
         for (const sheet of nextSheets) {
-            const { image, src, pdf, page, regions = [], articles } = sheet;
+            const { image, src, pdf, printText, page, regions = [], articles } = sheet;
             if (!src) continue;
             const rows = new Map(articles.map(row => [row.article_number, row]));
             const overlay = document.createElementNS(svgNS, 'svg');
@@ -342,13 +466,22 @@ export function configureArticleViewer(onOpen, onSave) {
                 const title = document.createElementNS(svgNS, 'title');
                 title.textContent = row.title + ' · 연결 기사 보기';
                 polygon.append(title);
-                const select = () => {
+                targets.set(id, { polygon, details: { row, points, pdf, printText, page, pngPath } });
+                const select = () => { if (!editing) openArticle(row); };
+                polygon.addEventListener('click', event => {
+                    clearTimeout(pendingClick);
+                    if (event.detail < 2) pendingClick = setTimeout(select, 250);
+                });
+                polygon.addEventListener('pointerenter', () => {
                     if (editing) return;
-                    void open({ row, points, pdf, page, pngPath }, polygon).catch(() => {
-                        status.textContent = '기사를 불러오지 못했습니다.';
-                    });
-                };
-                polygon.addEventListener('click', select);
+                    hovered = id;
+                    placeBadge();
+                });
+                polygon.addEventListener('pointerleave', event => {
+                    if (event.relatedTarget === badge) return;
+                    hovered = undefined;
+                    badge.hidden = true;
+                });
                 polygon.addEventListener('keydown', event => {
                     if (event.key === 'Enter' || event.key === ' ') {
                         event.preventDefault();
@@ -360,10 +493,15 @@ export function configureArticleViewer(onOpen, onSave) {
             layer.append(overlay);
             const visibleSheet = { ...sheet, overlay };
             overlay.addEventListener('click', event => {
-                if (editing !== visibleSheet || saving || points.length >= 63) return;
+                if (editing !== visibleSheet || saving || closed || points.length >= 63) return;
                 const rect = overlay.getBoundingClientRect();
                 const x = Math.round(1000 * (event.clientX - rect.left) / rect.width);
                 const y = Math.round(1000 * (event.clientY - rect.top) / rect.height);
+                if (points.length >= 3 && Math.abs((x - points[0][0]) * rect.width / 1000) < 14 &&
+                    Math.abs((y - points[0][1]) * rect.height / 1000) < 14) {
+                    finishBoundary();
+                    return;
+                }
                 const last = points.at(-1);
                 if (!last) points.push([x, y]);
                 else {
@@ -399,23 +537,27 @@ export function configureArticleViewer(onOpen, onSave) {
             ui('article-copy').style.setProperty('--article-text-size', fontSize + 'px');
         };
     }
-    download.onclick = () => {
-        if (!selection || download.disabled) return;
-        const name = selection.row.title.replace(/[\\/:*?"<>|]/g, ' ').slice(0, 100);
-        const link = document.createElement('a');
-        const text = activeTab !== 'image';
-        link.href = text ? URL.createObjectURL(new Blob(
-            [[article.title, article.subtitle, article.body].filter(Boolean).join('\n\n')],
-            { type: 'text/plain;charset=utf-8' },
-        )) : cropUrl;
-        link.download = name + (text ? '.txt' : '.png');
-        link.click();
-        if (text) setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    download.onclick = async () => {
+        if (!selection?.pngPath) return;
+        const { pngPath, row } = selection;
+        const url = pngPath.startsWith('/epaper/files/') ? pngPath :
+            supabase.storage.from('evere-epaper-crops').getPublicUrl(pngPath).data.publicUrl;
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error('PNG 없음');
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(await response.blob());
+            link.download = row.title.replace(/[\\/:*?"<>|]/g, ' ').slice(0, 100) + '.png';
+            link.click();
+            setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+        } catch {
+            status.textContent = '이미지를 다운로드하지 못했습니다.';
+        }
     };
     print.onclick = () => {
         if (print.disabled) return;
         main.classList.add('print-article');
         try { window.print(); } finally { main.classList.remove('print-article'); }
     };
-    return { setSheets, track };
+    return { setSheets, track, openArticle, selectedId: () => selection?.row.article_number, isEditing: () => Boolean(editing) };
 }

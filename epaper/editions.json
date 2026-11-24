@@ -77,7 +77,8 @@
             "pngPath": "/epaper/files/1/articles/43.png"
           }
         ]
-      }
+      },
+      "printText": "/epaper/files/1/print-text.json"
     }
   ]
 }
