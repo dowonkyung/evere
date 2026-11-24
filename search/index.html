@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>기사 검색 | 이브레</title>
+  <title>통합검색 | 이브레</title>
   <link rel="icon" href="/assets/evere/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="/assets/khan/common.css">
@@ -18,8 +18,8 @@
 <link rel="preload" as="style" href="/assets/evere/article-header.css?v=reader-palette-1">
 <link rel="stylesheet" href="/assets/evere/header-first-paint.css">
 <script defer src="/assets/evere/header-first-paint.js"></script>
-  <link rel="stylesheet" href="/assets/evere/search.css">
-  <script type="module" src="/assets/evere/search.js"></script>
+  <link rel="stylesheet" href="/assets/evere/search.css?v=sections-1">
+  <script type="module" src="/assets/evere/search.js?v=sections-1"></script>
 </head>
 <body>
 <div id="evere-header" data-css-pending data-compact-only>
@@ -204,14 +204,48 @@
 </template>
 </div>
   <main class="article-search-page">
-    <h1>기사 검색</h1>
-    <form action="/search/" role="search" class="article-search-form">
-      <input type="search" name="query" aria-label="기사 제목 검색" placeholder="기사 제목을 입력해 주세요" maxlength="120" required>
+    <h1>통합검색</h1>
+    <form action="/search/" role="search" class="article-search-form" id="search-form">
+      <input type="search" name="query" aria-label="기사 제목 검색" placeholder="검색어를 입력해 주세요" maxlength="120" required>
+      <input type="hidden" name="section" value="articles">
       <button type="submit">검색</button>
     </form>
-    <p id="search-status" role="status"></p>
-    <ul id="search-results"></ul>
-    <nav id="search-pages" aria-label="검색 결과 페이지" hidden></nav>
+    <nav class="search-sections" aria-label="검색 결과 분류">
+      <a href="/search/" data-section="articles" aria-current="page">기사</a>
+      <a href="/search/?section=opinion" data-section="opinion">사설·칼럼</a>
+      <a href="/search/?section=images" data-section="images">이미지</a>
+    </nav>
+    <div class="search-layout">
+      <section class="search-results-panel" aria-label="검색 결과">
+        <p id="search-status" role="status"></p>
+        <ul id="search-results"></ul>
+        <nav id="search-pages" aria-label="검색 결과 페이지" hidden></nav>
+      </section>
+      <aside class="search-filter-panel">
+        <details open>
+          <summary>검색 설정</summary>
+          <form id="search-filters" action="/search/">
+            <input type="hidden" name="query">
+            <input type="hidden" name="section">
+            <label>기간
+              <select name="period">
+                <option value="">전체 기간</option>
+                <option value="7">최근 1주</option>
+                <option value="30">최근 1개월</option>
+                <option value="365">최근 1년</option>
+              </select>
+            </label>
+            <label>정렬
+              <select name="sort">
+                <option value="">최신순</option>
+                <option value="oldest">오래된순</option>
+              </select>
+            </label>
+            <button type="submit">적용</button>
+          </form>
+        </details>
+      </aside>
+    </div>
   </main>
 </body>
 </html>
