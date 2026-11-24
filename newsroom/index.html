@@ -12,26 +12,13 @@
   <script type="module" src="/assets/evere/account.js?v=workspace-1"></script>
   <script type="module" src="/assets/evere/newsroom.js?v=compact-nav-1"></script>
 <script type="module" src="/assets/evere/route-init.js?v=routes-1"></script>
-  <link rel="stylesheet" href="/assets/evere/newsroom-workspace.css?v=white-action-text-1">
+  <link rel="stylesheet" href="/assets/evere/newsroom-workspace.css?v=sidebar-brand-1">
 </head>
 <body class="newsroom">
-  <header class="newsroom-header">
-    <a class="newsroom-brand" href="/newsroom/" aria-label="이브레 뉴스룸"><img src="/assets/evere/wordmark.svg" alt=""><span>뉴스룸</span></a>
-    <nav aria-label="뉴스룸 링크">
-      <a href="/" class="newsroom-public-link">이브레 홈 <span aria-hidden="true">↗</span></a>
-      <a href="/boards/">게시판</a>
-      <div class="newsroom-session">
-        <div class="newsroom-identity" id="newsroom-identity" hidden>
-          <img id="newsroom-avatar" width="30" height="30" alt="" hidden>
-          <span id="member-summary"></span>
-        </div>
-        <button id="sign-out" type="button" hidden>로그아웃</button>
-      </div>
-    </nav>
-  </header>
   <main class="newsroom-main">
     <p id="status" role="status" aria-live="polite"></p>
     <section id="access" hidden>
+      <a class="newsroom-brand" href="/newsroom/" aria-label="이브레 뉴스룸"><img src="/assets/evere/wordmark.svg" alt=""><span>뉴스룸</span></a>
       <h1 id="access-title">로그인</h1>
       <form id="access-form">
         <label id="signup-name" hidden>이름<input name="displayName" maxlength="40" autocomplete="name"></label>
@@ -43,17 +30,22 @@
       <button id="resend" class="text-action" type="button" hidden>인증 이메일 다시 보내기</button>
     </section>
     <section id="profile-setup" hidden>
+      <a class="newsroom-brand" href="/newsroom/" aria-label="이브레 뉴스룸"><img src="/assets/evere/wordmark.svg" alt=""><span>뉴스룸</span></a>
       <h1>이브레 회원 이름 등록</h1>
       <form id="profile-form">
         <label>이름<input name="displayName" maxlength="40" autocomplete="name" required></label>
         <button type="submit">등록</button>
       </form>
+      <button class="text-action" type="button" onclick="document.getElementById('sign-out').click()">로그아웃</button>
     </section>
     <section id="workspace" hidden>
       <nav class="newsroom-nav" aria-label="뉴스룸 메뉴">
+        <div class="newsroom-nav-brand-row">
+          <a class="newsroom-brand" href="/newsroom/" aria-label="이브레 뉴스룸"><img class="newsroom-brand-symbol" src="/assets/evere/favicon.svg" alt=""><img class="newsroom-brand-wordmark" src="/assets/evere/wordmark.svg" alt=""><span>뉴스룸</span></a>
         <button id="newsroom-nav-toggle" class="newsroom-nav-toggle" type="button" aria-label="메뉴 너비 줄이기" title="메뉴 너비 줄이기" aria-pressed="false">
           <svg class="workspace-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18v14H3z M9 5v14 M14 9l-2 3 2 3"/></svg>
         </button>
+        </div>
         <a href="#overview" data-view="overview" title="대시보드"><svg class="workspace-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3z M14 3h7v7h-7z M3 14h7v7H3z M14 14h7v7h-7z"/></svg><span>대시보드</span></a>
         <a href="#write" data-view="write" title="기사 작성"><svg class="workspace-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9 M4 20l4-.8L20 7l-4-4L4 15z M14 5l4 4"/></svg><span>기사 작성</span></a>
         <a href="#review" data-view="review" title="기사 목록·승인"><svg class="workspace-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h14v18H5z M8 8h8 M8 12h8 M8 16h5"/></svg><span>기사 목록·승인</span></a>
@@ -64,6 +56,17 @@
         <a href="#boards" data-view="boards" data-owner hidden title="게시판 관리"><svg class="workspace-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h18v16H3z M3 9h18 M3 14h18 M9 9v11"/></svg><span>게시판 관리</span></a>
       </nav>
       <div class="newsroom-content">
+        <nav class="newsroom-tools" aria-label="뉴스룸 링크">
+      <a href="/" class="newsroom-public-link">이브레 홈 <span aria-hidden="true">↗</span></a>
+      <a href="/boards/">게시판</a>
+      <div class="newsroom-session">
+        <div class="newsroom-identity" id="newsroom-identity" hidden>
+          <img id="newsroom-avatar" width="30" height="30" alt="" hidden>
+          <span id="member-summary"></span>
+        </div>
+        <button id="sign-out" type="button" hidden>로그아웃</button>
+      </div>
+    </nav>
         <section data-panel="overview">
           <div class="newsroom-overview-head">
             <h1>대시보드</h1>
