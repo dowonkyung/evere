@@ -47,3 +47,22 @@
   .evere-compact-shell .nav-type11.article-tools-active { min-height: 50px; }
   .nav-type11.article-tools-active > slot[name="article-tools"] { display: contents; }
 }
+
+/* Palette variables cross the shadow boundary through the header host. */
+:host([data-reader-palette]) :is(.yna-shell, .wrap-header21, .fixed-navigation01, .evere-panel, .evere-category-popup, .evere-category-popup .title-m) {
+  background: var(--background-default);
+  color: var(--text-primary);
+  border-color: var(--stroke-framing);
+}
+:host([data-reader-palette]) :is(.article-header-title, .gnb-menu01 li > a, .evere-category-popup a, .evere-category-popup button) {
+  color: var(--text-primary);
+}
+:host([data-reader-palette]) .evere-search input {
+  background: var(--surface-soft);
+  color: var(--text-primary);
+  border-color: var(--stroke-framing);
+}
+:host([data-reader-palette="dark"]) :is(.utility-zone .login01, .utility-zone .btn-type004-toggle, .logo-yna21 img, .logo-yna03 img, .category-close, .category-toggle),
+:host([data-reader-palette="green"]) :is(.utility-zone .login01, .utility-zone .btn-type004-toggle, .logo-yna21 img, .logo-yna03 img, .category-close, .category-toggle) {
+  filter: invert(1) hue-rotate(180deg);
+}

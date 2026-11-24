@@ -75,14 +75,15 @@ function enableReadingHeader(articleTitle) {
     schedule();
 }
 
-const articlePage = document.querySelector('.article-page');
 for (const button of document.querySelectorAll('[data-reader-size], [data-reader-theme]')) {
     button.addEventListener('click', () => {
         const { readerSize, readerTheme } = button.dataset;
         if (readerSize) ui('published-article').dataset.textSize = readerSize;
         else {
-            articlePage.dataset.readerTheme = readerTheme;
-            articlePage.classList.toggle('reader-dark', readerTheme === 'dark' || readerTheme === 'green');
+            for (const element of [document.body, ui('evere-header')]) {
+                if (readerTheme === 'light') delete element.dataset.readerPalette;
+                else element.dataset.readerPalette = readerTheme;
+            }
         }
         for (const option of button.parentElement.children) {
             option.setAttribute('aria-pressed', String(option === button));
