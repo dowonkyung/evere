@@ -469,8 +469,14 @@
   .reporter-card-heading { gap: 2px 6px; }
   .reporter-card-name { font-size: 18px; line-height: 1.35; overflow-wrap: anywhere; }
   .reporter-card-position { font-size: 13px; }
-  .reporter-card-actions { flex: none; }
-  .evere-article .article-page .reporter-card-email { display: block; margin-top: 4px; line-height: 1.45; }
+  /* Reserve the button's width without letting its height push the email down. */
+  .reporter-card-actions { flex: none; height: 0; align-content: start; overflow: visible; }
+  .evere-article .article-page .reporter-card-email {
+    display: block;
+    margin: 4px 0 0;
+    padding: 0;
+    line-height: 1.45;
+  }
   .reporter-card-bio { margin-top: 4px; line-height: 1.5; }
   .reporter-card-email + .reporter-card-bio { margin-top: 2px; }
   .profile-previous { inset-inline-start: -6px; }

@@ -65,7 +65,7 @@ export async function showReporterCards(articleId) {
         top.append(actions);
         card.append(avatar, content);
         list.append(card);
-        void collectionButton(follow, 'reporters', reporter.reporter_id, ['구독', '구독 취소'], actions).catch(() => {});
+        void collectionButton(follow, 'reporters', reporter.reporter_id, ['구독', '구독 취소'], content).catch(() => {});
     }
     section.hidden = false;
     if (data.length > 1) configureArrows(section, list);
