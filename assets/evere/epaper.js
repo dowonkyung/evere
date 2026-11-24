@@ -196,35 +196,6 @@ function showPanel(name) {
     printSearch.setVisible(activePanel === 'search');
 }
 
-function animatePageFlip(direction) {
-    if (!direction || reduceMotion.matches) return;
-    const image = ui('image');
-    const stage = ui('stage');
-    if (ui('image-scroll').hidden || !image.complete || !image.naturalWidth) return;
-    const paper = image.getBoundingClientRect();
-    const frame = stage.getBoundingClientRect();
-    const prior = image.cloneNode();
-    prior.removeAttribute('id');
-    prior.className = 'viewer-page-flip';
-    prior.alt = '';
-    prior.setAttribute('aria-hidden', 'true');
-    Object.assign(prior.style, {
-        left: paper.left - frame.left + 'px',
-        top: paper.top - frame.top + 'px',
-        width: paper.width + 'px',
-        height: paper.height + 'px',
-        transformOrigin: direction > 0 ? 'left center' : 'right center',
-    });
-    stage.append(prior);
-    const animation = prior.animate([
-        { rotate: 'y 0deg', opacity: 1, filter: 'brightness(1)' },
-        { rotate: 'y ' + (direction * -55) + 'deg', opacity: .82, filter: 'brightness(.80)', offset: .65 },
-        { rotate: 'y ' + (direction * -89) + 'deg', opacity: 0, filter: 'brightness(.72)' },
-    ], { duration: 550, easing: 'cubic-bezier(.42,0,.3,1)' });
-    animation.onfinish = () => prior.remove();
-    animation.oncancel = () => prior.remove();
-}
-
 function setPageImage(src, label) {
     const stage = ui('stage');
     const image = ui('image');
@@ -315,9 +286,6 @@ function render(issueNumber, pageNumber, updateHistory = '') {
     }
 
     const [page, nextPage] = spreadPages(edition, requested);
-    if (current?.issueNumber === issueNumber && current.leftPage !== page && zoom === 1) {
-        animatePageFlip(Math.sign(page - current.leftPage));
-    }
     current = { issueNumber, page: requested, leftPage: page, rightPage: nextPage, edition };
     const path = toPath(issueNumber, requested);
     if (updateHistory && location.pathname !== path) history[updateHistory](null, '', path);
@@ -358,9 +326,17 @@ function render(issueNumber, pageNumber, updateHistory = '') {
     ui('spread').querySelector('span').textContent = spread ? '양면 보기' : '단면 보기';
     ui('second-image').hidden = !hasSpread;
     if (hasSpread) {
-        ui('second-image').src = nextPhoto;
+        const second = ui('second-image');
+        if (second.getAttribute('src') !== nextPhoto) {
+            second.classList.remove('page-fade');
+            second.src = nextPhoto;
+            void second.decode().then(() => {
+                if (!second.hidden && second.getAttribute('src') === nextPhoto) second.classList.add('page-fade');
+            }).catch(() => {});
+        }
         ui('second-image').alt = issueNumber + '호 ' + nextPage + '면 원본 지면';
     } else {
+        ui('second-image').classList.remove('page-fade');
         ui('second-image').removeAttribute('src');
     }
     ui('image-scroll').classList.toggle('is-spread', hasSpread);
