@@ -102,7 +102,7 @@
 #article-share-status { display: block; margin-top: 8px; }
 #article-share-status:empty { display: none; }
 #evere-header + .article-page[data-reader-theme="beige"] { background: #f4e8d4; box-shadow: 0 0 0 100vmax #f4e8d4; clip-path: inset(0 -100vmax); }
-#evere-header + .article-page[data-reader-theme="green"] { background: #174735; box-shadow: 0 0 0 100vmax #174735; }
+#evere-header + .article-page.reader-dark[data-reader-theme="green"] { background: #174735; box-shadow: 0 0 0 100vmax #174735; }
 #evere-header + .article-page.reader-dark {
   color: #e8eeed;
   background: #182323;
