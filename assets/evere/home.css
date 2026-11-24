@@ -134,6 +134,6 @@ body > footer .evere-footer-sitemap .menu > ul > li > ul > li:last-child { paddi
 [data-home-primary] .home-article-placeholder div { min-height: 94px; }
 
 main article > div > a.home-title-fits {
-    -webkit-line-clamp: unset;
-    text-overflow: clip;
+    -webkit-line-clamp: unset !important;
+    text-overflow: clip !important;
 }
