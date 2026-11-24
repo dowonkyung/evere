@@ -288,3 +288,26 @@ button:not(:disabled) { cursor: pointer; }
 .viewer-linked-badge[hidden], .viewer-article-navigation button[hidden] { display:none; }
 @media (prefers-color-scheme: dark) { .is-dark .viewer-article-tabs button:not([aria-selected="true"]) { color:inherit; } }
 @media print { .viewer-linked-badge,.viewer-article-navigation { display:none!important; } }
+
+#epaper-repin { position:absolute; right:24px; bottom:24px; z-index:3; display:grid; place-items:center; width:44px; height:44px; border:1px solid #d9e7e2; border-radius:50%; color:#438c73; background:#fffc; box-shadow:0 4px 16px #0002; }
+#epaper-repin[hidden], .viewer-dock-wrap[hidden] { display:none; }
+#epaper-region-form { max-height:calc(100dvh - 112px); overflow:auto; }
+#epaper-region-form label { display:block; margin-bottom:6px; }
+#epaper-region-form textarea { display:block; width:100%; resize:vertical; margin-top:4px; font:inherit; }
+#epaper-search-form { position:relative; }
+#epaper-search-form input { width:100%; height:44px; padding:0 42px 0 15px; border:1px solid var(--separator); border-radius:8px; background:none; color:inherit; }
+#epaper-search-form button { position:absolute; right:6px; top:5px; width:34px; height:34px; font-size:22px; }
+#epaper-search-status { text-align:right; font-size:13px; margin:6px 0 0; }
+#epaper-search-results { display:block; }
+#epaper-search-results li { border-bottom:1px solid var(--separator); }
+#epaper-search-results button { display:block; text-align:left; width:100%; padding:9px 0 17px; font:inherit; }
+#epaper-search-results button strong { display:block; font-size:20px; margin-bottom:4px; }
+#epaper-search-results button span { color:#646e77; line-height:1.5; overflow-wrap:anywhere; }
+#epaper-search-results mark { background:#c2ee83; color:#111; font-weight:700; }
+#epaper-search-marks, #epaper-search-marks svg { position:absolute; pointer-events:none; }
+#epaper-search-marks { inset:0; z-index:1; overflow:hidden; }
+#epaper-search-marks rect { fill:#a4ed32; opacity:.58; }
+#epaper-search-marks rect.is-selected { fill:#cefc43; opacity:.76; }
+@media print { #epaper-repin,#epaper-search-marks { display:none!important; } }
+#epaper-search-form button svg { width:20px; height:20px; }
+#epaper-region-previous { display:block; padding:4px 0; color:inherit; }

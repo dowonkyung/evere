@@ -8,8 +8,8 @@
   <link rel="icon" href="/assets/evere/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="/assets/evere/evere-ellipsis.css?v=punctuation-3">
-  <link rel="stylesheet" href="/assets/evere/epaper.css?v=print-reader-1">
-  <script type="module" src="/assets/evere/epaper.js?v=print-reader-1"></script>
+  <link rel="stylesheet" href="/assets/evere/epaper.css?v=print-continuation-1">
+  <script type="module" src="/assets/evere/epaper.js?v=print-continuation-1"></script>
 </head>
 <body>
   <div class="viewer-layout">
@@ -32,6 +32,10 @@
       <button type="button" id="epaper-region-toggle" hidden>기사 영역 지정</button>
       <form id="epaper-region-form" hidden>
         <label>기사 <select id="epaper-region-article"></select></label>
+        <label>이전 연결 기사 <output id="epaper-region-previous">연결 없음</output></label>
+        <label>다음 연결 기사 <select id="epaper-region-next"></select></label>
+        <label>지면 텍스트 <textarea id="epaper-region-print" rows="3"></textarea></label>
+        <label>온라인 본문 <textarea id="epaper-region-online" rows="3"></textarea></label>
         <p>지면을 눌러 꼭짓점을 찍으세요. 각 선은 가로 또는 세로로 이어집니다.</p>
         <div><button type="button" id="epaper-region-undo">점 되돌리기</button><button type="button" id="epaper-region-reset">새로 그리기</button><button type="button" id="epaper-region-finish">영역 닫기</button><button type="submit">영역 저장</button><button type="button" id="epaper-region-close">닫기</button></div>
         <p id="epaper-region-status" role="status"></p>
@@ -43,8 +47,8 @@
       <aside class="viewer-panel" id="epaper-panel" aria-label="지면 탐색" inert>
         <header><h2 id="epaper-panel-title"></h2><button type="button" id="epaper-panel-close" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M18 6L6 18" stroke-linecap="round" stroke-linejoin="round"></path><path d="M6 6L18 18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button></header>
         <div data-panel-content="search" hidden>
-          <label for="epaper-search">기사 제목 검색</label><input id="epaper-search" type="search" placeholder="검색어를 입력하세요">
-          <ul id="epaper-search-results"></ul><p id="epaper-search-status" role="status"></p>
+          <form id="epaper-search-form" role="search"><input id="epaper-search" type="search" aria-label="지면 검색어" placeholder="검색어를 입력하세요"><button type="submit" aria-label="검색"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0"><path d="M20.0004 20.0001L16.1426 16.1423" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M11.1111 18.2222C15.0385 18.2222 18.2222 15.0385 18.2222 11.1111C18.2222 7.18376 15.0385 4 11.1111 4C7.18376 4 4 7.18376 4 11.1111C4 15.0385 7.18376 18.2222 11.1111 18.2222Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg></button></form>
+          <p id="epaper-search-status" role="status"></p><ul id="epaper-search-results"></ul>
         </div>
         <div data-panel-content="thumbnails" hidden><p id="epaper-thumbnail-summary"></p><ul id="epaper-pages"></ul></div>
         <div data-panel-content="contents" hidden><ul id="epaper-articles"></ul><p id="epaper-articles-empty" hidden>이 호에 연결된 기사가 없습니다.</p></div>
@@ -55,8 +59,10 @@
         <div class="viewer-stage" id="epaper-stage" hidden>
           <iframe id="epaper-pdf" title="이브레 신문 지면 PDF" hidden></iframe>
           <div class="viewer-paper-scroll" id="epaper-image-scroll" hidden><img id="epaper-image" alt=""><img id="epaper-second-image" alt="" hidden></div>
+          <div id="epaper-search-marks" aria-hidden="true"></div>
           <div class="viewer-hotspots" id="epaper-hotspots"></div>
-          <button type="button" id="epaper-linked-article" class="viewer-linked-badge" hidden><img src="/assets/evere/epaper-article-chain.svg" width="12" height="12" alt="" draggable="false">연결 기사 보기</button>
+          <button type="button" id="epaper-linked-previous" class="viewer-linked-badge" aria-label="이전 연결 기사 보기" hidden><img src="/assets/evere/epaper-article-chain.svg" width="12" height="12" alt="">연결 기사 보기</button>
+          <button type="button" id="epaper-linked-article" class="viewer-linked-badge" aria-label="다음 연결 기사 보기" hidden><img src="/assets/evere/epaper-article-chain.svg" width="12" height="12" alt="" draggable="false">연결 기사 보기</button>
           <div class="viewer-paper-unavailable" id="epaper-paper">
             <img src="/assets/evere/wordmark.svg" alt="이브레"><p id="epaper-paper-edition"></p>
             <p>이 호의 PDF가 아직 등록되지 않았습니다.</p>
@@ -67,6 +73,7 @@
           <button type="button" id="epaper-prev" aria-label="이전 면"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0"><path d="M15 18L9 12L15 6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
           <button type="button" id="epaper-next" aria-label="다음 면"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0"><path d="M9 18L15 12L9 6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
         </nav>
+        <button type="button" id="epaper-repin" aria-label="메뉴 고정" title="메뉴 고정" hidden><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16.5V21M8 3h8a2 2 0 0 1 0 4v4l3 3v2.5H5V14l3-3V7a2 2 0 0 1 0-4Z"/></svg></button>
         <div class="viewer-dock-wrap"><nav class="viewer-dock" aria-label="지면 조작">
           <span id="epaper-page-count" aria-live="polite">—</span>
           <button type="button" id="epaper-zoom-out" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0"><path d="M5 12H19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>축소</span></button>
@@ -107,10 +114,6 @@
         </div>
         <div id="epaper-article-online" role="tabpanel" aria-labelledby="epaper-tab-online" hidden></div>
         <div id="epaper-article-image" role="tabpanel" aria-labelledby="epaper-tab-image" hidden><img id="epaper-article-crop" alt=""></div>
-        <nav class="viewer-article-navigation" aria-label="연결 기사">
-          <button type="button" id="epaper-linked-prev" aria-label="이전 연결 기사 보기"><img src="/assets/evere/epaper-article-chain.svg" width="12" height="12" alt="" draggable="false">이전 연결 기사 보기</button>
-          <button type="button" id="epaper-linked-next" aria-label="다음 연결 기사 보기"><img src="/assets/evere/epaper-article-chain.svg" width="12" height="12" alt="" draggable="false">다음 연결 기사 보기</button>
-        </nav>
       </aside>
     </main>
   </div>

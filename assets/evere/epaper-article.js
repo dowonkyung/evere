@@ -19,7 +19,7 @@ function orthogonal(points) {
 
 const pdfModule = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/';
 let pdfLibrary;
-async function withPdfPage(pdf, number, usePage) {
+async function withPdf(pdf, useDocument) {
     if (!pdf) throw new Error('원본 PDF 없음');
     pdfLibrary ??= import(pdfModule + 'pdf.min.mjs');
     const library = await pdfLibrary.catch(error => { pdfLibrary = undefined; throw error; });
@@ -27,11 +27,34 @@ async function withPdfPage(pdf, number, usePage) {
     const task = library.getDocument({ url: pdf, isEvalSupported: false });
     try {
         const document = await task.promise;
-        const page = await document.getPage(number);
-        return await usePage(page);
+        return await useDocument(document);
     } finally {
         await task.destroy();
     }
+}
+
+function withPdfPage(pdf, number, usePage) {
+    return withPdf(pdf, async document => usePage(await document.getPage(number)));
+}
+
+export function indexPdf(pdf) {
+    return withPdf(pdf, async document => {
+        const pages = [];
+        for (let number = 1; number <= document.numPages; number++) {
+            const page = await document.getPage(number);
+            const viewport = page.getViewport({ scale: 1 });
+            const { items } = await page.getTextContent();
+            const runs = items.filter(item => item.str).map(item => {
+                const [x, y] = viewport.convertToViewportPoint(item.transform[4], item.transform[5]);
+                const h = item.height || Math.hypot(item.transform[2], item.transform[3]);
+                return [item.str, x * 1000 / viewport.width, (y - .85 * h) * 1000 / viewport.height,
+                    item.width * 1000 / viewport.width, h * 1000 / viewport.height];
+            });
+            pages.push([number, runs]);
+            page.cleanup();
+        }
+        return pages;
+    });
 }
 
 function cropRegion(pdf, number, points) {
@@ -48,8 +71,10 @@ function containsPoint(points, x, y) {
 }
 
 async function readPrintText(selection) {
-    const { points, pdf, page, printText, pngPath, row } = selection;
-    if (printText && pngPath?.startsWith('/epaper/files/')) {
+    const { points, pdf, page, printText, row } = selection;
+    if (selection.printBody != null) return selection.printBody.trim() ? { body: selection.printBody } : null;
+    if (selection.issue !== 1) return null;
+    if (printText) {
         const response = await fetch(printText);
         if (response.ok) {
             const entries = await response.json();
@@ -130,6 +155,9 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
     const toggle = ui('region-toggle');
     const picker = ui('region-article');
     const message = ui('region-status');
+    const nextPicker = ui('region-next');
+    const printInput = ui('region-print');
+    const onlineInput = ui('region-online');
     let editing;
     let points = [];
     let sketch;
@@ -137,7 +165,8 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
     let closed = false;
     let contexts = [];
     const targets = new Map();
-    const badge = ui('linked-article');
+    const nextBadge = ui('linked-article');
+    const previousBadge = ui('linked-previous');
     let hovered;
     let pendingClick;
     let printText;
@@ -164,6 +193,18 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
         const region = editing.regions.find(entry => entry.article === Number(picker.value));
         points = region ? region.points.map(point => [...point]) : [];
         closed = Boolean(region);
+        ui('region-previous').textContent = region?.previous
+            ? region.previous.page + '면 · ' + (editing.articles.find(row => row.article_number === region.previous.article)?.title || '')
+            : '연결 없음';
+        nextPicker.value = region?.next ? region.next.page + ':' + region.next.article : '';
+        printInput.value = region?.printBody || '';
+        onlineInput.value = region?.onlineBody || '';
+        if (region && editing.issue === 1 && region.printBody == null && editing.printText) {
+            const edit = editing, article = picker.value;
+            void readPrintText({ ...region, issue: 1, printText: edit.printText, row: { article_number: Number(article) } })
+                .then(data => { if (editing === edit && picker.value === article && !printInput.value) printInput.value = data?.body || ''; })
+                .catch(() => {});
+        }
         message.textContent = '';
         outline();
     }
@@ -178,6 +219,8 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
         sketch.setAttribute('class', 'region-sketch');
         editing.overlay.append(sketch);
         picker.replaceChildren(...editing.articles.map(row => new Option(row.title, row.article_number)));
+        nextPicker.replaceChildren(new Option('연결 없음', ''), ...editing.destinations.map(entry =>
+            new Option(entry.page + '면 · ' + entry.title, entry.page + ':' + entry.article)));
         form.hidden = false;
         toggle.setAttribute('aria-expanded', 'true');
         loadPoints();
@@ -213,23 +256,32 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
         saving = true;
         message.textContent = '원본 PDF에서 PNG를 만드는 중입니다.';
         try {
-            const png = await cropRegion(sheet.pdf, sheet.page, boundary);
+            const prior = sheet.regions.find(entry => entry.article === article);
+            const changed = !prior?.pngPath || JSON.stringify(prior.points) !== JSON.stringify(boundary);
             const bucket = supabase.storage.from('evere-epaper-crops');
-            const pngPath = sheet.issue + '/' + sheet.page + '/' + article + '-' + crypto.randomUUID() + '.png';
-            const upload = await bucket.upload(pngPath, png, { contentType: 'image/png' });
-            if (upload.error) throw upload.error;
+            let pngPath = prior?.pngPath;
+            if (changed) {
+                const png = await cropRegion(sheet.pdf, sheet.page, boundary);
+                pngPath = sheet.issue + '/' + sheet.page + '/' + article + '-' + crypto.randomUUID() + '.png';
+                const upload = await bucket.upload(pngPath, png, { contentType: 'image/png' });
+                if (upload.error) throw upload.error;
+            }
+            const [nextPage, nextArticle] = nextPicker.value.split(':').map(Number);
+            const next = nextPage ? { page: nextPage, article: nextArticle } : null;
+            const printBody = printInput.value.trim() || null;
+            const onlineBody = onlineInput.value.trim() || null;
             const saved = await supabase.from('evere_epaper_regions').upsert({
                 issue: sheet.issue, page: sheet.page, article_number: article, points: boundary, png_path: pngPath,
+                next_page: next?.page ?? null, next_article: next?.article ?? null, print_body: printBody, online_body: onlineBody,
             });
             if (saved.error) {
-                await bucket.remove([pngPath]);
+                if (changed) await bucket.remove([pngPath]);
                 throw saved.error;
             }
-            const prior = sheet.regions.find(entry => entry.article === article);
-            if (prior?.pngPath) await bucket.remove([prior.pngPath]);
-            sheet.regions = [...sheet.regions.filter(entry => entry.article !== article), { article, points: boundary, pngPath }];
-            onSave(sheet.issue, sheet.page, sheet.regions);
-            if (editing === sheet) setSheets(sheets);
+            if (changed && prior?.pngPath && !prior.pngPath.startsWith('/')) await bucket.remove([prior.pngPath]);
+            const regions = [...sheet.regions.filter(entry => entry.article !== article),
+                { article, points: boundary, pngPath, printBody, onlineBody, next }];
+            onSave(sheet.issue, sheet.page, regions);
         } catch {
             if (editing === sheet) message.textContent = '영역과 PNG를 저장하지 못했습니다. 다시 시도해 주세요.';
         } finally {
@@ -249,22 +301,23 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
     let fontSize = 17;
     let lastTrigger;
 
-    function placeBadge() {
-        const polygon = targets.get(hovered)?.polygon;
-        if (!polygon || editing) { badge.hidden = true; return; }
-        const rect = polygon.getBoundingClientRect();
+    function placeBadges() {
+        const target = targets.get(hovered) || targets.get(selection?.page + ':' + selection?.row.article_number);
         const base = stage.getBoundingClientRect();
-        badge.hidden = false;
-        badge.style.left = Math.max(0, rect.right - base.left - badge.offsetWidth - 8) + 'px';
-        badge.style.top = Math.max(0, rect.bottom - base.top - badge.offsetHeight - 6) + 'px';
+        for (const [badge, key] of [[previousBadge, 'previous'], [nextBadge, 'next']]) {
+            const destination = target?.details[key];
+            badge.hidden = !destination || Boolean(editing);
+            badge.onclick = destination ? () => onMove(destination) : null;
+            if (badge.hidden) continue;
+            const rect = target.polygon.getBoundingClientRect();
+            badge.style.left = Math.max(0, (key === 'previous' ? rect.left + 8 : rect.right - badge.offsetWidth - 8) - base.left) + 'px';
+            badge.style.top = Math.max(0, (key === 'previous' ? rect.top + 6 : rect.bottom - badge.offsetHeight - 6) - base.top) + 'px';
+            badge.title = destination.page + '면 연결 기사 보기';
+        }
     }
-    badge.onclick = () => {
-        const row = targets.get(hovered)?.details.row;
-        if (row) openArticle(row);
-    };
-    badge.onpointerleave = () => { hovered = undefined; badge.hidden = true; };
-    ui('linked-prev').onclick = () => onMove(-1);
-    ui('linked-next').onclick = () => onMove(1);
+    for (const badge of [previousBadge, nextBadge]) {
+        badge.onpointerleave = () => { hovered = undefined; placeBadges(); };
+    }
     function layout() {
         frameRequest = 0;
         const base = stage.getBoundingClientRect();
@@ -281,7 +334,7 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
                 width: width + 'px', height: height + 'px',
             });
         }
-        if (hovered) placeBadge();
+        placeBadges();
         if (performance.now() < trackUntil) schedule();
     }
 
@@ -310,7 +363,7 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
         job++;
         selection = undefined;
         onOpen(undefined);
-        badge.hidden = true;
+        nextBadge.hidden = previousBadge.hidden = true;
         article = undefined;
         clearCrop();
         panel.inert = true;
@@ -345,9 +398,10 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
             ui('article-subtitle').hidden = !article?.subtitle?.trim();
             const copy = ui('article-copy');
             copy.replaceChildren();
-            if (article) renderBody(copy, article, { legacyLineBreaks: true });
+            if (article?.manual) copy.textContent = article.body;
+            else if (article) renderBody(copy, article, { legacyLineBreaks: true });
             copy.querySelectorAll('figure').forEach(figure => figure.remove());
-            status.textContent = onlineReady ? article ? '' : '온라인 기사를 불러오지 못했습니다.' : '온라인 기사를 불러오는 중입니다.';
+            status.textContent = onlineReady ? article ? '' : '등록된 온라인 본문이 없습니다.' : '온라인 기사를 불러오는 중입니다.';
         }
         if (tab !== 'image') ui('article-' + tab).append(content);
         ui('online-meta').hidden = !online;
@@ -412,6 +466,12 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
             textReady = true;
             if (activeTab === 'text') switchTab('text');
         });
+        if (next.issue !== 1) {
+            article = next.onlineBody ? { title: next.row.title, body: next.onlineBody, manual: true } : null;
+            onlineReady = true;
+            if (activeTab === 'online') switchTab('online');
+            return;
+        }
         const { data, error } = await supabase.from('evere_articles').select('title,subtitle,body,body_html,published_at,byline_names')
             .eq('article_number', next.row.article_number).eq('status', 'published').maybeSingle();
         if (job !== current) return;
@@ -420,7 +480,7 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
             if (activeTab === 'online') switchTab('online');
             return;
         }
-        article = data;
+        article = next.onlineBody ? { ...data, body: next.onlineBody, manual: true } : data;
         ui('online-date').dateTime = data.published_at || '';
         ui('online-date').textContent = data.published_at ? new Intl.DateTimeFormat('sv-SE', {
             timeZone: 'Asia/Seoul', dateStyle: 'short', timeStyle: 'short',
@@ -429,17 +489,17 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
         if (activeTab === 'online') switchTab('online');
     }
 
-    function openArticle(row) {
-        const target = targets.get(row.article_number);
-        const sheet = contexts.find(item => item.page === row.print_page);
-        void open(target?.details || { row, pdf: sheet?.pdf, page: row.print_page }, target?.polygon).catch(() => {
+    function openArticle(row, page = row.print_page) {
+        const target = targets.get(page + ':' + row.article_number);
+        const sheet = contexts.find(item => item.page === page);
+        void open(target?.details || { row, pdf: sheet?.pdf, page, issue: row.print_issue }, target?.polygon).catch(() => {
             status.textContent = '기사를 불러오지 못했습니다.';
         });
     }
     function setSheets(nextSheets) {
         stopEditing();
         clearTimeout(pendingClick);
-        badge.hidden = true;
+        nextBadge.hidden = previousBadge.hidden = true;
         hovered = undefined;
         targets.clear();
         contexts = nextSheets;
@@ -448,13 +508,14 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
         sheets = [];
         layer.replaceChildren();
         for (const sheet of nextSheets) {
-            const { image, src, pdf, printText, page, regions = [], articles } = sheet;
+            const { image, src, pdf, printText, page, issue, regions = [], articles } = sheet;
             if (!src) continue;
             const rows = new Map(articles.map(row => [row.article_number, row]));
             const overlay = document.createElementNS(svgNS, 'svg');
             overlay.setAttribute('viewBox', '0 0 1000 1000');
             overlay.setAttribute('preserveAspectRatio', 'none');
-            for (const { article: id, points, pngPath } of regions) {
+            for (const region of regions) {
+                const { article: id, points } = region;
                 const row = rows.get(id);
                 if (!row || !orthogonal(points)) continue;
                 const polygon = document.createElementNS(svgNS, 'polygon');
@@ -466,21 +527,22 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
                 const title = document.createElementNS(svgNS, 'title');
                 title.textContent = row.title + ' · 연결 기사 보기';
                 polygon.append(title);
-                targets.set(id, { polygon, details: { row, points, pdf, printText, page, pngPath } });
-                const select = () => { if (!editing) openArticle(row); };
+                const key = page + ':' + id;
+                targets.set(key, { polygon, details: { ...region, row, pdf, printText, page, issue } });
+                const select = () => { if (!editing) openArticle(row, page); };
                 polygon.addEventListener('click', event => {
                     clearTimeout(pendingClick);
                     if (event.detail < 2) pendingClick = setTimeout(select, 250);
                 });
                 polygon.addEventListener('pointerenter', () => {
                     if (editing) return;
-                    hovered = id;
-                    placeBadge();
+                    hovered = key;
+                    placeBadges();
                 });
                 polygon.addEventListener('pointerleave', event => {
-                    if (event.relatedTarget === badge) return;
+                    if (event.relatedTarget?.closest?.('.viewer-linked-badge')) return;
                     hovered = undefined;
-                    badge.hidden = true;
+                    placeBadges();
                 });
                 polygon.addEventListener('keydown', event => {
                     if (event.key === 'Enter' || event.key === ' ') {
@@ -559,5 +621,5 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
         main.classList.add('print-article');
         try { window.print(); } finally { main.classList.remove('print-article'); }
     };
-    return { setSheets, track, openArticle, selectedId: () => selection?.row.article_number, isEditing: () => Boolean(editing) };
+    return { setSheets, track, openArticle, closeArticle: () => { if (selection) close(false); }, isEditing: () => Boolean(editing) };
 }

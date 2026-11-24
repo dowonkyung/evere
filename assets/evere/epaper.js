@@ -1,6 +1,6 @@
-import { configureArticleViewer } from './epaper-article.js?v=print-reader-1';
+import { configureArticleViewer, indexPdf } from './epaper-article.js?v=print-continuation-1';
+import { configurePrintSearch } from './epaper-search.js?v=1';
 import { supabase } from './supabase.js';
-import { articlePath } from './routes.js?v=routes-1';
 import { setArticleTitle } from './article-label.js';
 
 const ui = id => document.getElementById('epaper-' + id);
@@ -13,29 +13,20 @@ let spread = false;
 let activePanel = '';
 let imageRequest = 0;
 let zoomAnimations = [];
-function linkedArticles() {
-    return (current?.edition.articles || []).filter(row => row.print_page).sort((a, b) =>
-        a.print_page - b.print_page || a.article_number - b.article_number);
-}
 const articleViewer = configureArticleViewer(id => {
-    const rows = linkedArticles();
-    const index = rows.findIndex(row => row.article_number === id);
-    ui('linked-prev').hidden = index <= 0;
-    ui('linked-next').hidden = index < 0 || index >= rows.length - 1;
     for (const link of ui('articles').querySelectorAll('[data-print-article]')) {
         if (Number(link.dataset.printArticle) === id) link.setAttribute('aria-current', 'true');
         else link.removeAttribute('aria-current');
     }
 }, (issue, page, regions) => {
     savedRegions.set(regionKey(issue, page), regions);
-}, direction => {
-    const rows = linkedArticles();
-    const index = rows.findIndex(row => row.article_number === articleViewer.selectedId());
-    const next = rows[index + direction];
-    if (index < 0 || !next) return false;
-    if (current.page !== next.print_page) render(current.issueNumber, next.print_page, 'pushState');
-    articleViewer.openArticle(next);
-    return true;
+    render(issue, page);
+}, destination => {
+    if (!current) return;
+    const row = current.edition.articles.find(article => article.article_number === destination.article);
+    if (!row) return;
+    if (current.page !== destination.page) render(current.issueNumber, destination.page, 'pushState');
+    articleViewer.openArticle(row, destination.page);
 });
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 let defaultIssue;
@@ -50,13 +41,14 @@ function regionsFor(edition, issue, page) {
 async function loadSavedRegions() {
     const size = 300;
     for (let from = 0; ; from += size) {
-        const { data, error } = await supabase.from('evere_epaper_regions').select('issue,page,article_number,points,png_path')
+        const { data, error } = await supabase.from('evere_epaper_regions').select('issue,page,article_number,points,png_path,print_body,online_body,next_page,next_article')
             .order('issue').order('page').order('article_number').range(from, from + size - 1);
         if (error) return;
         for (const row of data) {
             const key = regionKey(row.issue, row.page);
             if (!savedRegions.has(key)) savedRegions.set(key, []);
-            savedRegions.get(key).push({ article: row.article_number, points: row.points, pngPath: row.png_path });
+            savedRegions.get(key).push({ article: row.article_number, points: row.points, pngPath: row.png_path, printBody: row.print_body, onlineBody: row.online_body,
+                next: row.next_page ? { page: row.next_page, article: row.next_article } : null });
         }
         if (data.length < size) return;
     }
@@ -79,6 +71,22 @@ function requestedEdition() {
     const parts = /^\/epaper\/([1-9]\d*)(?:\/([1-9]\d*))?\/?$/.exec(url.pathname);
     return [positiveNumber(parts?.[1] ?? url.searchParams.get('issue')),
         positiveNumber(parts?.[2] ?? url.searchParams.get('page'))];
+}
+
+function continuationTargets(edition, issue, page) {
+    return edition.pages.filter(number => number !== page).flatMap(number => {
+        const ids = new Set(regionsFor(edition, issue, number).map(entry => entry.article));
+        return edition.articles.filter(row => ids.has(row.article_number))
+            .map(row => ({ page: number, article: row.article_number, title: row.title }));
+    });
+}
+
+function previousRegion(edition, issue, page, article) {
+    for (const number of edition.pages) {
+        const previous = regionsFor(edition, issue, number).find(entry => entry.next?.page === page && entry.next.article === article);
+        if (previous) return { page: number, article: previous.article };
+    }
+    return null;
 }
 
 function sameSiteAsset(value, extension) {
@@ -140,6 +148,7 @@ function setZoom(value, animate = false) {
     }
     if (!animateChange) return;
     articleViewer.track(250);
+    printSearch.track();
     for (const [index, image] of images.entries()) {
         const from = previous[index];
         const to = image.getBoundingClientRect();
@@ -163,6 +172,7 @@ function showPanel(name) {
         button.setAttribute('aria-pressed', String(button.dataset.viewerPanel === activePanel));
     }
     if (activePanel === 'search') ui('search').focus();
+    printSearch.setVisible(activePanel === 'search');
 }
 
 function animatePageFlip(direction) {
@@ -223,6 +233,8 @@ function render(issueNumber, pageNumber, updateHistory = '') {
         for (const key of ['stage', 'pagination', 'download']) ui(key).hidden = true;
         for (const key of ['zoom', 'zoom-out', 'spread', 'print']) ui(key).disabled = true;
         ui('page-count').textContent = '—';
+        printSearch.setIssue(null, '');
+        printSearch.setPages(null, null);
         articleViewer.setSheets([]);
         ui('articles').replaceChildren();
         ui('articles-empty').hidden = false;
@@ -296,11 +308,13 @@ function render(issueNumber, pageNumber, updateHistory = '') {
         imageRequest++;
         ui('stage').classList.remove('is-loading', 'page-loaded');
     }
+    printSearch.setIssue(issueNumber, pdf);
     articleViewer.setSheets([
-        { image: ui('image'), src: photo, pdf, printText: sameSiteAsset(edition.printText, '.json'), page, issue: issueNumber, editable: canEditRegions, regions: regionsFor(edition, issueNumber, page), articles: edition.articles.filter(row => row.print_page === page) },
-        { image: ui('second-image'), src: hasSpread ? nextPhoto : '', pdf, printText: sameSiteAsset(edition.printText, '.json'), page: nextPage, issue: issueNumber, regions: regionsFor(edition, issueNumber, nextPage), articles: edition.articles.filter(row => row.print_page === nextPage) },
+        { image: ui('image'), src: photo, pdf, printText: sameSiteAsset(edition.printText, '.json'), page, issue: issueNumber, editable: canEditRegions, destinations: continuationTargets(edition, issueNumber, page), regions: regionsFor(edition, issueNumber, page).map(entry => ({...entry, previous: previousRegion(edition, issueNumber, page, entry.article)})), articles: edition.articles },
+        { image: ui('second-image'), src: hasSpread ? nextPhoto : '', pdf, printText: sameSiteAsset(edition.printText, '.json'), page: nextPage, issue: issueNumber, regions: regionsFor(edition, issueNumber, nextPage).map(entry => ({...entry, previous: previousRegion(edition, issueNumber, nextPage, entry.article)})), articles: edition.articles },
     ]);
 
+    printSearch.setPages(page, hasSpread ? nextPage : null);
     for (const link of ui('editions').querySelectorAll('a[aria-current]')) link.removeAttribute('aria-current');
     ui('editions').querySelector('[data-issue="' + issueNumber + '"]')?.setAttribute('aria-current', 'true');
     ui('pages').replaceChildren(...edition.pages.map(number => {
@@ -438,11 +452,14 @@ ui('fullscreen').onclick = () => {
     void action.catch(() => {});
 };
 document.addEventListener('fullscreenchange', () => ui('fullscreen').setAttribute('aria-pressed', String(!!document.fullscreenElement)));
-ui('pin').onclick = () => {
-    const unpinned = ui('pin').closest('.viewer-dock-wrap').classList.toggle('is-unpinned');
-    ui('pin').setAttribute('aria-pressed', String(!unpinned));
-    ui('pin').querySelector('span').textContent = unpinned ? '고정' : '고정 해제';
-};
+function setToolbarPinned(pinned) {
+    ui('pin').closest('.viewer-dock-wrap').hidden = !pinned;
+    ui('repin').hidden = pinned;
+    try { localStorage.setItem('evere-epaper-toolbar-pinned', String(pinned)); } catch {}
+}
+try { setToolbarPinned(localStorage.getItem('evere-epaper-toolbar-pinned') !== 'false'); } catch {}
+ui('pin').onclick = () => { setToolbarPinned(false); ui('repin').focus(); };
+ui('repin').onclick = () => { setToolbarPinned(true); ui('pin').focus(); };
 for (const button of document.querySelectorAll('[data-viewer-panel]')) {
     button.onclick = () => showPanel(button.dataset.viewerPanel);
 }
@@ -474,22 +491,12 @@ ui('articles').addEventListener('click', event => {
     const number = Number(link.dataset.contentsPage);
     if (current.page !== number) render(current.issueNumber, number, 'pushState');
     const row = current.edition.articles.find(article => article.article_number === Number(link.dataset.printArticle));
-    if (row) articleViewer.openArticle(row);
+    if (row) articleViewer.openArticle(row, number);
 });
-ui('search').oninput = () => {
-    const term = ui('search').value.trim().toLocaleLowerCase('ko-KR');
-    const matches = term ? [...issues.values()].flatMap(edition => edition.articles)
-        .filter(row => row.title.toLocaleLowerCase('ko-KR').includes(term)) : [];
-    ui('search-results').replaceChildren(...matches.map(row => {
-        const item = document.createElement('li');
-        const link = document.createElement('a');
-        link.href = articlePath(row);
-        setArticleTitle(link, row.title, row.article_label);
-        item.append(link);
-        return item;
-    }));
-    ui('search-status').textContent = term && !matches.length ? '검색 결과가 없습니다.' : '';
-};
+const printSearch = configurePrintSearch(indexPdf, () => current, page => {
+    if (current?.page !== page) render(current.issueNumber, page, 'pushState');
+    articleViewer.closeArticle();
+}, () => articleViewer.track(350));
 document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && !ui('issue-popover').hidden) {
         setIssuePopover(false, true);
