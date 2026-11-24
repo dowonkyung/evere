@@ -37,7 +37,7 @@
     padding: 19px 13px; border-inline-end: 1px solid var(--line);
 }
 .newsroom .newsroom-nav a { display: flex; align-items: center; gap: 10px; margin: 2px 0; padding: 10px 11px; border-radius: 7px; font-size: 14px; font-weight: 600; }
-.newsroom .newsroom-nav a[aria-current="page"] { color: #092e2d; background: var(--accent); box-shadow: none; }
+.newsroom .newsroom-nav a[aria-current="page"] { color: #FFF; background: var(--accent); box-shadow: none; }
 .newsroom .newsroom-nav a[data-view="profile"] { margin-top: 15px; }
 .workspace-icon { display: block; flex: 0 0 auto; width: 17px; height: 17px; }
 .newsroom-content {
@@ -53,7 +53,7 @@
     padding: 0 0 15px; margin: 0 0 23px; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: none;
 }
 .newsroom-overview-head h1 { margin: 0; }
-.workspace-primary { display: inline-flex; align-items: center; gap: 8px; padding: 9px 13px; border-radius: 7px; background: var(--accent); color: #092e2d; font-size: 14px; font-weight: 650; text-decoration: none; }
+.workspace-primary { display: inline-flex; align-items: center; gap: 8px; padding: 9px 13px; border-radius: 7px; background: var(--accent); color: #FFF; font-size: 14px; font-weight: 650; text-decoration: none; }
 .workspace-primary:hover { background: #00a6a2; }
 .workspace-widgets { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 2vw, 24px); align-items: start; }
 .workspace-widget { min-width: 0; padding: clamp(15px, 1.65vw, 23px); border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: var(--panel-shadow); }
@@ -116,7 +116,7 @@
     position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden;
     clip-path: inset(50%); white-space: nowrap;
 }
-.newsroom button[type="submit"] { color: #092e2d; }
+.newsroom button[type="submit"] { color: #FFF; }
 .newsroom button[type="submit"]:not(:disabled):hover { background: #00a6a2; }
 @media (max-width: 720px) {
     .newsroom #workspace.has-compact-nav { grid-template-columns: minmax(0, 1fr); }
