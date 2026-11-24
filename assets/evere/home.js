@@ -32,6 +32,8 @@ const menuDim = header.querySelector('.evere-category-dim');
 const closeMenu = menu.querySelector('[data-close-sitemap]');
 const desktop = matchMedia('(min-width: 1024px)');
 const mobileCategory = matchMedia('(max-width: 767px)');
+const reduceMenuMotion = matchMedia('(prefers-reduced-motion: reduce)');
+const categoryAnimations = new WeakMap();
 const categoryButtons = [...menu.querySelectorAll('[data-category-toggle]')];
 const expandCategories = menu.querySelector('[data-expand-categories]');
 expandCategories.setAttribute('aria-controls', categoryButtons.map(button => button.getAttribute('aria-controls')).join(' '));
@@ -93,9 +95,34 @@ for (const container of [mainHeader, compactHeader].filter(Boolean)) {
     });
 }
 
-function setCategoryExpanded(button, expanded) {
-    button.setAttribute('aria-expanded', String(expanded));
-    button.closest('dt').nextElementSibling?.classList.toggle('category-collapsed', !expanded);
+function setCategoryExpanded(button, expanded, animate = false) {
+    const panel = button.closest('dt').nextElementSibling;
+    const state = String(expanded);
+    if (animate && button.getAttribute('aria-expanded') === state) return;
+    const slide = animate && mobileCategory.matches && !reduceMenuMotion.matches && panel?.animate;
+    const from = slide ? panel.getBoundingClientRect().height : 0;
+    button.setAttribute('aria-expanded', state);
+    if (!panel) return;
+
+    categoryAnimations.get(panel)?.cancel();
+    panel.classList.toggle('category-collapsed', !expanded);
+    panel.classList.toggle('category-sliding', Boolean(slide));
+    if (!slide) {
+        categoryAnimations.delete(panel);
+        return;
+    }
+
+    const to = expanded ? panel.getBoundingClientRect().height : 0;
+    const animation = panel.animate(
+        [{ height: from + 'px' }, { height: to + 'px' }],
+        { duration: 200, easing: 'ease-in-out' },
+    );
+    categoryAnimations.set(panel, animation);
+    animation.onfinish = () => {
+        if (categoryAnimations.get(panel) !== animation) return;
+        panel.classList.remove('category-sliding');
+        categoryAnimations.delete(panel);
+    };
 }
 
 function updateExpandCategories() {
@@ -112,7 +139,7 @@ for (const button of categoryButtons) {
     function toggleCategory(event) {
         if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
         event.preventDefault();
-        setCategoryExpanded(button, button.getAttribute('aria-expanded') !== 'true');
+        setCategoryExpanded(button, button.getAttribute('aria-expanded') !== 'true', true);
         updateExpandCategories();
     }
 
@@ -134,7 +161,7 @@ for (const button of categoryButtons) {
 
 expandCategories.addEventListener('click', () => {
     const open = expandCategories.getAttribute('aria-expanded') !== 'true';
-    for (const button of categoryButtons) setCategoryExpanded(button, open);
+    for (const button of categoryButtons) setCategoryExpanded(button, open, true);
     updateExpandCategories();
 });
 
