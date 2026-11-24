@@ -118,6 +118,7 @@ async function loadProfile() {
     const saved = result(await supabase.from('evere_member_profiles').select('position_title,bio')
         .eq('member_id', memberId).maybeSingle());
     if (member?.id !== memberId) return;
+    if (profileDetails.elements.displayName) profileDetails.elements.displayName.value = member.display_name;
     profileDetails.elements.position.value = saved?.position_title || '';
     profileDetails.elements.bio.value = saved?.bio || '';
     if (!headerAvatar) await loadAvatar(memberId);
@@ -603,6 +604,12 @@ profileDetails.addEventListener('submit', handle(async () => {
         position_title: profileDetails.elements.position.value.trim(),
         bio: profileDetails.elements.bio.value.trim(),
     }));
+    const name = profileDetails.elements.displayName;
+    if (name && name.value.trim() !== member.display_name) {
+        result(await supabase.rpc('evere_set_my_display_name', { new_name: name.value.trim() }));
+        member.display_name = name.value.trim();
+        await refreshMembers();
+    }
     message('프로필을 저장했습니다.');
 }));
 avatarForm.addEventListener('submit', handle(async () => {

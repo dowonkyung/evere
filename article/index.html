@@ -10,8 +10,8 @@
   <link rel="stylesheet" href="/assets/evere/home.css?v=evere-ellipsis-1">
   <link rel="stylesheet" href="/assets/evere/article-page.css?v=comment-input-1">
   <script defer src="/assets/khan/swiper-bundle.min.js"></script>
-  <script defer src="/assets/evere/home.js?v=mobile-logo-91"></script>
-  <script type="module" src="/assets/evere/article.js?v=series-badge-1"></script>
+  <script defer src="/assets/evere/home.js?v=account-dot-1"></script>
+  <script type="module" src="/assets/evere/article.js?v=reader-collections-1"></script>
 <script type="module" src="/assets/evere/route-init.js?v=direct-route-1"></script>
 <link rel="preload" as="style" href="/assets/yna/default.css">
 <link rel="preload" as="style" href="/assets/yna/variables.css">
@@ -210,6 +210,7 @@
     <div class="reader-layout">
       <aside class="reader-actions function-wrap" id="reader-actions" aria-label="기사 도구" hidden>
         <a href="#comments-section" aria-label="댓글"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v12H9l-5 4z M8 10h.01 M12 10h.01 M16 10h.01"/></svg><span><span class="reader-action-label">댓글</span> <b id="article-comment-count"></b></span></a>
+        <button id="article-bookmark" type="button" aria-pressed="false" aria-label="북마크" hidden><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg><span class="reader-action-label" data-collection-label>북마크</span></button>
         <details>
           <summary aria-label="글자 크기"><span class="reader-type-icon" aria-hidden="true"><small>가</small>가</span><span class="reader-action-label">글자 크기</span></summary>
           <div class="reader-tool-panel">
@@ -240,6 +241,7 @@
           <h1 id="title"></h1>
           <time id="published-time"></time>
           <p id="byline" class="article-byline"></p>
+          <div id="reporter-follows" class="reader-sector"></div>
         </header>
         <div class="editor-subtitle" id="editor-subtitle" hidden><p id="subtitle"></p></div>
         <div id="article-photos" class="article-photos"></div>

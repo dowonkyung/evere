@@ -1,0 +1,11 @@
+.account-main { width: min(var(--evere-content-width, 1216px), calc(100% - 40px)); }
+.account-main .opinion-title { margin-bottom: 16px; }
+.account-main .child-section { overflow: hidden; margin-bottom: 24px; }
+.account-main .child-section ul { display: flex; margin: 0; padding: 0; list-style: none; }
+.account-main .child-section li { width: auto; }
+.account-main .child-section a { display: block; padding: 10px 16px; }
+.account-main .child-section a.active { color: #007c79; box-shadow: inset 0 -2px #00b8b4; font-weight: 700; }
+.account-main [data-my-panel] { margin-top: 24px; }
+.account-main [data-my-list] { margin: 12px 0 32px; padding: 0; list-style: none; }
+.account-main [data-my-list] li { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid #ddd; overflow-wrap: anywhere; }
+.account-main [data-my-list] button { flex: none; }

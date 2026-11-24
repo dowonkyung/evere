@@ -1,3 +1,4 @@
+import { collectionButton } from './reader-collections.js';
 import { supabase } from './supabase.js';
 import { setArticleTitle } from './article-label.js';
 import { articlePath } from './routes.js?v=routes-1';
@@ -80,24 +81,7 @@ function storyCard(entry, includeSummary = false) {
 }
 
 function configureFollow(series) {
-    const button = ui('series-follow');
-    const key = 'evere:series-follow:' + series.series_number;
-    try {
-        const update = () => {
-            const followed = localStorage.getItem(key) === '1';
-            button.textContent = followed ? '구독 중' : '구독';
-            button.setAttribute('aria-pressed', String(followed));
-        };
-        update();
-        button.hidden = false;
-        button.addEventListener('click', () => {
-            if (localStorage.getItem(key) === '1') localStorage.removeItem(key);
-            else localStorage.setItem(key, '1');
-            update();
-        });
-    } catch {
-        button.hidden = true;
-    }
+    void collectionButton(ui('series-follow'), 'series', series.id, ['구독', '구독 취소']).catch(() => {});
 }
 
 async function recommend(current) {
