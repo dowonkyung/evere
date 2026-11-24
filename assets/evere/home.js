@@ -34,6 +34,7 @@ const desktop = matchMedia('(min-width: 1024px)');
 const mobileCategory = matchMedia('(max-width: 767px)');
 const categoryButtons = [...menu.querySelectorAll('[data-category-toggle]')];
 const expandCategories = menu.querySelector('[data-expand-categories]');
+expandCategories.setAttribute('aria-controls', categoryButtons.map(button => button.getAttribute('aria-controls')).join(' '));
 let activeHeader = mainHeader || compactHeader;
 
 function togglePanel(panel, button, open) {
@@ -98,7 +99,19 @@ function updateExpandCategories() {
 }
 
 for (const button of categoryButtons) {
-    button.addEventListener('click', () => {
+    const title = button.closest('dt');
+    const link = title.querySelector('a');
+    const list = title.nextElementSibling.querySelector('ul');
+    const item = document.createElement('li');
+    const all = link.cloneNode(false);
+    all.textContent = '전체';
+    item.className = 'category-mobile-all';
+    item.append(all);
+    list.prepend(item);
+
+    title.addEventListener('click', event => {
+        if (!mobileCategory.matches || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
         button.setAttribute('aria-expanded', String(button.getAttribute('aria-expanded') !== 'true'));
         updateExpandCategories();
     });
@@ -118,7 +131,7 @@ function closeCategoryMenu() {
 closeMenu.addEventListener('click', closeCategoryMenu);
 menuDim.addEventListener('click', closeCategoryMenu);
 menu.addEventListener('click', (event) => {
-    if (event.target.closest('a[href]')) setMenuOpen(false);
+    if (!event.defaultPrevented && event.target.closest('a[href]')) setMenuOpen(false);
 });
 
 document.querySelector('footer .info a[title="사이트맵"]')?.addEventListener('click', (event) => {

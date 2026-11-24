@@ -186,6 +186,7 @@ function memberTableMessage(message) {
 }
 
 let memberPhotoRequest = 0;
+let memberProfileRequest = 0;
 
 async function setMemberPhoto(path, target) {
     const request = ++memberPhotoRequest;
@@ -209,7 +210,7 @@ async function uploadAvatar(path, photo) {
     result(await avatarBucket.upload(path, photo, { upsert: true, contentType: photo.type, cacheControl: '60' }));
 }
 
-function editMember(entry) {
+async function editMember(entry) {
     memberForm.reset();
     memberSelect.value = entry.id;
     memberForm.elements.accountId.value = entry.id;
@@ -230,6 +231,27 @@ function editMember(entry) {
     ui('member-photo-status').textContent = '';
     ui('member-dialog').showModal();
     void setMemberPhoto(entry.avatar_path, entry.id).catch(() => {});
+    const fields = [memberForm.elements.memberBio, memberForm.elements.reporterEmail];
+    const submit = memberForm.querySelector('[type="submit"]');
+    const status = ui('member-dialog-status');
+    const request = ++memberProfileRequest;
+    for (const field of fields) field.disabled = true;
+    submit.disabled = true;
+    status.textContent = '프로필을 불러오는 중입니다.';
+    try {
+        const profile = result(await supabase.rpc('evere_owner_member_profiles')
+            .eq('member_id', entry.id).single());
+        if (request !== memberProfileRequest || !ui('member-dialog').open) return;
+        fields[0].value = profile.bio;
+        fields[1].value = profile.reporter_email;
+        for (const field of fields) field.disabled = false;
+        submit.disabled = false;
+        status.textContent = '';
+    } catch (error) {
+        if (request === memberProfileRequest && ui('member-dialog').open) {
+            status.textContent = getError(error);
+        }
+    }
 }
 
 async function renderMemberTable() {
@@ -731,6 +753,8 @@ if (articleForm && memberForm) {
             result(await supabase.rpc('evere_owner_save_member', {
                 target: memberSelect.value, new_name: name, new_position: memberForm.elements.positionTitle.value.trim(),
                 new_role: role, new_sectors: assigned,
+                new_bio: memberForm.elements.memberBio.value.trim(),
+                new_reporter_email: memberForm.elements.reporterEmail.value.trim(),
             }));
             if (memberSelect.value === member.id) member.display_name = name;
             dialog.close();

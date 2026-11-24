@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="/assets/evere/account.css?v=left-white-1">
   <link rel="stylesheet" href="/assets/evere/newsroom.css?v=editor-tools-1">
-  <script type="module" src="/assets/evere/account.js?v=smart-punctuation-2"></script>
+  <script type="module" src="/assets/evere/account.js?v=owner-profile-1"></script>
   <script type="module" src="/assets/evere/newsroom.js?v=series-rename-1"></script>
 <script type="module" src="/assets/evere/route-init.js?v=routes-1"></script>
 </head>
@@ -254,9 +254,11 @@
             <form id="members-form">
               <input type="hidden" name="member">
               <label>아이디<input name="accountId" readonly></label>
-              <label>이메일 주소<input name="email" readonly></label>
+              <label>로그인 이메일<input name="email" readonly></label>
               <label>이름<input name="displayName" maxlength="40" required></label>
               <label>직위<input name="positionTitle" maxlength="60"></label>
+              <label>소개 멘트<textarea name="memberBio" rows="4" maxlength="500"></textarea></label>
+              <label>기자 이메일 (선택)<input type="email" name="reporterEmail" maxlength="254"></label>
               <fieldset>
                 <legend>프로필 사진</legend>
                 <img id="member-photo-preview" class="member-avatar" width="48" height="48" alt="현재 프로필 사진" hidden>
