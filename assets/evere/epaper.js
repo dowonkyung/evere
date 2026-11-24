@@ -88,7 +88,7 @@ function requestedEdition() {
 }
 
 function continuationTargets(edition, issue, page) {
-    return edition.pages.filter(number => number !== page).flatMap(number => {
+    return edition.pages.filter(number => number > page).flatMap(number => {
         const ids = new Set(regionsFor(edition, issue, number).map(entry => entry.article));
         return edition.articles.filter(row => ids.has(row.article_number))
             .map(row => ({ page: number, article: row.article_number, title: row.title }));
