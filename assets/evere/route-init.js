@@ -1,4 +1,4 @@
-import { categoryFromURL, categoryPath } from './routes.js?v=direct-route-1';
+import { categoryFromURL, categoryPath } from './routes.js?v=wiki-culture-1';
 
 const url = new URL(location.href);
 const sector = url.pathname.split('/')[1];

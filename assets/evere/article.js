@@ -1,11 +1,11 @@
 import { showReporterCards } from './reporter-cards.js?v=reporter-links-1';
 import { collectionButton } from './reader-collections.js';
 import { articlePageTitle, setArticleTitle } from './article-label.js';
-import { articlePath, articleNumberFromURL } from './routes.js?v=direct-route-1';
+import { articlePath, articleNumberFromURL } from './routes.js?v=wiki-culture-1';
 import { renderBody, renderPhotos, photoBucket } from './article-content.js?v=paragraph-breaks-2';
 import { seriesFor, seriesLink } from './series.js?v=numbered-link-1';
 import { supabase } from './supabase.js';
-import { sectors } from './article-taxonomy.js?v=corrections-1';
+import { sectors } from './article-taxonomy.js?v=wiki-culture-1';
 
 const ui = (id) => document.getElementById(id);
 let articleId = new URLSearchParams(location.search).get('id');

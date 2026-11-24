@@ -1,6 +1,6 @@
 import { supabase } from './supabase.js';
-import { articlePath } from './routes.js';
-import { articleCategories, sectors } from './article-taxonomy.js';
+import { articlePath } from './routes.js?v=wiki-culture-1';
+import { articleCategories, sectors } from './article-taxonomy.js?v=wiki-culture-1';
 import { photoBucket, readPhotoCaption } from './article-content.js?v=caption-1';
 
 const params = new URLSearchParams(location.search);

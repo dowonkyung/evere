@@ -1,4 +1,4 @@
-import { articleCategories } from './article-taxonomy.js';
+import { articleCategories } from './article-taxonomy.js?v=wiki-culture-1';
 
 export function articlePath(article) {
     const number = Number(article.article_number);

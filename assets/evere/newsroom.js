@@ -1,7 +1,7 @@
 import { configureHomeVisualEditor } from './newsroom-home-layout.js?v=opinion-visual-1';
-import { categoryPath } from './routes.js?v=routes-1';
+import { categoryPath } from './routes.js?v=wiki-culture-1';
 import { supabase } from './supabase.js';
-import { sectors, articleCategories } from './article-taxonomy.js?v=corrections-1';
+import { sectors, articleCategories } from './article-taxonomy.js?v=wiki-culture-1';
 import { seriesFor } from './series.js?v=numbered-link-1';
 import { loadBottomLinks } from './home-bottom-links.js';
 import { issueUrl, loadHomeIssues } from './home-issues.js?v=issues-1';

@@ -1,5 +1,5 @@
 import { setArticleTitle } from './article-label.js';
-import { articlePath, categoryFromURL } from './routes.js?v=routes-1';
+import { articlePath, categoryFromURL } from './routes.js?v=wiki-culture-1';
 import { supabase } from './supabase.js';
 import { photoBucket } from './article-content.js?v=caption-1';
 import { requestedSeries } from './series.js';

@@ -45,7 +45,11 @@ export const articleCategories = {
         ],
         [
             "chair",
-            "의장동정"
+            "동정"
+        ],
+        [
+            "other-wikis",
+            "기타위키"
         ]
     ],
     "virtual-nations": [
@@ -254,6 +258,10 @@ export const articleCategories = {
         [
             "arts",
             "미술·전시·공연"
+        ],
+        [
+            "subculture",
+            "서브컬쳐"
         ]
     ]
 };

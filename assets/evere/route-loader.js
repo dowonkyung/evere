@@ -2,7 +2,7 @@
 (async () => {
     const status = document.querySelector('[data-route-status]');
     try {
-        const { routeTemplate } = await import('/assets/evere/routes.js?v=routes-1');
+        const { routeTemplate } = await import('/assets/evere/routes.js?v=wiki-culture-1');
         const template = routeTemplate(location.pathname);
         if (!template) {
             status.textContent = '페이지를 찾을 수 없습니다.';

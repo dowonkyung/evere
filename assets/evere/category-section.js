@@ -1,6 +1,6 @@
 import { articleListPicture, loadArticleListPhotos, renderMajorArticles } from './article-list-media.js?v=category-pages-1';
 import { setArticleTitle } from './article-label.js';
-import { categoryFromURL } from './routes.js?v=routes-1';
+import { categoryFromURL } from './routes.js?v=wiki-culture-1';
 import { articles, latestSeries } from './section-data.js';
 import { recentSeries, requestedSeries, seriesFor } from './series.js';
 
