@@ -29,3 +29,6 @@ export function renderHomeIssues(list, items) {
 
 const list = document.querySelector('[data-home-issues]');
 if (list) void loadHomeIssues().then((items) => renderHomeIssues(list, items)).catch(() => {});
+
+const slogan = document.querySelector('[data-home-slogan]');
+if (slogan && Math.random() < 0.5) slogan.textContent = '세계 최초 창업(주) 언론';
