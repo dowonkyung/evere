@@ -363,7 +363,7 @@ section.etc > ul { display: flex; gap: 32px; }
 section.etc h2 { font-size: 18px; font-weight: 700; line-height: 24px; padding: 14px 0 16px 0; border-top: 2px solid var(--stroke-primary); position: relative; }
 section.etc dd li a { display: block; border-top: 1px solid var(--stroke-separator); font-size: 15px; font-weight: 600; line-height: 22px; padding: 15px 0 16px; }
 section.etc > ul.list > li:first-child { width: 384px; }
-section.etc > ul.list > li:first-child h2 a { display: inline-block; line-height: 24px; padding-right: 24px; background: var(--svg-ic-arrow-right-24) no-repeat right; }
+section.etc > ul.list > li h2 a { display: inline-block; line-height: 24px; padding-right: 24px; background: var(--svg-ic-arrow-right-24) no-repeat right; }
 section.etc > ul.list > li:last-child { flex: 1 1 0; }
 section.etc > ul.list > li:last-child > dl > dd { display: flex; gap: 32px; }
 section.etc > ul.list > li:last-child > dl > dd > ul { width: 384px; }
@@ -1014,9 +1014,9 @@ section.block aside li.banner.nowar0901 > a .kor2 { display: block; margin: 10px
 	/* notice, culture&education */
 	section.etc h2 { font-size: 20px; }
 	/* section.etc dd li a { font-size: 18px; line-height: 26px;} */
-	section.etc > ul.list > li:first-child h2 a { display: block; background: var(--svg-ic-arrow-long-24) center right no-repeat;}
+	section.etc > ul.list > li h2 a { display: block; background: var(--svg-ic-arrow-long-24) center right no-repeat;}
 	section.etc > ul { gap: 0; flex-direction: column; }
-	section.etc > ul.list > li:first-child h2 a::after { position: absolute; display: block; width: 24px; height: 24px; right: 0; top: 16px; content: ''; background: var(--svg-ic-arrow-long-right-24) no-repeat; }
+	section.etc > ul.list > li h2 a::after { position: absolute; display: block; width: 24px; height: 24px; right: 0; top: 16px; content: ''; background: var(--svg-ic-arrow-long-right-24) no-repeat; }
 	section.etc > ul.list > li:first-child { width: auto; padding-bottom: 24px; }
 	section.etc > ul.list > li:last-child > dl > dd { display: block; }
 	section.etc > ul.list > li:last-child > dl > dd > ul { width: 100%; }
