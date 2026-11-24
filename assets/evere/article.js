@@ -176,11 +176,28 @@ function checked(response) {
     return response.data;
 }
 
+const commentOrder = ui('comment-order');
+const commentRefresh = ui('comments-refresh');
+const relativeCommentTime = new Intl.RelativeTimeFormat('ko', { numeric: 'auto' });
+let commentRequest = 0;
+
+function commentTime(date) {
+    const minutes = Math.floor((Date.now() - date.getTime()) / 60000);
+    if (minutes >= 0 && minutes < 1) return '방금 전';
+    if (minutes >= 1 && minutes < 60) return relativeCommentTime.format(-minutes, 'minute');
+    if (minutes >= 60 && minutes < 1440) return relativeCommentTime.format(-Math.floor(minutes / 60), 'hour');
+    return dateFormat.format(date);
+}
+
 async function commentsAt(newOffset) {
+    const request = ++commentRequest;
+    const ascending = commentOrder.value === 'oldest';
     const response = await supabase.from('evere_comments').select('author_name,body,created_at', { count: 'exact' })
-        .eq('article_id', articleId).order('created_at', { ascending: false }).order('id')
+        .eq('article_id', articleId).order('created_at', { ascending }).order('id', { ascending })
         .range(newOffset, newOffset + pageSize);
+    if (request !== commentRequest) return;
     const rows = checked(response);
+    ui('comment-list-status').textContent = '';
     ui('article-comment-count').textContent = response.count ?? '';
     offset = newOffset;
     previous.disabled = offset === 0;
@@ -189,7 +206,14 @@ async function commentsAt(newOffset) {
         const item = document.createElement('li');
         const meta = document.createElement('p');
         meta.className = 'comment-meta';
-        meta.textContent = (row.author_name || '이브레 회원') + ' · ' + dateFormat.format(new Date(row.created_at));
+        const author = document.createElement('strong');
+        author.textContent = row.author_name || '이브레 회원';
+        const date = new Date(row.created_at);
+        const time = document.createElement('time');
+        time.dateTime = row.created_at;
+        time.title = dateFormat.format(date);
+        time.textContent = commentTime(date);
+        meta.append(author, time);
         const body = document.createElement('p');
         body.className = 'comment-body';
         body.textContent = row.body;
@@ -198,6 +222,7 @@ async function commentsAt(newOffset) {
     }));
     if (!rows.length) {
         const empty = document.createElement('li');
+        empty.className = 'comment-empty';
         empty.textContent = '아직 댓글이 없습니다.';
         ui('comments').append(empty);
     }
@@ -209,10 +234,14 @@ async function navigateComments(button, newOffset) {
         await commentsAt(newOffset);
     } catch {
         button.disabled = false;
-        ui('status').textContent = '댓글을 불러오지 못했습니다.';
+        ui('comment-list-status').textContent = '댓글을 불러오지 못했습니다.';
+    } finally {
+        if (button === commentRefresh) button.disabled = false;
     }
 }
 
+commentRefresh.addEventListener('click', () => navigateComments(commentRefresh, 0));
+commentOrder.addEventListener('change', () => navigateComments(commentRefresh, 0));
 previous.addEventListener('click', () => navigateComments(previous, Math.max(0, offset - pageSize)));
 next.addEventListener('click', () => navigateComments(next, offset + pageSize));
 const commentInput = form.elements.comment;
