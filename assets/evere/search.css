@@ -70,7 +70,7 @@
 .search-view-all { display: block; box-sizing: border-box; width: min(240px, 100%); margin: 4px auto 48px; padding: 15px 8px; border: 1px solid var(--search-line); border-radius: 28px; text-align: center; font-size: 15px; font-weight: 600; line-height: 24px; }
 .search-view-all strong { color: var(--search-accent); }
 .search-view-all::after { content: ""; display: inline-block; width: 6px; height: 6px; margin-left: 8px; border: solid currentColor; border-width: 1px 1px 0 0; transform: rotate(45deg); }
-.search-filter-panel { --search-control-accent: #4c70e8; --search-control-border: #d9d9d9; --search-control-muted: #999; }
+.search-filter-panel { --search-control-accent: var(--evere-accent, #00B8B4); --search-control-border: #d9d9d9; --search-control-muted: #999; }
 .search-filter-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .search-reset { display: inline-flex; align-items: center; gap: 4px; height: 24px; padding-right: 4px; font-size: 13px; font-weight: 500; }
 #search-filters { padding: 20px; border: 1px solid var(--search-control-border); border-radius: 12px; }
