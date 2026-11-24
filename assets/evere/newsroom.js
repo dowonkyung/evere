@@ -9,6 +9,23 @@ import { issueUrl, loadHomeIssues } from './home-issues.js?v=issues-1';
 const ui = (id) => document.getElementById(id);
 const panels = [...document.querySelectorAll('[data-panel]')];
 const nav = [...document.querySelectorAll('.newsroom-nav [data-view]')];
+const navToggle = ui('newsroom-nav-toggle');
+const navPreference = 'evere-newsroom-nav-compact';
+function setCompactNav(compact) {
+    ui('workspace').classList.toggle('has-compact-nav', compact);
+    navToggle.setAttribute('aria-pressed', String(compact));
+    const label = compact ? '메뉴 너비 늘리기' : '메뉴 너비 줄이기';
+    navToggle.title = label;
+    navToggle.setAttribute('aria-label', label);
+}
+if (navToggle) {
+    try { setCompactNav(localStorage.getItem(navPreference) === 'true'); } catch {}
+    navToggle.onclick = () => {
+        const compact = navToggle.getAttribute('aria-pressed') !== 'true';
+        setCompactNav(compact);
+        try { localStorage.setItem(navPreference, String(compact)); } catch {}
+    };
+}
 const layout = ui('layout-form');
 const layoutSubmit = layout.querySelector('[type="submit"]');
 const slots = [...ui('layout-slots').querySelectorAll('select')];
