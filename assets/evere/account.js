@@ -540,6 +540,23 @@ function renderArticlePagination(count, page) {
     add(last + 1, '다음 페이지로 이동', 'next');
 }
 
+function renderWorkspaceSummary(articles, count) {
+    const recent = ui('workspace-recent-articles');
+    if (!recent) return;
+    ui('workspace-article-total').textContent = count.toLocaleString('ko-KR');
+    ui('workspace-recent-empty').hidden = articles.length > 0;
+    recent.replaceChildren(...articles.slice(0, 5).map(article => {
+        const row = element('li');
+        const title = element('span', article.title, 'workspace-article-title');
+        const status = element('span', editorialLabels.get(article.editorial_state), 'queue-status');
+        status.dataset.state = article.editorial_state;
+        const date = element('time', queueDate.format(new Date(article.created_at)));
+        date.dateTime = article.created_at;
+        row.append(status, title, date);
+        return row;
+    }));
+}
+
 async function loadArticles(offset = articleOffset) {
     let query = supabase.from('evere_articles').select('id,title,article_label,body,sector,editorial_state,created_by,created_at', { count: 'exact' });
     const request = ++articleListRequest;
@@ -548,6 +565,7 @@ async function loadArticles(offset = articleOffset) {
     if (request !== articleListRequest) return false;
     const articles = result(response);
     const pages = Math.ceil(response.count / limit);
+    if (!offset && !listState) renderWorkspaceSummary(articles, response.count ?? 0);
     const lastOffset = Math.max(0, pages - 1) * limit;
     if (offset > lastOffset) return loadArticles(lastOffset);
     articleOffset = offset;
