@@ -432,3 +432,19 @@
 @media (prefers-reduced-motion: reduce) {
     .photo-library-overlay { transition: none; }
 }
+
+.newsroom .queue-pagination { padding: 20px 0 84px; }
+.newsroom .queue-pagination ul { display: flex; justify-content: center; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.newsroom .queue-pagination li { min-width: 30px; height: 28px; }
+.newsroom .queue-pagination li.active { min-width: 28px; }
+.newsroom .queue-pagination button { display: block; width: 100%; min-height: 0; margin: 0; padding: 0; border: 0; border-radius: 4px; color: #666; background: transparent; font: inherit; font-size: 16px; font-weight: 500; line-height: 28px; text-align: center; }
+.newsroom .queue-pagination li.active button { color: #fff; background: #333; }
+.newsroom .queue-pagination button.btn { width: 30px; height: 30px; border: 1px solid #ddd; }
+.newsroom .queue-pagination button.btn::before { display: block; width: 28px; height: 28px; content: ''; background: center / 16px 16px no-repeat; }
+.newsroom .queue-pagination button.btn-prev::before { background-image: url("https://img.khan.co.kr/images/khan/svg/default/ic-arrow-prev-16.svg"); }
+.newsroom .queue-pagination button.btn-next::before { background-image: url("https://img.khan.co.kr/images/khan/svg/default/ic-arrow-next-16.svg"); }
+.newsroom .queue-pagination button.btn:disabled { opacity: 1; }
+.newsroom .queue-pagination button.btn:disabled::before { opacity: .3; }
+@media (max-width: 1023px) {
+    .newsroom .queue-pagination { padding-bottom: 0; }
+}

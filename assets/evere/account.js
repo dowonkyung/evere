@@ -81,7 +81,7 @@ function handle(action) {
         } catch (error) {
             message(getError(error), true);
         } finally {
-            if (control && control.id !== 'previous' && control.id !== 'next') control.disabled = false;
+            if (control) control.disabled = false;
         }
     };
 }
@@ -501,16 +501,56 @@ function articleRow(article) {
     return row;
 }
 
-async function loadArticles() {
-    let query = supabase.from('evere_articles').select('id,title,article_label,body,sector,editorial_state,created_by,created_at');
+function renderArticlePagination(count, page) {
+    const pagination = ui('article-pagination');
+    const list = pagination.querySelector('ul');
+    pagination.hidden = !count;
+    list.replaceChildren();
+    if (!count) return;
+
+    const first = Math.floor((page - 1) / 5) * 5 + 1;
+    const last = Math.min(first + 4, count);
+    function add(target, label, direction) {
+        const row = element('li');
+        const button = element('button', direction ? '' : label);
+        button.type = 'button';
+        if (direction) {
+            button.classList.add('btn', 'btn-' + direction);
+            button.setAttribute('aria-label', label);
+        }
+        if (target === page) {
+            row.className = 'active';
+            button.setAttribute('aria-current', 'page');
+            button.addEventListener('click', event => event.preventDefault());
+        } else if (target < 1 || target > count) {
+            button.disabled = true;
+        } else {
+            button.addEventListener('click', handle(async () => {
+                if (await loadArticles((target - 1) * limit)) {
+                    ui('articles').closest('table').scrollIntoView({ block: 'start' });
+                    pagination.querySelector('[aria-current="page"]')?.focus({ preventScroll: true });
+                }
+            }));
+        }
+        row.append(button);
+        list.append(row);
+    }
+    add(first - 1, '이전 페이지로 이동', 'prev');
+    for (let number = first; number <= last; number++) add(number, String(number));
+    add(last + 1, '다음 페이지로 이동', 'next');
+}
+
+async function loadArticles(offset = articleOffset) {
+    let query = supabase.from('evere_articles').select('id,title,article_label,body,sector,editorial_state,created_by,created_at', { count: 'exact' });
     const request = ++articleListRequest;
     if (listState) query = query.eq('editorial_state', listState);
-    const articles = result(await query.order('created_at', { ascending: false }).order('id').range(articleOffset, articleOffset + limit));
-    if (request !== articleListRequest) return;
-    if (!articles.length && articleOffset) {
-        articleOffset -= limit;
-        return loadArticles();
-    }
+    const response = await query.order('created_at', { ascending: false }).order('id').range(offset, offset + limit - 1);
+    if (request !== articleListRequest) return false;
+    const articles = result(response);
+    const pages = Math.ceil(response.count / limit);
+    const lastOffset = Math.max(0, pages - 1) * limit;
+    if (offset > lastOffset) return loadArticles(lastOffset);
+    articleOffset = offset;
     const table = ui('articles');
     table.replaceChildren(...articles.slice(0, limit).map(articleRow));
     if (!articles.length) {
@@ -520,8 +560,8 @@ async function loadArticles() {
         row.append(empty);
         table.append(row);
     }
-    ui('previous').disabled = articleOffset === 0;
-    ui('next').disabled = articles.length <= limit;
+    renderArticlePagination(pages, offset / limit + 1);
+    return true;
 }
 
 async function refresh() {
@@ -817,18 +857,6 @@ if (articleForm && memberForm) {
         await loadArticles();
         message(state === 'draft' ? '작성중으로 저장했습니다.' : '기사 승인을 요청했습니다.');
     }));
-    for (const [id, distance] of [['previous', -limit], ['next', limit]]) {
-        ui(id).addEventListener('click', handle(async () => {
-            articleOffset += distance;
-            try {
-                await loadArticles();
-            } catch (error) {
-                articleOffset -= distance;
-                ui(id).disabled = false;
-                throw error;
-            }
-        }));
-    }
     window.addEventListener('hashchange', () => {
         if (!member || location.hash !== '#review') return;
         articleOffset = 0;

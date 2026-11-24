@@ -8,8 +8,8 @@
   <link rel="icon" href="/assets/evere/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="/assets/evere/account.css?v=left-white-1">
-  <link rel="stylesheet" href="/assets/evere/newsroom.css?v=paragraph-breaks-1">
-  <script type="module" src="/assets/evere/account.js?v=print-placement-1"></script>
+  <link rel="stylesheet" href="/assets/evere/newsroom.css?v=queue-pagination-1">
+  <script type="module" src="/assets/evere/account.js?v=queue-pagination-1"></script>
   <script type="module" src="/assets/evere/newsroom.js?v=opinion-visual-1"></script>
 <script type="module" src="/assets/evere/route-init.js?v=routes-1"></script>
 </head>
@@ -185,10 +185,9 @@
             <tbody id="articles"></tbody>
           </table>
         </div>
-        <div class="pager">
-          <button id="previous" type="button" disabled>이전</button>
-          <button id="next" type="button" disabled>다음</button>
-        </div>
+        <nav class="queue-pagination" id="article-pagination" aria-label="기사 목록 페이지" hidden>
+          <ul></ul>
+        </nav>
       </section>
         </section>
         <section data-panel="layout" data-editor hidden>
@@ -366,10 +365,10 @@
           <img class="photo-options-preview" data-photo-preview alt="선택한 사진 미리보기" hidden>
           <fieldset><legend>기준 크기</legend><div class="photo-option-toggles"><label><input type="radio" name="size" value="180" ><span>180px</span></label>
             <label><input type="radio" name="size" value="250" ><span>250px</span></label>
-            <label><input type="radio" name="size" value="600" checked><span>600px</span></label>
+            <label><input type="radio" name="size" value="600"><span>600px</span></label>
             <label><input type="radio" name="size" value="960" ><span>960px</span></label>
             <label><input type="radio" name="size" value="1280" ><span>1280px</span></label>
-            <label><input type="radio" name="size" value="original" ><span>원본 크기</span></label></div></fieldset>
+            <label><input type="radio" name="size" value="original" checked><span>원본 크기</span></label></div></fieldset>
           <fieldset><legend>사진 정렬</legend><div class="photo-option-toggles"><label><input type="radio" name="position" value="left" ><span>왼쪽</span></label><label><input type="radio" name="position" value="center" checked><span>가운데</span></label><label><input type="radio" name="position" value="right" ><span>오른쪽</span></label></div></fieldset>
           <label>사진 제목<input name="captionTitle" maxlength="200"></label>
           <label>사진 설명<textarea name="caption" rows="4" maxlength="500" placeholder="(서울=이브레) 혼종인 기자 = 사진을 찍고 있다. 2026.11.24 honjongin@evere.kr&#10;[출처 이브위키. 재판매 및 DB 금지]"></textarea></label>
