@@ -8,8 +8,8 @@
   <link rel="icon" href="/assets/evere/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="/assets/evere/evere-ellipsis.css?v=punctuation-3">
-  <link rel="stylesheet" href="/assets/evere/epaper.css?v=region-workspace-1">
-  <script type="module" src="/assets/evere/epaper.js?v=region-workspace-1"></script>
+  <link rel="stylesheet" href="/assets/evere/epaper.css?v=region-image-1">
+  <script type="module" src="/assets/evere/epaper.js?v=region-image-1"></script>
 </head>
 <body>
   <div class="viewer-layout">
@@ -29,20 +29,7 @@
         <a href="/" aria-label="이브레 홈"><img src="/assets/evere/logo.svg" alt="이브레"></a>
         </div>
       </div>
-      <button type="button" id="epaper-region-toggle" aria-controls="epaper-region-form" aria-expanded="false" hidden><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6m-6 4h6"/></svg>기사 영역 지정</button>
-      <form id="epaper-region-form" aria-labelledby="epaper-region-heading" hidden>
-        <header><h2 id="epaper-region-heading">기사 영역 지정</h2><button type="button" id="epaper-region-close" aria-label="영역 편집 닫기">×</button></header>
-        <label>이브레 기사 <select id="epaper-region-article" required></select></label>
-        <fieldset id="epaper-region-fields" disabled>
-          <label>지면 제목 <input id="epaper-region-title" type="text" maxlength="300"></label>
-          <label>지면 텍스트 <textarea id="epaper-region-print" rows="5" maxlength="100000"></textarea></label>
-          <label>이전 연결 기사 <output id="epaper-region-previous">연결 없음</output></label>
-          <label>다음 연결 기사 <select id="epaper-region-next"></select></label>
-          <p class="region-instructions">지면을 클릭해 꼭짓점을 찍으세요. 첫 점을 다시 누르거나 영역 닫기를 선택하면 직각으로 닫힙니다.</p>
-          <div class="region-tools"><button type="button" id="epaper-region-reset">새 영역 그리기</button><button type="button" id="epaper-region-undo">점 되돌리기</button><button type="button" id="epaper-region-finish">영역 닫기</button></div>
-        </fieldset>
-        <footer><p id="epaper-region-status" role="status"></p><button type="submit" id="epaper-region-save" disabled>저장</button></footer>
-      </form>
+      
       <section id="epaper-issue-popover" class="viewer-issue-popover" aria-labelledby="epaper-issue-title" hidden>
         <header><h2 id="epaper-issue-title">발행호</h2><button type="button" id="epaper-issue-close" aria-label="발행호 닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M18 6L6 18" stroke-linecap="round" stroke-linejoin="round"></path><path d="M6 6L18 18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button></header>
         <ul id="epaper-editions"></ul>
@@ -77,7 +64,21 @@
           <button type="button" id="epaper-next" aria-label="다음 면"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0"><path d="M9 18L15 12L9 6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
         </nav>
         <button type="button" id="epaper-repin" aria-label="메뉴 고정" title="메뉴 고정" hidden><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16.5V21M8 3h8a2 2 0 0 1 0 4v4l3 3v2.5H5V14l3-3V7a2 2 0 0 1 0-4Z"/></svg></button>
-        <div class="viewer-dock-wrap"><nav class="viewer-dock" aria-label="지면 조작">
+        <div class="viewer-dock-wrap"><form id="epaper-region-form" aria-labelledby="epaper-region-heading" hidden>
+        <header><h2 id="epaper-region-heading">기사 영역 지정</h2><button type="button" id="epaper-region-close" aria-label="영역 편집 닫기">×</button></header>
+        <label>지면 영역 <select id="epaper-region-article" required></select></label>
+        <fieldset id="epaper-region-fields" disabled>
+          <div id="epaper-region-metadata">
+          <label>지면 제목 <input id="epaper-region-title" type="text" maxlength="300"></label>
+          <label>지면 텍스트 <textarea id="epaper-region-print" rows="5" maxlength="100000"></textarea></label>
+          <label>이전 연결 기사 <output id="epaper-region-previous">연결 없음</output></label>
+          <label>다음 연결 기사 <select id="epaper-region-next"></select></label>
+          </div>
+          <p class="region-instructions">지면을 클릭해 꼭짓점을 찍으세요. 첫 점을 다시 누르거나 영역 닫기를 선택하면 직각으로 닫힙니다.</p>
+          <div class="region-tools"><button type="button" id="epaper-region-reset">새 영역 그리기</button><button type="button" id="epaper-region-undo">점 되돌리기</button><button type="button" id="epaper-region-finish">영역 닫기</button></div>
+        </fieldset>
+        <footer><p id="epaper-region-status" role="status"></p><button type="submit" id="epaper-region-save" disabled>저장</button></footer>
+      </form><nav class="viewer-dock" aria-label="지면 조작">
           <span id="epaper-page-count" aria-live="polite">—</span>
           <button type="button" id="epaper-zoom-out" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0"><path d="M5 12H19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>축소</span></button>
           <button type="button" id="epaper-zoom" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0"><path d="M5 12H19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 5V19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>확대</span></button>

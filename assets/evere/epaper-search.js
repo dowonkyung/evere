@@ -79,13 +79,14 @@ export function configurePrintSearch(indexPdf, getCurrent, jumpTo, trackReader) 
     scroll.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', schedule);
 
-    function select(index) {
+    function select(index, zoom = false) {
         selected = index;
         for (const button of results.querySelectorAll('button')) {
             button.toggleAttribute('data-active', Number(button.dataset.result) === index);
         }
-        const { page } = matches[index];
-        jumpTo(pages.includes(page) ? getCurrent().page : page);
+        const match = matches[index];
+        const side = pages.indexOf(match.page);
+        jumpTo(side >= 0 ? getCurrent().page : match.page, zoom ? match : null, Math.max(0, side));
         trackReader();
         track();
     }
@@ -102,7 +103,7 @@ export function configurePrintSearch(indexPdf, getCurrent, jumpTo, trackReader) 
             mark.textContent = match.hit;
             snippet.append(match.before, mark, match.after + '…');
             button.append(heading, snippet);
-            button.onclick = () => select(index);
+            button.onclick = () => select(index, true);
             li.append(button);
             return li;
         }));

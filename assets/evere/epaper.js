@@ -1,5 +1,5 @@
-import { configureArticleViewer, indexPdf } from './epaper-article.js?v=region-workspace-1';
-import { configurePrintSearch } from './epaper-search.js?v=1';
+import { configureArticleViewer, indexPdf } from './epaper-article.js?v=region-image-1';
+import { configurePrintSearch } from './epaper-search.js?v=2';
 import { supabase } from './supabase.js';
 import { setArticleTitle } from './article-label.js';
 
@@ -20,7 +20,7 @@ const articleViewer = configureArticleViewer(id => {
     }
 }, (issue, page, regions) => {
     savedRegions.set(regionKey(issue, page), regions);
-    render(issue, page);
+    if (current?.issueNumber === issue && current.page === page) render(issue, page);
 }, destination => {
     if (!current) return;
     const row = current.edition.articles.find(article => article.article_number === destination.article);
@@ -49,6 +49,20 @@ async function loadSavedRegions() {
             if (!savedRegions.has(key)) savedRegions.set(key, []);
             savedRegions.get(key).push({ article: row.article_number, points: row.points, pngPath: row.png_path, printTitle: row.print_title, printBody: row.print_body,
                 next: row.next_page ? { page: row.next_page, article: row.next_article } : null });
+        }
+        if (data.length < size) return;
+    }
+}
+async function loadImageRegions() {
+    const size = 300;
+    for (let from = 0; ; from += size) {
+        const { data, error } = await supabase.from('evere_epaper_image_regions')
+            .select('id,issue,page,points,png_path').order('id').range(from, from + size - 1);
+        if (error) return;
+        for (const row of data) {
+            const key = regionKey(row.issue, row.page);
+            if (!savedRegions.has(key)) savedRegions.set(key, []);
+            savedRegions.get(key).push({ article: row.id, points: row.points, pngPath: row.png_path, imageOnly: true });
         }
         if (data.length < size) return;
     }
@@ -122,7 +136,7 @@ function makeLink(issue, page, label, active) {
     return link;
 }
 
-function setZoom(value, animate = false) {
+function setZoom(value, animate = false, targetPoint) {
     const nextZoom = Math.max(1, Math.min(3, value));
     const scroll = ui('image-scroll');
     const images = [...scroll.querySelectorAll('img:not([hidden])')];
@@ -141,6 +155,13 @@ function setZoom(value, animate = false) {
     if (zoom === 1) {
         scroll.scrollTop = 0;
         scroll.scrollLeft = 0;
+    } else if (targetPoint) {
+        const image = images[targetPoint.side];
+        if (image) {
+            const target = image.getBoundingClientRect();
+            scroll.scrollLeft += target.left + targetPoint.x * target.width - centerX;
+            scroll.scrollTop += target.top + targetPoint.y * target.height - centerY;
+        }
     } else if (previous.length && previous[0].width && previous[0].height) {
         const target = images[0].getBoundingClientRect();
         scroll.scrollLeft += target.left + (centerX - previous[0].left) * target.width / previous[0].width - centerX;
@@ -373,6 +394,7 @@ async function start() {
         fetch('/epaper/editions.json?v=print-reader-1').then(response => response.ok ? response.json() : null).catch(() => null),
         loadPrintArticles().catch(() => null),
         loadSavedRegions().catch(() => {}),
+        loadImageRegions().catch(() => {}),
     ]);
     for (const edition of manifest?.editions || []) {
         if (Number.isSafeInteger(edition.issue) && edition.issue > 0) issues.set(edition.issue, { ...edition, articles: [], pages: [] });
@@ -453,14 +475,20 @@ ui('fullscreen').onclick = () => {
     void action.catch(() => {});
 };
 document.addEventListener('fullscreenchange', () => ui('fullscreen').setAttribute('aria-pressed', String(!!document.fullscreenElement)));
+const dock = ui('pin').closest('.viewer-dock-wrap');
+const repin = ui('repin');
+repin.hidden = false;
 function setToolbarPinned(pinned) {
-    ui('pin').closest('.viewer-dock-wrap').hidden = !pinned;
-    ui('repin').hidden = pinned;
+    if (!pinned) articleViewer.closeEditor();
+    dock.classList.toggle('is-toolbar-hidden', !pinned);
+    repin.classList.toggle('is-toolbar-hidden', pinned);
+    dock.inert = !pinned;
+    repin.inert = pinned;
     try { localStorage.setItem('evere-epaper-toolbar-pinned', String(pinned)); } catch {}
 }
-try { setToolbarPinned(localStorage.getItem('evere-epaper-toolbar-pinned') !== 'false'); } catch {}
-ui('pin').onclick = () => { setToolbarPinned(false); ui('repin').focus(); };
-ui('repin').onclick = () => { setToolbarPinned(true); ui('pin').focus(); };
+try { setToolbarPinned(localStorage.getItem('evere-epaper-toolbar-pinned') !== 'false'); } catch { setToolbarPinned(true); }
+ui('pin').onclick = () => { setToolbarPinned(false); repin.focus({ preventScroll: true }); };
+repin.onclick = () => { setToolbarPinned(true); ui('pin').focus({ preventScroll: true }); };
 for (const button of document.querySelectorAll('[data-viewer-panel]')) {
     button.onclick = () => showPanel(button.dataset.viewerPanel);
 }
@@ -494,9 +522,22 @@ ui('articles').addEventListener('click', event => {
     const row = current.edition.articles.find(article => article.article_number === Number(link.dataset.printArticle));
     if (row) articleViewer.openArticle(row, number);
 });
-const printSearch = configurePrintSearch(indexPdf, () => current, page => {
+const printSearch = configurePrintSearch(indexPdf, () => current, (page, match, side) => {
     if (current?.page !== page) render(current.issueNumber, page, 'pushState');
     articleViewer.closeArticle();
+    if (!match || !match.boxes.length) return;
+    const firstY = match.boxes[0][1];
+    const firstLine = match.boxes.filter(box => Math.abs(box[1] - firstY) < 3);
+    const left = Math.min(...firstLine.map(box => box[0]));
+    const right = Math.max(...firstLine.map(box => box[0] + box[2]));
+    const image = ui(side ? 'second-image' : 'image');
+    const issue = current.issueNumber;
+    const focus = () => {
+        if (current?.issueNumber !== issue || current.page !== page) return;
+        setZoom(2.5, true, { side, x:(left + right) / 2000, y:(firstY + firstLine[0][3] / 2) / 1000 });
+    };
+    if (image.complete && image.naturalWidth) requestAnimationFrame(focus);
+    else image.addEventListener('load', focus, { once:true });
 }, () => articleViewer.track(350));
 document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && !ui('issue-popover').hidden) {
