@@ -115,6 +115,7 @@
 }
 
 .newsroom-nav-brand-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 42px; margin-bottom: 21px; }
+.newsroom .newsroom-nav-brand-row .newsroom-brand { display: inline-flex; margin: 0; padding: 0; background: transparent; }
 .newsroom .newsroom-nav-brand-row .newsroom-nav-toggle { margin: 0; }
 .newsroom-brand-symbol { display: none !important; }
 .newsroom .has-compact-nav .newsroom-nav-brand-row { flex-direction: column; justify-content: center; }
