@@ -293,8 +293,8 @@
 
             <style>
             .wrap-bnr-pub80 { width: 100%; height: 105px; margin: 0 auto 50px; }
-            .wrap-bnr-pub80 > a { display: flex; overflow: hidden; justify-content: center; align-items: center; position: relative; width: 100%; height: 100%; padding: 20px; border-radius: 8px; gap: 0 20px; background: none; background-size: 100% 100%; }
-            .wrap-bnr-pub80 > a:after { position: absolute; display: block;  width: 300px; height: 270px; right: -33px; top: 50%; transform: translateY(-42%); content: ''; background: none; background-size: 300px 270px; opacity: .25; }
+            .wrap-bnr-pub80 > .bnr-pub80 { display: flex; overflow: hidden; justify-content: center; align-items: center; position: relative; width: 100%; height: 100%; padding: 20px; border-radius: 8px; gap: 0 20px; background: center / cover no-repeat url('/assets/evere/bg-pub80-bnr.jpg'); }
+            .wrap-bnr-pub80 > .bnr-pub80:after { position: absolute; display: block;  width: 300px; height: 270px; right: -33px; top: 50%; transform: translateY(-42%); content: ''; background: none; background-size: 300px 270px; opacity: .25; }
             .wrap-bnr-pub80 .slogan { color: #111; font-weight: 700; font-size: 30px; z-index: 2; transition: all 0.3s; }
             .wrap-bnr-pub80 .slogan strong { color: #2654e9; }
             .wrap-bnr-pub80 .symbol { width: 50px; height: 45px; text-indent: -9999px; font-size: 0; line-height: 0; background: none; background-size: 100% 100%; transition: all 0.3s; z-index: 2; }
@@ -306,46 +306,46 @@
 
             @media screen and (min-width: 1024px) and (max-width: 1279px) {
                 .wrap-bnr-pub80 { height: 85px; }
-                .wrap-bnr-pub80 > a { gap: 0 15px; }
-                .wrap-bnr-pub80 > a:after { width: 200px; height: 180px; right: -15px; top: 50%; transform: translateY(-42%); background-size: 200px 180px; opacity: .25; }
+                .wrap-bnr-pub80 > .bnr-pub80 { gap: 0 15px; }
+                .wrap-bnr-pub80 > .bnr-pub80:after { width: 200px; height: 180px; right: -15px; top: 50%; transform: translateY(-42%); background-size: 200px 180px; opacity: .25; }
                 .wrap-bnr-pub80 .slogan { font-size: 26px; }
                 .wrap-bnr-pub80 .symbol { width: 40px; height: 36px; }
                 .wrap-bnr-pub80 .msg .tit { font-size: 17px; }
             }
             @media screen and (min-width: 768px) and (max-width: 1023px) {
                 .wrap-bnr-pub80 { height: 85px; }
-                .wrap-bnr-pub80 > a:after { width: 200px; height: 180px; right: -15px; top: 50%; transform: translateY(-42%); background-size: 200px 180px; opacity: .25; }
+                .wrap-bnr-pub80 > .bnr-pub80:after { width: 200px; height: 180px; right: -15px; top: 50%; transform: translateY(-42%); background-size: 200px 180px; opacity: .25; }
                 .wrap-bnr-pub80 .slogan { font-size: 26px; }
                 .wrap-bnr-pub80 .symbol { width: 40px; height: 36px; }
                 .wrap-bnr-pub80 .msg .tit { font-size: 17px; }
             }
             @media screen and (max-width: 767px) {
                 .wrap-bnr-pub80 { display: none; }
-                .wrap-bnr-pub80 > a { justify-content: space-around; gap: 0; }
+                .wrap-bnr-pub80 > .bnr-pub80 { justify-content: space-around; gap: 0; }
                 .wrap-bnr-pub80.mb { display: block; height: 80px; padding: 0 20px; margin: 0 auto 40px; }
-                .wrap-bnr-pub80 > a:after { width: 180px; height: 160px; right: -15px; top: 50%; transform: translateY(-42%); background-size: 180px 160px; opacity: .25; }
+                .wrap-bnr-pub80 > .bnr-pub80:after { width: 180px; height: 160px; right: -15px; top: 50%; transform: translateY(-42%); background-size: 180px 160px; opacity: .25; }
                 .wrap-bnr-pub80.mb .slogan { font-size: 20px; text-align: center; }
                 .wrap-bnr-pub80.mb .slogan .tit { display: block; font-size: 16px; margin: 0 0 5px; }
-                .wrap-bnr-pub80.mb .msg .since { padding-top: 37px; font-size: 11px; background: none; background-size: 38px 34px; background-position: top center; background-repeat: no-repeat; }
+                .wrap-bnr-pub80.mb .msg .since { font-size: 11px; text-align: center; }
             }
             @media screen and (max-width: 320px) {
-                .wrap-bnr-pub80 > a { justify-content: space-around; gap: 0; }
+                .wrap-bnr-pub80 > .bnr-pub80 { justify-content: space-around; gap: 0; }
                 .wrap-bnr-pub80.mb .slogan { font-size: 16px; }
                 .wrap-bnr-pub80.mb .slogan .tit { font-size: 14px; margin: 0 0 5px; }
                 .wrap-bnr-pub80.mb .msg .since { font-size: 10px; }
             }
             </style>
 
-            <!-- 창간80주년 허브페이지 진입 배너 - mobile -->
+            <!-- 이브레 워크아웃 배너 - mobile -->
             <div class="wrap-bnr-pub80 mb">
-                <a href="https://www.khan.co.kr/80th" title="창간 80주년" target="_self" class="bnr-pub80">
+                <div class="bnr-pub80">
                     <div class="msg">
-                        <span class="since">1946 ~ 2026</span>
+                        <span class="since">이브레 워크아웃</span>
                     </div>
-                    <div class="slogan"><span class="tit">경향신문 창간 80주년</span>“진실을 <strong>읽다</strong>, 세상을 <strong>잇다</strong>”</div>
-                </a>
+                    <div class="slogan"><span class="tit">문학사 투자자 상담센터</span>“투자자 여러분과 <strong>직접 소통하겠습니다</strong>”</div>
+                </div>
             </div>
-            <!-- // 창간80주년 허브페이지 진입 배너 - mobile -->
+            <!-- // 이브레 워크아웃 배너 - mobile -->
 
             <div class="banner-head-bottom" loading="lazy">
                 <div class="ad-wrapper">
@@ -387,18 +387,17 @@
     </ul>
 </div>
 
-<!-- 창간80주년 허브페이지 진입 배너 - pc -->
+<!-- 이브레 워크아웃 배너 - pc -->
                 <div class="wrap-bnr-pub80">
-                    <a href="https://www.khan.co.kr/80th" title="창간 80주년" target="_self" class="bnr-pub80">
+                    <div class="bnr-pub80">
                         <div class="msg">
-                            <span class="since">1946 ~ 2026</span>
-                            <span class="tit">경향신문 창간 80주년</span>
+                            <span class="since">이브레 워크아웃</span>
+                            <span class="tit">문학사 투자자 상담센터</span>
                         </div>
-                        <div class="symbol">창간 80주년</div>
-                        <div class="slogan">“진실을 <strong>읽다</strong>, 세상을 <strong>잇다</strong>”</div>
-                    </a>
+                        <div class="slogan">“투자자 여러분과 <strong>직접 소통하겠습니다</strong>”</div>
+                    </div>
                 </div>
-                <!-- // 창간80주년 허브페이지 진입 배너 - pc -->
+                <!-- // 이브레 워크아웃 배너 - pc -->
                 </div>
                 <aside>
     <h2><a href="/opinion/" class="arrow">오피니언</a></h2>
