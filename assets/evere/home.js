@@ -55,7 +55,8 @@ function setMenuOpen(open, section) {
         menu.scrollTop = 0;
         const title = section ? menu.querySelector('#sitemap-' + section + ' dt') : null;
         if (title && mobileCategory.matches) {
-            title.querySelector('[data-category-toggle]').setAttribute('aria-expanded', 'true');
+            const toggle = title.querySelector('[data-category-toggle]');
+            if (toggle) setCategoryExpanded(toggle, true);
             updateExpandCategories();
         }
         const focusTarget = title || (mobileCategory.matches ? closeMenu : menu);
@@ -92,6 +93,11 @@ for (const container of [mainHeader, compactHeader].filter(Boolean)) {
     });
 }
 
+function setCategoryExpanded(button, expanded) {
+    button.setAttribute('aria-expanded', String(expanded));
+    button.closest('dt').nextElementSibling?.classList.toggle('category-collapsed', !expanded);
+}
+
 function updateExpandCategories() {
     const expanded = categoryButtons.every((button) => button.getAttribute('aria-expanded') === 'true');
     expandCategories.setAttribute('aria-expanded', String(expanded));
@@ -101,25 +107,34 @@ function updateExpandCategories() {
 for (const button of categoryButtons) {
     const title = button.closest('dt');
     const link = title.querySelector('a');
-    const list = title.nextElementSibling.querySelector('ul');
-    const item = document.createElement('li');
-    const all = link.cloneNode(false);
-    all.textContent = '전체';
-    item.className = 'category-mobile-all';
-    item.append(all);
-    list.prepend(item);
+    setCategoryExpanded(button, button.getAttribute('aria-expanded') === 'true');
 
-    title.addEventListener('click', event => {
-        if (!mobileCategory.matches || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    function toggleCategory(event) {
+        if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
         event.preventDefault();
-        button.setAttribute('aria-expanded', String(button.getAttribute('aria-expanded') !== 'true'));
+        setCategoryExpanded(button, button.getAttribute('aria-expanded') !== 'true');
         updateExpandCategories();
-    });
+    }
+
+    button.addEventListener('click', toggleCategory);
+
+    const list = title.nextElementSibling?.querySelector('ul');
+    if (link && list) {
+        const item = document.createElement('li');
+        const all = link.cloneNode(false);
+        all.textContent = '전체';
+        item.className = 'category-mobile-all';
+        item.append(all);
+        list.prepend(item);
+        link.addEventListener('click', event => {
+            if (mobileCategory.matches) toggleCategory(event);
+        });
+    }
 }
 
 expandCategories.addEventListener('click', () => {
     const open = expandCategories.getAttribute('aria-expanded') !== 'true';
-    for (const button of categoryButtons) button.setAttribute('aria-expanded', String(open));
+    for (const button of categoryButtons) setCategoryExpanded(button, open);
     updateExpandCategories();
 });
 
