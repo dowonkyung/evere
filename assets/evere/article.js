@@ -326,11 +326,18 @@ async function render() {
     sectionLink.textContent = sectors[data.sector];
     ui('sector').replaceChildren(sectionLink);
     ui('title').textContent = title;
-    ui('subtitle').textContent = data.subtitle;
-    ui('editor-subtitle').hidden = !data.subtitle?.trim();
-    renderBody(ui('body'), data, { legacyLineBreaks: true });
+    const subtitle = data.subtitle?.trim() || '';
+    ui('subtitle').textContent = subtitle;
+    ui('editor-subtitle').hidden = !subtitle;
+    const body = ui('body');
+    renderBody(body, data, { legacyLineBreaks: true });
+    while (body.firstElementChild?.matches('p, div')) {
+        const paragraph = body.firstElementChild;
+        if (paragraph.textContent.trim() || paragraph.querySelector('figure[data-photo]')) break;
+        paragraph.remove();
+    }
     void showReporterCards(data.id).catch(() => {});
-    void renderPhotos(ui('article-photos'), data.photo_paths, ui('body')).catch(() => {});
+    void renderPhotos(ui('article-photos'), data.photo_paths, body).catch(() => {});
     if (data.published_at) {
         const time = ui('published-time');
         time.dateTime = data.published_at;
