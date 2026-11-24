@@ -247,11 +247,12 @@ export function configureArticleViewer(onOpen, onSave) {
             const current = job;
             status.textContent = '지면 이미지를 불러오는 중입니다.';
             const image = selection.pngPath ? (async () => {
-                const { data } = supabase.storage.from('evere-epaper-crops').getPublicUrl(selection.pngPath);
-                const response = await fetch(data.publicUrl);
+                const url = selection.pngPath.startsWith('/epaper/files/')
+                    ? selection.pngPath : supabase.storage.from('evere-epaper-crops').getPublicUrl(selection.pngPath).data.publicUrl;
+                const response = await fetch(url);
                 if (!response.ok) throw new Error('PNG 없음');
                 return response.blob();
-            })() : cropRegion(selection.pdf, selection.page, selection.points);
+            })() : Promise.reject(new Error('저장된 지면 이미지 없음'));
             void image.then(blob => {
                 if (job !== current) return;
                 clearCrop();

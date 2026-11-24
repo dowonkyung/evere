@@ -1,4 +1,4 @@
-import { configureArticleViewer } from './epaper-article.js?v=region-editor-1';
+import { configureArticleViewer } from './epaper-article.js?v=region-editor-2';
 import { supabase } from './supabase.js';
 import { articlePath } from './routes.js?v=routes-1';
 import { setArticleTitle } from './article-label.js';
@@ -332,7 +332,7 @@ function render(issueNumber, pageNumber, updateHistory = '') {
 
 async function start() {
     const [manifest, articles] = await Promise.all([
-        fetch('/epaper/editions.json?v=article-regions-1').then(response => response.ok ? response.json() : null).catch(() => null),
+        fetch('/epaper/editions.json?v=article-regions-2').then(response => response.ok ? response.json() : null).catch(() => null),
         loadPrintArticles().catch(() => null),
         loadSavedRegions().catch(() => {}),
     ]);
