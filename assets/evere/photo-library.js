@@ -3,6 +3,7 @@ import { photoBucket, readPhotoCaption } from './article-content.js?v=photo-opti
 
 const storedPath = /^[a-f\d-]{36}\/[a-f\d-]{36}\.(?:jpg|png|webp)$/i;
 
+const pinnedTitle = '이브레 속보(CG)';
 const initialCount = 6;
 const moreCount = 10;
 const batchSize = 24;
@@ -13,10 +14,10 @@ function searchState(term) {
     carrier.textContent = term;
     const escaped = carrier.innerHTML.replace(/[\\%_]/g, char => '\\' + char);
     return { term, escaped, token: term.toLocaleLowerCase('ko-KR'), offset: 0,
-        seen: new Set(), pending: [], exhausted: false, busy: false };
+        seen: new Set(), pending: [], exhausted: false, busy: false, pinLoaded: false };
 }
 
-async function fillPhotos(state, count, active) {
+async function fillPhotos(state, count, active, exactTitle = '') {
     while (active() && !state.exhausted && state.pending.length < count) {
         let request = supabase.from('evere_articles')
             .select('id,title,body_html,photo_paths,published_at')
@@ -36,6 +37,7 @@ async function fillPhotos(state, count, active) {
                 if (!storedPath.test(path) || state.seen.has(path)) continue;
                 const figure = figures.get(path);
                 const caption = figure ? readPhotoCaption(figure) : { captionTitle: '', caption: '' };
+                if (exactTitle && caption.captionTitle.trim() !== exactTitle) continue;
                 if (![caption.captionTitle, caption.caption].some(value => value.toLocaleLowerCase('ko-KR').includes(state.token))) continue;
                 state.seen.add(path);
                 state.pending.push({ path, ...caption, articleTitle: entry.title, publishedAt: entry.published_at });
@@ -83,6 +85,17 @@ export function connectPhotoLibrary(panel, onSelect) {
         more.disabled = true;
         status.textContent = '기존 사진을 불러오는 중입니다.';
         try {
+            if (!current.term && !current.pinLoaded) {
+                const pinSearch = searchState(pinnedTitle);
+                await fillPhotos(pinSearch, 1, active, pinnedTitle);
+                if (!active()) return;
+                const pinned = pinSearch.pending[0];
+                if (pinned) {
+                    current.seen.add(pinned.path);
+                    current.pending.push(pinned);
+                }
+                current.pinLoaded = true;
+            }
             await fillPhotos(current, count + 1, active);
             if (!active()) return;
             const rows = current.pending.slice(0, count);
