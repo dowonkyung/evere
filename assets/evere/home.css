@@ -144,7 +144,3 @@ main article > div > a.home-title-fits {
 [data-home-opinion] article > div { min-width: 0; }
 [data-home-opinion] article picture img { width: 100%; height: 100%; object-fit: cover; }
 
-/* The lower lead keeps text above the image at every breakpoint. */
-section.block .list-block > .main-block > [data-home-slot="4"] > article {
-    display: grid;
-}

@@ -27,7 +27,7 @@ function articleDescription(data) {
     return Array.from(text.replace(/\s+/g, ' ').trim()).slice(0, 120).join('');
 }
 
-function makeArticle(data, summary = false, thumbnailRatio = '700 / 467', textFirst = false) {
+function makeArticle(data, summary = false, thumbnailRatio = '700 / 467') {
     const article = document.createElement('article');
     const picture = document.createElement('picture');
     const image = document.createElement('img');
@@ -50,8 +50,7 @@ function makeArticle(data, summary = false, thumbnailRatio = '700 / 467', textFi
         description.textContent = excerpt;
         text.append(description);
     }
-    if (textFirst) article.append(text, picture);
-    else article.append(picture, text);
+    article.append(picture, text);
     return { article, image, path: data.photo_paths?.[0] };
 }
 
@@ -97,7 +96,7 @@ async function renderArticles() {
         .map(item => [Number(item.dataset.homeSlot), item]));
     for (const { slot, evere_articles: article } of placements) {
         placed.add(article.id);
-        const rendered = makeArticle(article, slot === 1 || slot >= 4, slot >= 5 ? '300 / 200' : undefined, slot === 4);
+        const rendered = makeArticle(article, slot === 1 || slot >= 4, slot >= 5 ? '300 / 200' : undefined);
         images.push(rendered);
         const item = lowerItems.get(slot) || (slot === 1 ? primary : secondaryList.children[slot - 2]);
         if (item) {
