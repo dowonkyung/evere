@@ -456,3 +456,6 @@
   .profile-previous { inset-inline-start: -6px; }
   .profile-next { inset-inline-end: -6px; }
 }
+
+.evere-article .article-page .reporter-card-email { display: inline-block; margin-top: 5px; color: var(--text-secondary, #666); font-size: 14px; line-height: 1.55; overflow-wrap: anywhere; }
+.reporter-card-email:hover { text-decoration: underline; }

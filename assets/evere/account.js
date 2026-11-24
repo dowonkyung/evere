@@ -115,12 +115,13 @@ function showAvatar(url) {
 
 async function loadProfile() {
     const memberId = member.id;
-    const saved = result(await supabase.from('evere_member_profiles').select('position_title,bio')
+    const saved = result(await supabase.from('evere_member_profiles').select('position_title,bio,publish_login_email')
         .eq('member_id', memberId).maybeSingle());
     if (member?.id !== memberId) return;
     if (profileDetails.elements.displayName) profileDetails.elements.displayName.value = member.display_name;
     profileDetails.elements.position.value = saved?.position_title || '';
     profileDetails.elements.bio.value = saved?.bio || '';
+    if (profileDetails.elements.publishLoginEmail) profileDetails.elements.publishLoginEmail.checked = Boolean(saved?.publish_login_email);
     if (!headerAvatar) await loadAvatar(memberId);
 }
 
@@ -607,6 +608,7 @@ profileDetails.addEventListener('submit', handle(async () => {
         member_id: member.id,
         position_title: profileDetails.elements.position.value.trim(),
         bio: profileDetails.elements.bio.value.trim(),
+        ...(profileDetails.elements.publishLoginEmail ? { publish_login_email: profileDetails.elements.publishLoginEmail.checked } : {}),
     }));
     const name = profileDetails.elements.displayName;
     if (name && name.value.trim() !== member.display_name) {

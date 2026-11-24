@@ -50,6 +50,11 @@ export async function showReporterCards(articleId) {
         heading.append(name);
         if (reporter.position_title) heading.append(position);
         content.append(heading);
+        if (reporter.public_email) {
+            const email = node('a', 'reporter-card-email', reporter.public_email);
+            email.href = 'mailto:' + encodeURIComponent(reporter.public_email).replace('%40', '@');
+            content.append(email);
+        }
         if (reporter.bio) content.append(node('p', 'reporter-card-bio', reporter.bio));
         const actions = node('div', 'reporter-card-actions');
         const follow = node('button', 'reporter-card-follow');

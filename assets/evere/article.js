@@ -1,4 +1,4 @@
-import { showReporterCards } from './reporter-cards.js';
+import { showReporterCards } from './reporter-cards.js?v=email-1';
 import { collectionButton } from './reader-collections.js';
 import { articlePageTitle, setArticleTitle } from './article-label.js';
 import { articlePath, articleNumberFromURL } from './routes.js?v=direct-route-1';
