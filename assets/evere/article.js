@@ -1,3 +1,4 @@
+import { showReporterCards } from './reporter-cards.js';
 import { collectionButton } from './reader-collections.js';
 import { articlePageTitle, setArticleTitle } from './article-label.js';
 import { articlePath, articleNumberFromURL } from './routes.js?v=direct-route-1';
@@ -328,6 +329,7 @@ async function render() {
     ui('subtitle').textContent = data.subtitle;
     ui('editor-subtitle').hidden = !data.subtitle?.trim();
     renderBody(ui('body'), data);
+    void showReporterCards(data.id).catch(() => {});
     void renderPhotos(ui('article-photos'), data.photo_paths, ui('body')).catch(() => {});
     if (data.published_at) {
         const time = ui('published-time');

@@ -8,10 +8,10 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="/assets/khan/common.css">
   <link rel="stylesheet" href="/assets/evere/home.css?v=evere-ellipsis-1">
-  <link rel="stylesheet" href="/assets/evere/article-page.css?v=comment-order-1">
+  <link rel="stylesheet" href="/assets/evere/article-page.css?v=reporter-cards-1">
   <script defer src="/assets/khan/swiper-bundle.min.js"></script>
   <script defer src="/assets/evere/home.js?v=account-dot-1"></script>
-  <script type="module" src="/assets/evere/article.js?v=comment-order-1"></script>
+  <script type="module" src="/assets/evere/article.js?v=reporter-cards-1"></script>
 <script type="module" src="/assets/evere/route-init.js?v=direct-route-1"></script>
 <link rel="preload" as="style" href="/assets/yna/default.css">
 <link rel="preload" as="style" href="/assets/yna/variables.css">
@@ -226,6 +226,11 @@
         <div class="editor-subtitle" id="editor-subtitle" hidden><p id="subtitle"></p></div>
         <div id="article-photos" class="article-photos"></div>
         <div id="body" class="article-body"></div>
+        <section id="reporter-profiles" class="reporter-profiles" aria-label="기사 작성 기자" hidden>
+          <ul id="profile-card-list" class="profile_card_list" tabindex="0" aria-label="기자 프로필 목록"></ul>
+          <button type="button" class="profile-arrow profile-previous" aria-label="이전 기자" aria-controls="profile-card-list" hidden><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="m6.657 10.851-.008.008 7.231 7.231 1.132-1.13-6.108-6.109 6.108-6.108-1.132-1.131-7.231 7.231.008.008Z" fill="#1D1D1D"/></svg></button>
+          <button type="button" class="profile-arrow profile-next" aria-label="다음 기자" aria-controls="profile-card-list" hidden><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="m6.657 10.851-.008.008 7.231 7.231 1.132-1.13-6.108-6.109 6.108-6.108-1.132-1.131-7.231 7.231.008.008Z" fill="#1D1D1D"/></svg></button>
+        </section>
       </article>
       <aside id="article-related" class="reader-related" aria-labelledby="article-related-title" hidden>
         <h2 id="article-related-title">주요기사</h2>

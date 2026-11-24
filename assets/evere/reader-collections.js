@@ -6,7 +6,7 @@ export const collections = {
     reporters: ['evere_reporter_follows', 'reporter_id'],
 };
 
-export async function collectionButton(button, kind, id, labels) {
+export async function collectionButton(button, kind, id, labels, statusTarget) {
     const [table, key] = collections[kind];
     const { data: { session } } = await supabase.auth.getSession();
     let selected = false;
@@ -25,7 +25,7 @@ export async function collectionButton(button, kind, id, labels) {
     button.hidden = false;
     const status = document.createElement('span');
     status.setAttribute('role', 'status');
-    (button.closest('.reader-layout')?.querySelector('.reader-article') || button.parentElement).append(status);
+    (statusTarget || button.closest('.reader-layout')?.querySelector('.reader-article') || button.parentElement).append(status);
     button.addEventListener('click', async () => {
         if (!session) { location.assign('/account/'); return; }
         button.disabled = true;
