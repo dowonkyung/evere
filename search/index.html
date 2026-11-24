@@ -18,8 +18,8 @@
 <link rel="preload" as="style" href="/assets/evere/article-header.css?v=reader-palette-1">
 <link rel="stylesheet" href="/assets/evere/header-first-paint.css">
 <script defer src="/assets/evere/header-first-paint.js"></script>
-  <link rel="stylesheet" href="/assets/evere/search.css?v=overview-1">
-  <script type="module" src="/assets/evere/search.js?v=overview-1"></script>
+  <link rel="stylesheet" href="/assets/evere/search.css?v=search-settings-1">
+  <script type="module" src="/assets/evere/search.js?v=search-settings-1"></script>
 </head>
 <body>
 <div id="evere-header" data-css-pending data-compact-only>
@@ -222,9 +222,12 @@
         <nav id="search-pages" aria-label="검색 결과 페이지" hidden></nav>
       </div>
       <aside class="search-filter-panel">
-        <details open>
-          <summary>검색 설정</summary>
-          <a id="search-reset" class="search-reset" href="/search/">초기화</a>
+        <div class="search-filter-heading">
+          <h2>검색 설정</h2>
+          <a id="search-reset" class="search-reset" href="/search/">초기화
+            <svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M13 5a5.5 5.5 0 1 0 .4 5M13 2.5V5.5h-3"/></svg>
+          </a>
+        </div>
           <form id="search-filters" action="/search/">
             <input type="hidden" name="query">
             <input type="hidden" name="section">
@@ -234,7 +237,8 @@
               <label><input type="radio" name="scope" value="" checked><span>전체 범위</span></label>
               <label><input type="radio" name="scope" value="title"><span>제목</span></label>
               <label><input type="radio" name="scope" value="body"><span>본문</span></label>
-              <label><input type="radio" name="scope" value="subtitle"><span>부제</span></label>
+              <label><input type="radio" name="scope" value="byline"><span>기자명</span></label>
+              <label><input type="radio" name="scope" value="series"><span>연재명</span></label>
               </div>
             </fieldset>
             <fieldset>
@@ -245,18 +249,24 @@
               <label><input type="radio" name="period" value="7"><span>최근 1주</span></label>
               <label><input type="radio" name="period" value="30"><span>최근 1개월</span></label>
               <label><input type="radio" name="period" value="365"><span>최근 1년</span></label>
+              <label class="search-period-custom"><input type="radio" name="period" value="custom"><span>직접 입력</span></label>
+              </div>
+              <div class="search-custom-dates" hidden>
+                <input type="date" name="from" aria-label="시작 날짜" disabled>
+                <span aria-hidden="true">–</span>
+                <input type="date" name="to" aria-label="종료 날짜" disabled>
               </div>
             </fieldset>
             <fieldset>
               <legend>정렬</legend>
               <div class="search-pills">
+              <label><input type="radio" name="sort" value="relevance"><span>정확도순</span></label>
               <label><input type="radio" name="sort" value="" checked><span>최신순</span></label>
               <label><input type="radio" name="sort" value="oldest"><span>오래된순</span></label>
               </div>
             </fieldset>
             <button type="submit">선택 적용</button>
           </form>
-        </details>
       </aside>
     </div>
   </main>

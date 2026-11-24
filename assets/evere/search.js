@@ -1,16 +1,26 @@
 import { supabase } from './supabase.js';
 import { articlePath } from './routes.js';
 import { articleCategories, sectors } from './article-taxonomy.js';
-import { photoBucket } from './article-content.js?v=caption-1';
+import { photoBucket, readPhotoCaption } from './article-content.js?v=caption-1';
 
 const params = new URLSearchParams(location.search);
 const query = (params.get('query') || '').trim().slice(0, 120);
 const sectionNames = { articles: '기사', opinion: '사설·칼럼', images: '이미지' };
 const requestedSection = params.get('section');
 const section = Object.hasOwn(sectionNames, requestedSection) ? requestedSection : 'all';
-const period = ['1', '7', '30', '365'].includes(params.get('period')) ? params.get('period') : '';
-const scope = ['title', 'body', 'subtitle'].includes(params.get('scope')) ? params.get('scope') : '';
-const sort = params.get('sort') === 'oldest' ? 'oldest' : '';
+const period = ['1', '7', '30', '365', 'custom'].includes(params.get('period')) ? params.get('period') : '';
+const scope = ['title', 'body', 'byline', 'series'].includes(params.get('scope')) ? params.get('scope') : '';
+const sort = ['relevance', 'oldest'].includes(params.get('sort')) ? params.get('sort') : '';
+function validDate(value) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(value ?? '') || value.startsWith('0000')) return '';
+    const date = new Date(value + 'T00:00:00Z');
+    return Number.isFinite(date.valueOf()) && date.toISOString().slice(0, 10) === value ? value : '';
+}
+const fromDate = period === 'custom' ? validDate(params.get('from')) : '';
+const toDate = period === 'custom' ? validDate(params.get('to')) : '';
+const publishedFrom = period === 'custom' ? (fromDate ? fromDate + 'T00:00:00+09:00' : null)
+    : period ? new Date(Date.now() - Number(period) * 86400000).toISOString() : null;
+const publishedBefore = toDate ? new Date(Date.parse(toDate + 'T00:00:00+09:00') + 86400000).toISOString() : null;
 const requestedPage = Number(params.get('page'));
 const page = Number.isSafeInteger(requestedPage) && requestedPage > 0 && requestedPage <= 1000 ? requestedPage : 1;
 const pageSize = 20;
@@ -29,6 +39,20 @@ filters.elements.section.value = section;
 filters.elements.period.value = period;
 filters.elements.sort.value = sort;
 filters.elements.scope.value = scope;
+filters.elements.from.value = fromDate;
+filters.elements.to.value = toDate;
+const dates = document.querySelector('.search-custom-dates');
+function syncDates() {
+    const custom = filters.elements.period.value === 'custom';
+    dates.hidden = !custom;
+    for (const field of [filters.elements.from, filters.elements.to]) {
+        field.disabled = !custom;
+        field.required = custom;
+    }
+    filters.elements.to.min = filters.elements.from.value;
+}
+filters.addEventListener('change', syncDates);
+syncDates();
 document.querySelector('#search-reset').href = searchUrl(section, 1, false);
 
 function searchUrl(targetSection, number = 1, preserveFilters = true) {
@@ -36,6 +60,8 @@ function searchUrl(targetSection, number = 1, preserveFilters = true) {
     if (query) search.set('query', query);
     if (targetSection !== 'all') search.set('section', targetSection);
     if (preserveFilters && period) search.set('period', period);
+    if (preserveFilters && fromDate) search.set('from', fromDate);
+    if (preserveFilters && toDate) search.set('to', toDate);
     if (preserveFilters && sort) search.set('sort', sort);
     if (preserveFilters && scope) search.set('scope', scope);
     if (number > 1) search.set('page', number);
@@ -79,7 +105,7 @@ function renderResult(target, kind, article, photoUrls) {
     title.className = 'search-result-title';
     title.href = href;
     appendHighlight(title, article.title);
-    const photoUrl = photoUrls.get(article.photo_paths?.[0]);
+    const photoUrl = photoUrls.get(article.photo_path);
     const photo = document.createElement('a');
     if (photoUrl) {
         photo.className = 'search-result-photo';
@@ -92,8 +118,23 @@ function renderResult(target, kind, article, photoUrls) {
         photo.append(image);
     }
     if (kind === 'images') {
+        const template = document.createElement('template');
+        template.innerHTML = article.body_html || '';
+        const figure = [...template.content.querySelectorAll('figure[data-photo]')]
+            .find(node => node.dataset.photo === article.photo_path);
+        const { captionTitle, caption } = figure ? readPhotoCaption(figure) : {};
         if (photoUrl) item.append(photo);
+        if (captionTitle) {
+            title.replaceChildren();
+            appendHighlight(title, captionTitle);
+        }
         item.append(title);
+        if (caption) {
+            const description = document.createElement('p');
+            description.className = 'search-image-caption';
+            appendHighlight(description, caption);
+            item.append(description);
+        }
     } else {
         const copy = document.createElement('div');
         copy.className = 'search-result-copy';
@@ -125,30 +166,14 @@ function renderResult(target, kind, article, photoUrls) {
 }
 
 async function fetchResults(kind, limit, start) {
-    const keyword = query.replace(/[\\%_]/g, character => '\\' + character);
-    const pattern = '%' + keyword + '%';
-    let request = supabase.from('evere_articles')
-        .select('id,article_number,title,subtitle,body,published_at,photo_paths,sector,category,byline_names', { count: 'exact' })
-        .eq('status', 'published')
-        .not('article_number', 'is', null);
-    const quoted = '"' + pattern.replace(/["\\]/g, '\\$&') + '"';
-    const match = ['title', 'subtitle', 'body'].map(field => field + '.ilike.' + quoted).join(',');
-    if (scope) request = request.ilike(scope, pattern);
-    if (kind === 'opinion') {
-        request = request.eq('sector', 'opinion').in('category', ['editorial', 'column']);
-    } else if (kind === 'images') {
-        request = request.not('photo_paths', 'is', null).neq('photo_paths', '{}');
-    }
-    if (kind === 'articles') {
-        const news = 'or(sector.neq.opinion,category.is.null,category.not.in.(editorial,column))';
-        request = scope ? request.or(news.slice(3, -1)) : request.or('and(' + news + ',or(' + match + '))');
-    } else if (!scope) {
-        request = request.or(match);
-    }
-    if (period) request = request.gte('published_at', new Date(Date.now() - Number(period) * 86400000).toISOString());
+    let request = supabase.rpc('evere_search_results', {
+        keyword: query, result_kind: kind, search_scope: scope,
+        published_from: publishedFrom, published_before: publishedBefore,
+    }, { count: 'exact' });
+    if (sort === 'relevance') request = request.order('relevance', { ascending: false });
     const { data, count, error } = await request
         .order('published_at', { ascending: sort === 'oldest', nullsFirst: false })
-        .order('id')
+        .order('id').order('photo_order')
         .range(start, start + limit - 1);
     if (error) throw error;
     return { kind, data, count };
@@ -180,7 +205,7 @@ async function loadResults() {
     const overview = section === 'all';
     const kinds = overview ? Object.keys(sectionNames) : [section];
     const groups = await Promise.all(kinds.map(kind => fetchResults(kind, overview ? 4 : pageSize, overview ? 0 : offset)));
-    const paths = [...new Set(groups.flatMap(group => group.data.map(article => article.photo_paths?.[0])).filter(Boolean))];
+    const paths = [...new Set(groups.flatMap(group => group.data.map(article => article.photo_path)).filter(Boolean))];
     const photoUrls = new Map();
     if (paths.length) {
         const response = await Promise.resolve(photoBucket.createSignedUrls(paths, 3600)).catch(() => null);
