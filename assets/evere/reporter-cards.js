@@ -32,24 +32,29 @@ function configureArrows(section, list) {
     update();
 }
 
-export async function showReporterCards(articleId) {
+export async function showReporterCards(data) {
     const section = document.querySelector('#reporter-profiles');
     const list = section.querySelector('.profile_card_list');
-    const { data, error } = await supabase.rpc('evere_article_reporter_cards', { target_article: articleId });
-    if (error || !data?.length) return;
+    if (!data?.length) return;
     const photos = new Map();
     for (const reporter of data) {
         const card = node('li', 'profile_wrap');
-        const avatar = node('span', 'reporter-avatar', Array.from(reporter.display_name)[0]);
-        avatar.setAttribute('aria-hidden', 'true');
+        const href = reporter.reporter_number ? '/reporter/' + reporter.reporter_number : '';
+        const avatar = node(href ? 'a' : 'span', 'reporter-avatar', Array.from(reporter.display_name)[0]);
+        if (href) {
+            avatar.href = href;
+            avatar.setAttribute('aria-label', reporter.display_name + ' 기자 페이지');
+        } else {
+            avatar.setAttribute('aria-hidden', 'true');
+        }
         if (reporter.avatar_path) photos.set(reporter.avatar_path, avatar);
         const content = node('div', 'reporter-card-content');
         const name = node('h2', 'reporter-card-name', reporter.display_name);
         const position = node('p', 'reporter-card-position', reporter.position_title?.trim() || '기자');
         const heading = node('div', 'reporter-card-heading');
-        if (reporter.reporter_number) {
+        if (href) {
             const profile = node('a', '', reporter.display_name);
-            profile.href = '/reporter/' + reporter.reporter_number;
+            profile.href = href;
             name.replaceChildren(profile);
         }
         heading.append(name, position);

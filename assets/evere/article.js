@@ -1,4 +1,4 @@
-import { showReporterCards } from './reporter-cards.js?v=reporter-pages-1';
+import { showReporterCards } from './reporter-cards.js?v=reporter-links-1';
 import { collectionButton } from './reader-collections.js';
 import { articlePageTitle, setArticleTitle } from './article-label.js';
 import { articlePath, articleNumberFromURL } from './routes.js?v=direct-route-1';
@@ -363,7 +363,6 @@ async function render() {
         if (paragraph.textContent.trim() || paragraph.querySelector('figure[data-photo]')) break;
         paragraph.remove();
     }
-    void showReporterCards(data.id).catch(() => {});
     void renderPhotos(ui('article-photos'), data.photo_paths, body).catch(() => {});
     if (data.published_at) {
         const time = ui('published-time');
@@ -374,11 +373,22 @@ async function render() {
     const reporterCount = data.byline?.length || 0;
     const byline = ui('byline');
     const reporterName = (name) => /\s기자$/.test(name) ? name : name + ' 기자';
-    const setByline = (titles = new Map()) => {
+    let titles = new Map();
+    const reporterLinks = new Map();
+    const setByline = () => {
         byline.replaceChildren(...names.map((name, index) => {
             const person = document.createElement('span');
             const title = titles.get(index + 1);
-            person.textContent = index >= reporterCount ? name : (title ? name + ' ' + title : reporterName(name));
+            const label = index >= reporterCount ? name : (title ? name + ' ' + title : reporterName(name));
+            const href = reporterLinks.get(data.byline?.[index]);
+            if (href) {
+                const link = document.createElement('a');
+                link.href = href;
+                link.textContent = label;
+                person.append(link);
+            } else {
+                person.textContent = label;
+            }
             return person;
         }));
     };
@@ -386,8 +396,17 @@ async function render() {
     if (reporterCount) void Promise.resolve(supabase.rpc('evere_article_byline_positions', { target_article: data.id }))
         .then(({ data: positions, error }) => {
             if (error || !positions?.length) return;
-            const titles = new Map(positions.map(row => [row.byline_index, row.position_title.trim()]));
-            setByline(titles);
+            titles = new Map(positions.map(row => [row.byline_index, row.position_title.trim()]));
+            setByline();
+        }).catch(() => {});
+    if (reporterCount) void Promise.resolve(supabase.rpc('evere_article_reporter_cards', { target_article: data.id }))
+        .then(({ data: reporters, error }) => {
+            if (error || !reporters?.length) return;
+            for (const reporter of reporters) {
+                if (reporter.reporter_number) reporterLinks.set(reporter.reporter_id, '/reporter/' + reporter.reporter_number);
+            }
+            setByline();
+            return showReporterCards(reporters);
         }).catch(() => {});
     ui('status').replaceChildren();
     ui('published-article').hidden = false;
