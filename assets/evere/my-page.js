@@ -7,7 +7,6 @@ const tabs = [...document.querySelectorAll('[data-my-tab]')];
 const sections = [...document.querySelectorAll('[data-my-panel]')];
 let account = null;
 let request = 0;
-let swiper;
 
 function choose() {
     const key = location.hash.slice(1);
@@ -19,11 +18,6 @@ function choose() {
         else tab.removeAttribute('aria-current');
     }
     for (const panel of sections) panel.hidden = panel.dataset.myPanel !== active;
-    if (account && typeof Swiper === 'function') {
-        if (!swiper) swiper = new Swiper('.account-main .swiper-container', { slidesPerView: 'auto', freeMode: true });
-        swiper.update();
-        swiper.slideTo(tabs.findIndex(tab => tab.dataset.myTab === active), 0);
-    }
     const turn = ++request;
     if (account && active !== 'profile') void load(active, turn);
 }

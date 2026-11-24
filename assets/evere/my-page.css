@@ -30,3 +30,5 @@
 .account-main [data-my-list] { margin: 12px 0 32px; padding: 0; list-style: none; }
 .account-main [data-my-list] li { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid #ddd; overflow-wrap: anywhere; }
 .account-main [data-my-list] button { flex: none; }
+
+.account-main .child-section .swiper-wrapper { justify-content: flex-start; text-align: start; }

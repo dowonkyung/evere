@@ -121,7 +121,7 @@
 .reader-comments textarea:focus { outline: none; box-shadow: none; border-color: #aaa; }
 .reader-comments button { justify-self: start; padding: 7px 13px; border: 1px solid #bbb; border-radius: 4px; }
 .reader-comments button:disabled { opacity: .5; cursor: default; }
-.reader-comments button[type="submit"] { background: #00b8b4; border-color: #00b8b4; }
+.reader-comments button[type="submit"] { background: #00b8b4; border-color: #00b8b4; color: #fff; }
 .reader-comments li { padding-block: 10px; border-bottom: 1px solid #e8e8e8; }
 .reader-comments .comment-meta { color: #666; font-size: 14px; }
 .reader-comments .comment-body { white-space: pre-wrap; overflow-wrap: anywhere; }
