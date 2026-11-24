@@ -1,4 +1,4 @@
-import { configureArticleViewer, indexPdf } from './epaper-article.js?v=print-continuation-1';
+import { configureArticleViewer, indexPdf } from './epaper-article.js?v=region-workspace-1';
 import { configurePrintSearch } from './epaper-search.js?v=1';
 import { supabase } from './supabase.js';
 import { setArticleTitle } from './article-label.js';
@@ -41,13 +41,13 @@ function regionsFor(edition, issue, page) {
 async function loadSavedRegions() {
     const size = 300;
     for (let from = 0; ; from += size) {
-        const { data, error } = await supabase.from('evere_epaper_regions').select('issue,page,article_number,points,png_path,print_body,online_body,next_page,next_article')
+        const { data, error } = await supabase.from('evere_epaper_regions').select('issue,page,article_number,points,png_path,print_title,print_body,next_page,next_article')
             .order('issue').order('page').order('article_number').range(from, from + size - 1);
         if (error) return;
         for (const row of data) {
             const key = regionKey(row.issue, row.page);
             if (!savedRegions.has(key)) savedRegions.set(key, []);
-            savedRegions.get(key).push({ article: row.article_number, points: row.points, pngPath: row.png_path, printBody: row.print_body, onlineBody: row.online_body,
+            savedRegions.get(key).push({ article: row.article_number, points: row.points, pngPath: row.png_path, printTitle: row.print_title, printBody: row.print_body,
                 next: row.next_page ? { page: row.next_page, article: row.next_article } : null });
         }
         if (data.length < size) return;
@@ -357,7 +357,8 @@ function render(issueNumber, pageNumber, updateHistory = '') {
             link.href = toPath(issueNumber, number);
             link.dataset.contentsPage = number;
             link.dataset.printArticle = row.article_number;
-            setArticleTitle(link, row.title, row.article_label);
+            const region = regionsFor(edition, issueNumber, number).find(entry => entry.article === row.article_number);
+            setArticleTitle(link, region?.printTitle || row.title, row.article_label);
             item.append(link);
             list.append(item);
         }

@@ -152,12 +152,14 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
     const print = ui('article-print');
     const content = ui('article-content');
     const form = ui('region-form');
-    const toggle = ui('region-toggle');
+    const toggles = [ui('region-toggle'), ui('region-toolbar')];
+    const fields = ui('region-fields');
+    const save = ui('region-save');
     const picker = ui('region-article');
     const message = ui('region-status');
     const nextPicker = ui('region-next');
     const printInput = ui('region-print');
-    const onlineInput = ui('region-online');
+    const titleInput = ui('region-title');
     let editing;
     let points = [];
     let sketch;
@@ -186,10 +188,12 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
         points = [];
         closed = false;
         form.hidden = true;
-        toggle.setAttribute('aria-expanded', 'false');
+        for (const button of toggles) button.setAttribute('aria-expanded', 'false');
     }
 
     function loadPoints() {
+        fields.disabled = save.disabled = !picker.value;
+        const article = editing.articles.find(row => row.article_number === Number(picker.value));
         const region = editing.regions.find(entry => entry.article === Number(picker.value));
         points = region ? region.points.map(point => [...point]) : [];
         closed = Boolean(region);
@@ -198,18 +202,22 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
             : '연결 없음';
         nextPicker.value = region?.next ? region.next.page + ':' + region.next.article : '';
         printInput.value = region?.printBody || '';
-        onlineInput.value = region?.onlineBody || '';
+        titleInput.value = region?.printTitle || '';
+        titleInput.placeholder = article?.title || '';
         if (region && editing.issue === 1 && region.printBody == null && editing.printText) {
-            const edit = editing, article = picker.value;
-            void readPrintText({ ...region, issue: 1, printText: edit.printText, row: { article_number: Number(article) } })
-                .then(data => { if (editing === edit && picker.value === article && !printInput.value) printInput.value = data?.body || ''; })
+            const edit = editing, selectedArticle = picker.value;
+            void readPrintText({ ...region, issue: 1, printText: edit.printText, row: { article_number: Number(selectedArticle) } })
+                .then(data => { if (editing === edit && picker.value === selectedArticle) {
+                    if (!printInput.value) printInput.value = data?.body || '';
+                    if (!titleInput.value) titleInput.placeholder = data?.title || titleInput.placeholder;
+                } })
                 .catch(() => {});
         }
-        message.textContent = '';
+        message.textContent = picker.value && !region ? '지면에서 새 영역을 그리세요.' : '';
         outline();
     }
 
-    toggle.onclick = () => {
+    function toggleEditor() {
         if (editing) { stopEditing(); return; }
         close(false);
         editing = sheets.find(sheet => sheet.editable && sheet.pdf && sheet.articles.length);
@@ -218,18 +226,26 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
         sketch = document.createElementNS(svgNS, 'polyline');
         sketch.setAttribute('class', 'region-sketch');
         editing.overlay.append(sketch);
-        picker.replaceChildren(...editing.articles.map(row => new Option(row.title, row.article_number)));
+        const registered = new Set(editing.regions.map(region => region.article));
+        picker.replaceChildren(new Option('연결할 기사를 선택하세요', ''), ...editing.articles.map(row =>
+            new Option((registered.has(row.article_number) ? '등록됨 · ' : '') + row.title, row.article_number)));
         nextPicker.replaceChildren(new Option('연결 없음', ''), ...editing.destinations.map(entry =>
             new Option(entry.page + '면 · ' + entry.title, entry.page + ':' + entry.article)));
         form.hidden = false;
-        toggle.setAttribute('aria-expanded', 'true');
+        for (const button of toggles) button.setAttribute('aria-expanded', 'true');
         loadPoints();
-        picker.focus();
-    };
+        picker.focus({ preventScroll: true });
+    }
+    for (const button of toggles) button.onclick = toggleEditor;
     picker.onchange = loadPoints;
     ui('region-close').onclick = stopEditing;
     ui('region-undo').onclick = () => { closed = false; points.pop(); outline(); };
-    ui('region-reset').onclick = () => { closed = false; points = []; outline(); };
+    ui('region-reset').onclick = () => {
+        closed = false;
+        points = [];
+        message.textContent = '지면에서 새 영역을 그리세요.';
+        outline();
+    };
     function finishBoundary() {
         const boundary = closeBoundary(points);
         if (!boundary) {
@@ -245,7 +261,7 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
 
     form.onsubmit = async event => {
         event.preventDefault();
-        if (saving || !editing) return;
+        if (saving || !editing || !picker.value) return;
         const sheet = editing;
         const article = Number(picker.value);
         const boundary = closed ? points : closeBoundary(points);
@@ -253,7 +269,7 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
             message.textContent = '꼭짓점을 네 개 이상 찍어 직각으로 닫히는 영역을 만드세요.';
             return;
         }
-        saving = true;
+        saving = save.disabled = true;
         message.textContent = '원본 PDF에서 PNG를 만드는 중입니다.';
         try {
             const prior = sheet.regions.find(entry => entry.article === article);
@@ -269,10 +285,10 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
             const [nextPage, nextArticle] = nextPicker.value.split(':').map(Number);
             const next = nextPage ? { page: nextPage, article: nextArticle } : null;
             const printBody = printInput.value.trim() || null;
-            const onlineBody = onlineInput.value.trim() || null;
+            const printTitle = titleInput.value.trim() || null;
             const saved = await supabase.from('evere_epaper_regions').upsert({
                 issue: sheet.issue, page: sheet.page, article_number: article, points: boundary, png_path: pngPath,
-                next_page: next?.page ?? null, next_article: next?.article ?? null, print_body: printBody, online_body: onlineBody,
+                next_page: next?.page ?? null, next_article: next?.article ?? null, print_body: printBody, print_title: printTitle,
             });
             if (saved.error) {
                 if (changed) await bucket.remove([pngPath]);
@@ -280,12 +296,13 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
             }
             if (changed && prior?.pngPath && !prior.pngPath.startsWith('/')) await bucket.remove([prior.pngPath]);
             const regions = [...sheet.regions.filter(entry => entry.article !== article),
-                { article, points: boundary, pngPath, printBody, onlineBody, next }];
+                { article, points: boundary, pngPath, printBody, printTitle, next }];
             onSave(sheet.issue, sheet.page, regions);
         } catch {
             if (editing === sheet) message.textContent = '영역과 PNG를 저장하지 못했습니다. 다시 시도해 주세요.';
         } finally {
             saving = false;
+            save.disabled = !picker.value;
         }
     };
     const crop = ui('article-crop');
@@ -387,7 +404,7 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
         download.disabled = !selection?.pngPath;
         print.disabled = tab === 'image' ? !cropUrl : online ? !article : !printText;
         if (tab === 'text') {
-            ui('article-title').textContent = printText?.title || selection?.row.title || '';
+            ui('article-title').textContent = selection?.printTitle || printText?.title || selection?.row.title || '';
             ui('article-copy').textContent = printText?.body || '';
             ui('article-subtitle').hidden = true;
             status.textContent = textReady ? printText ? '' : '이 기사에서 읽을 수 있는 지면 텍스트가 없습니다.' : '지면 텍스트를 불러오는 중입니다.';
@@ -398,8 +415,7 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
             ui('article-subtitle').hidden = !article?.subtitle?.trim();
             const copy = ui('article-copy');
             copy.replaceChildren();
-            if (article?.manual) copy.textContent = article.body;
-            else if (article) renderBody(copy, article, { legacyLineBreaks: true });
+            if (article) renderBody(copy, article, { legacyLineBreaks: true });
             copy.querySelectorAll('figure').forEach(figure => figure.remove());
             status.textContent = onlineReady ? article ? '' : '등록된 온라인 본문이 없습니다.' : '온라인 기사를 불러오는 중입니다.';
         }
@@ -466,12 +482,6 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
             textReady = true;
             if (activeTab === 'text') switchTab('text');
         });
-        if (next.issue !== 1) {
-            article = next.onlineBody ? { title: next.row.title, body: next.onlineBody, manual: true } : null;
-            onlineReady = true;
-            if (activeTab === 'online') switchTab('online');
-            return;
-        }
         const { data, error } = await supabase.from('evere_articles').select('title,subtitle,body,body_html,published_at,byline_names')
             .eq('article_number', next.row.article_number).eq('status', 'published').maybeSingle();
         if (job !== current) return;
@@ -480,7 +490,7 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
             if (activeTab === 'online') switchTab('online');
             return;
         }
-        article = next.onlineBody ? { ...data, body: next.onlineBody, manual: true } : data;
+        article = data;
         ui('online-date').dateTime = data.published_at || '';
         ui('online-date').textContent = data.published_at ? new Intl.DateTimeFormat('sv-SE', {
             timeZone: 'Asia/Seoul', dateStyle: 'short', timeStyle: 'short',
@@ -503,7 +513,8 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
         hovered = undefined;
         targets.clear();
         contexts = nextSheets;
-        toggle.hidden = !nextSheets.some(sheet => sheet.editable && sheet.src && sheet.pdf && sheet.articles.length);
+        const canEdit = nextSheets.some(sheet => sheet.editable && sheet.src && sheet.pdf && sheet.articles.length);
+        for (const button of toggles) button.hidden = !canEdit;
         if (selection) close(false);
         sheets = [];
         layer.replaceChildren();
@@ -522,10 +533,10 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
                 polygon.setAttribute('points', points.map(point => point.join(',')).join(' '));
                 polygon.setAttribute('tabindex', '0');
                 polygon.setAttribute('role', 'button');
-                polygon.setAttribute('aria-label', row.title + ' 연결 기사 보기');
+                polygon.setAttribute('aria-label', (region.printTitle || row.title) + ' 기사 보기');
                 polygon.setAttribute('aria-pressed', 'false');
                 const title = document.createElementNS(svgNS, 'title');
-                title.textContent = row.title + ' · 연결 기사 보기';
+                title.textContent = (region.printTitle || row.title) + ' · 기사 보기';
                 polygon.append(title);
                 const key = page + ':' + id;
                 targets.set(key, { polygon, details: { ...region, row, pdf, printText, page, issue } });
@@ -555,7 +566,7 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
             layer.append(overlay);
             const visibleSheet = { ...sheet, overlay };
             overlay.addEventListener('click', event => {
-                if (editing !== visibleSheet || saving || closed || points.length >= 63) return;
+                if (editing !== visibleSheet || saving || !picker.value || closed || points.length >= 63) return;
                 const rect = overlay.getBoundingClientRect();
                 const x = Math.round(1000 * (event.clientX - rect.left) / rect.width);
                 const y = Math.round(1000 * (event.clientY - rect.top) / rect.height);

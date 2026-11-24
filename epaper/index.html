@@ -8,8 +8,8 @@
   <link rel="icon" href="/assets/evere/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="/assets/evere/evere-ellipsis.css?v=punctuation-3">
-  <link rel="stylesheet" href="/assets/evere/epaper.css?v=print-continuation-1">
-  <script type="module" src="/assets/evere/epaper.js?v=print-continuation-1"></script>
+  <link rel="stylesheet" href="/assets/evere/epaper.css?v=region-workspace-1">
+  <script type="module" src="/assets/evere/epaper.js?v=region-workspace-1"></script>
 </head>
 <body>
   <div class="viewer-layout">
@@ -29,16 +29,19 @@
         <a href="/" aria-label="이브레 홈"><img src="/assets/evere/logo.svg" alt="이브레"></a>
         </div>
       </div>
-      <button type="button" id="epaper-region-toggle" hidden>기사 영역 지정</button>
-      <form id="epaper-region-form" hidden>
-        <label>기사 <select id="epaper-region-article"></select></label>
-        <label>이전 연결 기사 <output id="epaper-region-previous">연결 없음</output></label>
-        <label>다음 연결 기사 <select id="epaper-region-next"></select></label>
-        <label>지면 텍스트 <textarea id="epaper-region-print" rows="3"></textarea></label>
-        <label>온라인 본문 <textarea id="epaper-region-online" rows="3"></textarea></label>
-        <p>지면을 눌러 꼭짓점을 찍으세요. 각 선은 가로 또는 세로로 이어집니다.</p>
-        <div><button type="button" id="epaper-region-undo">점 되돌리기</button><button type="button" id="epaper-region-reset">새로 그리기</button><button type="button" id="epaper-region-finish">영역 닫기</button><button type="submit">영역 저장</button><button type="button" id="epaper-region-close">닫기</button></div>
-        <p id="epaper-region-status" role="status"></p>
+      <button type="button" id="epaper-region-toggle" aria-controls="epaper-region-form" aria-expanded="false" hidden><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6m-6 4h6"/></svg>기사 영역 지정</button>
+      <form id="epaper-region-form" aria-labelledby="epaper-region-heading" hidden>
+        <header><h2 id="epaper-region-heading">기사 영역 지정</h2><button type="button" id="epaper-region-close" aria-label="영역 편집 닫기">×</button></header>
+        <label>이브레 기사 <select id="epaper-region-article" required></select></label>
+        <fieldset id="epaper-region-fields" disabled>
+          <label>지면 제목 <input id="epaper-region-title" type="text" maxlength="300"></label>
+          <label>지면 텍스트 <textarea id="epaper-region-print" rows="5" maxlength="100000"></textarea></label>
+          <label>이전 연결 기사 <output id="epaper-region-previous">연결 없음</output></label>
+          <label>다음 연결 기사 <select id="epaper-region-next"></select></label>
+          <p class="region-instructions">지면을 클릭해 꼭짓점을 찍으세요. 첫 점을 다시 누르거나 영역 닫기를 선택하면 직각으로 닫힙니다.</p>
+          <div class="region-tools"><button type="button" id="epaper-region-reset">새 영역 그리기</button><button type="button" id="epaper-region-undo">점 되돌리기</button><button type="button" id="epaper-region-finish">영역 닫기</button></div>
+        </fieldset>
+        <footer><p id="epaper-region-status" role="status"></p><button type="submit" id="epaper-region-save" disabled>저장</button></footer>
       </form>
       <section id="epaper-issue-popover" class="viewer-issue-popover" aria-labelledby="epaper-issue-title" hidden>
         <header><h2 id="epaper-issue-title">발행호</h2><button type="button" id="epaper-issue-close" aria-label="발행호 닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M18 6L6 18" stroke-linecap="round" stroke-linejoin="round"></path><path d="M6 6L18 18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button></header>
@@ -58,7 +61,7 @@
         <p class="viewer-status" id="epaper-status" role="status">지면을 불러오는 중입니다.</p>
         <div class="viewer-stage" id="epaper-stage" hidden>
           <iframe id="epaper-pdf" title="이브레 신문 지면 PDF" hidden></iframe>
-          <div class="viewer-paper-scroll" id="epaper-image-scroll" hidden><img id="epaper-image" alt=""><img id="epaper-second-image" alt="" hidden></div>
+          <div class="viewer-paper-scroll" id="epaper-image-scroll" hidden><img id="epaper-image" alt="" draggable="false"><img id="epaper-second-image" alt="" draggable="false" hidden></div>
           <div id="epaper-search-marks" aria-hidden="true"></div>
           <div class="viewer-hotspots" id="epaper-hotspots"></div>
           <button type="button" id="epaper-linked-previous" class="viewer-linked-badge" aria-label="이전 연결 기사 보기" hidden><img src="/assets/evere/epaper-article-chain.svg" width="12" height="12" alt="">연결 기사 보기</button>
@@ -83,6 +86,7 @@
           <a id="epaper-download" aria-label="현재 면 PNG 다운로드" download hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0"><path d="M12 15V3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M7 10L12 15L17 10" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>다운로드</span></a>
           <button type="button" id="epaper-print" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0"><path d="M6.6 17.4001H4.8C4.32261 17.4001 3.86477 17.2104 3.52721 16.8728C3.18964 16.5353 3 16.0774 3 15.6001V11.1C3 10.6227 3.18964 10.1648 3.52721 9.82726C3.86477 9.48969 4.32261 9.30005 4.8 9.30005H19.2C19.6774 9.30005 20.1352 9.48969 20.4728 9.82726C20.8104 10.1648 21 10.6227 21 11.1V15.6001C21 16.0774 20.8104 16.5353 20.4728 16.8728C20.1352 17.2104 19.6774 17.4001 19.2 17.4001H17.4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M6.59961 9.3V3.9C6.59961 3.66131 6.69443 3.43239 6.86321 3.2636C7.032 3.09482 7.26091 3 7.49961 3H16.4996C16.7383 3 16.9672 3.09482 17.136 3.2636C17.3048 3.43239 17.3996 3.66131 17.3996 3.9V9.3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M16.4996 13.8H7.49961C7.00255 13.8 6.59961 14.203 6.59961 14.7V20.1001C6.59961 20.5971 7.00255 21.0001 7.49961 21.0001H16.4996C16.9967 21.0001 17.3996 20.5971 17.3996 20.1001V14.7C17.3996 14.203 16.9967 13.8 16.4996 13.8Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>인쇄</span></button>
           <button type="button" id="epaper-fullscreen" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0"><path d="M3 7V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H7" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M17 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V7" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M21 17V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H17" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M7 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V17" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>전체 화면</span></button>
+          <button type="button" id="epaper-region-toolbar" aria-controls="epaper-region-form" aria-expanded="false" hidden><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6m-6 4h6"/></svg><span>기사 영역 지정</span></button>
           <button type="button" id="epaper-pin" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0"><path d="M12 16.5V21" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M14.6982 9.606V7.5C14.6982 7.2614 14.793 7.0324 14.9618 6.8637C15.1306 6.6949 15.3595 6.6 15.5982 6.6C16.0756 6.6 16.5335 6.4104 16.871 6.0728C17.2086 5.7353 17.3982 5.2774 17.3982 4.8C17.3982 4.3227 17.2086 3.8648 16.871 3.5273C16.5335 3.1897 16.0756 3 15.5982 3H8.2992" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M3 3L21 21" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M9.2988 9.3009V10.8849C9.2987 11.2198 9.2051 11.548 9.0286 11.8326C8.8521 12.1172 8.5997 12.3469 8.2998 12.496L6.6978 13.306C6.3979 13.455 6.1456 13.6847 5.9691 13.9693C5.7926 14.2538 5.699 14.582 5.6988 14.917V15.601C5.6988 15.8396 5.7936 16.0686 5.9624 16.2373C6.1312 16.4062 6.3601 16.501 6.5988 16.501H16.4988" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>고정 해제</span></button>
         </nav></div>
       </section>
