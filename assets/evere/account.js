@@ -265,16 +265,18 @@ async function renderMemberTable() {
         if (batch.length < 200) break;
     }
     if (!rows.length) { memberTableMessage('등록된 회원이 없습니다.'); return; }
+    rows.sort((first, second) =>
+        Date.parse(first.joined_at) - Date.parse(second.joined_at) ||
+        first.joined_at.localeCompare(second.joined_at) || first.id.localeCompare(second.id));
     const photos = new Map();
-    ui('member-rows').replaceChildren(...rows.map(entry => {
+    ui('member-rows').replaceChildren(...rows.map((entry, index) => {
         const row = element('tr');
         const avatar = element('td');
         const placeholder = element('span', Array.from(entry.display_name)[0], 'member-avatar');
         avatar.append(placeholder);
         if (entry.avatar_path) photos.set(entry.avatar_path, avatar);
-        row.append(avatar);
-        for (const value of [entry.email, entry.display_name, entry.position_title,
-            entry.joined_at && memberDate.format(new Date(entry.joined_at)),
+        row.append(element('td', String(index + 1)), avatar);
+        for (const value of [entry.email, entry.display_name, roleNames[entry.role], entry.position_title,
             entry.last_sign_in_at && memberDate.format(new Date(entry.last_sign_in_at))]) {
             row.append(element('td', value || '—'));
         }
