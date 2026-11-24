@@ -1,4 +1,4 @@
-import { configureArticleViewer, indexPdf, renderPdfPreview } from './epaper-article.js?v=multi-issue-1';
+import { configureArticleViewer, indexPdf } from './epaper-article.js?v=prepared-pages-1';
 import { configurePrintSearch } from './epaper-search.js?v=2';
 import { supabase } from './supabase.js';
 import { setArticleTitle } from './article-label.js';
@@ -200,30 +200,35 @@ function setPageImage(src, label) {
     const stage = ui('stage');
     const image = ui('image');
     const request = ++imageRequest;
-    stage.classList.remove('is-loading', 'page-loaded');
+    stage.classList.remove('page-loaded');
     image.alt = label;
     if (image.getAttribute('src') !== src) image.src = src;
-    const loading = setTimeout(() => {
-        if (request === imageRequest) stage.classList.add('is-loading');
-    }, 150);
-    const ready = image.decode ? image.decode() : Promise.resolve();
-    void ready.then(() => {
-        if (request === imageRequest) stage.classList.add('page-loaded');
-    }).catch(() => {}).finally(() => {
-        clearTimeout(loading);
-        if (request === imageRequest) stage.classList.remove('is-loading');
-    });
+    void image.decode().then(() => {
+        if (request !== imageRequest || !current) return;
+        stage.classList.add('page-loaded');
+        prefetchAdjacent(current.edition, current.leftPage, current.rightPage);
+    }).catch(() => {});
 }
 
-const pdfPreviews = new Map();
-const pendingPreviews = new Map();
-const failedPreviews = new Set();
-const previewKey = (pdf, page) => pdf + '#' + page;
+function resolvePreview(edition, page) {
+    const value = edition.previews?.[page];
+    return sameSiteAsset(value, '.png') || sameSiteAsset(value, '.webp');
+}
 
-function resolvePreview(edition, pdf, page) {
-    const existing = sameSiteAsset(edition.previews?.[page], '.png');
-    if (existing || !edition.renderPreviews || !pdf || !page) return existing;
-    return pdfPreviews.get(previewKey(pdf, page)) || '';
+const prefetched = new Set();
+function prefetchAdjacent(edition, left, right) {
+    const adjacent = [edition.pages[edition.pages.indexOf(left) - 1], edition.pages[edition.pages.indexOf(right || left) + 1]];
+    for (const page of new Set(adjacent.flatMap(number => number ? spreadPages(edition, number) : []))) {
+        const source = resolvePreview(edition, page);
+        if (!source || prefetched.has(source)) continue;
+        prefetched.add(source);
+        const hint = document.createElement('link');
+        hint.rel = 'prefetch';
+        hint.as = 'image';
+        hint.href = source;
+        hint.fetchPriority = 'low';
+        document.head.append(hint);
+    }
 }
 
 function spreadPages(edition, requested) {
@@ -231,34 +236,6 @@ function spreadPages(edition, requested) {
     const left = requested % 2 === 0 ? requested : requested - 1;
     return edition.pages.includes(left) && edition.pages.includes(left + 1)
         ? [left, left + 1] : [requested, null];
-}
-
-function requestPreviews(edition, pdf, pages) {
-    if (!edition.renderPreviews || !pdf) return;
-    for (const page of pages) {
-        const key = previewKey(pdf, page);
-        if (!page || resolvePreview(edition, pdf, page) || pendingPreviews.has(key) || failedPreviews.has(key)) continue;
-        const pending = renderPdfPreview(pdf, page).then(blob => {
-            pdfPreviews.set(key, URL.createObjectURL(blob));
-            if (pdfPreviews.size > 12) {
-                const active = current?.edition === edition ? [current.leftPage, current.rightPage] : [];
-                for (const [oldKey, url] of pdfPreviews) {
-                    if (oldKey === key || active.some(number => oldKey === previewKey(pdf, number))) continue;
-                    URL.revokeObjectURL(url);
-                    pdfPreviews.delete(oldKey);
-                    break;
-                }
-            }
-        }).catch(() => failedPreviews.add(key)).finally(() => {
-            pendingPreviews.delete(key);
-            if (current?.edition !== edition || (current.leftPage !== page && current.rightPage !== page)) return;
-            const selected = articleViewer.selectedArticle();
-            const item = edition.articles.find(row => row.article_number === selected);
-            render(current.issueNumber, current.page);
-            if (item) articleViewer.openArticle(item, item.print_page);
-        });
-        pendingPreviews.set(key, pending);
-    }
 }
 
 function render(issueNumber, pageNumber, updateHistory = '') {
@@ -298,8 +275,7 @@ function render(issueNumber, pageNumber, updateHistory = '') {
     ui('pagination').hidden = false;
 
     const pdf = sameSiteAsset(edition.pdf, '.pdf');
-    const photo = resolvePreview(edition, pdf, page);
-    const loadingPreview = edition.renderPreviews && pdf && !photo && !failedPreviews.has(previewKey(pdf, page));
+    const photo = resolvePreview(edition, page);
     const pdfLink = pdf && pdf + '#page=' + page;
     ui('paper').hidden = Boolean(photo || pdf);
     const download = ui('download');
@@ -311,17 +287,15 @@ function render(issueNumber, pageNumber, updateHistory = '') {
         download.removeAttribute('href');
     }
     ui('print').dataset.pdf = pdfLink || '';
-    ui('pdf').hidden = Boolean(photo) || !pdf || loadingPreview;
-    if (!photo && pdf && !loadingPreview) ui('pdf').src = pdfLink;
+    ui('pdf').hidden = Boolean(photo) || !pdf;
+    if (!photo && pdf) ui('pdf').src = pdfLink;
     else ui('pdf').removeAttribute('src');
     ui('image-scroll').hidden = !photo;
     const index = edition.pages.indexOf(page);
-    const nextPhoto = resolvePreview(edition, pdf, nextPage);
-    requestPreviews(edition, pdf, spread ? [page, nextPage] : [page]);
-    if (loadingPreview) ui('status').textContent = '원본 PDF에서 지면을 표시하는 중입니다.';
+    const nextPhoto = resolvePreview(edition, nextPage);
     const hasSpread = Boolean(spread && photo && nextPhoto);
     ui('spread').disabled = !edition.pages.some(number => number % 2 === 0 && edition.pages.includes(number + 1) &&
-        (edition.renderPreviews && pdf || edition.previews?.[number] && edition.previews?.[number + 1]));
+        (resolvePreview(edition, number) && resolvePreview(edition, number + 1)));
     ui('spread').setAttribute('aria-pressed', String(spread));
     ui('spread').querySelector('span').textContent = spread ? '양면 보기' : '단면 보기';
     ui('second-image').hidden = !hasSpread;
@@ -353,7 +327,7 @@ function render(issueNumber, pageNumber, updateHistory = '') {
     if (photo) setPageImage(photo, issueNumber + '호 ' + page + '면 원본 지면');
     else {
         imageRequest++;
-        ui('stage').classList.remove('is-loading', 'page-loaded');
+        ui('stage').classList.remove('page-loaded');
     }
     printSearch.setIssue(issueNumber, pdf);
     articleViewer.setSheets([
@@ -417,7 +391,7 @@ function render(issueNumber, pageNumber, updateHistory = '') {
 
 async function start() {
     const [manifest, articles] = await Promise.all([
-        fetch('/epaper/editions.json?v=multi-issue-1').then(response => response.ok ? response.json() : null).catch(() => null),
+        fetch('/epaper/editions.json?v=prepared-pages-1').then(response => response.ok ? response.json() : null).catch(() => null),
         loadPrintArticles().catch(() => null),
         loadSavedRegions().catch(() => {}),
         loadImageRegions().catch(() => {}),
@@ -491,6 +465,31 @@ ui('spread').onclick = () => {
 ui('dark').onclick = () => {
     const active = document.body.classList.toggle('is-dark');
     ui('dark').setAttribute('aria-pressed', String(active));
+};
+ui('download').onclick = async event => {
+    const link = ui('download');
+    if (!link.pathname.endsWith('.webp')) return;
+    event.preventDefault();
+    const filename = link.download;
+    const image = new Image();
+    image.src = link.href;
+    try {
+        await image.decode();
+        const canvas = document.createElement('canvas');
+        canvas.width = image.naturalWidth;
+        canvas.height = image.naturalHeight;
+        canvas.getContext('2d').drawImage(image, 0, 0);
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+        if (!blob) throw new Error('PNG 생성 실패');
+        const url = URL.createObjectURL(blob);
+        const exportLink = document.createElement('a');
+        exportLink.href = url;
+        exportLink.download = filename;
+        exportLink.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch {
+        ui('status').textContent = '지면 이미지를 다운로드하지 못했습니다.';
+    }
 };
 ui('print').onclick = () => {
     if (!ui('image-scroll').hidden) window.print();

@@ -137,14 +137,7 @@ button:not(:disabled) { cursor: pointer; }
 #epaper-date-toggle svg { transition: transform var(--motion-panel) var(--motion-in-out); }
 .viewer-date:has(.viewer-date-details[data-collapsed]) #epaper-date-toggle { border-right-color: transparent; }
 .viewer-dock-wrap { transition: translate var(--motion-panel) var(--motion-in-out); }
-.viewer-stage.is-loading::after {
-    position: absolute; inset: 0; width: min(70dvh, 100%); margin: auto;
-    content: ''; pointer-events: none;
-    background: linear-gradient(105deg, #e3e3e3 20%, #fff 47%, #e3e3e3 74%) 100% / 220% 100%;
-    animation: viewer-loading-shimmer 500ms linear infinite;
-}
 .viewer-stage.page-loaded #epaper-image, #epaper-second-image.page-fade { animation: viewer-page-loading-fade 200ms ease-out; }
-@keyframes viewer-loading-shimmer { to { background-position: 0 0; } }
 @keyframes viewer-page-loading-fade { from { opacity: .72; } to { opacity: 1; } }
 .viewer-arrows svg { width: 20px; height: 20px; display: block; margin: auto; }
 @media (prefers-reduced-motion: reduce) {

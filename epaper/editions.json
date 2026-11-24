@@ -88,7 +88,6 @@
       "date": "2023-12-02",
       "pdf": "/epaper/files/2/231202.pdf",
       "pageCount": 8,
-      "renderPreviews": true,
       "thumbnails": {
         "1": "/epaper/files/2/thumb-1.png",
         "2": "/epaper/files/2/thumb-2.png",
@@ -98,6 +97,16 @@
         "6": "/epaper/files/2/thumb-6.png",
         "7": "/epaper/files/2/thumb-7.png",
         "8": "/epaper/files/2/thumb-8.png"
+      },
+      "previews": {
+        "1": "/epaper/files/2/page-1.webp",
+        "2": "/epaper/files/2/page-2.webp",
+        "3": "/epaper/files/2/page-3.webp",
+        "4": "/epaper/files/2/page-4.webp",
+        "5": "/epaper/files/2/page-5.webp",
+        "6": "/epaper/files/2/page-6.webp",
+        "7": "/epaper/files/2/page-7.webp",
+        "8": "/epaper/files/2/page-8.webp"
       }
     },
     {
@@ -105,12 +114,17 @@
       "date": "2023-12-09",
       "pdf": "/epaper/files/3/231209.pdf",
       "pageCount": 4,
-      "renderPreviews": true,
       "thumbnails": {
         "1": "/epaper/files/3/thumb-1.png",
         "2": "/epaper/files/3/thumb-2.png",
         "3": "/epaper/files/3/thumb-3.png",
         "4": "/epaper/files/3/thumb-4.png"
+      },
+      "previews": {
+        "1": "/epaper/files/3/page-1.webp",
+        "2": "/epaper/files/3/page-2.webp",
+        "3": "/epaper/files/3/page-3.webp",
+        "4": "/epaper/files/3/page-4.webp"
       }
     },
     {
@@ -118,7 +132,6 @@
       "date": "2023-12-16",
       "pdf": "/epaper/files/4/231216.pdf",
       "pageCount": 6,
-      "renderPreviews": true,
       "thumbnails": {
         "1": "/epaper/files/4/thumb-1.png",
         "2": "/epaper/files/4/thumb-2.png",
@@ -126,6 +139,14 @@
         "4": "/epaper/files/4/thumb-4.png",
         "5": "/epaper/files/4/thumb-5.png",
         "6": "/epaper/files/4/thumb-6.png"
+      },
+      "previews": {
+        "1": "/epaper/files/4/page-1.webp",
+        "2": "/epaper/files/4/page-2.webp",
+        "3": "/epaper/files/4/page-3.webp",
+        "4": "/epaper/files/4/page-4.webp",
+        "5": "/epaper/files/4/page-5.webp",
+        "6": "/epaper/files/4/page-6.webp"
       }
     },
     {
@@ -133,12 +154,17 @@
       "date": "2023-12-23",
       "pdf": "/epaper/files/5/231223.pdf",
       "pageCount": 4,
-      "renderPreviews": true,
       "thumbnails": {
         "1": "/epaper/files/5/thumb-1.png",
         "2": "/epaper/files/5/thumb-2.png",
         "3": "/epaper/files/5/thumb-3.png",
         "4": "/epaper/files/5/thumb-4.png"
+      },
+      "previews": {
+        "1": "/epaper/files/5/page-1.webp",
+        "2": "/epaper/files/5/page-2.webp",
+        "3": "/epaper/files/5/page-3.webp",
+        "4": "/epaper/files/5/page-4.webp"
       }
     },
     {
@@ -146,12 +172,17 @@
       "date": "2023-12-30",
       "pdf": "/epaper/files/6/231230.pdf",
       "pageCount": 4,
-      "renderPreviews": true,
       "thumbnails": {
         "1": "/epaper/files/6/thumb-1.png",
         "2": "/epaper/files/6/thumb-2.png",
         "3": "/epaper/files/6/thumb-3.png",
         "4": "/epaper/files/6/thumb-4.png"
+      },
+      "previews": {
+        "1": "/epaper/files/6/page-1.webp",
+        "2": "/epaper/files/6/page-2.webp",
+        "3": "/epaper/files/6/page-3.webp",
+        "4": "/epaper/files/6/page-4.webp"
       }
     }
   ]
