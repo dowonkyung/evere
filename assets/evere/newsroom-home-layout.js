@@ -10,7 +10,7 @@ const labels = ['대표 헤드라인', '보조 헤드라인 1', '보조 헤드�
     '하단 오른쪽 기사 1', '하단 오른쪽 기사 2', '하단 오른쪽 기사 3', '하단 대표 기사 바로 아래'];
 const batchSize = 20;
 
-export function configureHomeVisualEditor(isHomeSelected) {
+export function configureHomeVisualEditor(isHomeSelected, openIssues) {
     const ui = id => document.getElementById(id);
     const editor = ui('home-visual-editor');
     const frame = ui('home-preview');
@@ -205,11 +205,13 @@ export function configureHomeVisualEditor(isHomeSelected) {
             .home-preview-region button svg { display: block; width: 20px; height: 20px; }
         `;
         doc.head.append(style);
-        const overlays = groups.map(group => {
+        const regions = [{ name: '메인 이슈 링크', targets: ['.evere-home-issues'], open: openIssues },
+            ...groups.map(group => ({ ...group, open: () => openGroup(group) }))];
+        const overlays = regions.map(group => {
             const targets = group.targets.map(selector => doc.querySelector(selector)).filter(Boolean);
             const overlay = doc.createElement('div');
             overlay.className = 'home-preview-region';
-            const edit = button('', () => void openGroup(group), doc);
+            const edit = button('', () => void group.open(), doc);
             edit.setAttribute('aria-label', group.name + ' 편집');
             edit.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" stroke-width="1.5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M13.0207 5.82839L15.8491 2.99996L20.7988 7.94971L17.9704 10.7781M13.0207 5.82839L3.41405 15.435C3.22652 15.6225 3.12116 15.8769 3.12116 16.1421V20.6776H7.65669C7.92191 20.6776 8.17626 20.5723 8.3638 20.3847L17.9704 10.7781M13.0207 5.82839L17.9704 10.7781" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>';
             overlay.append(edit);

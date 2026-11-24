@@ -1,4 +1,4 @@
-import { configureHomeVisualEditor } from './newsroom-home-layout.js?v=edit-icon-1';
+import { configureHomeVisualEditor } from './newsroom-home-layout.js?v=home-issues-1';
 import { categoryPath } from './routes.js?v=routes-1';
 import { supabase } from './supabase.js';
 import { sectors, articleCategories } from './article-taxonomy.js';
@@ -11,7 +11,7 @@ const nav = [...document.querySelectorAll('.newsroom-nav [data-view]')];
 const layout = ui('layout-form');
 const layoutSubmit = layout.querySelector('[type="submit"]');
 const slots = [...ui('layout-slots').querySelectorAll('select')];
-const showHomeVisualEditor = configureHomeVisualEditor(() => layout.elements.page.value === 'home');
+const showHomeVisualEditor = configureHomeVisualEditor(() => layout.elements.page.value === 'home', openHomeIssues);
 
 function sectionHeadLayout(page, category) {
     return page !== 'home' && page !== 'opinion' && category === '';
@@ -36,6 +36,8 @@ const boardForm = ui('board-form');
 const postForm = ui('board-post-form');
 const seriesForm = ui('series-form');
 const issuesForm = ui('home-issues-form');
+const issuesDialog = ui('home-issues-dialog');
+let issuesSaving = false;
 const issuesFields = ui('home-issues-fields');
 let issuesRequest = 0;
 let member = null;
@@ -90,7 +92,7 @@ function selectView() {
         else link.removeAttribute('aria-current');
     }
     if (view === 'profile') ui('profile-settings').open = true;
-    if (view === 'layout') refreshIssues();
+
     if (view === 'layout') loadLayout().catch(() => notify('화면 배치를 불러오지 못했습니다.', true));
     if (view === 'series') loadSeries().catch(() => notify('기획·연재 분류를 불러오지 못했습니다.', true));
     if (view === 'boards') loadBoards().catch(() => notify('게시판을 불러오지 못했습니다.', true));
@@ -104,7 +106,7 @@ document.addEventListener('evere:member', (event) => {
     optionList(layout.elements.page, allowed, layout.elements.page.value);
     optionList(seriesForm.elements.sector, allowed.filter(([key]) => key !== 'home'), seriesForm.elements.sector.value);
     resetCategories();
-    if (!member) refreshIssues();
+
     if (member) selectView();
 });
 window.addEventListener('hashchange', selectView);
@@ -230,7 +232,6 @@ async function loadLayout() {
 }
 layout.elements.page.addEventListener('change', () => {
     resetCategories();
-    refreshIssues();
     loadLayout().catch(() => notify('화면 배치를 불러오지 못했습니다.', true));
 });
 layout.elements.category.addEventListener('change', () => {
@@ -310,12 +311,11 @@ function addIssueRow(entry = { label: '', url: '' }) {
     return row;
 }
 
-async function refreshIssues() {
+async function openHomeIssues() {
+    if (issuesDialog.open || !['owner', 'director'].includes(member?.role) || layout.elements.page.value !== 'home') return;
     const request = ++issuesRequest;
-    const allowed = ['owner', 'director'].includes(member?.role) && layout.elements.page.value === 'home';
-    issuesForm.hidden = !allowed;
     issuesFields.disabled = true;
-    if (!allowed) return;
+    issuesDialog.showModal();
     issuesStatus('이슈 링크를 불러오는 중입니다.');
     try {
         const entries = await loadHomeIssues();
@@ -326,9 +326,15 @@ async function refreshIssues() {
         issuesFields.disabled = false;
         issuesStatus('');
     } catch {
-        if (request === issuesRequest) issuesStatus('이슈 링크를 불러오지 못했습니다. 화면 편집을 다시 열어 주세요.', true);
+        if (request === issuesRequest) issuesStatus('이슈 링크를 불러오지 못했습니다. 팝업을 다시 열어 주세요.', true);
     }
 }
+
+issuesDialog.addEventListener('close', () => { issuesRequest++; });
+issuesDialog.addEventListener('cancel', event => { if (issuesSaving) event.preventDefault(); });
+issuesDialog.querySelector('form[method="dialog"]').addEventListener('submit', event => {
+    if (issuesSaving) event.preventDefault();
+});
 
 ui('add-home-issue').addEventListener('click', () => {
     const row = addIssueRow();
@@ -351,13 +357,19 @@ issuesForm.addEventListener('submit', async (event) => {
     }
     const request = issuesRequest;
     issuesFields.disabled = true;
+    issuesSaving = true;
     issuesStatus('저장 중입니다.');
     try {
         value(await supabase.rpc('evere_save_home_issues', { items: entries }));
-        if (request === issuesRequest) issuesStatus('메인페이지에 이슈 링크를 저장했습니다.');
+        if (request === issuesRequest) {
+            issuesDialog.close();
+            ui('home-preview').contentWindow.location.reload();
+            notify('메인페이지에 이슈 링크를 저장했습니다.');
+        }
     } catch {
         if (request === issuesRequest) issuesStatus('저장하지 못했습니다. 입력 내용은 유지됩니다. 다시 시도해 주세요.', true);
     } finally {
+        issuesSaving = false;
         if (request === issuesRequest) issuesFields.disabled = false;
     }
 });
