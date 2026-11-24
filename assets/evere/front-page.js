@@ -90,7 +90,8 @@ async function renderArticles() {
     }
     const hasLower = [...lowerItems.values()].some(item => !item.hidden);
     lowerList.querySelector('.main-block').hidden = !hasLower;
-    lowerList.querySelector('[data-home-list-empty]').hidden = hasLower;
+    lowerList.hidden = !hasLower;
+    document.querySelector('[data-home-list-empty]').hidden = hasLower;
     lowerList.querySelector('[data-home-sub-list]').hidden = ![5, 6, 7].some(slot => !lowerItems.get(slot).hidden);
     recent.filter(({ id }) => !placed.has(id)).slice(0, latestLimit).forEach((article, index) => {
         const rendered = makeArticle(article, false, '300 / 200');

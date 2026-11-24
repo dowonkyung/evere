@@ -187,9 +187,10 @@ export function configureHomeVisualEditor(isHomeSelected, openIssues) {
         if (!home || !win) return;
         const style = doc.createElement('style');
         style.textContent = `
+            [data-home-list][hidden] { display: flex !important; }
             [data-home-list] .main-block[hidden], [data-home-list] [data-home-sub-list][hidden],
             [data-home-list] [data-home-slot][hidden] { display: block !important; }
-            [data-home-list] [data-home-list-empty] { display: none !important; }
+            [data-home-list-empty] { display: none !important; }
             [data-home-slot]:empty { min-height: 90px; }
             [data-home-slot="4"]:empty { min-height: 220px; }
             [data-home-slot]:empty::after { content: "배치된 기사 없음"; display: block; padding: 18px 10px; color: #606666; }

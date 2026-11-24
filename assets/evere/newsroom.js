@@ -1,4 +1,4 @@
-import { configureHomeVisualEditor } from './newsroom-home-layout.js?v=home-issues-1';
+import { configureHomeVisualEditor } from './newsroom-home-layout.js?v=home-lower-layout-1';
 import { categoryPath } from './routes.js?v=routes-1';
 import { supabase } from './supabase.js';
 import { sectors, articleCategories } from './article-taxonomy.js';
