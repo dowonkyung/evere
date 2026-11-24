@@ -371,18 +371,19 @@ async function render() {
         time.textContent = '입력 ' + dateFormat.format(new Date(data.published_at));
     }
     const names = data.byline_names;
+    const reporterCount = data.byline?.length || 0;
     const byline = ui('byline');
     const reporterName = (name) => /\s기자$/.test(name) ? name : name + ' 기자';
     const setByline = (titles = new Map()) => {
         byline.replaceChildren(...names.map((name, index) => {
             const person = document.createElement('span');
             const title = titles.get(index + 1);
-            person.textContent = title ? name + ' ' + title : reporterName(name);
+            person.textContent = index >= reporterCount ? name : (title ? name + ' ' + title : reporterName(name));
             return person;
         }));
     };
     setByline();
-    if (names.length) void Promise.resolve(supabase.rpc('evere_article_byline_positions', { target_article: data.id }))
+    if (reporterCount) void Promise.resolve(supabase.rpc('evere_article_byline_positions', { target_article: data.id }))
         .then(({ data: positions, error }) => {
             if (error || !positions?.length) return;
             const titles = new Map(positions.map(row => [row.byline_index, row.position_title.trim()]));
@@ -446,7 +447,7 @@ async function updateCommentSession() {
 async function readArticle() {
     for (let attempt = 0; attempt < 3; attempt++) {
         try {
-            let query = supabase.from('evere_articles').select('id,article_number,title,article_label,subtitle,body,body_html,photo_paths,sector,series_id,byline_names,published_at')
+            let query = supabase.from('evere_articles').select('id,article_number,title,article_label,subtitle,body,body_html,photo_paths,sector,series_id,byline,byline_names,published_at')
                 .eq('status', 'published');
             query = articleNumber ? query.eq('article_number', articleNumber) : query.eq('id', articleId);
             const response = await query.maybeSingle();
