@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="/assets/evere/home.css?v=evere-ellipsis-1">
   <link rel="stylesheet" href="/assets/evere/article-page.css?v=profile-email-gap-1">
   <script defer src="/assets/khan/swiper-bundle.min.js"></script>
-  <script defer src="/assets/evere/home.js?v=mobile-menu-button-1"></script>
+  <script defer src="/assets/evere/home.js?v=header-search-1"></script>
   <script type="module" src="/assets/evere/article.js?v=profile-email-gap-1"></script>
 <script type="module" src="/assets/evere/route-init.js?v=direct-route-1"></script>
 <link rel="preload" as="style" href="/assets/yna/default.css">
@@ -18,7 +18,7 @@
 <link rel="preload" as="style" href="/assets/yna/common.css">
 <link rel="preload" as="style" href="/assets/yna/style.css">
 <link rel="preload" as="style" href="/assets/yna/layout.css">
-<link rel="preload" as="style" href="/assets/evere/header.css?v=mobile-menu-button-1">
+<link rel="preload" as="style" href="/assets/evere/header.css?v=header-search-1">
 <link rel="preload" as="style" href="/assets/evere/article-header.css?v=reader-palette-1">
 <link rel="stylesheet" href="/assets/evere/header-first-paint.css">
 <script defer src="/assets/evere/header-first-paint.js"></script>
@@ -31,7 +31,7 @@
 <link rel="stylesheet" href="/assets/yna/common.css">
 <link rel="stylesheet" href="/assets/yna/style.css">
 <link rel="stylesheet" href="/assets/yna/layout.css">
-<link rel="stylesheet" href="/assets/evere/header.css?v=mobile-menu-button-1">
+<link rel="stylesheet" href="/assets/evere/header.css?v=header-search-1">
 <link rel="stylesheet" href="/assets/evere/article-header.css?v=reader-palette-1">
 <div class="yna-shell evere-compact-shell site-home-web">
 <div class="evere-category-dim" hidden></div>
@@ -80,7 +80,7 @@
 <div class="progress-bar01" id="progressBar01">
 <div class="bar" style="width: 0%;"></div>
 </div>
-<div class="evere-panel evere-search" id="evere-search" hidden><form role="search"><input type="search" name="query" aria-label="메인 기사 검색" required><button type="submit">검색</button></form><span aria-live="polite"></span><ul></ul></div>
+<div class="evere-panel evere-search" id="evere-search" hidden><form role="search" action="/search/"><input type="search" name="query" aria-label="기사 제목 검색" placeholder="검색어를 입력해 주세요" maxlength="120" required><button type="submit" aria-label="검색">검색</button></form></div>
 <div class="evere-category-popup" id="evere-menu" role="region" aria-label="전체 메뉴" tabindex="-1" hidden>
 <nav class="wrap category" aria-label="뉴스 사이트맵">
 <div class="title-m">

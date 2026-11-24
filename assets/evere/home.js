@@ -41,6 +41,8 @@ let activeHeader = mainHeader || compactHeader;
 
 function togglePanel(panel, button, open) {
     panel.hidden = !open;
+    menuDim.hidden = search.hidden && menu.hidden;
+    shell.classList.toggle('evere-search-open', !search.hidden);
     button.classList.toggle('active', open);
     button.setAttribute('aria-expanded', String(open));
     button.querySelector('.ir-txt01').textContent =
@@ -51,7 +53,6 @@ function setMenuOpen(open, section) {
     const button = activeHeader.querySelector('button.menu01');
     togglePanel(menu, button, open);
     menu.classList.toggle('active', open);
-    menuDim.hidden = !open;
     document.documentElement.classList.toggle('evere-sitemap-open', open);
     if (open) {
         menu.scrollTop = 0;
@@ -171,7 +172,15 @@ function closeCategoryMenu() {
 }
 
 closeMenu.addEventListener('click', closeCategoryMenu);
-menuDim.addEventListener('click', closeCategoryMenu);
+menuDim.addEventListener('click', () => {
+    if (!menu.hidden) {
+        closeCategoryMenu();
+    } else if (!search.hidden) {
+        const button = activeHeader.querySelector('.btn-srch-switch');
+        togglePanel(search, button, false);
+        button.focus({ preventScroll: true });
+    }
+});
 menu.addEventListener('click', (event) => {
     if (!event.defaultPrevented && event.target.closest('a[href]')) setMenuOpen(false);
 });
@@ -227,27 +236,17 @@ const weekLabel = header.querySelector('.txt-week');
 if (weekLabel) weekLabel.textContent = '(' + datePart('weekday') + ')';
 
 const searchForm = search.querySelector('form');
-searchForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const query = searchForm.elements.query.value.trim().toLocaleLowerCase('ko');
-    const results = search.querySelector('ul');
-    results.replaceChildren();
-    const unique = new Set();
-    if (query) {
-        for (const article of document.querySelectorAll('main a[href]')) {
-            const title = article.textContent.trim().replace(/\s+/g, ' ');
-            if (title.length < 8 || !title.toLocaleLowerCase('ko').includes(query) || unique.has(article.href)) continue;
-            unique.add(article.href);
-            const link = document.createElement('a');
-            link.href = article.href;
-            link.textContent = title;
-            const item = document.createElement('li');
-            item.append(link);
-            results.append(item);
-            if (unique.size === 8) break;
-        }
+searchForm.action = '/search/';
+searchForm.elements.query.placeholder = '검색어를 입력해 주세요';
+searchForm.elements.query.maxLength = 120;
+searchForm.querySelector('button').setAttribute('aria-label', '검색');
+searchForm.addEventListener('submit', event => {
+    const input = searchForm.elements.query;
+    input.value = input.value.trim();
+    if (!input.value) {
+        event.preventDefault();
+        input.focus();
     }
-    search.querySelector('[aria-live]').textContent = unique.size ? '검색 결과 ' + unique.size + '건' : '검색 결과가 없습니다.';
 });
 
 for (const carousel of document.querySelectorAll('main .swiper-initialized')) {
@@ -263,11 +262,11 @@ for (const carousel of document.querySelectorAll('main .swiper-initialized')) {
 }
 
 for (const selector of ['section.issue', '.issue-keyword-list']) {
-    new Swiper(selector + ' .swiper-container', { slidesPerView: 'auto' });
+    globalThis.Swiper && new Swiper(selector + ' .swiper-container', { slidesPerView: 'auto' });
 }
 
 for (const section of ['banner', 'interactive', 'photoplus', 'video']) {
-    new Swiper('.' + section + '-wrap .swiper-container', {
+    globalThis.Swiper && new Swiper('.' + section + '-wrap .swiper-container', {
         slidesPerView: 1,
         spaceBetween: 16,
         pagination: { el: '.' + section + '-wrap-pagignation', clickable: true },

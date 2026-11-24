@@ -42,20 +42,80 @@
 }
 .hide01, .evere-panel[hidden], .evere-category-popup[hidden], .evere-category-dim[hidden] { display: none; }
 
-.evere-panel {
+.yna-shell.evere-search-open { overflow: visible; }
+.evere-search {
     position: absolute;
-    z-index: 30;
+    z-index: 300;
     inset: 100% 0 auto;
-    padding: 20px calc((100% - min(100%, var(--evere-content-width))) / 2);
-    background: #fff;
-    border-bottom: 2px solid #00B8B4;
-    box-shadow: 0 8px 16px #0002;
+    padding: 26px 24px;
+    background: var(--background-default, #fff);
+    color: var(--text-primary, #151515);
 }
-.evere-panel form { display: flex; gap: 8px; }
-.evere-panel input { min-width: 0; flex: 1; padding: 10px; border: 1px solid #999; }
-.evere-panel button { padding: 10px 20px; background: #00B8B4; color: #fff; }
-.evere-panel ul { display: flex; flex-wrap: wrap; gap: 14px 24px; }
-.evere-panel [aria-live] { display: block; margin-top: 8px; }
+.evere-search::before {
+    content: "";
+    position: absolute;
+    inset: 0 24px auto;
+    max-width: var(--evere-content-width, 1216px);
+    margin-inline: auto;
+    border-top: 2px solid currentColor;
+}
+.evere-search form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-sizing: border-box;
+    width: min(100%, 800px);
+    min-height: 52px;
+    margin: 0 auto;
+    padding: 6px 16px 6px 24px;
+    border-radius: 28px;
+    background: var(--surface-soft, #f0f0f0);
+}
+.evere-search form:focus-within { box-shadow: 0 0 0 1px var(--stroke-framing, #d9d9d9); }
+.evere-search input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font-size: 16px;
+    line-height: 24px;
+}
+.evere-search input:focus { outline: none; }
+.evere-search input::placeholder { color: var(--text-secondary, #737373); }
+.evere-search button {
+    position: relative;
+    flex: 0 0 36px;
+    height: 36px;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: inherit;
+    font-size: 0;
+}
+.evere-search button::before,
+.evere-search button::after { content: ""; position: absolute; pointer-events: none; }
+.evere-search button::before {
+    width: 12px;
+    height: 12px;
+    inset: 8px auto auto 8px;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+}
+.evere-search button::after {
+    width: 9px;
+    height: 2px;
+    inset: 23px auto auto 21px;
+    border-radius: 2px;
+    background: currentColor;
+    transform: rotate(45deg);
+}
+.evere-search > :is(ul, [aria-live]) { display: none; }
+@media (max-width: 767px) {
+    .evere-search { padding: 16px 12px; }
+    .evere-search::before { inset-inline: 12px; border-top-width: 1px; }
+    .evere-search form { padding-inline: 16px 8px; }
+}
 :focus-visible { outline: 2px solid #00B8B4; outline-offset: 3px; }
 
 @media (max-width: 1023px) {
