@@ -26,8 +26,8 @@
 <link rel="preload" as="style" href="/assets/evere/header.css?v=evere-ellipsis-1">
 <link rel="stylesheet" href="/assets/evere/header-first-paint.css">
 <script defer src="/assets/evere/header-first-paint.js"></script>
-<script type="module" src="/assets/evere/reporter-page.js"></script>
-<link rel="stylesheet" href="/assets/evere/reporter-page.css">
+<script type="module" src="/assets/evere/reporter-page.js?v=subscribers-1"></script>
+<link rel="stylesheet" href="/assets/evere/reporter-page.css?v=subscribers-1">
 </head>
 <body class="evere-opinion-list evere-section evere-reporter">
 <div id="evere-header" data-css-pending data-compact-only>
@@ -225,7 +225,10 @@
                 </div>
             </div>
             <p class="journalist_introduce" id="reporter-bio" hidden></p>
-            <div class="journalist_popularity"><button type="button" id="reporter-follow" hidden></button></div>
+            <div class="journalist_popularity">
+                <dl><dt>구독</dt><dd id="reporter-subscriber-count" aria-live="polite">—</dd></dl>
+                <button type="button" id="reporter-follow" hidden>구독</button>
+            </div>
             <p id="reporter-action-status" role="status"></p>
         </header>
         <div class="journalist_body">

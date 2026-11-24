@@ -6,7 +6,7 @@ export const collections = {
     reporters: ['evere_reporter_follows', 'reporter_id'],
 };
 
-export async function collectionButton(button, kind, id, labels, statusTarget) {
+export async function collectionButton(button, kind, id, labels, statusTarget, onChange) {
     const [table, key] = collections[kind];
     const { data: { session } } = await supabase.auth.getSession();
     let selected = false;
@@ -36,6 +36,7 @@ export async function collectionButton(button, kind, id, labels, statusTarget) {
             if (error) throw error;
             selected = !selected;
             update();
+            onChange?.();
         } catch {
             status.textContent = '변경하지 못했습니다. 다시 시도해 주세요.';
         } finally {

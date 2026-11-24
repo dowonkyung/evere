@@ -12,8 +12,11 @@
 .evere-reporter .journalist_share { display: flex; margin-top: 11px; }
 .evere-reporter .text_email, .evere-reporter .journalist_introduce { color: #666; font-size: 14px; line-height: 22px; overflow-wrap: anywhere; }
 .evere-reporter .journalist_introduce { width: min(100%, 668px); margin-top: 24px; white-space: pre-wrap; }
-.evere-reporter .journalist_popularity { position: absolute; right: 0; top: 40px; }
-.evere-reporter #reporter-follow { min-width: 59px; padding: 5px 12px; border: 1px solid #00b8b4; border-radius: 4px; background: #fff; color: #007a79; font: inherit; font-size: 14px; cursor: pointer; }
+.evere-reporter .journalist_popularity { position: absolute; right: 0; top: 40px; box-sizing: border-box; min-width: 116px; padding-inline: 21px; border-inline-start: 1px solid rgba(0,0,0,.1); text-align: center; }
+.evere-reporter .journalist_popularity dl { margin: 0 0 12px; font-weight: 700; }
+.evere-reporter .journalist_popularity dt { color: #333; font-size: 14px; line-height: 20px; }
+.evere-reporter .journalist_popularity dd { margin: 0; color: #111; font-size: 24px; line-height: 34px; }
+.evere-reporter #reporter-follow { min-width: 59px; min-height: 28px; padding: 4px 12px; border: 1px solid #00b8b4; border-radius: 16px; background: #fff; color: #007a79; font: inherit; font-size: 13px; font-weight: 700; line-height: 18px; white-space: nowrap; cursor: pointer; }
 .evere-reporter #reporter-follow[aria-pressed="true"] { background: #00b8b4; color: #111; }
 .evere-reporter .journalist_body { margin-top: 60px; }
 .evere-reporter .journalist_body > .contents > div { width: min(884px, 100%); }
@@ -26,7 +29,7 @@
     .evere-reporter .name { font-size: 28px; line-height: 34px; }
     .evere-reporter .profile_info { margin-top: 6px; font-size: 15px; line-height: 21px; }
     .evere-reporter .journalist_share { margin-top: 12px; }
-    .evere-reporter .journalist_popularity { position: static; margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(0,0,0,.1); }
+    .evere-reporter .journalist_popularity { position: static; width: fit-content; margin: 24px 0 0 auto; padding: 16px 0 0; border: 0; text-align: right; }
     .evere-reporter .journalist_body { margin-top: 40px; }
 }
 @media (max-width: 767px) {

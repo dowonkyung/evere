@@ -2,7 +2,7 @@ import { supabase } from './supabase.js';
 import { articlePath } from './routes.js?v=routes-1';
 import { articleListPicture, loadArticleListPhotos } from './article-list-media.js?v=category-pages-1';
 import { setArticleTitle } from './article-label.js';
-import { collectionButton } from './reader-collections.js';
+import { collectionButton } from './reader-collections.js?v=subscribers-1';
 
 const ui = id => document.getElementById(id);
 const url = new URL(location.href);
@@ -11,6 +11,8 @@ const number = /^[1-9]\d*$/.test(candidate || '') ? Number(candidate) : 0;
 const dateFormat = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' });
 const pageSize = 20;
 let offset = 0;
+let countRequest = 0;
+const numberFormat = new Intl.NumberFormat('ko-KR');
 
 function articleRow(entry) {
     const row = document.createElement('li');
@@ -70,6 +72,14 @@ async function setAvatar(path, name) {
     image.src = data.signedUrl;
 }
 
+async function refreshSubscriberCount() {
+    const request = ++countRequest;
+    const { data, error } = await supabase.rpc('evere_reporter_subscriber_count', { target_number: number });
+    if (!error && data !== null && request === countRequest) {
+        ui('reporter-subscriber-count').textContent = numberFormat.format(data);
+    }
+}
+
 async function render() {
     if (!Number.isSafeInteger(number) || number < 1) {
         ui('reporter-status').textContent = '기자 페이지를 찾을 수 없습니다.';
@@ -110,7 +120,9 @@ async function render() {
     ui('reporter-status').hidden = true;
     ui('reporter-details').hidden = false;
     void setAvatar(data.avatar_path, data.display_name).catch(() => {});
-    void collectionButton(ui('reporter-follow'), 'reporters', data.reporter_id, ['구독', '구독 취소'], status).catch(() => {});
+    const refreshCount = () => void refreshSubscriberCount().catch(() => {});
+    refreshCount();
+    void collectionButton(ui('reporter-follow'), 'reporters', data.reporter_id, ['구독', '구독 취소'], status, refreshCount).catch(() => {});
     ui('reporter-load-more').onclick = () => void loadArticles(data.reporter_id);
     await loadArticles(data.reporter_id);
 }
