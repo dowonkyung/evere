@@ -1,4 +1,4 @@
-import { configureArticleViewer, indexPdf } from './epaper-article.js?v=region-image-1';
+import { configureArticleViewer, indexPdf } from './epaper-article.js?v=region-drag-1';
 import { configurePrintSearch } from './epaper-search.js?v=2';
 import { supabase } from './supabase.js';
 import { setArticleTitle } from './article-label.js';
@@ -391,7 +391,7 @@ function render(issueNumber, pageNumber, updateHistory = '') {
 
 async function start() {
     const [manifest, articles] = await Promise.all([
-        fetch('/epaper/editions.json?v=print-reader-1').then(response => response.ok ? response.json() : null).catch(() => null),
+        fetch('/epaper/editions.json?v=region-drag-1').then(response => response.ok ? response.json() : null).catch(() => null),
         loadPrintArticles().catch(() => null),
         loadSavedRegions().catch(() => {}),
         loadImageRegions().catch(() => {}),

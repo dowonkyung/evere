@@ -401,3 +401,9 @@ button:not(:disabled) { cursor: pointer; }
 @media (prefers-reduced-motion: reduce) {
     .viewer-dock-wrap, #epaper-repin { transition:none!important; }
 }
+
+#epaper-region-drag-header { cursor:grab; touch-action:none; user-select:none; }
+#epaper-region-drag-header:active { cursor:grabbing; }
+.region-heading-group { display:flex; align-items:center; gap:5px; }
+#epaper-region-grip { cursor:inherit; display:grid; place-items:center; width:26px; height:30px; margin:0; padding:0; border-radius:5px; }
+#epaper-region-grip:focus-visible { outline:2px solid #00b8b4; }

@@ -58,7 +58,17 @@ export function indexPdf(pdf) {
 }
 
 function cropRegion(pdf, number, points) {
-    return withPdfPage(pdf, number, page => renderCrop(page, page.getViewport({ scale: 300 / 72 }), points));
+    return withPdfPage(pdf, number, async page => {
+        const base = page.getViewport({ scale: 1 });
+        const xs = points.map(point => point[0]);
+        const ys = points.map(point => point[1]);
+        const width = base.width * (Math.max(...xs) - Math.min(...xs)) / 1000;
+        const height = base.height * (Math.max(...ys) - Math.min(...ys)) / 1000;
+        const scale = Math.min(450 / 72, Math.sqrt(18000000 / (width * height)), 8190 / Math.max(width, height));
+        let png = await renderCrop(page, page.getViewport({ scale }), points);
+        if (png.size > 25 * 1024 * 1024) png = await renderCrop(page, page.getViewport({ scale: scale * .75 }), points);
+        return png;
+    });
 }
 
 function containsPoint(points, x, y) {
@@ -152,6 +162,44 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
     const print = ui('article-print');
     const content = ui('article-content');
     const form = ui('region-form');
+    const dragHeader = ui('region-drag-header');
+    const grip = ui('region-grip');
+    let offsetX = 0;
+    let offsetY = 0;
+    let drag;
+
+    function moveForm(dx, dy) {
+        const bounds = form.getBoundingClientRect();
+        if (!bounds.width) return;
+        const margin = 8;
+        const viewport = document.documentElement;
+        offsetX += Math.max(margin - bounds.left, Math.min(dx, viewport.clientWidth - margin - bounds.right));
+        offsetY += Math.max(margin - bounds.top, Math.min(dy, viewport.clientHeight - margin - bounds.bottom));
+        form.style.translate = offsetX + 'px ' + offsetY + 'px';
+    }
+    dragHeader.onpointerdown = event => {
+        if (event.button !== 0 || event.target.closest('#epaper-region-close')) return;
+        drag = { id: event.pointerId, x: event.clientX, y: event.clientY };
+        dragHeader.setPointerCapture(event.pointerId);
+        event.preventDefault();
+    };
+    dragHeader.onpointermove = event => {
+        if (drag?.id !== event.pointerId) return;
+        moveForm(event.clientX - drag.x, event.clientY - drag.y);
+        drag.x = event.clientX;
+        drag.y = event.clientY;
+    };
+    dragHeader.onlostpointercapture = () => { drag = undefined; };
+    grip.onkeydown = event => {
+        const direction = { ArrowLeft:[-1,0], ArrowRight:[1,0], ArrowUp:[0,-1], ArrowDown:[0,1] }[event.key];
+        if (!direction) return;
+        event.preventDefault();
+        event.stopPropagation();
+        const step = event.shiftKey ? 48 : 16;
+        moveForm(direction[0] * step, direction[1] * step);
+    };
+    window.addEventListener('resize', () => moveForm(0, 0));
+
     const toggles = [ui('region-toolbar')];
     const metadata = ui('region-metadata');
     const fields = ui('region-fields');
@@ -189,6 +237,8 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
         points = [];
         closed = false;
         form.hidden = true;
+        offsetX = offsetY = 0;
+        form.style.removeProperty('translate');
         for (const button of toggles) button.setAttribute('aria-expanded', 'false');
     }
 
@@ -284,12 +334,13 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
         message.textContent = '원본 PDF에서 PNG를 만드는 중입니다.';
         try {
             const prior = sheet.regions.find(entry => entry.article === article);
-            const changed = !prior?.pngPath || JSON.stringify(prior.points) !== JSON.stringify(boundary);
+            const highResolution = prior?.pngPath && /(?:-hi-|\/hi-)/.test(prior.pngPath);
+            const changed = !highResolution || JSON.stringify(prior.points) !== JSON.stringify(boundary);
             const bucket = supabase.storage.from('evere-epaper-crops');
             let pngPath = prior?.pngPath;
             if (changed) {
                 const png = await cropRegion(sheet.pdf, sheet.page, boundary);
-                pngPath = sheet.issue + '/' + sheet.page + '/' + article + '-' + crypto.randomUUID() + '.png';
+                pngPath = sheet.issue + '/' + sheet.page + '/' + article + '-hi-' + crypto.randomUUID() + '.png';
                 const upload = await bucket.upload(pngPath, png, { contentType: 'image/png' });
                 if (upload.error) throw upload.error;
             }

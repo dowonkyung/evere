@@ -8,8 +8,8 @@
   <link rel="icon" href="/assets/evere/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="/assets/evere/evere-ellipsis.css?v=punctuation-3">
-  <link rel="stylesheet" href="/assets/evere/epaper.css?v=region-image-1">
-  <script type="module" src="/assets/evere/epaper.js?v=region-image-1"></script>
+  <link rel="stylesheet" href="/assets/evere/epaper.css?v=region-drag-1">
+  <script type="module" src="/assets/evere/epaper.js?v=region-drag-1"></script>
 </head>
 <body>
   <div class="viewer-layout">
@@ -65,7 +65,7 @@
         </nav>
         <button type="button" id="epaper-repin" aria-label="메뉴 고정" title="메뉴 고정" hidden><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16.5V21M8 3h8a2 2 0 0 1 0 4v4l3 3v2.5H5V14l3-3V7a2 2 0 0 1 0-4Z"/></svg></button>
         <div class="viewer-dock-wrap"><form id="epaper-region-form" aria-labelledby="epaper-region-heading" hidden>
-        <header><h2 id="epaper-region-heading">기사 영역 지정</h2><button type="button" id="epaper-region-close" aria-label="영역 편집 닫기">×</button></header>
+        <header id="epaper-region-drag-header"><div class="region-heading-group"><button type="button" id="epaper-region-grip" aria-label="팝업 이동" title="드래그하거나 방향키로 이동"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="9" cy="5" r="1.5"/><circle cx="15" cy="5" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg></button><h2 id="epaper-region-heading">기사 영역 지정</h2></div><button type="button" id="epaper-region-close" aria-label="영역 편집 닫기">×</button></header>
         <label>지면 영역 <select id="epaper-region-article" required></select></label>
         <fieldset id="epaper-region-fields" disabled>
           <div id="epaper-region-metadata">
