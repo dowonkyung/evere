@@ -10,6 +10,8 @@ let current;
 let zoom = 1;
 let spread = false;
 let activePanel = '';
+let imageRequest = 0;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 let defaultIssue;
 
 function positiveNumber(value) {
@@ -69,7 +71,7 @@ function setZoom(value) {
 
 function showPanel(name) {
     activePanel = name === activePanel ? '' : name;
-    ui('panel').hidden = !activePanel;
+    ui('panel').inert = !activePanel;
     ui('panel').closest('.viewer-main').classList.toggle('has-panel', Boolean(activePanel));
     ui('panel-title').textContent = ({ issues: '발행호', search: '검색', thumbnails: '썸네일', contents: '목차' })[activePanel] || '';
     for (const panel of document.querySelectorAll('[data-panel-content]')) panel.hidden = panel.dataset.panelContent !== activePanel;
@@ -77,6 +79,54 @@ function showPanel(name) {
         button.setAttribute('aria-pressed', String(button.dataset.viewerPanel === activePanel));
     }
     if (activePanel === 'search') ui('search').focus();
+}
+
+function animatePageFlip(direction) {
+    if (!direction || reduceMotion.matches) return;
+    const image = ui('image');
+    const stage = ui('stage');
+    if (ui('image-scroll').hidden || !image.complete || !image.naturalWidth) return;
+    const paper = image.getBoundingClientRect();
+    const frame = stage.getBoundingClientRect();
+    const prior = image.cloneNode();
+    prior.removeAttribute('id');
+    prior.className = 'viewer-page-flip';
+    prior.alt = '';
+    prior.setAttribute('aria-hidden', 'true');
+    Object.assign(prior.style, {
+        left: paper.left - frame.left + 'px',
+        top: paper.top - frame.top + 'px',
+        width: paper.width + 'px',
+        height: paper.height + 'px',
+        transformOrigin: direction > 0 ? 'left center' : 'right center',
+    });
+    stage.append(prior);
+    const animation = prior.animate([
+        { rotate: 'y 0deg', opacity: 1, filter: 'brightness(1)' },
+        { rotate: 'y ' + (direction * -55) + 'deg', opacity: .82, filter: 'brightness(.80)', offset: .65 },
+        { rotate: 'y ' + (direction * -89) + 'deg', opacity: 0, filter: 'brightness(.72)' },
+    ], { duration: 550, easing: 'cubic-bezier(.42,0,.3,1)' });
+    animation.onfinish = () => prior.remove();
+    animation.oncancel = () => prior.remove();
+}
+
+function setPageImage(src, label) {
+    const stage = ui('stage');
+    const image = ui('image');
+    const request = ++imageRequest;
+    stage.classList.remove('is-loading', 'page-loaded');
+    image.alt = label;
+    if (image.getAttribute('src') !== src) image.src = src;
+    const loading = setTimeout(() => {
+        if (request === imageRequest) stage.classList.add('is-loading');
+    }, 150);
+    const ready = image.decode ? image.decode() : Promise.resolve();
+    void ready.then(() => {
+        if (request === imageRequest) stage.classList.add('page-loaded');
+    }).catch(() => {}).finally(() => {
+        clearTimeout(loading);
+        if (request === imageRequest) stage.classList.remove('is-loading');
+    });
 }
 
 function render(issueNumber, pageNumber, updateHistory = '') {
@@ -100,6 +150,9 @@ function render(issueNumber, pageNumber, updateHistory = '') {
         return;
     }
 
+    if (current?.issueNumber === issueNumber && current.page !== page && zoom === 1) {
+        animatePageFlip(Math.sign(page - current.page));
+    }
     current = { issueNumber, page, edition };
     const path = toPath(issueNumber, page);
     if (updateHistory && location.pathname !== path) history[updateHistory](null, '', path);
@@ -146,9 +199,10 @@ function render(issueNumber, pageNumber, updateHistory = '') {
     ui('thumbnail-summary').textContent =
         [edition.date ? displayDate(edition.date) + ' (' + weekday + ')' : '', totalPages + '면'].filter(Boolean).join(' · ');
     setZoom(1);
-    if (photo) {
-        ui('image').alt = issueNumber + '호 ' + page + '면 원본 지면';
-        ui('image').src = photo;
+    if (photo) setPageImage(photo, issueNumber + '호 ' + page + '면 원본 지면');
+    else {
+        imageRequest++;
+        ui('stage').classList.remove('is-loading', 'page-loaded');
     }
 
     for (const link of ui('editions').querySelectorAll('a[aria-current]')) link.removeAttribute('aria-current');
@@ -287,7 +341,9 @@ for (const button of document.querySelectorAll('[data-viewer-panel]')) {
 }
 ui('panel-close').onclick = () => showPanel('');
 ui('date-toggle').onclick = () => {
-    const collapsed = ui('date-details').hidden = !ui('date-details').hidden;
+    const collapsed = ui('date-toggle').getAttribute('aria-expanded') === 'true';
+    ui('date-details').inert = collapsed;
+    ui('date-details').toggleAttribute('data-collapsed', collapsed);
     ui('date-toggle').setAttribute('aria-expanded', String(!collapsed));
     ui('date-toggle').setAttribute('aria-label', collapsed ? '날짜와 로고 펼치기' : '날짜와 로고 접기');
     if (collapsed && activePanel === 'issues') showPanel('');

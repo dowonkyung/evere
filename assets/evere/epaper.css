@@ -104,3 +104,50 @@ button:not(:disabled) { cursor: pointer; }
     .viewer-main { --panel-width: min(300px, calc(100vw - var(--rail-width))); }
     .viewer-main.has-panel .viewer-reading { margin-inline-start: 0; }
 }
+
+:root {
+    --motion-fast: 150ms;
+    --motion-base: 250ms;
+    --motion-panel: 300ms;
+    --motion-standard: cubic-bezier(.2,0,0,1);
+    --motion-in-out: cubic-bezier(.45,0,.55,1);
+}
+.viewer-rail-actions button, .viewer-panel a, .viewer-arrows button, .viewer-dock :is(button,a) {
+    transition: background-color var(--motion-fast), color var(--motion-fast), border-color var(--motion-fast), opacity var(--motion-fast);
+}
+.viewer-main, .viewer-rail, .viewer-stage { transition: background-color var(--motion-base) var(--motion-standard); }
+.viewer-reading { transition: margin-inline-start var(--motion-panel) var(--motion-in-out); }
+.viewer-panel {
+    visibility: hidden; opacity: 0; transform: translateX(-100%);
+    transition: transform var(--motion-panel) var(--motion-in-out), opacity var(--motion-base) ease-out,
+                visibility 0s linear var(--motion-panel);
+}
+.viewer-main.has-panel .viewer-panel { visibility: visible; opacity: 1; transform: translateX(0); transition-delay: 0s; }
+.viewer-panel [data-panel-content]:not([hidden]) { animation: viewer-panel-content 200ms ease-out; }
+@keyframes viewer-panel-content { from { opacity: 0; } to { opacity: 1; } }
+.viewer-date-details {
+    max-width: 270px; opacity: 1; overflow: hidden; white-space: nowrap;
+    transition: max-width var(--motion-panel) var(--motion-in-out), opacity 200ms ease-out, padding var(--motion-panel) var(--motion-in-out);
+}
+.viewer-date-details[data-collapsed] { max-width: 0; padding-inline: 0; opacity: 0; }
+.viewer-date-details a { flex: 0 0 auto; }
+#epaper-date-toggle { flex: 0 0 auto; }
+#epaper-date-toggle svg { transition: transform var(--motion-panel) var(--motion-in-out); }
+.viewer-date:has(.viewer-date-details[data-collapsed]) #epaper-date-toggle { border-right-color: transparent; }
+.viewer-dock-wrap { transition: translate var(--motion-panel) var(--motion-in-out); }
+.viewer-paper-scroll img { transition: height var(--motion-base) var(--motion-standard); }
+.viewer-stage { perspective: 9000px; }
+.viewer-stage .viewer-page-flip { position: absolute; z-index: 1; margin: 0; pointer-events: none; backface-visibility: hidden; box-shadow: 5px 0 12px #0003; }
+.viewer-stage.is-loading::after {
+    position: absolute; inset: 0; width: min(70dvh, 100%); margin: auto;
+    content: ''; pointer-events: none;
+    background: linear-gradient(105deg, #e3e3e3 20%, #fff 47%, #e3e3e3 74%) 100% / 220% 100%;
+    animation: viewer-loading-shimmer 500ms linear infinite;
+}
+.viewer-stage.page-loaded #epaper-image { animation: viewer-page-loading-fade 200ms ease-out; }
+@keyframes viewer-loading-shimmer { to { background-position: 0 0; } }
+@keyframes viewer-page-loading-fade { from { opacity: .72; } to { opacity: 1; } }
+.viewer-arrows svg { width: 20px; height: 20px; display: block; margin: auto; }
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0s !important; transition-duration: 0s !important; transition-delay: 0s !important; }
+}
