@@ -23,9 +23,10 @@
   <link rel="stylesheet" href="/assets/khan/swiper-bundle.min.css">
   <link rel="stylesheet" href="/assets/khan/opinion-list.css?v=opinion-1">
   <link rel="stylesheet" href="/assets/evere/account.css?v=my-page-1">
-  <link rel="stylesheet" href="/assets/evere/my-page.css">
-  <script type="module" src="/assets/evere/my-page.js"></script>
-  <script type="module" src="/assets/evere/account.js?v=my-page-1"></script>
+  <link rel="stylesheet" href="/assets/evere/opinion.css?v=categories-1">
+  <link rel="stylesheet" href="/assets/evere/my-page.css?v=category-2">
+  <script type="module" src="/assets/evere/my-page.js?v=category-2"></script>
+  <script type="module" src="/assets/evere/account.js?v=my-page-2"></script>
 </head>
 <body class="evere-opinion-list evere-section">
 <div id="evere-header" data-css-pending data-compact-only>
@@ -209,7 +210,7 @@
 </div>
 </template>
 </div>
-  <main class="account-main">
+  <main class="account-main"><div class="wrap">
     <h1 class="opinion-title">마이페이지</h1>
     <p id="status" role="status" aria-live="polite"></p>
     <section id="access" hidden>
@@ -238,12 +239,12 @@
           <li class="swiper-slide"><a href="#subscriptions" data-my-tab="subscriptions">구독함</a></li>
         </ul>
       </nav>
-      <p id="member-summary"></p>
-      <div class="account-links"><a href="/newsroom/">이브레 뉴스룸</a><button id="sign-out" type="button" hidden>로그아웃</button></div>
       <section data-my-panel="profile" aria-label="기본정보">
-      <details id="profile-settings">
-        <summary>프로필 편집</summary>
-        <div class="profile-settings">
+        <div class="account-greeting">
+          <p id="member-summary"></p>
+          <div class="account-links"><a href="/newsroom/">이브레 뉴스룸</a><button id="sign-out" type="button" hidden>로그아웃</button></div>
+        </div>
+        <div class="profile-settings" id="profile-settings">
           <form id="avatar-form">
             <img id="profile-avatar" class="profile-avatar" width="88" height="88" alt="내 프로필 사진" hidden>
             <label>프로필 사진<input name="avatar" type="file" accept="image/jpeg,image/png,image/webp" required></label>
@@ -261,14 +262,13 @@
             <button type="submit">프로필 저장</button>
           </form>
         </div>
-      </details>
       </section>
       <section data-my-panel="bookmarks" hidden><h2>북마크한 기사</h2><ul data-my-list="bookmarks"></ul></section>
       <section data-my-panel="subscriptions" hidden><h2>구독한 기획·연재</h2><ul data-my-list="series"></ul><h2>구독한 기자</h2><ul data-my-list="reporters"></ul></section>
 
     </section>
     <noscript>회원 기능을 이용하려면 JavaScript를 켜 주세요.</noscript>
-  </main>
+  </div></main>
 </body>
 </html>
 

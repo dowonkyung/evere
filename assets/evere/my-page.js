@@ -19,8 +19,6 @@ function choose() {
         else tab.removeAttribute('aria-current');
     }
     for (const panel of sections) panel.hidden = panel.dataset.myPanel !== active;
-    const profile = document.querySelector('#profile-settings');
-    profile.open = active === 'profile' && Boolean(account);
     if (account && typeof Swiper === 'function') {
         if (!swiper) swiper = new Swiper('.account-main .swiper-container', { slidesPerView: 'auto', freeMode: true });
         swiper.update();

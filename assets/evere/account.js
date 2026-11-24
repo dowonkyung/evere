@@ -160,7 +160,10 @@ function displayName(id) {
 }
 
 async function refreshMembers() {
-    ui('member-summary').textContent = member.display_name + ' · ' + roleNames[member.role];
+    const summary = ui('member-summary');
+    summary.textContent = summary.closest('.account-greeting')
+        ? member.display_name + '님, 반가워요!'
+        : member.display_name + ' · ' + roleNames[member.role];
     if (!articleForm) return;
     members = result(await supabase.from('evere_members').select('id,display_name,role,sectors').order('display_name'));
     compose.setMember(member, members);
@@ -513,6 +516,7 @@ async function refresh() {
     if (user && !member) ui('profile-form').elements.displayName.value = user.user_metadata?.evere_display_name || '';
     if (member) {
         await refreshMembers();
+        if (ui('profile-settings').tagName !== 'DETAILS') void loadProfile().catch((error) => message(getError(error), true));
         if (headerAvatar) void loadAvatar(member.id).catch(() => {});
         if (articleForm) await loadArticles();
     } else {
