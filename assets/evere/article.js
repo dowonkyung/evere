@@ -176,6 +176,8 @@ function checked(response) {
 }
 
 const commentOrder = ui('comment-order');
+const orderSummary = commentOrder.querySelector('summary');
+let oldestFirst = false;
 const commentRefresh = ui('comments-refresh');
 const relativeCommentTime = new Intl.RelativeTimeFormat('ko', { numeric: 'auto' });
 let commentRequest = 0;
@@ -191,7 +193,7 @@ function commentTime(date) {
 async function commentsAt(newOffset) {
     const request = ++commentRequest;
     if (newOffset === 0) commentMore.hidden = true;
-    const ascending = commentOrder.value === 'oldest';
+    const ascending = oldestFirst;
     const response = await supabase.from('evere_comments').select('author_name,body,created_at', { count: 'exact' })
         .eq('article_id', articleId).order('created_at', { ascending }).order('id', { ascending })
         .range(newOffset, newOffset + pageSize - 1);
@@ -245,7 +247,27 @@ async function navigateComments(button, newOffset) {
 }
 
 commentRefresh.addEventListener('click', () => navigateComments(commentRefresh, 0));
-commentOrder.addEventListener('change', () => navigateComments(commentRefresh, 0));
+const orderButtons = [...commentOrder.querySelectorAll('[data-comment-order]')];
+for (const button of orderButtons) {
+    button.addEventListener('click', () => {
+        const ascending = button.dataset.commentOrder === 'oldest';
+        commentOrder.open = false;
+        orderSummary.focus();
+        if (ascending === oldestFirst) return;
+        oldestFirst = ascending;
+        commentOrder.querySelector('.comment-order-label').textContent = button.textContent;
+        for (const option of orderButtons) option.setAttribute('aria-pressed', String(option === button));
+        void navigateComments(commentRefresh, 0);
+    });
+}
+commentOrder.addEventListener('keydown', event => {
+    if (event.key !== 'Escape' || !commentOrder.open) return;
+    commentOrder.open = false;
+    orderSummary.focus();
+});
+document.addEventListener('click', event => {
+    if (!commentOrder.contains(event.target)) commentOrder.open = false;
+});
 commentMore.addEventListener('click', () => navigateComments(commentMore, shownComments));
 const commentInput = form.elements.comment;
 const commentSubmit = form.querySelector('[type="submit"]');
