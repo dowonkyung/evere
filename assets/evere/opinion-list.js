@@ -21,7 +21,7 @@ function adjacentDate(mode) {
 
 function renderList(date = '', requested = 1) {
     selected = date;
-    picker.value = date;
+    if (picker) picker.value = date;
     dateLabel.textContent = date ? date.replaceAll('-', '.') : defaultLabel;
     dateLabel.classList.toggle('disabled', !date);
 
@@ -95,10 +95,11 @@ for (const control of controls) {
 }
 
 calendar.addEventListener('click', () => {
+    if (!picker) return;
     if (typeof picker.showPicker === 'function') picker.showPicker();
     else picker.focus();
 });
-picker.addEventListener('change', () => renderList(picker.value));
+picker?.addEventListener('change', () => renderList(picker.value));
 all.addEventListener('click', () => renderList());
 empty.querySelector('.btn-reset')?.addEventListener('click', () => renderList());
 renderList();

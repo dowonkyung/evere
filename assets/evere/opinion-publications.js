@@ -12,7 +12,7 @@ const dateFormat = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' });
 
 try {
     const { publishedFeed } = await import('./published-feed.js?v=article-thumbs-1');
-    rows = await publishedFeed('opinion', category, series);
+    rows = await publishedFeed('opinion', category, series, { all: true });
     if (series) {
         const name = (await seriesFor('opinion')).find(({ id }) => id === series)?.title || '기획·연재';
         main.querySelector('.head')?.remove();
@@ -45,11 +45,11 @@ try {
     }
     list.prepend(fragment);
 } catch {
-    // The saved list is still available.
+    // Keep the page layout available if the live feed is unreachable.
 }
 if (contents) {
     renderMajorArticles(contents, rows);
     void loadArticleListPhotos(contents).catch(() => {});
 }
-if (category || series) await import('./opinion-list.js?v=categories-1');
+await import('./opinion-list.js?v=optional-calendar-1');
 
