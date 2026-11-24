@@ -8,8 +8,8 @@
   <link rel="icon" href="/assets/evere/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="/assets/evere/evere-ellipsis.css?v=punctuation-3">
-  <link rel="stylesheet" href="/assets/evere/epaper.css?v=article-viewer-1">
-  <script type="module" src="/assets/evere/epaper.js?v=article-viewer-2"></script>
+  <link rel="stylesheet" href="/assets/evere/epaper.css?v=region-editor-1">
+  <script type="module" src="/assets/evere/epaper.js?v=region-editor-1"></script>
 </head>
 <body>
   <div class="viewer-layout">
@@ -29,6 +29,13 @@
         <a href="/" aria-label="이브레 홈"><img src="/assets/evere/logo.svg" alt="이브레"></a>
         </div>
       </div>
+      <button type="button" id="epaper-region-toggle" hidden>기사 영역 지정</button>
+      <form id="epaper-region-form" hidden>
+        <label>기사 <select id="epaper-region-article"></select></label>
+        <p>지면을 눌러 꼭짓점을 찍으세요. 각 선은 가로 또는 세로로 이어집니다.</p>
+        <div><button type="button" id="epaper-region-undo">점 되돌리기</button><button type="button" id="epaper-region-reset">새로 그리기</button><button type="submit">영역 저장</button><button type="button" id="epaper-region-close">닫기</button></div>
+        <p id="epaper-region-status" role="status"></p>
+      </form>
       <section id="epaper-issue-popover" class="viewer-issue-popover" aria-labelledby="epaper-issue-title" hidden>
         <header><h2 id="epaper-issue-title">발행호</h2><button type="button" id="epaper-issue-close" aria-label="발행호 닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M18 6L6 18" stroke-linecap="round" stroke-linejoin="round"></path><path d="M6 6L18 18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button></header>
         <ul id="epaper-editions"></ul>
@@ -86,15 +93,18 @@
         </header>
         <p id="epaper-article-status" role="status"></p>
         <div id="epaper-article-text" role="tabpanel" aria-labelledby="epaper-tab-text">
+          <div id="epaper-article-content">
           <h2 id="epaper-article-title"></h2>
+          <div class="viewer-article-meta">
+          <div id="epaper-online-meta" hidden><time id="epaper-online-date"></time><div id="epaper-online-byline"></div></div>
+          <a id="epaper-article-link" target="_blank" rel="noopener" hidden>↗ 기사 원문</a>
           <div class="viewer-article-font" aria-label="기사 글자 크기"><button id="epaper-type-up" type="button" aria-label="글자 확대">가+</button><button id="epaper-type-down" type="button" aria-label="글자 축소">가−</button></div>
+          </div>
           <p id="epaper-article-subtitle" hidden></p>
           <div id="epaper-article-copy"></div>
+          </div>
         </div>
-        <div id="epaper-article-online" role="tabpanel" aria-labelledby="epaper-tab-online" hidden>
-          <a id="epaper-article-link" target="_blank" rel="noopener">새 탭에서 기사 열기 ↗</a>
-          <iframe id="epaper-article-frame" title="온라인 기사"></iframe>
-        </div>
+        <div id="epaper-article-online" role="tabpanel" aria-labelledby="epaper-tab-online" hidden></div>
         <div id="epaper-article-image" role="tabpanel" aria-labelledby="epaper-tab-image" hidden><img id="epaper-article-crop" alt=""></div>
       </aside>
     </main>

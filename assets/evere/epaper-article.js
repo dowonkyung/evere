@@ -2,6 +2,7 @@ import { supabase } from './supabase.js';
 import { articlePath } from './routes.js?v=routes-1';
 import { renderBody } from './article-content.js?v=paragraph-breaks-2';
 
+const orthogonalCoordinate = point => point.every(value => value >= 0 && value <= 1000);
 const svgNS = 'http://www.w3.org/2000/svg';
 const ui = id => document.getElementById('epaper-' + id);
 
@@ -16,11 +17,26 @@ function orthogonal(points) {
     return axes.every((axis, index) => axis && axis !== axes[(index + 1) % axes.length]);
 }
 
-async function cropRegion(src, points) {
-    const image = new Image();
-    image.src = src;
-    await image.decode();
-    const coordinates = points.map(([x, y]) => [x * image.naturalWidth / 1000, y * image.naturalHeight / 1000]);
+const pdfModule = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/';
+let pdfLibrary;
+async function cropRegion(pdf, number, points) {
+    if (!pdf) throw new Error('원본 PDF 없음');
+    pdfLibrary ??= import(pdfModule + 'pdf.min.mjs');
+    const library = await pdfLibrary.catch(error => { pdfLibrary = undefined; throw error; });
+    library.GlobalWorkerOptions.workerSrc = pdfModule + 'pdf.worker.min.mjs';
+    const task = library.getDocument({ url: pdf, isEvalSupported: false });
+    try {
+        const document = await task.promise;
+        const page = await document.getPage(number);
+        const viewport = page.getViewport({ scale: 300 / 72 });
+        return await renderCrop(page, viewport, points);
+    } finally {
+        await task.destroy();
+    }
+}
+
+async function renderCrop(page, viewport, points) {
+    const coordinates = points.map(([x, y]) => [x * viewport.width / 1000, y * viewport.height / 1000]);
     const xs = coordinates.map(point => point[0]);
     const ys = coordinates.map(point => point[1]);
     const x = Math.floor(Math.min(...xs));
@@ -36,11 +52,15 @@ async function cropRegion(src, points) {
     });
     context.closePath();
     context.clip();
-    context.drawImage(image, -x, -y);
+    const source = document.createElement('canvas');
+    source.width = canvas.width;
+    source.height = canvas.height;
+    await page.render({ canvasContext: source.getContext('2d'), viewport, transform: [1, 0, 0, 1, -x, -y] }).promise;
+    context.drawImage(source, 0, 0);
     return new Promise((resolve, reject) => canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('이미지 생성 실패')), 'image/png'));
 }
 
-export function configureArticleViewer(onOpen) {
+export function configureArticleViewer(onOpen, onSave) {
     const layer = ui('hotspots');
     const panel = ui('article-panel');
     const main = panel.closest('.viewer-main');
@@ -49,7 +69,98 @@ export function configureArticleViewer(onOpen) {
     const status = ui('article-status');
     const download = ui('article-download');
     const print = ui('article-print');
-    const frame = ui('article-frame');
+    const content = ui('article-content');
+    const form = ui('region-form');
+    const toggle = ui('region-toggle');
+    const picker = ui('region-article');
+    const message = ui('region-status');
+    let editing;
+    let points = [];
+    let sketch;
+    let saving = false;
+
+    function outline() {
+        sketch?.setAttribute('points', points.map(point => point.join(',')).join(' '));
+    }
+
+    function stopEditing() {
+        editing?.overlay.classList.remove('is-editing');
+        sketch?.remove();
+        sketch = editing = undefined;
+        points = [];
+        form.hidden = true;
+        toggle.setAttribute('aria-expanded', 'false');
+    }
+
+    function loadPoints() {
+        const region = editing.regions.find(entry => entry.article === Number(picker.value));
+        points = region ? region.points.map(point => [...point]) : [];
+        message.textContent = '';
+        outline();
+    }
+
+    toggle.onclick = () => {
+        if (editing) { stopEditing(); return; }
+        close(false);
+        editing = sheets.find(sheet => sheet.editable && sheet.pdf && sheet.articles.length);
+        if (!editing) return;
+        editing.overlay.classList.add('is-editing');
+        sketch = document.createElementNS(svgNS, 'polyline');
+        sketch.setAttribute('class', 'region-sketch');
+        editing.overlay.append(sketch);
+        picker.replaceChildren(...editing.articles.map(row => new Option(row.title, row.article_number)));
+        form.hidden = false;
+        toggle.setAttribute('aria-expanded', 'true');
+        loadPoints();
+        picker.focus();
+    };
+    picker.onchange = loadPoints;
+    ui('region-close').onclick = stopEditing;
+    ui('region-undo').onclick = () => { points.pop(); outline(); };
+    ui('region-reset').onclick = () => { points = []; outline(); };
+
+    form.onsubmit = async event => {
+        event.preventDefault();
+        if (saving || !editing) return;
+        const sheet = editing;
+        const article = Number(picker.value);
+        const boundary = points.map(point => [...point]);
+        const first = boundary[0];
+        const last = boundary.at(-1);
+        if (boundary.length >= 3 && first[0] !== last[0] && first[1] !== last[1]) {
+            const previous = boundary.at(-2);
+            boundary.push(previous[0] === last[0] ? [first[0], last[1]] : [last[0], first[1]]);
+        }
+        if (boundary.length > 64 || !orthogonal(boundary)) {
+            message.textContent = '꼭짓점을 네 개 이상 찍어 직각으로 닫히는 영역을 만드세요.';
+            return;
+        }
+        saving = true;
+        message.textContent = '원본 PDF에서 PNG를 만드는 중입니다.';
+        try {
+            const png = await cropRegion(sheet.pdf, sheet.page, boundary);
+            const bucket = supabase.storage.from('evere-epaper-crops');
+            const pngPath = sheet.issue + '/' + sheet.page + '/' + article + '-' + crypto.randomUUID() + '.png';
+            const upload = await bucket.upload(pngPath, png, { contentType: 'image/png' });
+            if (upload.error) throw upload.error;
+            const saved = await supabase.from('evere_epaper_regions').upsert({
+                issue: sheet.issue, page: sheet.page, article_number: article, points: boundary, png_path: pngPath,
+            });
+            if (saved.error) {
+                await bucket.remove([pngPath]);
+                throw saved.error;
+            }
+            const prior = sheet.regions.find(entry => entry.article === article);
+            if (prior?.pngPath) await bucket.remove([prior.pngPath]);
+            sheet.regions = [...sheet.regions.filter(entry => entry.article !== article), { article, points: boundary, pngPath }];
+            onSave(sheet.issue, sheet.page, sheet.regions);
+            if (editing === sheet) setSheets(sheets);
+        } catch {
+            if (editing === sheet) message.textContent = '영역과 PNG를 저장하지 못했습니다. 다시 시도해 주세요.';
+        } finally {
+            saving = false;
+        }
+    };
     const crop = ui('article-crop');
     const tabs = [...panel.querySelectorAll('[data-article-tab]')];
     let sheets = [];
@@ -108,7 +219,6 @@ export function configureArticleViewer(onOpen) {
         selection = undefined;
         article = undefined;
         clearCrop();
-        if (frame.hasAttribute('src')) frame.removeAttribute('src');
         panel.inert = true;
         main.classList.remove('has-article');
         layer.querySelector('[aria-pressed="true"]')?.setAttribute('aria-pressed', 'false');
@@ -126,14 +236,23 @@ export function configureArticleViewer(onOpen) {
             document.getElementById(button.getAttribute('aria-controls')).hidden = !active;
             if (active && focus) button.focus();
         }
-        download.disabled = tab === 'online' || (tab === 'text' && !article) || (tab === 'image' && !cropUrl);
+        const online = tab === 'online';
+        if (tab !== 'image') ui('article-' + tab).append(content);
+        ui('online-meta').hidden = !online;
+        ui('article-link').hidden = !online;
+        download.disabled = tab === 'image' ? !cropUrl : !article;
         print.disabled = download.disabled;
         if (!selection) return;
-        if (tab === 'online' && !frame.hasAttribute('src')) frame.src = articlePath(selection.row);
         if (tab === 'image' && !cropUrl) {
             const current = job;
             status.textContent = '지면 이미지를 불러오는 중입니다.';
-            void cropRegion(selection.src, selection.points).then(blob => {
+            const image = selection.pngPath ? (async () => {
+                const { data } = supabase.storage.from('evere-epaper-crops').getPublicUrl(selection.pngPath);
+                const response = await fetch(data.publicUrl);
+                if (!response.ok) throw new Error('PNG 없음');
+                return response.blob();
+            })() : cropRegion(selection.pdf, selection.page, selection.points);
+            void image.then(blob => {
                 if (job !== current) return;
                 clearCrop();
                 cropUrl = URL.createObjectURL(blob);
@@ -147,14 +266,13 @@ export function configureArticleViewer(onOpen) {
             }, () => {
                 if (job === current && activeTab === 'image') status.textContent = '지면 이미지를 만들지 못했습니다.';
             });
-        } else if (tab !== 'text' || article) status.textContent = '';
+        } else if (article || tab === 'image') status.textContent = '';
     }
 
     async function open(next, trigger) {
         const current = ++job;
         article = undefined;
         clearCrop();
-        if (frame.hasAttribute('src')) frame.removeAttribute('src');
         selection = next;
         lastTrigger = trigger;
         for (const polygon of layer.querySelectorAll('polygon')) polygon.setAttribute('aria-pressed', String(polygon === trigger));
@@ -165,26 +283,33 @@ export function configureArticleViewer(onOpen) {
         ui('article-title').textContent = next.row.title;
         ui('article-link').href = articlePath(next.row);
         ui('article-subtitle').hidden = true;
+        ui('online-date').textContent = '';
+        ui('online-byline').textContent = '';
         ui('article-copy').replaceChildren();
         status.textContent = '기사를 불러오는 중입니다.';
         switchTab('text');
         ui('tab-text').focus({ preventScroll: true });
         track(320);
-        const { data, error } = await supabase.from('evere_articles').select('title,subtitle,body,body_html')
+        const { data, error } = await supabase.from('evere_articles').select('title,subtitle,body,body_html,published_at,byline_names')
             .eq('article_number', next.row.article_number).eq('status', 'published').maybeSingle();
         if (job !== current) return;
         if (error || !data) {
-            if (activeTab === 'text') status.textContent = '기사를 불러오지 못했습니다.';
+            if (activeTab !== 'image') status.textContent = '기사를 불러오지 못했습니다.';
             return;
         }
         article = data;
+        ui('online-date').dateTime = data.published_at || '';
+        ui('online-date').textContent = data.published_at ? new Intl.DateTimeFormat('sv-SE', {
+            timeZone: 'Asia/Seoul', dateStyle: 'short', timeStyle: 'short',
+        }).format(new Date(data.published_at)) : '';
+        ui('online-byline').textContent = (data.byline_names || []).join(', ');
         ui('article-title').textContent = data.title;
         ui('article-subtitle').textContent = data.subtitle || '';
         ui('article-subtitle').hidden = !data.subtitle?.trim();
         const copy = ui('article-copy');
         renderBody(copy, data, { legacyLineBreaks: true });
         copy.querySelectorAll('figure').forEach(figure => figure.remove());
-        if (activeTab === 'text') {
+        if (activeTab !== 'image') {
             status.textContent = '';
             download.disabled = false;
             print.disabled = false;
@@ -192,16 +317,19 @@ export function configureArticleViewer(onOpen) {
     }
 
     function setSheets(nextSheets) {
+        stopEditing();
+        toggle.hidden = !nextSheets.some(sheet => sheet.editable && sheet.src && sheet.pdf && sheet.articles.length);
         if (selection) close(false);
         sheets = [];
         layer.replaceChildren();
-        for (const { image, src, regions, articles } of nextSheets) {
-            if (!src || !regions?.length) continue;
+        for (const sheet of nextSheets) {
+            const { image, src, pdf, page, regions = [], articles } = sheet;
+            if (!src) continue;
             const rows = new Map(articles.map(row => [row.article_number, row]));
             const overlay = document.createElementNS(svgNS, 'svg');
             overlay.setAttribute('viewBox', '0 0 1000 1000');
             overlay.setAttribute('preserveAspectRatio', 'none');
-            for (const { article: id, points } of regions) {
+            for (const { article: id, points, pngPath } of regions) {
                 const row = rows.get(id);
                 if (!row || !orthogonal(points)) continue;
                 const polygon = document.createElementNS(svgNS, 'polygon');
@@ -213,9 +341,12 @@ export function configureArticleViewer(onOpen) {
                 const title = document.createElementNS(svgNS, 'title');
                 title.textContent = row.title + ' · 연결 기사 보기';
                 polygon.append(title);
-                const select = () => void open({ row, points, src }, polygon).catch(() => {
-                    status.textContent = '기사를 불러오지 못했습니다.';
-                });
+                const select = () => {
+                    if (editing) return;
+                    void open({ row, points, pdf, page, pngPath }, polygon).catch(() => {
+                        status.textContent = '기사를 불러오지 못했습니다.';
+                    });
+                };
                 polygon.addEventListener('click', select);
                 polygon.addEventListener('keydown', event => {
                     if (event.key === 'Enter' || event.key === ' ') {
@@ -226,7 +357,23 @@ export function configureArticleViewer(onOpen) {
                 overlay.append(polygon);
             }
             layer.append(overlay);
-            sheets.push({ image, overlay });
+            const visibleSheet = { ...sheet, overlay };
+            overlay.addEventListener('click', event => {
+                if (editing !== visibleSheet || saving || points.length >= 63) return;
+                const rect = overlay.getBoundingClientRect();
+                const x = Math.round(1000 * (event.clientX - rect.left) / rect.width);
+                const y = Math.round(1000 * (event.clientY - rect.top) / rect.height);
+                const last = points.at(-1);
+                if (!last) points.push([x, y]);
+                else {
+                    const previous = points.at(-2);
+                    const horizontal = previous ? previous[0] === last[0] : Math.abs(x - last[0]) >= Math.abs(y - last[1]);
+                    const next = horizontal ? [x, last[1]] : [last[0], y];
+                    if (orthogonalCoordinate(next) && (next[0] !== last[0] || next[1] !== last[1])) points.push(next);
+                }
+                outline();
+            });
+            sheets.push(visibleSheet);
         }
         schedule();
     }
@@ -255,7 +402,7 @@ export function configureArticleViewer(onOpen) {
         if (!selection || download.disabled) return;
         const name = selection.row.title.replace(/[\\/:*?"<>|]/g, ' ').slice(0, 100);
         const link = document.createElement('a');
-        const text = activeTab === 'text';
+        const text = activeTab !== 'image';
         link.href = text ? URL.createObjectURL(new Blob(
             [[article.title, article.subtitle, article.body].filter(Boolean).join('\n\n')],
             { type: 'text/plain;charset=utf-8' },

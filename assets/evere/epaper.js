@@ -1,4 +1,4 @@
-import { configureArticleViewer } from './epaper-article.js';
+import { configureArticleViewer } from './epaper-article.js?v=region-editor-1';
 import { supabase } from './supabase.js';
 import { articlePath } from './routes.js?v=routes-1';
 import { setArticleTitle } from './article-label.js';
@@ -13,9 +13,40 @@ let spread = false;
 let activePanel = '';
 let imageRequest = 0;
 let zoomAnimations = [];
-const articleViewer = configureArticleViewer(() => { if (activePanel) showPanel(''); });
+const articleViewer = configureArticleViewer(() => {}, (issue, page, regions) => {
+    savedRegions.set(regionKey(issue, page), regions);
+});
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 let defaultIssue;
+let canEditRegions = false;
+const savedRegions = new Map();
+const regionKey = (issue, page) => issue + ':' + page;
+function regionsFor(edition, issue, page) {
+    const rows = new Map((edition.regions?.[page] || []).map(entry => [entry.article, entry]));
+    for (const entry of savedRegions.get(regionKey(issue, page)) || []) rows.set(entry.article, entry);
+    return [...rows.values()];
+}
+async function loadSavedRegions() {
+    const size = 300;
+    for (let from = 0; ; from += size) {
+        const { data, error } = await supabase.from('evere_epaper_regions').select('issue,page,article_number,points,png_path')
+            .order('issue').order('page').order('article_number').range(from, from + size - 1);
+        if (error) return;
+        for (const row of data) {
+            const key = regionKey(row.issue, row.page);
+            if (!savedRegions.has(key)) savedRegions.set(key, []);
+            savedRegions.get(key).push({ article: row.article_number, points: row.points, pngPath: row.png_path });
+        }
+        if (data.length < size) return;
+    }
+}
+void supabase.auth.getUser().then(async ({ data }) => {
+    if (!data?.user) return;
+    const { data: member } = await supabase.from('evere_members').select('role').eq('id', data.user.id).maybeSingle();
+    canEditRegions = member?.role === 'owner';
+    if (canEditRegions && current) render(current.issueNumber, current.page);
+}).catch(() => {});
+
 
 function positiveNumber(value) {
     const number = /^[1-9]\d*$/.test(value ?? '') ? Number(value) : 0;
@@ -245,8 +276,8 @@ function render(issueNumber, pageNumber, updateHistory = '') {
         ui('stage').classList.remove('is-loading', 'page-loaded');
     }
     articleViewer.setSheets([
-        { image: ui('image'), src: photo, regions: edition.regions?.[page], articles: edition.articles.filter(row => row.print_page === page) },
-        { image: ui('second-image'), src: hasSpread ? nextPhoto : '', regions: edition.regions?.[nextPage], articles: edition.articles.filter(row => row.print_page === nextPage) },
+        { image: ui('image'), src: photo, pdf, page, issue: issueNumber, editable: canEditRegions, regions: regionsFor(edition, issueNumber, page), articles: edition.articles.filter(row => row.print_page === page) },
+        { image: ui('second-image'), src: hasSpread ? nextPhoto : '', pdf, page: nextPage, issue: issueNumber, regions: regionsFor(edition, issueNumber, nextPage), articles: edition.articles.filter(row => row.print_page === nextPage) },
     ]);
 
     for (const link of ui('editions').querySelectorAll('a[aria-current]')) link.removeAttribute('aria-current');
@@ -303,6 +334,7 @@ async function start() {
     const [manifest, articles] = await Promise.all([
         fetch('/epaper/editions.json?v=article-regions-1').then(response => response.ok ? response.json() : null).catch(() => null),
         loadPrintArticles().catch(() => null),
+        loadSavedRegions().catch(() => {}),
     ]);
     for (const edition of manifest?.editions || []) {
         if (Number.isSafeInteger(edition.issue) && edition.issue > 0) issues.set(edition.issue, { ...edition, articles: [], pages: [] });

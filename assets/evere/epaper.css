@@ -239,3 +239,31 @@ button:not(:disabled) { cursor: pointer; }
 @media (max-width: 650px) { .viewer-issue-popover { top: 56px; right: 8px; } }
 @media (prefers-reduced-motion: reduce) { .viewer-issue-popover { animation: none; } }
 @media print { .viewer-issue-popover { display: none !important; } }
+
+#epaper-pages a::after {
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:linear-gradient(to bottom, transparent 50%, #e6e6e6 90%);
+}
+#epaper-pages a span {
+    z-index:1; padding:0 4px 10px; background:none;
+}
+.viewer-article-meta { display:flex; align-items:start; gap:4px; margin-bottom:24px; }
+#epaper-online-meta { margin-inline-end:auto; font-size:14px; line-height:19px; }
+#epaper-article-link { padding:7px 9px; border:1px solid currentColor; border-radius:6px; font-size:13px; line-height:16px; text-decoration:none; color:inherit; }
+#epaper-article-link[hidden] { display:none; }
+.viewer-article-meta .viewer-article-font { margin:0 0 0 auto; }
+#epaper-article-online .viewer-article-font { margin:0; }
+#epaper-region-toggle, #epaper-region-form {
+    position:absolute; z-index:7; left:24px; top:24px; padding:8px 12px;
+    background:var(--panel); color:var(--ink); border:1px solid var(--separator);
+    border-radius:8px; box-shadow:0 4px 12px #0002;
+}
+#epaper-region-form { top:65px; width:min(350px, calc(100% - 48px)); }
+#epaper-region-form p { font-size:13px; margin:8px 0; }
+#epaper-region-form select { width:100%; margin-top:6px; }
+#epaper-region-form button { padding:6px; margin-right:4px; }
+.viewer-hotspots svg.is-editing { pointer-events:auto; cursor:crosshair; background:#00b8b40c; }
+.viewer-hotspots svg.is-editing polygon { pointer-events:none; }
+.viewer-hotspots .region-sketch { fill:#00b8b433; stroke:#008985; stroke-width:2px; vector-effect:non-scaling-stroke; pointer-events:none; }
+@media (max-width:650px) { #epaper-region-toggle { top:56px;left:8px; } #epaper-region-form { top:96px;left:8px; } }
+@media print { #epaper-region-toggle, #epaper-region-form { display:none!important; } }
