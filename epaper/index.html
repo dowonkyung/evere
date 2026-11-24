@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#00B8B4">
+  <title>지면보기 | 이브레</title>
+  <link rel="icon" href="/assets/evere/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
+  <link rel="stylesheet" href="/assets/evere/epaper.css">
+  <script type="module" src="/assets/evere/epaper.js"></script>
+</head>
+<body>
+  <header class="epaper-top">
+    <a class="epaper-brand" href="/epaper/" aria-label="이브레 지면보기"><img src="/assets/evere/logo.svg" alt=""><span>지면보기</span></a>
+    <a class="epaper-home" href="/">이브레 홈 <span aria-hidden="true">↗</span></a>
+  </header>
+  <main class="epaper-shell">
+    <aside class="epaper-editions" aria-labelledby="editions-title">
+      <h2 id="editions-title">발행호</h2>
+      <ul id="epaper-editions"></ul>
+    </aside>
+    <section class="epaper-reader" aria-labelledby="epaper-heading">
+      <div class="epaper-reader-head">
+        <div>
+          <h1 id="epaper-heading">지면보기</h1>
+          <p id="epaper-date"></p>
+        </div>
+        <div class="epaper-reader-actions">
+          <button type="button" id="epaper-zoom" aria-pressed="false" hidden>확대</button>
+          <a class="epaper-pdf-link" id="epaper-open-pdf" target="_blank" rel="noopener" hidden>PDF 열기 ↗</a>
+        </div>
+      </div>
+      <p class="epaper-status" id="epaper-status" role="status">지면을 불러오는 중입니다.</p>
+      <div class="epaper-stage" id="epaper-stage" hidden>
+        <iframe id="epaper-pdf" title="이브레 신문 지면 PDF" hidden></iframe>
+        <div class="epaper-image-scroll" id="epaper-image-scroll" hidden><img id="epaper-image" alt=""></div>
+        <div class="epaper-paper" id="epaper-paper">
+          <img src="/assets/evere/wordmark.svg" alt="이브레">
+          <p id="epaper-paper-edition"></p>
+          <p>이 호의 지면 PDF가 아직 등록되지 않았습니다.</p>
+          <a href="#epaper-article-heading">이 면의 기사 보기 ↓</a>
+        </div>
+      </div>
+      <nav class="epaper-pagination" aria-label="지면 번호" id="epaper-pagination" hidden>
+        <button type="button" id="epaper-prev" aria-label="이전 면">‹</button>
+        <ul id="epaper-pages"></ul>
+        <button type="button" id="epaper-next" aria-label="다음 면">›</button>
+      </nav>
+    </section>
+    <aside class="epaper-articles" aria-labelledby="epaper-article-heading">
+      <h2 id="epaper-article-heading">이 면의 기사</h2>
+      <ul id="epaper-articles"></ul>
+      <p id="epaper-articles-empty" hidden>이 면에 연결된 기사가 없습니다.</p>
+    </aside>
+  </main>
+</body>
+</html>

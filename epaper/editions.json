@@ -1,0 +1,13 @@
+{
+  "editions": [
+    {
+      "issue": 1,
+      "date": "2022-11-05",
+      "pdf": "/epaper/files/1/221105.pdf",
+      "pageCount": 1,
+      "previews": {
+        "1": "/epaper/files/1/page-1.png"
+      }
+    }
+  ]
+}
