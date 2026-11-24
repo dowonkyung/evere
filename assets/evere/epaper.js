@@ -301,7 +301,7 @@ function render(issueNumber, pageNumber, updateHistory = '') {
 
 async function start() {
     const [manifest, articles] = await Promise.all([
-        fetch('/epaper/editions.json').then(response => response.ok ? response.json() : null).catch(() => null),
+        fetch('/epaper/editions.json?v=article-regions-1').then(response => response.ok ? response.json() : null).catch(() => null),
         loadPrintArticles().catch(() => null),
     ]);
     for (const edition of manifest?.editions || []) {
