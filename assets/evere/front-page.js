@@ -36,6 +36,28 @@ function makeArticle(data, summary = false, thumbnailRatio = '700 / 467') {
     return { article, image, path: data.photo_paths?.[0] };
 }
 
+let titleCheckFrame;
+
+function scheduleTitleCheck() {
+    cancelAnimationFrame(titleCheckFrame);
+    titleCheckFrame = requestAnimationFrame(() => {
+        const titles = [...document.querySelectorAll('main article > div > a')];
+        // Measure using each section's own line limit before changing any styles.
+        for (const title of titles) title.classList.remove('home-title-fits');
+        const fitting = titles.filter(title =>
+            title.clientWidth > 0 &&
+            title.scrollWidth <= title.clientWidth &&
+            title.scrollHeight <= title.clientHeight
+        );
+        for (const title of fitting) title.classList.add('home-title-fits');
+    });
+}
+
+window.addEventListener('resize', scheduleTitleCheck);
+document.fonts.ready.then(scheduleTitleCheck);
+document.fonts.addEventListener('loadingdone', scheduleTitleCheck);
+scheduleTitleCheck();
+
 async function renderArticles() {
     const [saved, feed] = await Promise.allSettled([
         supabase.from('evere_page_slots')
@@ -64,6 +86,8 @@ async function renderArticles() {
         latestList.children[index].replaceChildren(rendered.article);
         images.push(rendered);
     });
+
+    scheduleTitleCheck();
 
     const paths = [...new Set(images.map(({ path }) => path).filter(Boolean))];
     if (!paths.length) return;

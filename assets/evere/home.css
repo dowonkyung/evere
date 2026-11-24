@@ -132,3 +132,8 @@ body > footer .evere-footer-sitemap .menu > ul > li > ul > li:last-child { paddi
                 linear-gradient(#eee 0 0) left 32px / 54% 10px no-repeat;
 }
 [data-home-primary] .home-article-placeholder div { min-height: 94px; }
+
+main article > div > a.home-title-fits {
+    -webkit-line-clamp: unset;
+    text-overflow: clip;
+}
