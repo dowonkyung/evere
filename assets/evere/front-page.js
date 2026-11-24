@@ -12,6 +12,21 @@ const latestLimit = 6;
 const lowerList = document.querySelector('[data-home-list]');
 const opinionList = document.querySelector('[data-home-opinion]');
 
+function articleDescription(data) {
+    let text = data.body || '';
+    if (data.body_html?.trim()) {
+        const template = document.createElement('template');
+        template.innerHTML = data.body_html;
+        const content = template.content;
+        for (const extra of content.querySelectorAll('figure, figcaption, script, style, template')) extra.remove();
+        for (const block of content.querySelectorAll('br, p, div, li, blockquote, h1, h2, h3, h4, h5, h6')) {
+            block.after(' ');
+        }
+        text = content.textContent;
+    }
+    return Array.from(text.replace(/\s+/g, ' ').trim()).slice(0, 120).join('');
+}
+
 function makeArticle(data, summary = false, thumbnailRatio = '700 / 467') {
     const article = document.createElement('article');
     const picture = document.createElement('picture');
@@ -28,10 +43,11 @@ function makeArticle(data, summary = false, thumbnailRatio = '700 / 467') {
     title.href = articlePath(data);
     setArticleTitle(title, data.title, data.article_label);
     text.append(title);
-    if (summary) {
+    const excerpt = summary ? articleDescription(data) : '';
+    if (excerpt) {
         const description = document.createElement('p');
         description.className = 'desc';
-        description.textContent = data.subtitle || Array.from(data.body || '').slice(0, 120).join('');
+        description.textContent = excerpt;
         text.append(description);
     }
     article.append(picture, text);
@@ -63,7 +79,7 @@ scheduleTitleCheck();
 async function renderArticles() {
     const [saved, feed] = await Promise.allSettled([
         supabase.from('evere_page_slots')
-            .select('slot,evere_articles!inner(id,article_number,title,article_label,subtitle,body,status,photo_paths)')
+            .select('slot,evere_articles!inner(id,article_number,title,article_label,body,body_html,status,photo_paths)')
             .eq('page', 'home').eq('category', '').eq('evere_articles.status', 'published').order('slot'),
         supabase.from('evere_articles').select('id,article_number,title,article_label,photo_paths')
             .eq('status', 'published').order('published_at', { ascending: false, nullsFirst: false })
