@@ -14,7 +14,7 @@
 }
 .reader-article, .reader-comments { min-width: 0; grid-column: 2; }
 .reader-head { border-bottom: 1px solid #e1e1e1; padding-bottom: 24px; margin-bottom: 24px; }
-.reader-sector { display: flex; flex-wrap: wrap; gap: 8px 15px; margin-bottom: 8px; font-size: 15px; line-height: 24px; font-weight: 600; color: #007c79; }
+.reader-sector { display: flex; flex-wrap: wrap; gap: 8px 15px; margin-bottom: 8px; font-size: 15px; line-height: 24px; font-weight: 600; color: var(--text-primary, #151515); }
 .reader-sector a:hover { text-decoration: underline; }
 .reader-head h1 { margin: 0; font-size: 32px; line-height: 44px; font-weight: 700; word-break: keep-all; overflow-wrap: anywhere; }
 .reader-head time { display: block; margin-top: 16px; color: #686868; font-size: 14px; font-weight: 500; line-height: 18px; }
@@ -177,8 +177,7 @@
 .reader-type-icon small { font-size: .7em; }
 
 .reader-sector:has(.reader-series-link) { column-gap: 4px; }
-.reader-sector:has(.reader-series-link) > :first-child { color: var(--text-primary, #151515); }
-.reader-sector .reader-series-link { display: inline-flex; align-items: center; color: var(--evere-accent, #00B8B4); }
+.reader-sector .reader-series-link { display: inline-flex; align-items: center; color: #4c70e8; }
 .reader-series-link svg { flex: none; }
 
 #article-bookmark[aria-pressed="true"] svg { fill: currentColor; }
@@ -221,6 +220,7 @@
 .evere-article[data-reader-palette] #evere-header + .article-page,
 .evere-article[data-reader-palette] > footer { background-color: var(--background-default); color: var(--text-primary); }
 .evere-article[data-reader-palette] :is(.article-page, footer) :is(a, button, summary, select, label, h1, h2, h3) { color: inherit; }
+.evere-article[data-reader-palette] .article-page .reader-sector a.reader-series-link { color: #4c70e8; }
 .evere-article[data-reader-palette] :is(.reader-head time, .comment-meta, figcaption, #status) { color: var(--text-secondary); }
 .evere-article[data-reader-palette] .reader-head,
 .evere-article[data-reader-palette] .reader-actions,
