@@ -5,7 +5,7 @@ import { articlePath, articleNumberFromURL } from './routes.js?v=direct-route-1'
 import { renderBody, renderPhotos, photoBucket } from './article-content.js?v=paragraph-breaks-2';
 import { seriesFor, seriesLink } from './series.js?v=numbered-link-1';
 import { supabase } from './supabase.js';
-import { sectors } from './article-taxonomy.js';
+import { sectors } from './article-taxonomy.js?v=notice-1';
 
 const ui = (id) => document.getElementById(id);
 let articleId = new URLSearchParams(location.search).get('id');

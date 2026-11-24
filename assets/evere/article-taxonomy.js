@@ -8,10 +8,12 @@ export const sectors = {
     "international": "국제",
     "health": "건강",
     "sports": "스포츠",
-    "culture": "문화"
+    "culture": "문화",
+    "notice": "알림"
 };
 
 export const articleCategories = {
+    "notice": [],
     "opinion": [
         [
             "editorial",

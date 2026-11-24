@@ -9,8 +9,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="/assets/evere/account.css?v=left-white-1">
   <link rel="stylesheet" href="/assets/evere/newsroom.css?v=paragraph-breaks-1">
-  <script type="module" src="/assets/evere/account.js?v=first-paragraph-1"></script>
-  <script type="module" src="/assets/evere/newsroom.js?v=issues-no-preview-1"></script>
+  <script type="module" src="/assets/evere/account.js?v=notice-1"></script>
+  <script type="module" src="/assets/evere/newsroom.js?v=notice-1"></script>
 <script type="module" src="/assets/evere/route-init.js?v=routes-1"></script>
 </head>
 <body class="newsroom">
@@ -82,8 +82,8 @@
                 </div>
                 <label>부제목<textarea name="subtitle" maxlength="500" rows="2" placeholder="부제목을 입력하세요"></textarea></label>
                 <div class="compose-section-fields">
-                  <label>섹터<select name="sector" required></select></label>
-                  <label>하위 분류<select name="category"></select></label>
+                  <label>1차 섹션<select name="sector" required></select></label>
+                  <label>2차 섹션<select name="category"></select></label>
                   <label>기획·연재<select name="series"><option value="">선택 안 함</option></select></label>
                 </div>
                 <fieldset class="compose-byline">
@@ -156,7 +156,7 @@
           <h1>기획·연재 관리</h1>
           <div class="series-management">
             <form id="series-form">
-              <label>섹터<select name="sector" required></select></label>
+              <label>1차 섹션<select name="sector" required></select></label>
               <label>분류명<input name="title" maxlength="100" required placeholder="칼럼 코너명 또는 기획연재 제목"></label>
               <button type="submit">분류 만들기</button>
             </form>
@@ -191,7 +191,7 @@
           <form id="layout-form">
             <div class="newsroom-fields">
               <label>페이지<select name="page" required></select></label>
-              <label>하위 분류<select name="category"></select></label>
+              <label>2차 섹션<select name="category"></select></label>
             </div>
             <fieldset id="layout-slots" class="newsroom-slots">
               <legend id="layout-slot-heading">기사 배치</legend>

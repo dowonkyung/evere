@@ -1,7 +1,7 @@
 import { configureHomeVisualEditor } from './newsroom-home-layout.js?v=home-lower-layout-1';
 import { categoryPath } from './routes.js?v=routes-1';
 import { supabase } from './supabase.js';
-import { sectors, articleCategories } from './article-taxonomy.js';
+import { sectors, articleCategories } from './article-taxonomy.js?v=notice-1';
 import { seriesFor } from './series.js?v=numbered-link-1';
 import { issueUrl, loadHomeIssues } from './home-issues.js?v=issues-1';
 
@@ -77,8 +77,8 @@ function optionList(select, entries, selected = '') {
 }
 
 function editablePages() {
-    if (member?.role === 'owner' || member?.role === 'director') return [['home', '메인페이지'], ...Object.entries(sectors)];
-    if (member?.role === 'department_head') return Object.entries(sectors).filter(([key]) => member.sectors.includes(key));
+    if (member?.role === 'owner' || member?.role === 'director') return [['home', '메인페이지'], ...Object.entries(sectors).filter(([key]) => key !== 'notice')];
+    if (member?.role === 'department_head') return Object.entries(sectors).filter(([key]) => key !== 'notice' && member.sectors.includes(key));
     return [];
 }
 

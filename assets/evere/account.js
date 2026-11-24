@@ -1,7 +1,7 @@
 import { setArticleTitle } from './article-label.js';
 import { articlePath } from './routes.js?v=routes-1';
 import { supabase } from './supabase.js';
-import { sectors, articleCategories } from './article-taxonomy.js';
+import { sectors, articleCategories } from './article-taxonomy.js?v=notice-1';
 import { articleComposer } from './article-composer.js?v=first-paragraph-1';
 import { renderBody, renderPhotos } from './article-content.js?v=paragraph-breaks-1';
 const roleNames = {
@@ -148,7 +148,7 @@ function fillOptions(select, values, selected = []) {
 }
 
 function setCategories(form, selected = '') {
-    fillOptions(form.elements.category, [['', '하위 분류 없음'], ...(articleCategories[form.elements.sector.value] || [])], [selected]);
+    fillOptions(form.elements.category, [['', '2차 섹션 없음'], ...(articleCategories[form.elements.sector.value] || [])], [selected]);
 }
 
 function canEdit(sector) {

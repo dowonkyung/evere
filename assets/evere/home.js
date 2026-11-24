@@ -42,7 +42,8 @@ services.className = 'category-services';
 services.setAttribute('aria-label', '이브레 서비스');
 for (const name of ['구독신청', '기사제보', '지면보기', 'RSS', '알림']) {
     const item = document.createElement('li');
-    const label = document.createElement('span');
+    const label = document.createElement(name === '알림' ? 'a' : 'span');
+    if (name === '알림') label.href = '/notice/';
     label.textContent = name;
     item.append(label);
     services.append(item);
