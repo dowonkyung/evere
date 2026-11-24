@@ -12,7 +12,7 @@ button:not(:disabled) { cursor: pointer; }
 .viewer-layout { display: grid; grid-template-columns: var(--rail-width) minmax(0, 1fr); height: 100dvh; overflow: hidden; }
 .viewer-rail { display: flex; flex-direction: column; z-index: 4; padding: 0 11px; background: var(--rail); color: white; }
 .viewer-brand { display: grid; align-items: center; min-height: 96px; border-bottom: 3px solid #ffffff14; }
-.viewer-brand img { display: block; width: 100%; filter: brightness(0) invert(1); }
+.viewer-brand img { display: block; width: 100%; height: auto; }
 .viewer-rail-actions { display: grid; gap: 14px; margin-top: 15px; }
 .viewer-rail-actions button { display: grid; justify-items: center; align-content: center; gap: 6px; min-height: 60px; padding: 6px 0; border-radius: 6px; font-size: 13px; font-weight: 500; }
 .viewer-rail-actions button:hover, .viewer-rail-actions button[aria-pressed="true"] { background: #00b8b43d; }
@@ -294,9 +294,21 @@ button:not(:disabled) { cursor: pointer; }
 #epaper-region-form { max-height:calc(100dvh - 112px); overflow:auto; }
 #epaper-region-form label { display:block; margin-bottom:6px; }
 #epaper-region-form textarea { display:block; width:100%; resize:vertical; margin-top:4px; font:inherit; }
-#epaper-search-form { position:relative; }
-#epaper-search-form input { width:100%; height:44px; padding:0 42px 0 15px; border:1px solid var(--separator); border-radius:8px; background:none; color:inherit; }
-#epaper-search-form button { position:absolute; right:6px; top:5px; width:34px; height:34px; font-size:22px; }
+#epaper-search-form {
+    display:flex; align-items:center; gap:8px; width:100%;
+    padding:10px 16px; border:1px solid #dfdfdf; border-radius:8px; background:var(--panel);
+}
+.is-dark #epaper-search-form { border-color:#555; }
+#epaper-search-form:focus-within, .is-dark #epaper-search-form:focus-within { border-color:#489272; }
+#epaper-search-form input {
+    flex:1; min-width:0; width:auto; margin:0; padding:0; border:0; border-radius:0;
+    background:transparent; color:inherit; font-size:15px; line-height:22px; box-shadow:none;
+}
+#epaper-search-form input:focus { outline:none; }
+#epaper-search-form input::placeholder { color:#b7b7b7; }
+#epaper-search-form input::-webkit-search-cancel-button { -webkit-appearance:none; }
+#epaper-search-form button { display:grid; place-items:center; flex:none; width:20px; height:20px; padding:0; }
+#epaper-search-form button svg { stroke-width:1.6px; }
 #epaper-search-status { text-align:right; font-size:13px; margin:6px 0 0; }
 #epaper-search-results { display:block; }
 #epaper-search-results li { border-bottom:1px solid var(--separator); }
