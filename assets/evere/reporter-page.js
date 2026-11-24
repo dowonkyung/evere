@@ -129,7 +129,7 @@ async function render() {
     ui('reporter-bio').hidden = !data.bio.trim();
     if (data.public_email) {
         const email = ui('reporter-email');
-        ui('reporter-email-text').textContent = data.public_email;
+        email.textContent = data.public_email;
         email.href = 'mailto:' + encodeURIComponent(data.public_email).replace('%40', '@');
         ui('reporter-contact').hidden = false;
     }
