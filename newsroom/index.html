@@ -12,13 +12,13 @@
   <script type="module" src="/assets/evere/account.js?v=workspace-1"></script>
   <script type="module" src="/assets/evere/newsroom.js?v=no-boards-1"></script>
 <script type="module" src="/assets/evere/route-init.js?v=routes-1"></script>
-  <link rel="stylesheet" href="/assets/evere/newsroom-workspace.css?v=aligned-sidebar-logo-1">
+  <link rel="stylesheet" href="/assets/evere/newsroom-workspace.css?v=custom-newsroom-logo-1">
 </head>
 <body class="newsroom">
   <main class="newsroom-main">
     <p id="status" role="status" aria-live="polite"></p>
     <section id="access" hidden>
-      <a class="newsroom-brand" href="/newsroom/" aria-label="이브레 뉴스룸"><img src="/assets/evere/wordmark.svg" alt=""><span>뉴스룸</span></a>
+      <a class="newsroom-brand" href="/newsroom/" aria-label="이브레 뉴스룸"><img src="/assets/evere/wordmark.svg" alt=""><img class="newsroom-brand-title" src="/assets/evere/newsroom-title.svg" alt=""></a>
       <h1 id="access-title">로그인</h1>
       <form id="access-form">
         <label id="signup-name" hidden>이름<input name="displayName" maxlength="40" autocomplete="name"></label>
@@ -30,7 +30,7 @@
       <button id="resend" class="text-action" type="button" hidden>인증 이메일 다시 보내기</button>
     </section>
     <section id="profile-setup" hidden>
-      <a class="newsroom-brand" href="/newsroom/" aria-label="이브레 뉴스룸"><img src="/assets/evere/wordmark.svg" alt=""><span>뉴스룸</span></a>
+      <a class="newsroom-brand" href="/newsroom/" aria-label="이브레 뉴스룸"><img src="/assets/evere/wordmark.svg" alt=""><img class="newsroom-brand-title" src="/assets/evere/newsroom-title.svg" alt=""></a>
       <h1>이브레 회원 이름 등록</h1>
       <form id="profile-form">
         <label>이름<input name="displayName" maxlength="40" autocomplete="name" required></label>
@@ -41,7 +41,7 @@
     <section id="workspace" hidden>
       <nav class="newsroom-nav" aria-label="뉴스룸 메뉴">
         <div class="newsroom-nav-brand-row">
-          <a class="newsroom-brand" href="/newsroom/" aria-label="이브레 뉴스룸"><img class="newsroom-brand-symbol" src="/assets/evere/favicon.svg" alt=""><img class="newsroom-brand-wordmark" src="/assets/evere/logo.svg" alt=""><span>뉴스룸</span></a>
+          <a class="newsroom-brand" href="/newsroom/" aria-label="이브레 뉴스룸"><img class="newsroom-brand-symbol" src="/assets/evere/favicon.svg" alt=""><img class="newsroom-brand-wordmark" src="/assets/evere/logo.svg" alt=""><img class="newsroom-brand-title" src="/assets/evere/newsroom-title.svg" alt=""></a>
         <button id="newsroom-nav-toggle" class="newsroom-nav-toggle" type="button" aria-label="메뉴 너비 줄이기" title="메뉴 너비 줄이기" aria-pressed="false">
           <svg class="workspace-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 3v18"/></svg>
         </button>
