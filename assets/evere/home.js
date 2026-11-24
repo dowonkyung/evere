@@ -3,20 +3,9 @@ void import('./supabase.js').then(({ supabase }) => {
     const links = [...header.querySelectorAll('a.login01[href="/account/"]')];
     const mark = session => {
         for (const link of links) {
-            let dot = link.querySelector('[data-account-dot]');
-            if (!session) {
-                dot?.remove();
-                link.setAttribute('aria-label', '로그인');
-                continue;
-            }
-            link.setAttribute('aria-label', '마이페이지');
-            if (dot) continue;
-            if (getComputedStyle(link).position === 'static') link.style.position = 'relative';
-            dot = document.createElement('span');
-            dot.dataset.accountDot = '';
-            dot.setAttribute('aria-hidden', 'true');
-            dot.style.cssText = 'position:absolute;right:3px;bottom:3px;width:8px;height:8px;border-radius:50%;background:#4568e8;box-shadow:0 0 0 2px white;pointer-events:none';
-            link.append(dot);
+            link.setAttribute('aria-label', session ? '마이페이지' : '로그인');
+            if (session) link.style.backgroundImage = 'url("/assets/evere/account-signed-in.svg")';
+            else link.style.removeProperty('background-image');
         }
     };
     supabase.auth.onAuthStateChange((_event, session) => mark(session));
