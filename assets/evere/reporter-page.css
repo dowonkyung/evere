@@ -1,0 +1,35 @@
+.evere-reporter [hidden] { display: none !important; }
+.evere-reporter .journalist_header { position: relative; padding-top: 24px; }
+.evere-reporter .profile_area { display: flex; align-items: center; }
+.evere-reporter .profile_image { display: grid; place-items: center; flex: none; position: relative; width: 128px; height: 128px; margin: 0; overflow: hidden; border-radius: 50%; background: #f2f2f2; color: #666; font-size: 32px; }
+.evere-reporter .profile_image::before { position: absolute; inset: 0; border: 1px solid rgba(0,0,0,.04); border-radius: 50%; background: rgba(0,0,0,.06); content: ""; pointer-events: none; }
+.evere-reporter .profile_image img { width: 100%; height: 100%; object-fit: cover; }
+.evere-reporter .profile_body { min-width: 0; margin-left: 20px; }
+.evere-reporter .flex_area { display: flex; align-items: center; }
+.evere-reporter .name { margin: 0; color: #111; font-size: 32px; font-weight: 700; line-height: 44px; overflow-wrap: anywhere; }
+.evere-reporter .btn_share { display: grid; flex: none; place-items: center; width: 28px; height: 28px; margin-left: 10px; padding: 0; border: 0; background: transparent; cursor: pointer; }
+.evere-reporter .profile_info { margin-top: 4px; color: #333; font-size: 16px; line-height: 24px; }
+.evere-reporter .journalist_share { display: flex; margin-top: 11px; }
+.evere-reporter .text_email, .evere-reporter .journalist_introduce { color: #666; font-size: 14px; line-height: 22px; overflow-wrap: anywhere; }
+.evere-reporter .journalist_introduce { width: min(100%, 668px); margin-top: 24px; white-space: pre-wrap; }
+.evere-reporter .journalist_popularity { position: absolute; right: 0; top: 40px; }
+.evere-reporter #reporter-follow { min-width: 59px; padding: 5px 12px; border: 1px solid #00b8b4; border-radius: 4px; background: #fff; color: #007a79; font: inherit; font-size: 14px; cursor: pointer; }
+.evere-reporter #reporter-follow[aria-pressed="true"] { background: #00b8b4; color: #111; }
+.evere-reporter .journalist_body { margin-top: 60px; }
+.evere-reporter .journalist_body > .contents > div { width: min(884px, 100%); }
+.evere-reporter :is(.reporter-status, #reporter-list-status, #reporter-action-status):not(:empty) { padding-block: 12px; color: #666; }
+.evere-reporter .reporter-more { text-align: center; margin: 20px 0 48px; }
+.evere-reporter #reporter-load-more { padding: 7px 24px; border: 1px solid var(--stroke-framing); border-radius: 4px; color: var(--text-primary); background: transparent; cursor: pointer; }
+@media (max-width: 985px) {
+    .evere-reporter .journalist_header { margin-bottom: 40px; }
+    .evere-reporter .profile_image { align-self: flex-start; width: 96px; height: 96px; }
+    .evere-reporter .name { font-size: 28px; line-height: 34px; }
+    .evere-reporter .profile_info { margin-top: 6px; font-size: 15px; line-height: 21px; }
+    .evere-reporter .journalist_share { margin-top: 12px; }
+    .evere-reporter .journalist_popularity { position: static; margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(0,0,0,.1); }
+    .evere-reporter .journalist_body { margin-top: 40px; }
+}
+@media (max-width: 767px) {
+    .evere-reporter .journalist_header, .evere-reporter .reporter-status { margin-inline: 20px; }
+    .evere-reporter .journalist_body > .contents > div { width: 100%; }
+}

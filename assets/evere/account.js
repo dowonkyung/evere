@@ -259,23 +259,20 @@ async function renderMemberTable() {
     memberTableMessage('회원 목록을 불러오는 중입니다.');
     const rows = [];
     for (let offset = 0; ; offset += 200) {
-        const batch = result(await supabase.rpc('evere_owner_members').range(offset, offset + 199));
+        const batch = result(await supabase.rpc('evere_owner_members_numbered').order('member_number').range(offset, offset + 199));
         if (request !== memberTableRequest || member?.role !== 'owner') return;
         rows.push(...batch);
         if (batch.length < 200) break;
     }
     if (!rows.length) { memberTableMessage('등록된 회원이 없습니다.'); return; }
-    rows.sort((first, second) =>
-        Date.parse(first.joined_at) - Date.parse(second.joined_at) ||
-        first.joined_at.localeCompare(second.joined_at) || first.id.localeCompare(second.id));
     const photos = new Map();
-    ui('member-rows').replaceChildren(...rows.map((entry, index) => {
+    ui('member-rows').replaceChildren(...rows.map(entry => {
         const row = element('tr');
         const avatar = element('td');
         const placeholder = element('span', Array.from(entry.display_name)[0], 'member-avatar');
         avatar.append(placeholder);
         if (entry.avatar_path) photos.set(entry.avatar_path, avatar);
-        row.append(element('td', String(index + 1)), avatar);
+        row.append(element('td', String(entry.member_number)), avatar);
         for (const value of [entry.email, entry.display_name, roleNames[entry.role], entry.position_title,
             entry.last_sign_in_at && memberDate.format(new Date(entry.last_sign_in_at))]) {
             row.append(element('td', value || '—'));

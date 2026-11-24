@@ -47,6 +47,11 @@ export async function showReporterCards(articleId) {
         const name = node('h2', 'reporter-card-name', reporter.display_name);
         const position = node('p', 'reporter-card-position', reporter.position_title?.trim() || '기자');
         const heading = node('div', 'reporter-card-heading');
+        if (reporter.reporter_number) {
+            const profile = node('a', '', reporter.display_name);
+            profile.href = '/reporter/' + reporter.reporter_number;
+            name.replaceChildren(profile);
+        }
         heading.append(name, position);
         const top = node('div', 'reporter-card-top');
         top.append(heading);

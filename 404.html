@@ -13,9 +13,10 @@
   <script>
     const match = /^\/article\/([1-9]\d*)\/?$/.exec(location.pathname);
     const series = /^\/series\/articles\/([1-9]\d*)\/?$/.exec(location.pathname);
-    const route = match || series;
+    const reporter = /^\/reporter\/([1-9]\d*)\/?$/.exec(location.pathname);
+    const route = match || series || reporter;
     if (route && Number.isSafeInteger(Number(route[1]))) {
-      const target = new URL(series ? '/series/articles/' : '/article/', location.origin);
+      const target = new URL(reporter ? '/reporter/' : series ? '/series/articles/' : '/article/', location.origin);
       target.search = location.search;
       target.searchParams.set('number', route[1]);
       if (series) target.searchParams.set('rev', 'series-title-2');
