@@ -9,8 +9,12 @@ const groups = [
 const labels = ['대표 헤드라인', '보조 헤드라인 1', '보조 헤드라인 2', '하단 대표 기사',
     '하단 오른쪽 기사 1', '하단 오른쪽 기사 2', '하단 오른쪽 기사 3', '하단 대표 기사 바로 아래'];
 const batchSize = 20;
+const opinionGroups = [
+    { name: '사설', area: 'editorial', category: 'editorial', slots: [1, 2, 3], targets: ['#editorial'] },
+    { name: '칼럼', area: 'columns', category: 'column', slots: [1, 2, 3, 4, 5, 6], targets: ['#columns'] },
+];
 
-export function configureHomeVisualEditor(isHomeSelected, openIssues) {
+export function configureHomeVisualEditor(selectedPage, openIssues) {
     const ui = id => document.getElementById(id);
     const editor = ui('home-visual-editor');
     const frame = ui('home-preview');
@@ -39,7 +43,23 @@ export function configureHomeVisualEditor(isHomeSelected, openIssues) {
         return el;
     }
 
-    async function getPlacements() {
+    const previewPath = page => (page === 'opinion' ? '/opinion/' : '/') + '?preview=visual-layout';
+    const groupPage = group => group.area ? 'opinion' : 'home';
+
+    async function getPlacements(group) {
+        if (group.area) {
+            const { data: layout, error } = await supabase.from('evere_opinion_layout')
+                .select('items').eq('area', group.area).maybeSingle();
+            if (error) throw error;
+            const items = layout?.items || [];
+            const ids = items.filter(Boolean);
+            if (!ids.length) return new Map();
+            const { data, error: articleError } = await supabase.from('evere_articles').select('id,title')
+                .in('id', ids).eq('status', 'published').eq('sector', 'opinion').eq('category', group.category);
+            if (articleError) throw articleError;
+            const articles = new Map(data.map(article => [article.id, article]));
+            return new Map(items.flatMap((id, index) => articles.has(id) ? [[index + 1, articles.get(id)]] : []));
+        }
         const { data, error } = await supabase.from('evere_page_slots')
             .select('slot,evere_articles(id,title,status)').eq('page', 'home').eq('category', '');
         if (error) throw error;
@@ -52,7 +72,8 @@ export function configureHomeVisualEditor(isHomeSelected, openIssues) {
             const row = document.createElement('div');
             row.className = 'home-placement-row';
             const choice = choices.get(slot);
-            const select = button(labels[slot - 1] + ' · ' + (choice?.title || '배치하지 않음'), () => {
+            const slotLabel = activeGroup.area ? activeGroup.name + ' ' + slot : labels[slot - 1];
+            const select = button(slotLabel + ' · ' + (choice?.title || '배치하지 않음'), () => {
                 if (activeSlot === slot) return;
                 activeSlot = slot;
                 renderSlots();
@@ -82,6 +103,7 @@ export function configureHomeVisualEditor(isHomeSelected, openIssues) {
             const keyword = searchForm.elements.keyword.value.trim().replace(/[\\%_]/g, character => '\\' + character);
             let query = supabase.from('evere_articles').select('id,title')
                 .eq('status', 'published').not('article_number', 'is', null);
+            if (activeGroup.area) query = query.eq('sector', 'opinion').eq('category', activeGroup.category);
             if (keyword) query = query.ilike('title', '%' + keyword + '%');
             const { data, error } = await query.order('published_at', { ascending: false, nullsFirst: false })
                 .order('id').range(offset, offset + batchSize);
@@ -110,7 +132,7 @@ export function configureHomeVisualEditor(isHomeSelected, openIssues) {
     }
 
     async function openGroup(group) {
-        if (!isHomeSelected() || dialog.open) return;
+        if (selectedPage() !== groupPage(group) || dialog.open) return;
         activeGroup = group;
         activeSlot = group.slots[0];
         loaded = false;
@@ -126,7 +148,7 @@ export function configureHomeVisualEditor(isHomeSelected, openIssues) {
         dialog.showModal();
         const request = ++searchRequest;
         try {
-            const placements = await getPlacements();
+            const placements = await getPlacements(group);
             if (request !== searchRequest || !dialog.open) return;
             for (const slot of group.slots) {
                 if (placements.has(slot)) choices.set(slot, placements.get(slot));
@@ -152,25 +174,27 @@ export function configureHomeVisualEditor(isHomeSelected, openIssues) {
         if (saving) event.preventDefault();
     });
     save.addEventListener('click', async () => {
-        if (!loaded || saving || !isHomeSelected()) return;
+        if (!loaded || saving || selectedPage() !== groupPage(activeGroup)) return;
         saving = true;
         save.disabled = true;
         saveStatus.textContent = '배치를 저장하는 중입니다.';
         try {
-            const latest = await getPlacements();
-            const articles = labels.map((_, i) => (activeGroup.slots.includes(i + 1)
-                ? choices.get(i + 1) : latest.get(i + 1))?.id || null);
+            const latest = activeGroup.area ? null : await getPlacements(activeGroup);
+            const articles = activeGroup.area
+                ? activeGroup.slots.map(slot => choices.get(slot)?.id || null)
+                : labels.map((_, i) => (activeGroup.slots.includes(i + 1)
+                    ? choices.get(i + 1) : latest.get(i + 1))?.id || null);
             const chosen = articles.filter(Boolean);
             if (new Set(chosen).size !== chosen.length) {
                 saveStatus.textContent = '같은 기사는 한 위치에만 배치할 수 있습니다.';
                 return;
             }
-            const { error } = await supabase.rpc('evere_save_layout', {
-                target_page: 'home', target_category: '', articles,
-            });
+            const { error } = await (activeGroup.area
+                ? supabase.from('evere_opinion_layout').upsert({ area: activeGroup.area, items: articles })
+                : supabase.rpc('evere_save_layout', { target_page: 'home', target_category: '', articles }));
             if (error) throw error;
             dialog.close();
-            frame.src = '/?preview=home-layout&updated=' + Date.now();
+            frame.src = previewPath(groupPage(activeGroup)) + '&updated=' + Date.now();
         } catch {
             saveStatus.textContent = '배치를 저장하지 못했습니다. 다시 시도해 주세요.';
         } finally {
@@ -184,7 +208,8 @@ export function configureHomeVisualEditor(isHomeSelected, openIssues) {
         const doc = frame.contentDocument;
         const win = frame.contentWindow;
         const home = doc?.querySelector('[data-home-articles]');
-        if (!home || !win) return;
+        const opinion = doc?.querySelector('#columns');
+        if ((!home && !opinion) || !win) return;
         const style = doc.createElement('style');
         style.textContent = `
             [data-home-list][hidden] { display: flex !important; }
@@ -207,7 +232,8 @@ export function configureHomeVisualEditor(isHomeSelected, openIssues) {
             .home-preview-region button svg { display: block; width: 20px; height: 20px; }
         `;
         doc.head.append(style);
-        const regions = [{ name: '메인 이슈 링크', targets: ['.evere-home-issues'], open: () => openIssues() },
+        const regions = opinion ? opinionGroups.map(group => ({ ...group, open: () => openGroup(group) }))
+            : [{ name: '메인 이슈 링크', targets: ['.evere-home-issues'], open: () => openIssues() },
             { name: '이벤트 링크', targets: ['[data-home-event-links-region]'], open: () => openIssues('event_links') },
             { name: '하단 바로가기', targets: ['[data-home-service-cards]'], open: () => openIssues('service_cards') },
             ...groups.map(group => ({ ...group, open: () => openGroup(group) }))];
@@ -256,8 +282,11 @@ export function configureHomeVisualEditor(isHomeSelected, openIssues) {
         };
     });
 
-    return visible => {
-        editor.hidden = !visible;
-        if (visible && !frame.hasAttribute('src')) frame.src = '/?preview=home-layout';
+    return page => {
+        editor.hidden = !page;
+        if (page && frame.dataset.previewPage !== page) {
+            frame.dataset.previewPage = page;
+            frame.src = previewPath(page);
+        }
     };
 }

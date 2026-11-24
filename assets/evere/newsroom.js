@@ -1,4 +1,4 @@
-import { configureHomeVisualEditor } from './newsroom-home-layout.js?v=corrections-1';
+import { configureHomeVisualEditor } from './newsroom-home-layout.js?v=opinion-visual-1';
 import { categoryPath } from './routes.js?v=routes-1';
 import { supabase } from './supabase.js';
 import { sectors, articleCategories } from './article-taxonomy.js?v=corrections-1';
@@ -12,7 +12,10 @@ const nav = [...document.querySelectorAll('.newsroom-nav [data-view]')];
 const layout = ui('layout-form');
 const layoutSubmit = layout.querySelector('[type="submit"]');
 const slots = [...ui('layout-slots').querySelectorAll('select')];
-const showHomeVisualEditor = configureHomeVisualEditor(() => layout.elements.page.value === 'home', openHomeIssues);
+const showHomeVisualEditor = configureHomeVisualEditor(() => {
+    const { page, category } = layout.elements;
+    return page.value === 'home' || (page.value === 'opinion' && !category.value) ? page.value : '';
+}, openHomeIssues);
 
 function sectionHeadLayout(page, category) {
     return page !== 'home' && page !== 'opinion' && category === '';
@@ -200,11 +203,11 @@ async function loadLayout() {
     if (!page) return;
     const request = ++layoutRequest;
     layoutSubmit.disabled = true;
-    const isHome = page === 'home';
-    ui('layout-slots').hidden = isHome;
-    layoutSubmit.hidden = isHome;
-    showHomeVisualEditor(isHome);
-    if (isHome) {
+    const isVisual = page === 'home' || (page === 'opinion' && !category);
+    ui('layout-slots').hidden = isVisual;
+    layoutSubmit.hidden = isVisual;
+    showHomeVisualEditor(isVisual ? page : '');
+    if (isVisual) {
         ui('public-page').href = publicPage(page, category);
         return;
     }
@@ -240,7 +243,7 @@ layout.elements.category.addEventListener('change', () => {
     loadLayout().catch(() => notify('화면 배치를 불러오지 못했습니다.', true));
 });
 layout.addEventListener('submit', task(async () => {
-    if (layout.elements.page.value === 'home') return;
+    if (layout.elements.page.value === 'home' || (layout.elements.page.value === 'opinion' && !layout.elements.category.value)) return;
     const articleIds = slots.filter((select) => !select.closest('label').hidden).map((select) => select.value || null);
     const populated = articleIds.filter(Boolean);
     if (new Set(populated).size !== populated.length) {
