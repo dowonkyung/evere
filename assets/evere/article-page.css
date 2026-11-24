@@ -21,7 +21,7 @@
 .reader-head time:empty { display: none; }
 .article-byline { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; color: var(--text-strong, #333); font-size: 14px; line-height: 19px; font-weight: 600; }
 .article-byline > span { border-bottom: 1px solid var(--text-secondary, #666); }
-.reader-article .editor-subtitle { border-inline-start: 3px solid currentColor; padding-inline-start: 13px; margin: 0 0 32px; }
+.reader-article .editor-subtitle { border-inline-start: 3px solid currentColor; padding-inline-start: 13px; margin: 0; }
 .reader-article .editor-subtitle > p { margin: 0; white-space: pre-line; font-size: 17px; font-weight: 550; line-height: 28px; }
 .article-byline:empty, .article-photos:empty { display: none; }
 .reader-article .article-body { font-size: 18px; line-height: 32px; white-space: pre-wrap; overflow-wrap: anywhere; }
@@ -34,9 +34,10 @@
 .article-body ul { list-style: disc; }
 .article-body ol { list-style: decimal; }
 .article-body blockquote { padding-inline-start: 1em; border-inline-start: 3px solid var(--evere-accent); }
-.article-photos { display: grid; gap: 18px; margin-bottom: 32px; }
+.article-photos { display: grid; gap: 18px; }
 .article-photos img, .article-body figure img { display: block; max-width: 100%; height: auto; }
 .article-body figure[data-photo] { width: fit-content; max-width: 100%; margin: 32px auto; }
+.article-body > figure[data-photo]:first-child { margin-block-start: 0; }
 .article-body figure[data-position="left"] { margin-left: 0; }
 .article-body figure[data-position="right"] { margin-right: 0; }
 .article-body figcaption { margin-top: 8px; color: #666; font-size: 14px; line-height: 22px; overflow-wrap: anywhere; }
