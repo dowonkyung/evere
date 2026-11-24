@@ -255,6 +255,13 @@ function resolvePreview(edition, pdf, page) {
     return pdfPreviews.get(previewKey(pdf, page)) || '';
 }
 
+function spreadPages(edition, requested) {
+    if (!spread || requested === 1) return [requested, null];
+    const left = requested % 2 === 0 ? requested : requested - 1;
+    return edition.pages.includes(left) && edition.pages.includes(left + 1)
+        ? [left, left + 1] : [requested, null];
+}
+
 function requestPreviews(edition, pdf, pages) {
     if (!edition.renderPreviews || !pdf) return;
     for (const page of pages) {
@@ -263,7 +270,7 @@ function requestPreviews(edition, pdf, pages) {
         const pending = renderPdfPreview(pdf, page).then(blob => {
             pdfPreviews.set(key, URL.createObjectURL(blob));
             if (pdfPreviews.size > 12) {
-                const active = current?.edition === edition ? [current.page, current.page + 1] : [];
+                const active = current?.edition === edition ? [current.leftPage, current.rightPage] : [];
                 for (const [oldKey, url] of pdfPreviews) {
                     if (oldKey === key || active.some(number => oldKey === previewKey(pdf, number))) continue;
                     URL.revokeObjectURL(url);
@@ -273,8 +280,7 @@ function requestPreviews(edition, pdf, pages) {
             }
         }).catch(() => failedPreviews.add(key)).finally(() => {
             pendingPreviews.delete(key);
-            if (current?.edition !== edition || (current.page !== page &&
-                (!spread || edition.pages[edition.pages.indexOf(current.page) + 1] !== page))) return;
+            if (current?.edition !== edition || (current.leftPage !== page && current.rightPage !== page)) return;
             const selected = articleViewer.selectedArticle();
             const item = edition.articles.find(row => row.article_number === selected);
             render(current.issueNumber, current.page);
@@ -302,20 +308,21 @@ function render(issueNumber, pageNumber, updateHistory = '') {
         return;
     }
 
-    const page = pageNumber || edition.pages[0];
-    if (!edition.pages.includes(page)) {
+    const requested = pageNumber || edition.pages[0];
+    if (!edition.pages.includes(requested)) {
         render(issueNumber, edition.pages[0], 'replaceState');
         return;
     }
 
-    if (current?.issueNumber === issueNumber && current.page !== page && zoom === 1) {
-        animatePageFlip(Math.sign(page - current.page));
+    const [page, nextPage] = spreadPages(edition, requested);
+    if (current?.issueNumber === issueNumber && current.leftPage !== page && zoom === 1) {
+        animatePageFlip(Math.sign(page - current.leftPage));
     }
-    current = { issueNumber, page, edition };
-    const path = toPath(issueNumber, page);
+    current = { issueNumber, page: requested, leftPage: page, rightPage: nextPage, edition };
+    const path = toPath(issueNumber, requested);
     if (updateHistory && location.pathname !== path) history[updateHistory](null, '', path);
     ui('status').textContent = '';
-    ui('heading').textContent = issueNumber + '호 ' + page + '면';
+    ui('heading').textContent = issueNumber + '호 ' + (nextPage ? page + '·' + nextPage : page) + '면';
     document.title = ui('heading').textContent + ' | 이브레 지면보기';
     ui('date').textContent = edition.date || '발행호 선택';
     ui('paper-edition').textContent = ui('heading').textContent;
@@ -341,14 +348,14 @@ function render(issueNumber, pageNumber, updateHistory = '') {
     else ui('pdf').removeAttribute('src');
     ui('image-scroll').hidden = !photo;
     const index = edition.pages.indexOf(page);
-    const nextPage = edition.pages[index + 1];
     const nextPhoto = resolvePreview(edition, pdf, nextPage);
     requestPreviews(edition, pdf, spread ? [page, nextPage] : [page]);
     if (loadingPreview) ui('status').textContent = '원본 PDF에서 지면을 표시하는 중입니다.';
     const hasSpread = Boolean(spread && photo && nextPhoto);
-    ui('spread').disabled = !nextPage || !(photo && nextPhoto || edition.renderPreviews && pdf);
-    ui('spread').setAttribute('aria-pressed', String(hasSpread));
-    ui('spread').querySelector('span').textContent = hasSpread ? '양면 보기' : '단면 보기';
+    ui('spread').disabled = !edition.pages.some(number => number % 2 === 0 && edition.pages.includes(number + 1) &&
+        (edition.renderPreviews && pdf || edition.previews?.[number] && edition.previews?.[number + 1]));
+    ui('spread').setAttribute('aria-pressed', String(spread));
+    ui('spread').querySelector('span').textContent = spread ? '양면 보기' : '단면 보기';
     ui('second-image').hidden = !hasSpread;
     if (hasSpread) {
         ui('second-image').src = nextPhoto;
@@ -359,7 +366,7 @@ function render(issueNumber, pageNumber, updateHistory = '') {
     ui('image-scroll').classList.toggle('is-spread', hasSpread);
     ui('print').disabled = !photo && !pdf;
     const totalPages = edition.pageCount || Math.max(...edition.pages);
-    ui('page-count').textContent = page + '/' + totalPages + '면';
+    ui('page-count').textContent = (nextPage ? page + '–' + nextPage : page) + '/' + totalPages + '면';
     const weekday = edition.date
         ? new Intl.DateTimeFormat('ko-KR', { weekday: 'short', timeZone: 'Asia/Seoul' })
             .format(new Date(edition.date + 'T00:00:00+09:00'))
@@ -374,8 +381,8 @@ function render(issueNumber, pageNumber, updateHistory = '') {
     }
     printSearch.setIssue(issueNumber, pdf);
     articleViewer.setSheets([
-        { image: ui('image'), src: photo, pdf, printText: sameSiteAsset(edition.printText, '.json'), page, issue: issueNumber, editable: canEditRegions, destinations: continuationTargets(edition, issueNumber, page), regions: regionsFor(edition, issueNumber, page).map(entry => ({...entry, previous: previousRegion(edition, issueNumber, page, entry.article)})), articles: edition.articles },
-        { image: ui('second-image'), src: hasSpread ? nextPhoto : '', pdf, printText: sameSiteAsset(edition.printText, '.json'), page: nextPage, issue: issueNumber, regions: regionsFor(edition, issueNumber, nextPage).map(entry => ({...entry, previous: previousRegion(edition, issueNumber, nextPage, entry.article)})), articles: edition.articles },
+        { image: ui('image'), src: photo, pdf, printText: sameSiteAsset(edition.printText, '.json'), page, issue: issueNumber, editable: canEditRegions && (!hasSpread || requested === page), destinations: continuationTargets(edition, issueNumber, page), regions: regionsFor(edition, issueNumber, page).map(entry => ({...entry, previous: previousRegion(edition, issueNumber, page, entry.article)})), articles: edition.articles },
+        { image: ui('second-image'), src: hasSpread ? nextPhoto : '', pdf, printText: sameSiteAsset(edition.printText, '.json'), page: nextPage, issue: issueNumber, editable: canEditRegions && hasSpread && requested === nextPage, destinations: hasSpread ? continuationTargets(edition, issueNumber, nextPage) : [], regions: regionsFor(edition, issueNumber, nextPage).map(entry => ({...entry, previous: previousRegion(edition, issueNumber, nextPage, entry.article)})), articles: edition.articles },
     ]);
 
     printSearch.setPages(page, hasSpread ? nextPage : null);
@@ -384,7 +391,7 @@ function render(issueNumber, pageNumber, updateHistory = '') {
     ui('pages').replaceChildren(...edition.pages.map(number => {
         const item = document.createElement('li');
         const pageLabel = String(number).padStart(2, '0') + '면';
-        const link = makeLink(issueNumber, number, '', number === page ? 'page' : '');
+        const link = makeLink(issueNumber, number, '', (number === page || number === nextPage) ? 'page' : '');
         const thumbnail = sameSiteAsset(edition.thumbnails?.[number] || edition.previews?.[number], '.png');
         if (thumbnail) {
             const image = document.createElement('img');
@@ -401,7 +408,7 @@ function render(issueNumber, pageNumber, updateHistory = '') {
     }));
 
     ui('prev').disabled = index === 0;
-    ui('next').disabled = index === edition.pages.length - 1;
+    ui('next').disabled = edition.pages.indexOf(nextPage || page) === edition.pages.length - 1;
     const groups = new Map();
     for (const article of edition.articles) {
         if (!article.print_page) continue;
@@ -483,7 +490,8 @@ async function start() {
 
 function movePage(step) {
     if (!current) return;
-    const index = current.edition.pages.indexOf(current.page);
+    const edge = step < 0 ? current.leftPage : current.rightPage || current.leftPage;
+    const index = current.edition.pages.indexOf(edge);
     const next = current.edition.pages[index + step];
     if (next) render(current.issueNumber, next, 'pushState');
 }
@@ -565,7 +573,7 @@ ui('articles').addEventListener('click', event => {
     const row = current.edition.articles.find(article => article.article_number === Number(link.dataset.printArticle));
     if (row) articleViewer.openArticle(row, number);
 });
-const printSearch = configurePrintSearch(indexPdf, () => current, (page, match, side) => {
+const printSearch = configurePrintSearch(indexPdf, () => current, (page, match) => {
     if (current?.page !== page) render(current.issueNumber, page, 'pushState');
     articleViewer.closeArticle();
     if (!match || !match.boxes.length) return;
@@ -573,13 +581,15 @@ const printSearch = configurePrintSearch(indexPdf, () => current, (page, match, 
     const firstLine = match.boxes.filter(box => Math.abs(box[1] - firstY) < 3);
     const left = Math.min(...firstLine.map(box => box[0]));
     const right = Math.max(...firstLine.map(box => box[0] + box[2]));
+    const side = match.page === current.rightPage ? 1 : 0;
     const image = ui(side ? 'second-image' : 'image');
     const issue = current.issueNumber;
+    const requested = current.page;
     const focus = () => {
-        if (current?.issueNumber !== issue || current.page !== page) return;
+        if (current?.issueNumber !== issue || current.page !== requested) return;
         setZoom(2.5, true, { side, x:(left + right) / 2000, y:(firstY + firstLine[0][3] / 2) / 1000 });
     };
-    if (!ui('image-scroll').hidden && image.complete && image.naturalWidth) requestAnimationFrame(focus);
+    if (!ui('image-scroll').hidden && !image.hidden && image.complete && image.naturalWidth) requestAnimationFrame(focus);
     else image.addEventListener('load', focus, { once:true });
 }, () => articleViewer.track(350));
 document.addEventListener('keydown', event => {
