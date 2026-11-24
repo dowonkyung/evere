@@ -9,7 +9,9 @@ const dateFormat = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' });
 const toPath = (issue, page) => '/epaper/' + issue + '/' + page;
 let current;
 let zoom = 1;
+const viewModeKey = 'evere-epaper-view-mode';
 let spread = false;
+try { spread = localStorage.getItem(viewModeKey) === 'spread'; } catch {}
 let activePanel = '';
 let imageRequest = 0;
 let zoomAnimations = [];
@@ -297,6 +299,8 @@ function render(issueNumber, pageNumber, updateHistory = '') {
     ui('spread').disabled = !edition.pages.some(number => number % 2 === 0 && edition.pages.includes(number + 1) &&
         (resolvePreview(edition, number) && resolvePreview(edition, number + 1)));
     ui('spread').setAttribute('aria-pressed', String(spread));
+    ui('spread').querySelector('[data-view-icon="single"]').toggleAttribute('hidden', spread);
+    ui('spread').querySelector('[data-view-icon="spread"]').toggleAttribute('hidden', !spread);
     ui('spread').querySelector('span').textContent = spread ? '양면 보기' : '단면 보기';
     ui('second-image').hidden = !hasSpread;
     if (hasSpread) {
@@ -460,6 +464,7 @@ ui('zoom-out').onclick = () => setZoom(zoom - .25, true);
 ui('spread').onclick = () => {
     if (!current) return;
     spread = !spread;
+    try { localStorage.setItem(viewModeKey, spread ? 'spread' : 'single'); } catch {}
     render(current.issueNumber, current.page);
 };
 ui('dark').onclick = () => {
