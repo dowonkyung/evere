@@ -1,8 +1,9 @@
-import { configureHomeVisualEditor } from './newsroom-home-layout.js?v=home-lower-layout-1';
+import { configureHomeVisualEditor } from './newsroom-home-layout.js?v=home-bottom-1';
 import { categoryPath } from './routes.js?v=routes-1';
 import { supabase } from './supabase.js';
 import { sectors, articleCategories } from './article-taxonomy.js?v=notice-1';
 import { seriesFor } from './series.js?v=numbered-link-1';
+import { loadBottomLinks } from './home-bottom-links.js';
 import { issueUrl, loadHomeIssues } from './home-issues.js?v=issues-1';
 
 const ui = (id) => document.getElementById(id);
@@ -38,6 +39,7 @@ const seriesForm = ui('series-form');
 const issuesForm = ui('home-issues-form');
 const issuesDialog = ui('home-issues-dialog');
 let issuesSaving = false;
+let linkArea = '';
 const issuesFields = ui('home-issues-fields');
 let issuesRequest = 0;
 let member = null;
@@ -277,6 +279,7 @@ function issueEntries() {
     return [...ui('home-issues-rows').children].map((row) => ({
         label: row.querySelector('[name="issueLabel"]').value.trim(),
         url: row.querySelector('[name="issueUrl"]').value.trim(),
+        description: row.querySelector('[name="issueDescription"]')?.value.trim() || '',
     }));
 }
 
@@ -286,13 +289,14 @@ function addIssueRow(entry = { label: '', url: '' }) {
     for (const [name, title, field, maxLength] of [
         ['issueLabel', '표시 이름', 'label', 100],
         ['issueUrl', '링크 (https://… 또는 /경로)', 'url', 2048],
+        ...(linkArea === 'service_cards' ? [['issueDescription', '설명', 'description', 240]] : []),
     ]) {
         const label = document.createElement('label');
         label.textContent = title;
         const input = document.createElement('input');
         input.name = name;
-        input.value = entry[field];
-        input.required = true;
+        input.value = entry[field] || '';
+        input.required = field !== 'description';
         input.maxLength = maxLength;
         input.addEventListener('input', () => { input.setCustomValidity(''); });
         label.append(input);
@@ -306,21 +310,23 @@ function addIssueRow(entry = { label: '', url: '' }) {
     return row;
 }
 
-async function openHomeIssues() {
+async function openHomeIssues(area = '') {
     if (issuesDialog.open || !['owner', 'director'].includes(member?.role) || layout.elements.page.value !== 'home') return;
     const request = ++issuesRequest;
+    linkArea = area;
+    ui('home-issues-title').textContent = { event_links: '이벤트 링크', service_cards: '하단 바로가기' }[area] || '메인 이슈 링크';
     issuesFields.disabled = true;
     issuesDialog.showModal();
-    issuesStatus('이슈 링크를 불러오는 중입니다.');
+    issuesStatus('링크를 불러오는 중입니다.');
     try {
-        const entries = await loadHomeIssues();
+        const entries = await (linkArea ? loadBottomLinks(linkArea) : loadHomeIssues());
         if (request !== issuesRequest) return;
         ui('home-issues-rows').replaceChildren();
         entries.forEach(addIssueRow);
         issuesFields.disabled = false;
         issuesStatus('');
     } catch {
-        if (request === issuesRequest) issuesStatus('이슈 링크를 불러오지 못했습니다. 팝업을 다시 열어 주세요.', true);
+        if (request === issuesRequest) issuesStatus('링크를 불러오지 못했습니다. 팝업을 다시 열어 주세요.', true);
     }
 }
 
@@ -353,11 +359,13 @@ issuesForm.addEventListener('submit', async (event) => {
     issuesSaving = true;
     issuesStatus('저장 중입니다.');
     try {
-        value(await supabase.rpc('evere_save_home_issues', { items: entries }));
+        value(await (linkArea
+            ? supabase.rpc('evere_save_home_bottom_links', { target_area: linkArea, items: entries })
+            : supabase.rpc('evere_save_home_issues', { items: entries })));
         if (request === issuesRequest) {
             issuesDialog.close();
             ui('home-preview').contentWindow.location.reload();
-            notify('메인페이지에 이슈 링크를 저장했습니다.');
+            notify('메인페이지에 링크를 저장했습니다.');
         }
     } catch {
         if (request === issuesRequest) issuesStatus('저장하지 못했습니다. 입력 내용은 유지됩니다. 다시 시도해 주세요.', true);

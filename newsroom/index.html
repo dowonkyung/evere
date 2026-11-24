@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="/assets/evere/account.css?v=left-white-1">
   <link rel="stylesheet" href="/assets/evere/newsroom.css?v=paragraph-breaks-1">
   <script type="module" src="/assets/evere/account.js?v=notice-1"></script>
-  <script type="module" src="/assets/evere/newsroom.js?v=notice-1"></script>
+  <script type="module" src="/assets/evere/newsroom.js?v=home-bottom-1"></script>
 <script type="module" src="/assets/evere/route-init.js?v=routes-1"></script>
 </head>
 <body class="newsroom">
@@ -210,7 +210,7 @@
             </div>
           </form>
           <section id="home-visual-editor" hidden aria-label="메인페이지 비주얼 편집">
-            <p>미리보기의 편집 버튼을 눌러 구역에 기사를 배치하세요.</p>
+            <p>미리보기의 편집 버튼을 눌러 기사와 링크를 배치하세요.</p>
             <div class="home-preview-scroll"><iframe id="home-preview" title="메인페이지 편집 미리보기"></iframe></div>
           </section>
           <dialog id="home-placement-dialog" class="article-dialog" aria-labelledby="home-placement-title">
@@ -239,11 +239,11 @@
             <form id="home-issues-form">
             <p>표시 이름과 링크를 입력하세요. 추가한 순서대로 메인에 나란히 표시됩니다.</p>
             <fieldset id="home-issues-fields" disabled>
-              <legend>이슈 항목</legend>
+              <legend>링크 항목</legend>
               <div id="home-issues-rows"></div>
-              <button id="add-home-issue" type="button">이슈 추가</button>
+              <button id="add-home-issue" type="button">링크 추가</button>
 
-              <button type="submit">이슈 링크 저장</button>
+              <button type="submit">링크 저장</button>
             </fieldset>
             <p id="home-issues-status" role="status" aria-live="polite"></p>
             </form>

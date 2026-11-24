@@ -1,3 +1,4 @@
+import { loadBottomLinks } from './home-bottom-links.js';
 import { setArticleTitle } from './article-label.js';
 import { articlePath } from './routes.js?v=routes-1';
 import { supabase } from './supabase.js';
@@ -94,7 +95,12 @@ async function renderArticles() {
     const placed = new Set();
     const lowerItems = new Map([...lowerList.querySelectorAll('[data-home-slot]')]
         .map(item => [Number(item.dataset.homeSlot), item]));
+    const events = document.querySelector('[data-home-events]');
     for (const { slot, evere_articles: article } of placements) {
+        if (slot >= 9) {
+            events.append(articleListItem(article));
+            continue;
+        }
         placed.add(article.id);
         const rendered = makeArticle(article, slot === 1 || slot >= 4, slot >= 5 ? '300 / 200' : undefined);
         images.push(rendered);
@@ -216,3 +222,47 @@ void renderOpinion().catch(() => {
     if (opinionList.querySelector('article')) return;
     opinionList.firstElementChild.textContent = '오피니언을 불러오지 못했습니다.';
 });
+
+function articleListItem(article) {
+    const item = document.createElement('li');
+    const link = document.createElement('a');
+    link.href = articlePath(article);
+    setArticleTitle(link, article.title, article.article_label);
+    item.append(link);
+    return item;
+}
+
+async function renderNotices() {
+    const { data, error } = await supabase.from('evere_articles')
+        .select('article_number,title,article_label')
+        .eq('status', 'published').eq('sector', 'notice').not('article_number', 'is', null)
+        .order('published_at', { ascending: false, nullsFirst: false }).order('id').limit(4);
+    if (error) throw error;
+    document.querySelector('[data-home-notices]').replaceChildren(...data.map(articleListItem));
+}
+
+async function renderBottomLinks() {
+    const rows = await loadBottomLinks();
+    for (const [area, selector] of [['event_links', '[data-home-event-links]'], ['service_cards', '[data-home-service-cards]']]) {
+        const list = document.querySelector(selector);
+        list.replaceChildren(...rows.filter(row => row.area === area).map(row => {
+            const item = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = row.url;
+            if (area === 'service_cards') {
+                const title = document.createElement('p');
+                title.textContent = row.label;
+                const description = document.createElement('span');
+                description.textContent = row.description;
+                link.append(title, description);
+            } else {
+                link.textContent = row.label;
+            }
+            item.append(link);
+            return item;
+        }));
+    }
+}
+
+void renderNotices().catch(() => {});
+void renderBottomLinks().catch(() => {});
