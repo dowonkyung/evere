@@ -133,3 +133,8 @@
     .newsroom-nav-brand-row .newsroom-brand span { font-size: 17px; line-height: 22px; }
     .newsroom-tools { min-height: 48px; margin-bottom: 10px; flex-wrap: wrap; }
 }
+
+.newsroom #workspace:not(.has-compact-nav) .newsroom-nav-brand-row { padding-inline-start: 11px; }
+@media (max-width: 720px) {
+    .newsroom #workspace:not(.has-compact-nav) .newsroom-nav-brand-row { padding-inline-start: 9px; }
+}
