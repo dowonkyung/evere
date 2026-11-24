@@ -342,7 +342,7 @@ function render(issueNumber, pageNumber, updateHistory = '') {
         const item = document.createElement('li');
         const pageLabel = String(number).padStart(2, '0') + '면';
         const link = makeLink(issueNumber, number, '', number === page ? 'page' : '');
-        const thumbnail = sameSiteAsset(edition.previews?.[number], '.png');
+        const thumbnail = sameSiteAsset(edition.thumbnails?.[number] || edition.previews?.[number], '.png');
         if (thumbnail) {
             const image = document.createElement('img');
             image.src = thumbnail;
@@ -391,7 +391,7 @@ function render(issueNumber, pageNumber, updateHistory = '') {
 
 async function start() {
     const [manifest, articles] = await Promise.all([
-        fetch('/epaper/editions.json?v=region-drag-1').then(response => response.ok ? response.json() : null).catch(() => null),
+        fetch('/epaper/editions.json?v=page-2400-1').then(response => response.ok ? response.json() : null).catch(() => null),
         loadPrintArticles().catch(() => null),
         loadSavedRegions().catch(() => {}),
         loadImageRegions().catch(() => {}),

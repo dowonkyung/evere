@@ -6,7 +6,7 @@
       "pdf": "/epaper/files/1/221105.pdf",
       "pageCount": 1,
       "previews": {
-        "1": "/epaper/files/1/page-1.png"
+        "1": "/epaper/files/1/page-1-2400.png"
       },
       "regions": {
         "1": [
@@ -78,7 +78,10 @@
           }
         ]
       },
-      "printText": "/epaper/files/1/print-text.json"
+      "printText": "/epaper/files/1/print-text.json",
+      "thumbnails": {
+        "1": "/epaper/files/1/page-1.png"
+      }
     }
   ]
 }
