@@ -8,8 +8,8 @@
   <link rel="icon" href="/assets/evere/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="/assets/evere/evere-ellipsis.css?v=punctuation-3">
-  <link rel="stylesheet" href="/assets/evere/epaper.css?v=zoom-png-1">
-  <script type="module" src="/assets/evere/epaper.js?v=zoom-png-1"></script>
+  <link rel="stylesheet" href="/assets/evere/epaper.css?v=article-viewer-1">
+  <script type="module" src="/assets/evere/epaper.js?v=article-viewer-1"></script>
 </head>
 <body>
   <div class="viewer-layout">
@@ -25,13 +25,16 @@
       <div class="viewer-date">
         <button type="button" id="epaper-date-toggle" class="pointer-events-auto" aria-expanded="true" aria-controls="epaper-date-details" aria-label="날짜와 로고 접기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0 motion-safe:transition-transform motion-safe:duration-200 motion-safe:ease-out rotate-180"><path d="M11 17L6 12L11 7" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M18 17L13 12L18 7" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
         <div id="epaper-date-details" class="viewer-date-details">
-        <button type="button" data-viewer-panel="issues" aria-pressed="false" aria-label="발행일 선택"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0"><path d="M8.18066 3V6.6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M15.3809 3V6.6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M18.2222 4.8999H5.77778C4.79594 4.8999 4 5.69584 4 6.67768V19.1221C4 20.104 4.79594 20.8999 5.77778 20.8999H18.2222C19.2041 20.8999 20 20.104 20 19.1221V6.67768C20 5.69584 19.2041 4.8999 18.2222 4.8999Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M4 10.2H20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg><span id="epaper-date"></span></button>
+        <button type="button" id="epaper-calendar-toggle" aria-expanded="false" aria-controls="epaper-issue-popover" aria-label="발행일 선택"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0"><path d="M8.18066 3V6.6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M15.3809 3V6.6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M18.2222 4.8999H5.77778C4.79594 4.8999 4 5.69584 4 6.67768V19.1221C4 20.104 4.79594 20.8999 5.77778 20.8999H18.2222C19.2041 20.8999 20 20.104 20 19.1221V6.67768C20 5.69584 19.2041 4.8999 18.2222 4.8999Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M4 10.2H20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg><span id="epaper-date"></span></button>
         <a href="/" aria-label="이브레 홈"><img src="/assets/evere/logo.svg" alt="이브레"></a>
         </div>
       </div>
+      <section id="epaper-issue-popover" class="viewer-issue-popover" aria-labelledby="epaper-issue-title" hidden>
+        <header><h2 id="epaper-issue-title">발행호</h2><button type="button" id="epaper-issue-close" aria-label="발행호 닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M18 6L6 18" stroke-linecap="round" stroke-linejoin="round"></path><path d="M6 6L18 18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button></header>
+        <ul id="epaper-editions"></ul>
+      </section>
       <aside class="viewer-panel" id="epaper-panel" aria-label="지면 탐색" inert>
         <header><h2 id="epaper-panel-title"></h2><button type="button" id="epaper-panel-close" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M18 6L6 18" stroke-linecap="round" stroke-linejoin="round"></path><path d="M6 6L18 18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button></header>
-        <div data-panel-content="issues" hidden><ul id="epaper-editions"></ul></div>
         <div data-panel-content="search" hidden>
           <label for="epaper-search">기사 제목 검색</label><input id="epaper-search" type="search" placeholder="검색어를 입력하세요">
           <ul id="epaper-search-results"></ul><p id="epaper-search-status" role="status"></p>
@@ -45,6 +48,7 @@
         <div class="viewer-stage" id="epaper-stage" hidden>
           <iframe id="epaper-pdf" title="이브레 신문 지면 PDF" hidden></iframe>
           <div class="viewer-paper-scroll" id="epaper-image-scroll" hidden><img id="epaper-image" alt=""><img id="epaper-second-image" alt="" hidden></div>
+          <div class="viewer-hotspots" id="epaper-hotspots"></div>
           <div class="viewer-paper-unavailable" id="epaper-paper">
             <img src="/assets/evere/wordmark.svg" alt="이브레"><p id="epaper-paper-edition"></p>
             <p>이 호의 PDF가 아직 등록되지 않았습니다.</p>
@@ -67,6 +71,32 @@
           <button type="button" id="epaper-pin" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0"><path d="M12 16.5V21" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M14.6982 9.606V7.5C14.6982 7.2614 14.793 7.0324 14.9618 6.8637C15.1306 6.6949 15.3595 6.6 15.5982 6.6C16.0756 6.6 16.5335 6.4104 16.871 6.0728C17.2086 5.7353 17.3982 5.2774 17.3982 4.8C17.3982 4.3227 17.2086 3.8648 16.871 3.5273C16.5335 3.1897 16.0756 3 15.5982 3H8.2992" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M3 3L21 21" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M9.2988 9.3009V10.8849C9.2987 11.2198 9.2051 11.548 9.0286 11.8326C8.8521 12.1172 8.5997 12.3469 8.2998 12.496L6.6978 13.306C6.3979 13.455 6.1456 13.6847 5.9691 13.9693C5.7926 14.2538 5.699 14.582 5.6988 14.917V15.601C5.6988 15.8396 5.7936 16.0686 5.9624 16.2373C6.1312 16.4062 6.3601 16.501 6.5988 16.501H16.4988" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>고정 해제</span></button>
         </nav></div>
       </section>
+      <aside class="viewer-article-panel" id="epaper-article-panel" aria-label="연결 기사" inert>
+        <header class="viewer-article-toolbar">
+          <div class="viewer-article-tabs" role="tablist" aria-label="기사 보기 방식">
+            <button id="epaper-tab-text" type="button" role="tab" aria-selected="true" aria-controls="epaper-article-text" data-article-tab="text">텍스트</button>
+            <button id="epaper-tab-online" type="button" role="tab" aria-selected="false" aria-controls="epaper-article-online" data-article-tab="online">온라인</button>
+            <button id="epaper-tab-image" type="button" role="tab" aria-selected="false" aria-controls="epaper-article-image" data-article-tab="image">이미지</button>
+          </div>
+          <div class="viewer-article-tools">
+            <button id="epaper-article-download" type="button">다운로드</button>
+            <button id="epaper-article-print" type="button">인쇄</button>
+            <button id="epaper-article-close" type="button" aria-label="기사 닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M18 6L6 18" stroke-linecap="round" stroke-linejoin="round"></path><path d="M6 6L18 18" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+          </div>
+        </header>
+        <p id="epaper-article-status" role="status"></p>
+        <div id="epaper-article-text" role="tabpanel" aria-labelledby="epaper-tab-text">
+          <h2 id="epaper-article-title"></h2>
+          <div class="viewer-article-font" aria-label="기사 글자 크기"><button id="epaper-type-up" type="button" aria-label="글자 확대">가+</button><button id="epaper-type-down" type="button" aria-label="글자 축소">가−</button></div>
+          <p id="epaper-article-subtitle" hidden></p>
+          <div id="epaper-article-copy"></div>
+        </div>
+        <div id="epaper-article-online" role="tabpanel" aria-labelledby="epaper-tab-online" hidden>
+          <a id="epaper-article-link" target="_blank" rel="noopener">새 탭에서 기사 열기 ↗</a>
+          <iframe id="epaper-article-frame" title="온라인 기사"></iframe>
+        </div>
+        <div id="epaper-article-image" role="tabpanel" aria-labelledby="epaper-tab-image" hidden><img id="epaper-article-crop" alt=""></div>
+      </aside>
     </main>
   </div>
 </body>

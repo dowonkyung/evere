@@ -156,3 +156,86 @@ button:not(:disabled) { cursor: pointer; }
 .viewer-rail svg, .viewer-date svg, .viewer-panel svg, .viewer-arrows svg, .viewer-dock svg {
     width: 20px; height: 20px; flex-shrink: 0; stroke-width: 1.6px;
 }
+
+.viewer-main { --article-panel-width: min(42vw, 800px); }
+.viewer-main.has-article .viewer-reading { margin-inline-end: var(--article-panel-width); }
+.viewer-main.has-article .viewer-date { visibility: hidden; }
+.viewer-reading { transition-property: margin-inline-start, margin-inline-end; }
+.viewer-hotspots { position: absolute; inset: 0; pointer-events: none; }
+.viewer-hotspots svg { position: absolute; overflow: visible; pointer-events: none; }
+.viewer-hotspots polygon { fill: transparent; stroke: transparent; stroke-width: 1.5; vector-effect: non-scaling-stroke; pointer-events: all; cursor: pointer; }
+.viewer-hotspots polygon:hover, .viewer-hotspots polygon:focus-visible, .viewer-hotspots polygon[aria-pressed="true"] { fill: #008e7150; stroke: #008d77; }
+.viewer-article-panel { position: absolute; inset: 0 0 0 auto; z-index: 3; width: var(--article-panel-width); overflow: auto; color: var(--ink); background: var(--panel); box-shadow: -6px 0 14px #0001; visibility: hidden; transform: translateX(100%); transition: transform 300ms var(--motion-in-out), visibility 0s linear 300ms; }
+.viewer-main.has-article .viewer-article-panel { visibility: visible; transform: translateX(0); transition-delay: 0s; }
+.viewer-article-toolbar { position: sticky; top: 0; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 20px; border-bottom: 1px solid var(--separator); background: var(--panel); }
+.viewer-article-tabs, .viewer-article-tools, .viewer-article-font { display: flex; align-items: center; gap: 3px; }
+.viewer-article-tabs { border: 1px solid var(--separator); border-radius: 6px; background: #8881; }
+.viewer-article-tabs button, .viewer-article-tools button { padding: 5px 12px; border-radius: 5px; font-size: 13px; white-space: nowrap; }
+.viewer-article-tabs [aria-selected="true"] { background: #007d76; color: #fff; font-weight: 700; }
+.viewer-article-tools button { background: #8881; }
+.viewer-article-tools #epaper-article-close { display: grid; place-items: center; padding: 3px; background: transparent; }
+.viewer-article-tools svg { width: 20px; height: 20px; }
+.viewer-article-panel [role="tabpanel"] { padding: 16px 20px; }
+.viewer-article-panel h2 { margin: 0 0 12px; font-size: 26px; line-height: 1.35; }
+.viewer-article-font { justify-content: flex-end; margin-bottom: 24px; }
+.viewer-article-font button { padding: 5px 8px; background: #181818; color: #fff; }
+.viewer-article-font button:first-child { border-radius: 6px 0 0 6px; }
+.viewer-article-font button:last-child { border-radius: 0 6px 6px 0; }
+#epaper-article-subtitle { margin: 0 0 24px; white-space: pre-wrap; }
+#epaper-article-copy { font-size: var(--article-text-size, 17px); line-height: 1.55; overflow-wrap: anywhere; white-space: pre-wrap; }
+#epaper-article-copy > :is(p,div) { margin: 0 0 24px; }
+#epaper-article-status:not(:empty) { margin: 12px 20px; }
+#epaper-article-frame { display: block; width: 100%; height: calc(100dvh - 125px); margin-top: 10px; border: 0; }
+#epaper-article-link { font-size: 13px; text-decoration: underline; }
+#epaper-article-crop { display: block; width: 100%; height: auto; }
+@media (max-width: 760px) {
+    .viewer-main { --article-panel-width: 100%; }
+    .viewer-main.has-article .viewer-reading { margin-inline-end: 0; }
+    .viewer-article-toolbar { padding: 8px; flex-wrap: wrap; }
+    .viewer-article-panel [role="tabpanel"] { padding-inline: 12px; }
+}
+@media print {
+    .viewer-hotspots, .viewer-article-panel { display: none !important; }
+}
+
+@media print {
+    .viewer-main.print-article .viewer-reading { display: none !important; }
+    .viewer-main.print-article .viewer-article-panel { display: block !important; position: static; width: 100%; transform: none; visibility: visible; box-shadow: none; overflow: visible; }
+    .viewer-main.print-article :is(.viewer-article-toolbar,.viewer-article-font) { display: none; }
+}
+
+.viewer-issue-popover {
+    position: absolute;
+    z-index: 8;
+    top: 76px;
+    right: 24px;
+    width: min(354px, calc(100vw - 32px));
+    max-height: min(464px, calc(100dvh - 96px));
+    padding: 16px;
+    overflow: auto;
+    box-sizing: border-box;
+    color: #171717;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 7px 20px #0002;
+    animation: issue-popover-in 160ms ease-out;
+}
+.viewer-issue-popover[hidden] { display: none; }
+@keyframes issue-popover-in {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.viewer-issue-popover header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.viewer-issue-popover h2 { margin: 0; font-size: 16px; font-weight: 700; }
+.viewer-issue-popover header button { display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 0; background: transparent; color: inherit; cursor: pointer; }
+.viewer-issue-popover header svg { width: 20px; height: 20px; }
+.viewer-issue-popover ul { list-style: none; margin: 0; padding: 0; }
+.viewer-issue-popover li + li { border-top: 1px solid #eee; }
+.viewer-issue-popover li a { display: flex; align-items: center; justify-content: space-between; min-height: 44px; padding: 0 12px; border-radius: 7px; text-decoration: none; color: inherit; font-size: 15px; font-weight: 600; }
+.viewer-issue-popover time { color: #666; font-size: 14px; font-weight: 400; }
+.viewer-issue-popover li a:hover, .viewer-issue-popover li a:focus-visible { background: #f4f6f6; }
+.viewer-issue-popover li a[aria-current=true] { background: #e5f8f7; }
+#epaper-calendar-toggle[aria-expanded=true] { color: #007e7b; }
+@media (max-width: 650px) { .viewer-issue-popover { top: 56px; right: 8px; } }
+@media (prefers-reduced-motion: reduce) { .viewer-issue-popover { animation: none; } }
+@media print { .viewer-issue-popover { display: none !important; } }

@@ -1,3 +1,4 @@
+import { configureArticleViewer } from './epaper-article.js';
 import { supabase } from './supabase.js';
 import { articlePath } from './routes.js?v=routes-1';
 import { setArticleTitle } from './article-label.js';
@@ -12,6 +13,7 @@ let spread = false;
 let activePanel = '';
 let imageRequest = 0;
 let zoomAnimations = [];
+const articleViewer = configureArticleViewer(() => { if (activePanel) showPanel(''); });
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 let defaultIssue;
 
@@ -85,6 +87,7 @@ function setZoom(value, animate = false) {
         scroll.scrollTop += target.top + (centerY - previous[0].top) * target.height / previous[0].height - centerY;
     }
     if (!animateChange) return;
+    articleViewer.track(250);
     for (const [index, image] of images.entries()) {
         const from = previous[index];
         const to = image.getBoundingClientRect();
@@ -102,7 +105,7 @@ function showPanel(name) {
     activePanel = name === activePanel ? '' : name;
     ui('panel').inert = !activePanel;
     ui('panel').closest('.viewer-main').classList.toggle('has-panel', Boolean(activePanel));
-    ui('panel-title').textContent = ({ issues: '발행호', search: '검색', thumbnails: '썸네일', contents: '목차' })[activePanel] || '';
+    ui('panel-title').textContent = ({ search: '검색', thumbnails: '썸네일', contents: '목차' })[activePanel] || '';
     for (const panel of document.querySelectorAll('[data-panel-content]')) panel.hidden = panel.dataset.panelContent !== activePanel;
     for (const button of document.querySelectorAll('[data-viewer-panel]')) {
         button.setAttribute('aria-pressed', String(button.dataset.viewerPanel === activePanel));
@@ -168,6 +171,7 @@ function render(issueNumber, pageNumber, updateHistory = '') {
         for (const key of ['stage', 'pagination', 'download']) ui(key).hidden = true;
         for (const key of ['zoom', 'zoom-out', 'spread', 'print']) ui(key).disabled = true;
         ui('page-count').textContent = '—';
+        articleViewer.setSheets([]);
         ui('articles').replaceChildren();
         ui('articles-empty').hidden = false;
         return;
@@ -240,6 +244,10 @@ function render(issueNumber, pageNumber, updateHistory = '') {
         imageRequest++;
         ui('stage').classList.remove('is-loading', 'page-loaded');
     }
+    articleViewer.setSheets([
+        { image: ui('image'), src: photo, regions: edition.regions?.[page], articles: edition.articles.filter(row => row.print_page === page) },
+        { image: ui('second-image'), src: hasSpread ? nextPhoto : '', regions: edition.regions?.[nextPage], articles: edition.articles.filter(row => row.print_page === nextPage) },
+    ]);
 
     for (const link of ui('editions').querySelectorAll('a[aria-current]')) link.removeAttribute('aria-current');
     ui('editions').querySelector('[data-issue="' + issueNumber + '"]')?.setAttribute('aria-current', 'true');
@@ -316,7 +324,8 @@ async function start() {
         edition.pages = [...pages].sort((a, b) => a - b);
         if (!edition.pages.length) edition.pages.push(1);
     }
-    const ordered = [...issues.keys()].sort((a, b) => b - a);
+    const ordered = [...issues.keys()].sort((a, b) =>
+        (issues.get(b).date || '').localeCompare(issues.get(a).date || '') || b - a);
     defaultIssue = ordered.find(issue => sameSiteAsset(issues.get(issue).pdf, '.pdf')) || ordered[0];
     ui('editions').replaceChildren(...ordered.map(issue => {
         const edition = issues.get(issue);
@@ -376,13 +385,25 @@ for (const button of document.querySelectorAll('[data-viewer-panel]')) {
     button.onclick = () => showPanel(button.dataset.viewerPanel);
 }
 ui('panel-close').onclick = () => showPanel('');
+function setIssuePopover(open, restoreFocus = false) {
+    ui('issue-popover').hidden = !open;
+    ui('calendar-toggle').setAttribute('aria-expanded', String(open));
+    if (restoreFocus) ui('calendar-toggle').focus();
+}
+ui('calendar-toggle').onclick = () => setIssuePopover(ui('issue-popover').hidden);
+ui('issue-close').onclick = () => setIssuePopover(false, true);
+document.addEventListener('click', event => {
+    if (!ui('issue-popover').hidden && !event.target.closest('.viewer-issue-popover, .viewer-date')) {
+        setIssuePopover(false);
+    }
+});
 ui('date-toggle').onclick = () => {
     const collapsed = ui('date-toggle').getAttribute('aria-expanded') === 'true';
     ui('date-details').inert = collapsed;
     ui('date-details').toggleAttribute('data-collapsed', collapsed);
     ui('date-toggle').setAttribute('aria-expanded', String(!collapsed));
     ui('date-toggle').setAttribute('aria-label', collapsed ? '날짜와 로고 펼치기' : '날짜와 로고 접기');
-    if (collapsed && activePanel === 'issues') showPanel('');
+    if (collapsed) setIssuePopover(false);
 };
 ui('articles').addEventListener('click', event => {
     const link = event.target.closest('[data-contents-page]');
@@ -405,6 +426,10 @@ ui('search').oninput = () => {
     ui('search-status').textContent = term && !matches.length ? '검색 결과가 없습니다.' : '';
 };
 document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && !ui('issue-popover').hidden) {
+        setIssuePopover(false, true);
+        return;
+    }
     if (event.key === 'Escape' && activePanel) showPanel('');
     if (event.altKey || event.metaKey || event.ctrlKey || activePanel || zoom > 1) return;
     if (event.key === 'ArrowLeft') movePage(-1);
@@ -418,7 +443,8 @@ for (const key of ['editions', 'pages']) {
         const [, , issue, page] = new URL(link.href).pathname.split('/');
         event.preventDefault();
         render(Number(issue), Number(page), 'pushState');
-        showPanel('');
+        if (key === 'editions') setIssuePopover(false, true);
+        else showPanel('');
     });
 }
 window.addEventListener('popstate', () => {
