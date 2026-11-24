@@ -7,52 +7,64 @@
   <title>지면보기 | 이브레</title>
   <link rel="icon" href="/assets/evere/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
-  <link rel="stylesheet" href="/assets/evere/epaper.css">
-  <script type="module" src="/assets/evere/epaper.js"></script>
+  <link rel="stylesheet" href="/assets/evere/epaper.css?v=reader-layout-1">
+  <script type="module" src="/assets/evere/epaper.js?v=reader-layout-1"></script>
 </head>
 <body>
-  <header class="epaper-top">
-    <a class="epaper-brand" href="/epaper/" aria-label="이브레 지면보기"><img src="/assets/evere/logo.svg" alt=""><span>지면보기</span></a>
-    <a class="epaper-home" href="/">이브레 홈 <span aria-hidden="true">↗</span></a>
-  </header>
-  <main class="epaper-shell">
-    <aside class="epaper-editions" aria-labelledby="editions-title">
-      <h2 id="editions-title">발행호</h2>
-      <ul id="epaper-editions"></ul>
-    </aside>
-    <section class="epaper-reader" aria-labelledby="epaper-heading">
-      <div class="epaper-reader-head">
-        <div>
-          <h1 id="epaper-heading">지면보기</h1>
-          <p id="epaper-date"></p>
-        </div>
-        <div class="epaper-reader-actions">
-          <button type="button" id="epaper-zoom" aria-pressed="false" hidden>확대</button>
-          <a class="epaper-pdf-link" id="epaper-open-pdf" target="_blank" rel="noopener" hidden>PDF 열기 ↗</a>
-        </div>
+  <div class="viewer-layout">
+    <nav class="viewer-rail" aria-label="지면 도구">
+      <a class="viewer-brand" href="/" aria-label="이브레 홈"><img src="/assets/evere/wordmark.svg" alt="이브레"></a>
+      <div class="viewer-rail-actions">
+        <button type="button" data-viewer-panel="search" aria-pressed="false" aria-label="검색"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 21l-4.3-4.3M18 11a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/></svg><span>검색</span></button>
+        <button type="button" data-viewer-panel="thumbnails" aria-pressed="false" aria-label="썸네일"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v16H4z M5 18l5-5 3 3 3-5 4 4 M9 8h.1"/></svg><span>썸네일</span></button>
+        <button type="button" data-viewer-panel="contents" aria-pressed="false" aria-label="목차"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 5h13M8 12h13M8 19h13M3 5h.1M3 12h.1M3 19h.1"/></svg><span>목차</span></button>
       </div>
-      <p class="epaper-status" id="epaper-status" role="status">지면을 불러오는 중입니다.</p>
-      <div class="epaper-stage" id="epaper-stage" hidden>
-        <iframe id="epaper-pdf" title="이브레 신문 지면 PDF" hidden></iframe>
-        <div class="epaper-image-scroll" id="epaper-image-scroll" hidden><img id="epaper-image" alt=""></div>
-        <div class="epaper-paper" id="epaper-paper">
-          <img src="/assets/evere/wordmark.svg" alt="이브레">
-          <p id="epaper-paper-edition"></p>
-          <p>이 호의 지면 PDF가 아직 등록되지 않았습니다.</p>
-          <a href="#epaper-article-heading">이 면의 기사 보기 ↓</a>
-        </div>
+    </nav>
+    <main class="viewer-main">
+      <div class="viewer-date">
+        <button type="button" data-viewer-panel="issues" aria-pressed="false" aria-label="발행호 목록"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 6 6 6-6 6m8-12 6 6-6 6"/></svg></button>
+        <button type="button" data-viewer-panel="issues" aria-pressed="false" aria-label="발행일 선택"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18v15H3z M7 3v6M17 3v6M3 11h18"/></svg><span id="epaper-date"></span></button>
+        <a href="/" aria-label="이브레 홈"><img src="/assets/evere/logo.svg" alt="이브레"></a>
       </div>
-      <nav class="epaper-pagination" aria-label="지면 번호" id="epaper-pagination" hidden>
-        <button type="button" id="epaper-prev" aria-label="이전 면">‹</button>
-        <ul id="epaper-pages"></ul>
-        <button type="button" id="epaper-next" aria-label="다음 면">›</button>
-      </nav>
-    </section>
-    <aside class="epaper-articles" aria-labelledby="epaper-article-heading">
-      <h2 id="epaper-article-heading">이 면의 기사</h2>
-      <ul id="epaper-articles"></ul>
-      <p id="epaper-articles-empty" hidden>이 면에 연결된 기사가 없습니다.</p>
-    </aside>
-  </main>
+      <aside class="viewer-panel" id="epaper-panel" aria-label="지면 탐색" hidden>
+        <header><h2 id="epaper-panel-title"></h2><button type="button" id="epaper-panel-close" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5l14 14m0-14L5 19"/></svg></button></header>
+        <div data-panel-content="issues" hidden><ul id="epaper-editions"></ul></div>
+        <div data-panel-content="search" hidden>
+          <label for="epaper-search">기사 제목 검색</label><input id="epaper-search" type="search" placeholder="검색어를 입력하세요">
+          <ul id="epaper-search-results"></ul><p id="epaper-search-status" role="status"></p>
+        </div>
+        <div data-panel-content="thumbnails" hidden><ul id="epaper-pages"></ul></div>
+        <div data-panel-content="contents" hidden><ul id="epaper-articles"></ul><p id="epaper-articles-empty" hidden>이 면에 연결된 기사가 없습니다.</p></div>
+      </aside>
+      <section class="viewer-reading" aria-labelledby="epaper-heading">
+        <h1 class="sr-only" id="epaper-heading">지면보기</h1>
+        <p class="viewer-status" id="epaper-status" role="status">지면을 불러오는 중입니다.</p>
+        <div class="viewer-stage" id="epaper-stage" hidden>
+          <iframe id="epaper-pdf" title="이브레 신문 지면 PDF" hidden></iframe>
+          <div class="viewer-paper-scroll" id="epaper-image-scroll" hidden><img id="epaper-image" alt=""><img id="epaper-second-image" alt="" hidden></div>
+          <div class="viewer-paper-unavailable" id="epaper-paper">
+            <img src="/assets/evere/wordmark.svg" alt="이브레"><p id="epaper-paper-edition"></p>
+            <p>이 호의 PDF가 아직 등록되지 않았습니다.</p>
+            <button type="button" data-viewer-panel="contents" aria-pressed="false">이 면의 기사 보기</button>
+          </div>
+        </div>
+        <nav class="viewer-arrows" aria-label="지면 이동" id="epaper-pagination" hidden>
+          <button type="button" id="epaper-prev" aria-label="이전 면">‹</button>
+          <button type="button" id="epaper-next" aria-label="다음 면">›</button>
+        </nav>
+        <div class="viewer-dock-wrap"><nav class="viewer-dock" aria-label="지면 조작">
+          <span id="epaper-page-count" aria-live="polite">—</span>
+          <button type="button" id="epaper-zoom-out" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg><span>축소</span></button>
+          <button type="button" id="epaper-zoom" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg><span>확대</span></button>
+          <button type="button" id="epaper-spread" aria-pressed="false" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3h14v18H5z"/></svg><span>단면 보기</span></button>
+          <button type="button" id="epaper-dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 15a8 8 0 0 1-11-11 8 8 0 1 0 11 11Z"/></svg><span>다크 모드</span></button>
+          <a id="epaper-open-pdf" aria-label="PDF 다운로드" download hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M4 16v4h16v-4"/></svg><span>다운로드</span></a>
+          <button type="button" id="epaper-print" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6M6 16H3V9h18v7h-3M6 13h12v8H6z"/></svg><span>인쇄</span></button>
+          <button type="button" id="epaper-fullscreen" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9V3h6m6 0h6v6m0 6v6h-6m-6 0H3v-6"/></svg><span>전체 화면</span></button>
+          <button type="button" id="epaper-pin" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8m-7 0v8l-3 3h12l-3-3V4m-3 11v6"/></svg><span>고정 해제</span></button>
+        </nav></div>
+      </section>
+    </main>
+  </div>
 </body>
 </html>
