@@ -266,8 +266,6 @@
 #home-issues-rows { display: grid; gap: 12px; margin-bottom: 16px; }
 .home-issue-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto; gap: 12px; align-items: end; }
 .home-issue-row label { min-width: 0; }
-#home-issues-preview { display: flex; flex-wrap: nowrap; gap: 24px; overflow-x: auto; padding: 12px 0; list-style: none; }
-#home-issues-preview li { flex: none; }
 #home-issues-status[data-error="true"] { color: #b42318; }
 @media (max-width: 767px) {
     .home-issue-row { grid-template-columns: minmax(0, 1fr); }
