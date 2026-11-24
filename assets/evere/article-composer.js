@@ -1,5 +1,6 @@
 import { formattedBody, photoBucket, photoFigure, photoImage, readPhotoCaption, renderBody, setPhotoCaption, setPhotoOptions } from './article-content.js?v=photo-options-1';
-import { openPhotoDialog } from './photo-dialog.js';
+import { openPhotoDialog } from './photo-dialog.js?v=photo-sidebar-1';
+import { connectPhotoLibrary } from './photo-library.js';
 import { seriesFor } from './series.js';
 
 const photoTypes = new Map([['image/jpeg', 'jpg'], ['image/png', 'png'], ['image/webp', 'webp']]);
@@ -66,7 +67,7 @@ function enableInputPunctuation(field) {
 export function articleComposer(form, article = null, { contentOnly = false } = {}) {
     form.replaceChildren(document.getElementById('compose-fields').content.cloneNode(true));
     const find = (name) => form.querySelector(name);
-    const { title, subtitle, sector, category, series, writer, guest, omitByline, photos: fileInput } = form.elements;
+    const { title, subtitle, sector, category, series, writer, guest, omitByline } = form.elements;
     enableInputPunctuation(title);
     enableInputPunctuation(subtitle);
     const editor = find('.compose-editor');
@@ -462,10 +463,10 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
 
     let activePhotoDialog;
     let photoBatch = 0;
-    async function configurePhoto({ file, photo } = {}) {
+    async function configurePhoto({ file, photo, libraryPhoto } = {}) {
         if (saving || activePhotoDialog) return false;
         if (!photo && photos.length >= 8) { notify('사진은 최대 8장까지 첨부할 수 있습니다.'); return false; }
-        const dialog = openPhotoDialog({ file, photo });
+        const dialog = openPhotoDialog({ file, photo, libraryPhoto });
         activePhotoDialog = dialog;
         const options = await dialog.result;
         if (activePhotoDialog !== dialog) return false;
@@ -484,7 +485,7 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
         } else {
             const next = { ...options, key: 'local-' + crypto.randomUUID(), url: URL.createObjectURL(options.file) };
             photos.push(next);
-            if (options.insert) locate(next, true);
+            locate(next, true);
         }
         notify();
         showPhotos();
@@ -499,16 +500,7 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
         }
     }
 
-    find('[data-open-photo-options]').addEventListener('click', () => void configurePhoto());
-    fileInput.addEventListener('change', () => { addPhotos(fileInput.files); fileInput.value = ''; });
-    const drop = find('.compose-drop');
-    drop.addEventListener('dragover', (event) => { event.preventDefault(); drop.classList.add('drag-over'); });
-    drop.addEventListener('dragleave', () => drop.classList.remove('drag-over'));
-    drop.addEventListener('drop', (event) => {
-        event.preventDefault();
-        drop.classList.remove('drag-over');
-        addPhotos(event.dataTransfer.files);
-    });
+    const disconnectPhotoLibrary = connectPhotoLibrary(find('[data-photo-library]'), libraryPhoto => configurePhoto({ libraryPhoto }));
 
     if (photos.length) {
         for (const photo of photos) {
@@ -545,6 +537,7 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
         },
         refreshSeries,
         reset() {
+            if (article) disconnectPhotoLibrary();
             photoBatch++;
             activePhotoDialog?.close();
             activePhotoDialog = null;

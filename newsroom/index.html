@@ -8,8 +8,8 @@
   <link rel="icon" href="/assets/evere/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="/assets/evere/account.css?v=left-white-1">
-  <link rel="stylesheet" href="/assets/evere/newsroom.css?v=photo-options-1">
-  <script type="module" src="/assets/evere/account.js?v=photo-options-1"></script>
+  <link rel="stylesheet" href="/assets/evere/newsroom.css?v=photo-sidebar-1">
+  <script type="module" src="/assets/evere/account.js?v=photo-sidebar-1"></script>
   <script type="module" src="/assets/evere/newsroom.js?v=issues-no-preview-1"></script>
 <script type="module" src="/assets/evere/route-init.js?v=routes-1"></script>
 </head>
@@ -132,20 +132,22 @@
                 </div>
                 <div class="compose-editor" contenteditable="true" role="textbox" aria-label="본문" aria-multiline="true" data-placeholder="기사 본문을 입력하세요"></div>
               </section>
+              <ul class="compose-thumbs compose-attached" data-thumbs aria-label="첨부 사진"></ul>
+              <p class="compose-feedback" data-compose-feedback role="status"></p>
               <div class="compose-actions"><button type="submit">승인 요청</button></div>
             </div>
             <aside class="compose-side">
-              <section class="compose-media">
+              <section class="compose-media" data-photo-library>
                 <h2>본문 사진</h2>
-                <button type="button" data-open-photo-options>사진 추가·검색</button>
-                <label class="compose-drop">사진을 선택하거나 여기로 끌어오세요
-                  <span>JPG · PNG · WebP / 최대 8장, 장당 5MB</span>
-                  <input name="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple>
-                </label>
-                <p class="compose-media-help">사진을 본문에 붙여넣거나 끌어놓을 수 있습니다. 삽입한 사진을 클릭하면 캡션과 정렬을 편집할 수 있습니다.</p>
-                <ul class="compose-thumbs" data-thumbs aria-label="첨부 사진"></ul>
+                <div class="photo-library-search">
+                  <input type="search" data-photo-query maxlength="120" placeholder="사진 검색" aria-label="사진 제목 또는 설명 검색">
+                  <button type="button" data-photo-search aria-label="검색">
+                    <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="6"/><path d="m16 16 5 5"/></svg>
+                  </button>
+                </div>
+                <p class="photo-library-status" data-photo-library-status role="status"></p>
+                <div class="photo-library-results" data-photo-results></div>
               </section>
-              <p class="compose-feedback" data-compose-feedback role="status"></p>
             </aside>
           </template>
         </section>
@@ -354,11 +356,6 @@
           <div data-photo-source>
             <label>파일 선택<input type="file" name="file" accept="image/jpeg,image/png,image/webp"></label>
             <small>JPG · PNG · WebP, 장당 5MB 이하</small>
-            <div class="photo-library-search">
-              <label>기존 사진<input name="photoQuery" type="search" maxlength="120" placeholder="사진 제목 또는 설명"></label>
-              <button type="button" data-photo-search>검색</button>
-            </div>
-            <div class="photo-library-results" data-photo-results></div>
           </div>
           <img class="photo-options-preview" data-photo-preview alt="선택한 사진 미리보기" hidden>
           <fieldset><legend>기준 크기</legend><div class="photo-option-toggles"><label><input type="radio" name="size" value="180" ><span>180px</span></label>
@@ -367,14 +364,9 @@
             <label><input type="radio" name="size" value="960" ><span>960px</span></label>
             <label><input type="radio" name="size" value="1280" ><span>1280px</span></label>
             <label><input type="radio" name="size" value="original" ><span>원본 크기</span></label></div></fieldset>
-          <fieldset data-photo-insert-mode><legend>삽입 방식</legend><div class="photo-option-toggles">
-            <label><input type="radio" name="insert" value="auto" checked><span>자동</span></label>
-            <label><input type="radio" name="insert" value="manual"><span>수동</span></label>
-          </div></fieldset>
-          <fieldset><legend>삽입 위치</legend><div class="photo-option-toggles"><label><input type="radio" name="position" value="left" ><span>왼쪽</span></label><label><input type="radio" name="position" value="center" checked><span>가운데</span></label><label><input type="radio" name="position" value="right" ><span>오른쪽</span></label></div></fieldset>
-          <fieldset><legend>캡션 정렬</legend><div class="photo-option-toggles"><label><input type="radio" name="captionAlign" value="left" checked><span>왼쪽</span></label><label><input type="radio" name="captionAlign" value="center" ><span>가운데</span></label><label><input type="radio" name="captionAlign" value="right" ><span>오른쪽</span></label></div></fieldset>
+          <fieldset><legend>사진 정렬</legend><div class="photo-option-toggles"><label><input type="radio" name="position" value="left" ><span>왼쪽</span></label><label><input type="radio" name="position" value="center" checked><span>가운데</span></label><label><input type="radio" name="position" value="right" ><span>오른쪽</span></label></div></fieldset>
           <label>사진 제목<input name="captionTitle" maxlength="200"></label>
-          <label>사진 설명<textarea name="caption" rows="3" maxlength="500"></textarea></label>
+          <label>사진 설명<textarea name="caption" rows="4" maxlength="500" placeholder="(서울=이브레) 혼종인 기자 = 사진을 찍고 있다. 2026.11.24 honjongin@evere.kr&#10;[출처 이브위키. 재판매 및 DB 금지]"></textarea></label>
           <p data-photo-status role="status"></p>
         </div>
         <footer><button type="submit">적용</button></footer>
