@@ -215,10 +215,20 @@ async function navigateComments(button, newOffset) {
 
 previous.addEventListener('click', () => navigateComments(previous, Math.max(0, offset - pageSize)));
 next.addEventListener('click', () => navigateComments(next, offset + pageSize));
+const commentInput = form.elements.comment;
+const commentSubmit = form.querySelector('[type="submit"]');
+let commentSaving = false;
+function updateCommentLength() {
+    ui('comment-length').textContent = commentInput.value.length;
+    commentSubmit.disabled = commentSaving || !commentInput.value.trim();
+}
+commentInput.addEventListener('input', updateCommentLength);
+
 form.addEventListener('submit', async (event) => {
     event.preventDefault();
-    const submit = event.submitter;
-    submit.disabled = true;
+    if (commentSubmit.disabled) return;
+    commentSaving = true;
+    updateCommentLength();
     try {
         checked(await supabase.from('evere_comments').insert({ article_id: articleId, body: form.elements.comment.value.trim() }));
         form.reset();
@@ -227,7 +237,8 @@ form.addEventListener('submit', async (event) => {
     } catch {
         ui('status').textContent = '댓글을 등록하지 못했습니다. 계정과 입력 내용을 확인해 주세요.';
     } finally {
-        submit.disabled = false;
+        commentSaving = false;
+        updateCommentLength();
     }
 });
 
@@ -329,8 +340,9 @@ async function render() {
 async function updateCommentSession() {
     const { data: sessionData } = await supabase.auth.getSession();
     if (sessionData?.session) {
-        const { data: profile } = await supabase.from('evere_members').select('id')
+        const { data: profile } = await supabase.from('evere_members').select('id,display_name')
             .eq('id', sessionData.session.user.id).maybeSingle();
+        ui('comment-writer').textContent = profile?.display_name || '';
         form.hidden = !profile;
         ui('comment-sign-in').hidden = Boolean(profile);
     }

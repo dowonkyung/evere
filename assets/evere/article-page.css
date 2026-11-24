@@ -102,14 +102,13 @@
 #article-share-status { display: block; margin-top: 8px; }
 #article-share-status:empty { display: none; }
 .reader-related { grid-column: 4; grid-row: 1; margin-top: 0; border-top: 2px solid #171717; }
-.reader-comments h2 { margin: 0; padding-block: 13px; font-size: 20px; font-weight: 700; }
-.reader-related h2 { margin: 0; padding: 14px 0 16px; font-size: 18px; font-weight: 700; line-height: 24px; }
+.reader-comments h2, .reader-related h2 { margin: 0; padding: 14px 0 16px; font-size: 18px; font-weight: 700; line-height: 24px; }
 .reader-related ul { margin: 0; padding: 0; list-style: none; }
 .reader-related li { padding: 11px 0 12px; border-top: 1px solid #e8e8e8; font-size: 16px; font-weight: 600; line-height: 24px; }
 .reader-related li:nth-child(5) { padding-bottom: 0; }
 .reader-related li a > span { min-width: 0; overflow: hidden; overflow-wrap: anywhere; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .reader-related a:hover, .reader-comments a:hover { text-decoration: underline; }
-.reader-comments { margin-top: 56px; border-top: 2px solid #171717; scroll-margin-top: 80px; }
+.reader-comments { margin-top: 56px; scroll-margin-top: 80px; }
 .reader-comments form { display: grid; gap: 8px; margin-bottom: 15px; }
 .reader-comments textarea { display: block; border: 1px solid #aaa; border-radius: 8px; padding: 10px; width: 100%; resize: vertical; }
 .reader-comments textarea:focus { outline: none; box-shadow: none; border-color: #aaa; }
@@ -225,7 +224,7 @@
 .evere-article[data-reader-palette] .reader-head,
 .evere-article[data-reader-palette] .reader-actions,
 .evere-article[data-reader-palette] .reader-tool-panel { border-color: var(--stroke-framing); }
-.evere-article[data-reader-palette] :is(.reader-related, .reader-comments) { border-top-color: var(--stroke-primary); }
+.evere-article[data-reader-palette] .reader-related { border-top-color: var(--stroke-primary); }
 .evere-article[data-reader-palette] :is(.reader-related, .reader-comments) li { border-color: var(--stroke-separator); }
 .evere-article[data-reader-palette] .reader-tool-panel { background: var(--background-default); color: var(--text-primary); }
 .evere-article[data-reader-palette] .reader-option-icon { border-color: var(--stroke-framing); }
@@ -274,3 +273,24 @@
 @media (max-width: 480px) {
   .reader-options { gap: 12px; padding-inline: 4px; }
 }
+
+/* Keep the comment tools together as the composer changes height. */
+.comment-composer-heading, .comment-composer-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.comment-composer-heading { margin-bottom: 8px; }
+.comment-guide { position: relative; font-size: 13px; }
+.comment-guide summary { cursor: pointer; color: var(--text-secondary, #666); }
+.comment-guide p { position: absolute; inset: 100% 0 auto auto; z-index: 1; width: min(240px, 75vw); padding: 10px; background: var(--background-default, #fff); border: 1px solid var(--stroke-framing, #ddd); border-radius: 6px; }
+.comment-composer { padding: 14px 16px; border: 1px solid var(--stroke-framing, #ddd); border-radius: 10px; background: var(--surface-soft, #f2f2f2); }
+.reader-comments .comment-composer textarea,
+.evere-article[data-reader-palette] .reader-comments .comment-composer textarea { padding: 0; border: 0; background: transparent; color: inherit; line-height: 1.55; }
+.comment-composer textarea::placeholder { color: var(--text-secondary, #666); opacity: 1; }
+.reader-comments .comment-composer textarea:focus-visible { outline: 2px solid #00b8b4; outline-offset: 3px; }
+.comment-composer-actions { margin-top: 16px; color: var(--text-secondary, #666); font-size: 14px; }
+.comment-composer-actions output { color: var(--text-primary, #151515); }
+.reader-comments .comment-composer button { border-radius: 8px; font-weight: 650; }
+.evere-article .reader-comments .comment-composer button:disabled { opacity: 1; background: var(--stroke-framing, #ddd); border-color: transparent; color: var(--text-primary, #151515); }
