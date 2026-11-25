@@ -692,7 +692,7 @@ body > footer .info { color: var(--text-secondary); font-size: 13px; font-weight
 body > footer .info h1 > a  { display: block; width: 111px; height: 28px; background: var(--svg-logo); background-size: 100% 100%; }
 body > footer .info > ul { display: flex; flex-wrap: wrap; align-items: top; justify-content: space-between; }
 body > footer .info > ul > li:first-child { padding-right: 96px; }
-body > footer .info > ul > li:last-child { padding-left: 127px; }
+body > footer .info > ul > li:nth-child(3) { padding-left: 127px; }
 body > footer .info .menu, body > footer .info .contact, body > footer .info .manager, body > footer .info .link { display: flex; }
 body > footer .info .menu { padding-bottom: 16px; gap: 16px; }
 body > footer .info .menu a { font-weight: 600; }
@@ -832,7 +832,7 @@ picture > img, picture > source { width: 100%; height: 100%; object-fit: cover; 
 	/* footer - family site only tablet, mobile */
 	/* footer - information */
 	body > footer .info > ul > li:first-child { padding-right: 48px; }
-	body > footer .info > ul > li:last-child { padding-left: 102px; }
+	body > footer .info > ul > li:nth-child(3) { padding-left: 102px; }
 	body > footer .info .contact { width: 370px; flex-wrap: wrap; row-gap: 6px; }
 	/* asideTopMiddleBanner */
 	.banner-aside-top-middle { display: none; }
@@ -886,7 +886,7 @@ picture > img, picture > source { width: 100%; height: 100%; object-fit: cover; 
 	/* footer - information */
 	body > footer .info > ul { display: block; }
 	body > footer .info > ul > li:first-child { padding-right: 0; }
-	body > footer .info > ul > li:last-child { padding-left: 0; padding-top: 24px; }
+	body > footer .info > ul > li:nth-child(3) { padding-left: 0; padding-top: 24px; }
 	body > footer .info h1 > a  { width: 95px; height: 24px; }
 	body > footer .info .menu { padding-top: 24px; }
 	body > footer .info .contact { display: block; line-height: 22px; padding-bottom: 16px; }
@@ -997,7 +997,7 @@ picture > img, picture > source { width: 100%; height: 100%; object-fit: cover; 
 	/* footer - information */
 	body > footer .info > ul { display: block; }
 	body > footer .info > ul > li:first-child { padding-right: 0; }
-	body > footer .info > ul > li:last-child { padding-left: 0; padding-top: 24px; }
+	body > footer .info > ul > li:nth-child(3) { padding-left: 0; padding-top: 24px; }
 	body > footer .info h1 > a  { width: 95px; height: 24px; }
 	body > footer .info .menu { padding-top: 24px; }
 	body > footer .info .menu a { font-size: 13px; line-height: 18px; }
