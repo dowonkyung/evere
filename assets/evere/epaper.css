@@ -411,3 +411,7 @@ button:not(:disabled) { cursor: pointer; }
 .region-heading-group { display:flex; align-items:center; gap:5px; }
 #epaper-region-grip { cursor:inherit; display:grid; place-items:center; width:26px; height:30px; margin:0; padding:0; border-radius:5px; }
 #epaper-region-grip:focus-visible { outline:2px solid #00b8b4; }
+
+.viewer-rail-actions button[data-viewer-panel] { color: #fff; }
+.viewer-rail-actions button[data-viewer-panel] svg { width: 24px; height: 24px; color: inherit; stroke: currentColor; }
+.region-text-page { margin-inline-start: 4px; color: var(--ink); opacity: .65; font-weight: 500; }

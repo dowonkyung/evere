@@ -1,4 +1,4 @@
-import { configureArticleViewer, indexPdf } from './epaper-article.js?v=prepared-pages-1';
+import { configureArticleViewer, indexPdf } from './epaper-article.js?v=print-page-text-1';
 import { configurePrintSearch } from './epaper-search.js?v=2';
 import { supabase } from './supabase.js';
 import { setArticleTitle } from './article-label.js';
@@ -15,9 +15,9 @@ try { spread = localStorage.getItem(viewModeKey) === 'spread'; } catch {}
 let activePanel = '';
 let imageRequest = 0;
 let zoomAnimations = [];
-const articleViewer = configureArticleViewer(id => {
+const articleViewer = configureArticleViewer((id, page) => {
     for (const link of ui('articles').querySelectorAll('[data-print-article]')) {
-        if (Number(link.dataset.printArticle) === id) link.setAttribute('aria-current', 'true');
+        if (Number(link.dataset.printArticle) === id && Number(link.dataset.contentsPage) === page) link.setAttribute('aria-current', 'true');
         else link.removeAttribute('aria-current');
     }
 }, (issue, page, regions) => {
@@ -364,10 +364,11 @@ function render(issueNumber, pageNumber, updateHistory = '') {
     ui('prev').disabled = index === 0;
     ui('next').disabled = edition.pages.indexOf(nextPage || page) === edition.pages.length - 1;
     const groups = new Map();
-    for (const article of edition.articles) {
-        if (!article.print_page) continue;
-        if (!groups.has(article.print_page)) groups.set(article.print_page, []);
-        groups.get(article.print_page).push(article);
+    for (const number of edition.pages) {
+        const assigned = new Set(regionsFor(edition, issueNumber, number)
+            .filter(region => !region.imageOnly).map(region => region.article));
+        const articles = edition.articles.filter(row => row.print_page === number || assigned.has(row.article_number));
+        if (articles.length) groups.set(number, articles);
     }
     ui('articles').replaceChildren(...edition.pages.filter(number => groups.has(number)).map(number => {
         const group = document.createElement('li');

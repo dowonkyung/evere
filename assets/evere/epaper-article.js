@@ -84,7 +84,7 @@ async function readPrintText(selection) {
     const { points, pdf, page, printText, row } = selection;
     if (selection.printBody != null) return selection.printBody.trim() ? { body: selection.printBody } : null;
     if (selection.issue !== 1) return null;
-    if (printText) {
+    if (printText && page === row.print_page) {
         const response = await fetch(printText);
         if (response.ok) {
             const entries = await response.json();
@@ -258,7 +258,7 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
         titleInput.placeholder = article?.title || '';
         if (region && editing.issue === 1 && region.printBody == null && editing.printText) {
             const edit = editing, selectedArticle = picker.value;
-            void readPrintText({ ...region, issue: 1, printText: edit.printText, row: { article_number: Number(selectedArticle) } })
+            void readPrintText({ ...region, issue: 1, page: edit.page, printText: edit.printText, row: article })
                 .then(data => { if (editing === edit && picker.value === selectedArticle) {
                     if (!printInput.value) printInput.value = data?.body || '';
                     if (!titleInput.value) titleInput.placeholder = data?.title || titleInput.placeholder;
@@ -286,6 +286,7 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
             new Option((registered.has(row.article_number) ? '등록됨 · ' : '') + row.title, row.article_number)));
         nextPicker.replaceChildren(new Option('연결 없음', ''), ...editing.destinations.map(entry =>
             new Option(entry.page + '면 · ' + entry.title, entry.page + ':' + entry.article)));
+        ui('region-text-page').textContent = editing.page + '면';
         form.hidden = false;
         for (const button of toggles) button.setAttribute('aria-expanded', 'true');
         loadPoints();
@@ -519,7 +520,7 @@ export function configureArticleViewer(onOpen, onSave, onMove) {
         selection = next;
         lastTrigger = trigger;
         for (const polygon of layer.querySelectorAll('polygon')) polygon.setAttribute('aria-pressed', String(polygon === trigger));
-        onOpen(next.row.article_number);
+        onOpen(next.row.article_number, next.page);
         panel.inert = false;
         main.classList.add('has-article');
         panel.scrollTop = 0;
