@@ -8,14 +8,17 @@
   <link rel="icon" href="/assets/evere/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="/assets/evere/evere-ellipsis.css?v=punctuation-3">
-  <link rel="stylesheet" href="/assets/evere/epaper.css?v=article-panel-padding-1">
-  <script type="module" src="/assets/evere/epaper.js?v=article-tools-style-1"></script>
+  <link rel="stylesheet" href="/assets/evere/epaper.css?v=mobile-layout-1">
+  <script type="module" src="/assets/evere/epaper.js?v=mobile-layout-1"></script>
 </head>
 <body>
   <div class="viewer-layout">
     <nav class="viewer-rail" aria-label="지면 도구">
       <a class="viewer-brand" href="/" aria-label="이브레 홈"><img src="/assets/evere/epaper-rail-logo.svg" alt="이브레"></a>
-      <div class="viewer-rail-actions">
+      <button id="epaper-mobile-menu" class="viewer-mobile-menu" type="button" aria-label="지면 탐색 메뉴" aria-expanded="false" aria-controls="epaper-rail-actions">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <div class="viewer-rail-actions" id="epaper-rail-actions">
         <button type="button" data-viewer-panel="search" aria-pressed="false" aria-label="검색"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0"><path d="M20.0004 20.0001L16.1426 16.1423" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M11.1111 18.2222C15.0385 18.2222 18.2222 15.0385 18.2222 11.1111C18.2222 7.18376 15.0385 4 11.1111 4C7.18376 4 4 7.18376 4 11.1111C4 15.0385 7.18376 18.2222 11.1111 18.2222Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>검색</span></button>
         <button type="button" data-viewer-panel="thumbnails" aria-pressed="false" aria-label="썸네일"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0"><path d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M9 11C10.1046 11 11 10.1046 11 9C11 7.89543 10.1046 7 9 7C7.89543 7 7 7.89543 7 9C7 10.1046 7.89543 11 9 11Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M21 14.9999L17.914 11.9139C17.5389 11.539 17.0303 11.3284 16.5 11.3284C15.9697 11.3284 15.4611 11.539 15.086 11.9139L6 20.9999" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>썸네일</span></button>
         <button type="button" data-viewer-panel="contents" aria-pressed="false" aria-label="목차"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0"><path d="M4 5.77783H4.00889" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M4 12H4.00889" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M4 18.2222H4.00889" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M8.44434 5.77783H19.9999" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M8.44434 12H19.9999" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M8.44434 18.2222H19.9999" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>목차</span></button>

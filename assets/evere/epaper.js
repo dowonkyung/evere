@@ -185,16 +185,37 @@ function setZoom(value, animate = false, targetPoint) {
     }
 }
 
+const mobileLayout = matchMedia('screen and (max-width: 760px)');
+const mobileMenu = ui('mobile-menu');
+
+function setMobileMenu(open) {
+    mobileMenu.setAttribute('aria-expanded', String(open));
+    mobileMenu.closest('.viewer-layout').classList.toggle('mobile-menu-open', open);
+}
+
+mobileMenu.onclick = () => {
+    const open = mobileMenu.getAttribute('aria-expanded') !== 'true';
+    setMobileMenu(open);
+    if (!open && activePanel) showPanel('');
+};
+
+function closeMobileNavigation() {
+    if (!mobileLayout.matches) return;
+    if (activePanel) showPanel('');
+    setMobileMenu(false);
+}
+
 function showPanel(name) {
     activePanel = name === activePanel ? '' : name;
     ui('panel').inert = !activePanel;
+    ui('panel').dataset.activePanel = activePanel;
     ui('panel').closest('.viewer-main').classList.toggle('has-panel', Boolean(activePanel));
     ui('panel-title').textContent = ({ search: '검색', thumbnails: '썸네일', contents: '목차' })[activePanel] || '';
     for (const panel of document.querySelectorAll('[data-panel-content]')) panel.hidden = panel.dataset.panelContent !== activePanel;
     for (const button of document.querySelectorAll('[data-viewer-panel]')) {
         button.setAttribute('aria-pressed', String(button.dataset.viewerPanel === activePanel));
     }
-    if (activePanel === 'search') ui('search').focus();
+    if (activePanel === 'search' && !mobileLayout.matches) ui('search').focus();
     printSearch.setVisible(activePanel === 'search');
 }
 
@@ -555,12 +576,14 @@ ui('articles').addEventListener('click', event => {
     const number = Number(link.dataset.contentsPage);
     if (current.page !== number) render(current.issueNumber, number, 'pushState');
     const row = current.edition.articles.find(article => article.article_number === Number(link.dataset.printArticle));
+    closeMobileNavigation();
     if (row) articleViewer.openArticle(row, number);
 });
 const printSearch = configurePrintSearch(indexPdf, () => current, (page, match) => {
     if (current?.page !== page) render(current.issueNumber, page, 'pushState');
     articleViewer.closeArticle();
     if (!match || !match.boxes.length) return;
+    closeMobileNavigation();
     const firstY = match.boxes[0][1];
     const firstLine = match.boxes.filter(box => Math.abs(box[1] - firstY) < 3);
     const left = Math.min(...firstLine.map(box => box[0]));
