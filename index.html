@@ -10,10 +10,10 @@
 <link rel="stylesheet" href="/assets/khan/swiper-bundle.min.css">
 <link rel="stylesheet" href="/assets/khan/common.css">
 <link rel="stylesheet" href="/assets/khan/home.css?v=footer-heading-arrows-1">
-<link rel="stylesheet" href="/assets/evere/home.css?v=lower-lead-responsive-1">
+<link rel="stylesheet" href="/assets/evere/home.css?v=home-opinion-links-1">
 <script defer src="/assets/khan/swiper-bundle.min.js"></script>
 <script defer src="/assets/evere/home.js?v=epaper-link-1"></script>
-<script type="module" src="/assets/evere/front-page.js?v=corrections-1"></script>
+<script type="module" src="/assets/evere/front-page.js?v=home-opinion-links-1"></script>
 <script type="module" src="/assets/evere/home-issues.js?v=random-slogan-1"></script>
 <script type="module" src="/assets/evere/route-init.js?v=wiki-culture-1"></script>
 <link rel="preload" as="style" href="/assets/yna/default.css">
@@ -444,7 +444,10 @@
         <li><dl><dt><h2><a href="/corrections/">바로잡습니다</a></h2></dt><dd><ul data-home-corrections></ul></dd></dl></li>
         <li><dl><dt><h2><a href="/notice/">알림</a></h2></dt><dd>
             <ul data-home-events></ul>
-            <div data-home-event-links-region><ul data-home-event-links style="height: auto;"></ul></div>
+            <div data-home-event-links-region hidden>
+                <ul id="home-event-links" data-home-event-links></ul>
+                <button type="button" data-home-event-links-toggle aria-controls="home-event-links" aria-expanded="false" aria-label="알림 바로가기 목록"> </button>
+            </div>
         </dd></dl></li>
     </ul>
     <ul class="box" data-home-service-cards></ul>

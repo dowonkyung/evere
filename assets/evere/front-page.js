@@ -138,6 +138,8 @@ async function renderArticles() {
 void renderArticles().catch(() => {});
 
 
+const maxHomeOpinions = 10;
+
 async function loadOpinion(editorial) {
     const query = () => supabase.from('evere_articles')
         .select('article_number,title,byline,evere_series(title)')
@@ -150,15 +152,9 @@ async function loadOpinion(editorial) {
         if (error) throw error;
         return data;
     }
-    const rows = [];
-    const size = 100;
-    for (let start = 0; ; start += size) {
-        const { data, error } = await query().or('category.neq.editorial,category.is.null')
-            .range(start, start + size - 1);
-        if (error) throw error;
-        rows.push(...data);
-        if (data.length < size) return rows;
-    }
+    const { data, error } = await query().or('category.neq.editorial,category.is.null').limit(maxHomeOpinions);
+    if (error) throw error;
+    return data;
 }
 
 function opinionItem(row, editorial) {
@@ -183,7 +179,7 @@ function opinionItem(row, editorial) {
 
 async function renderOpinion() {
     const [editorials, others] = await Promise.all([loadOpinion(true), loadOpinion(false)]);
-    const entries = [...editorials.map(row => opinionItem(row, true)), ...others.map(row => opinionItem(row, false))];
+    const entries = [...editorials.map(row => opinionItem(row, true)), ...others.slice(0, maxHomeOpinions - editorials.length).map(row => opinionItem(row, false))];
     if (!entries.length) return;
     opinionList.replaceChildren(...entries.map(({ item }) => item));
     scheduleTitleCheck();
@@ -237,6 +233,21 @@ async function renderBoardArticles(sector, selector) {
     document.querySelector(selector).replaceChildren(...data.map(articleListItem));
 }
 
+const eventLinks = document.querySelector('[data-home-event-links]');
+const eventLinksRegion = eventLinks.parentElement;
+const eventLinksToggle = eventLinksRegion.querySelector('button');
+function setEventLinksExpanded(expanded) {
+    eventLinks.classList.toggle('active', expanded);
+    eventLinksToggle.setAttribute('aria-expanded', String(expanded));
+}
+eventLinksToggle.onclick = () => setEventLinksExpanded(!eventLinks.classList.contains('active'));
+eventLinksRegion.addEventListener('keydown', event => {
+    if (event.key !== 'Escape' || !eventLinks.classList.contains('active')) return;
+    event.stopPropagation();
+    setEventLinksExpanded(false);
+    eventLinksToggle.focus();
+});
+
 async function renderBottomLinks() {
     const rows = await loadBottomLinks();
     for (const [area, selector] of [['event_links', '[data-home-event-links]'], ['service_cards', '[data-home-service-cards]']]) {
@@ -258,6 +269,9 @@ async function renderBottomLinks() {
             return item;
         }));
     }
+    const count = eventLinks.childElementCount;
+    eventLinksRegion.hidden = count === 0;
+    eventLinksToggle.hidden = count < 2;
 }
 
 void renderBoardArticles('notice', '[data-home-events]').catch(() => {});
