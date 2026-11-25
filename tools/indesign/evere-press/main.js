@@ -105,13 +105,15 @@ function renderRows() {
         const line = document.createElement('div');
         line.className = 'press-row';
         line.setAttribute('role','row');
-        const updated = row.updated_at
+        const timestamp = row.updated_at
             ? new Date(Date.parse(row.updated_at) + 9 * 3600000).toISOString().slice(0,16).replace('T',' ')
-            : '–';
+            : '';
+        const updated = timestamp ? timestamp.slice(5) : '–';
         for (const label of [row.page + '면', updated, finalized ? '강판' : editing ? '편집중 (' + work.editor_name + ')' : '-']) {
             const cell = document.createElement('span');
             cell.setAttribute('role','cell');
             cell.textContent = label;
+            cell.setAttribute('title', label === updated && timestamp ? timestamp : label);
             line.appendChild(cell);
         }
         const actions = document.createElement('span');

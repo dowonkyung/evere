@@ -1,30 +1,29 @@
 <!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><style>
-body { background: #292b32; color: #f4f6fa; padding: 14px; font-size: 13px; }
+body { color: var(--uxp-host-text-color, #f4f6fa); padding: 10px; font-size: 12px; }
 [hidden] { display: none; }
-.press-brand { margin: 0 0 16px; }
-.press-brand img { display: block; width: 100%; max-width: 246px; height: auto; }
+.press-brand { margin: 0 0 12px; }
+.press-brand img { display: block; width: 100%; max-width: 236px; height: auto; }
 #login, #workspace { display: flex; flex-direction: column; }
 #login[hidden], #workspace[hidden] { display: none; }
-label, .press-label { color: #f4f6fa; }
-.press-label { font-size: 17px; font-weight: 700; margin: 0 0 7px; }
-#issue { margin-bottom: 15px; }
-input, select { color: #f4f6fa; background: #383c47; border: 1px solid #626a7a; border-radius: 5px; padding: 5px 7px; margin-bottom: 9px; min-height: 28px; }
-button { color: #f4f6fa; background: #424855; border: 1px solid #687386; border-radius: 5px; padding: 5px 8px; min-height: 26px; white-space: nowrap; }
-button:disabled { color: #adb3bf; background: #373a43; }
-#login-submit, .press-upload:not(:disabled) { color: #fff; background: #3454ae; border-color: #7492ed; }
-.press-scroll { max-height: 310px; overflow-x: auto; overflow-y: auto; border: 1px solid #616976; border-radius: 6px; background: #333641; }
-.press-table { min-width: 630px; }
-.press-row { display: flex; align-items: center; min-height: 38px; border-bottom: 1px solid #505565; }
-.press-row > span { display: block; flex: 1 0 auto; width: 140px; padding: 4px 8px; color: #f4f6fa; font-size: 12px; white-space: nowrap; }
-.press-row > span:first-child { flex: 0 0 52px; width: 52px; }
-.press-row > span:nth-child(3) { width: 220px; }
-.press-row > span:last-child { flex: 0 0 132px; width: 132px; padding-right: 4px; }
-.press-row button { margin-right: 4px; }
-.press-columns { background: #242a38; font-weight: 700; }
-.press-panel-actions { display: flex; flex-wrap: wrap; margin-top: 12px; }
-.press-panel-actions button { margin: 0 6px 4px 0; }
-#status { color: #e0e7f4; margin: 10px 0 0; }
+label, .press-label { color: inherit; }
+.press-label { font-size: 15px; font-weight: 700; margin: 0 0 5px; }
+#issue { margin-bottom: 10px; }
+input, select { margin-bottom: 7px; color: inherit; }
+button { color: inherit; font-size: 11px; white-space: nowrap; }
+.press-scroll { max-height: 310px; overflow-x: auto; overflow-y: auto; }
+.press-table { width: 100%; min-width: 210px; }
+.press-row { display: flex; align-items: center; width: 100%; min-height: 29px; border-bottom: 1px solid var(--uxp-host-border-color, #777); }
+.press-row > span { display: block; min-width: 0; white-space: nowrap; font-size: 11px; color: inherit; }
+.press-row > span:first-child { flex: 0 0 27px; }
+.press-row > span:nth-child(2) { flex: 0 0 68px; }
+.press-row > span:nth-child(3) { flex: 1 1 auto; margin-right: 4px; overflow: hidden; text-overflow: ellipsis; }
+.press-row > span:last-child { display: flex; flex: 0 0 82px; align-items: center; }
+.press-row button { padding: 2px 3px; margin: 0 0 0 2px; min-height: 21px; }
+.press-columns { font-weight: 700; }
+.press-panel-actions { display: flex; flex-wrap: wrap; margin-top: 8px; }
+.press-panel-actions button { margin: 0 4px 3px 0; }
+#status { color: inherit; margin: 6px 0 0; }
 </style></head><body>
 <div class="press-brand"><img src="press-logo.svg" alt="조판관리시스템"></div>
 <section id="login">
