@@ -10,6 +10,7 @@ let expiresAt = 0;
 let refreshPending;
 let pages = [];
 const documents = new Map();
+let canFinalize = false;
 
 function report(message) { get('status').textContent = message; }
 
@@ -79,19 +80,68 @@ async function loadIssues() {
     await loadPages(selected);
 }
 
+function activeIssue() {
+    return selectedNumber(get('issue'), issues.map(row => row.issue));
+}
+
+async function changeWork(row, action, lease = null) {
+    return (await request('/rest/v1/rpc/evere_press_work_change', {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({p_issue:row.issue,p_page:row.page,p_action:action,p_lease:lease})
+    })).json();
+}
+
+function renderRows() {
+    const container = get('page-rows');
+    container.innerHTML = '';
+    for (const row of pages) {
+        const work = row.evere_press_work;
+        const editing = work?.expires_at && Date.parse(work.expires_at) > Date.now();
+        const finalized = Boolean(work?.finalized_at);
+        const line = document.createElement('div');
+        line.className = 'press-row';
+        line.setAttribute('role','row');
+        const updated = row.updated_at
+            ? new Date(Date.parse(row.updated_at) + 9 * 3600000).toISOString().slice(0,16).replace('T',' ')
+            : '–';
+        for (const label of [row.page + '면', updated, finalized ? '강판' : editing ? '편집중 (' + work.editor_name + ')' : '-']) {
+            const cell = document.createElement('span');
+            cell.setAttribute('role','cell');
+            cell.textContent = label;
+            line.appendChild(cell);
+        }
+        const actions = document.createElement('span');
+        actions.setAttribute('role','cell');
+        const open = document.createElement('button');
+        open.textContent = '열기';
+        open.disabled = editing || finalized;
+        open.onclick = action(async () => {
+            open.disabled = true;
+            try { await openPage(row); }
+            finally { await loadPages(activeIssue()); }
+        });
+        if (canFinalize && !editing && (finalized || (row.revision > 0 && row.preview_path))) {
+            const button = document.createElement('button');
+            button.textContent = finalized ? '강판 해제' : '강판';
+            button.onclick = action(async () => {
+                await changeWork(row, finalized ? 'reopen' : 'finalize');
+                await loadPages(activeIssue());
+            });
+            actions.appendChild(button);
+        }
+        actions.appendChild(open);
+        line.appendChild(actions);
+        container.appendChild(line);
+    }
+}
+
 async function loadPages(issue) {
     const current = ++pagesRequest;
-    pages = [];
-    options(get('page'), []);
-    get('page').disabled = true;
-    get('open').disabled = true;
-    if (!Number.isInteger(issue) || !issues.some(row => row.issue === issue)) return;
-    const result = await (await request('/rest/v1/evere_press_pages?issue=eq.' + issue + '&order=page')).json();
+    const result = !Number.isInteger(issue) || !issues.some(row => row.issue === issue) ? []
+        : await (await request('/rest/v1/evere_press_pages?select=issue,page,revision,source_path,preview_path,updated_at,evere_press_work(editor_name,expires_at,finalized_at)&issue=eq.' + issue + '&order=page')).json();
     if (current !== pagesRequest) return;
     pages = result;
-    options(get('page'), pages.map(row => [row.page, row.page + '면' + (row.revision ? ' · 버전 ' + row.revision : ' · 기본 원고')]), pages[0]?.page);
-    get('page').disabled = !pages.length;
-    get('open').disabled = !pages.length;
+    renderRows();
 }
 
 function encodePath(path) { return path.split('/').map(encodeURIComponent).join('/'); }
@@ -112,24 +162,57 @@ async function readPageSource(row) {
     return file.read({ format: storage.formats.binary });
 }
 
-async function openPage() {
-    const page = selectedNumber(get('page'), pages.map(item => item.page));
-    const row = pages.find(item => item.page === page);
-    if (!row) throw new Error('편집할 면을 선택해 주세요.');
-    const existing = [...documents.values()].find(state => state.doc.isValid && state.row.issue === row.issue && state.row.page === row.page);
-    if (existing) throw new Error('이 면은 이미 열려 있습니다. 기존 문서를 닫은 뒤 다시 열어 주세요.');
-    const root = await storage.localFileSystem.getDataFolder();
-    const folder = await root.createFolder('issue-' + row.issue + '-page-' + row.page + '-' + Date.now());
-    const file = await folder.createFile(row.issue + '-' + row.page + '.indd');
-    await file.write(await readPageSource(row), { format: storage.formats.binary });
-    const doc = app.open(file);
-    const state = { doc, row, file, folder, owner: session.user.id, queue: Promise.resolve() };
-    const id = doc.id;
-    documents.set(id, state);
-    doc.addEventListener('afterSave', () => enqueue(state));
-    doc.addEventListener('beforeClose', () => documents.delete(id));
-    report(row.issue + '호 ' + row.page + '면 ' + (row.revision ? '저장본' : '기본 원고') + '을 열었습니다.');
+async function openPage(row) {
+    if (documents.size && [...documents.values()].some(state => state.row.issue === row.issue && state.row.page === row.page)) {
+        throw new Error('이미 열려 있는 면입니다.');
+    }
+    const owner = session.user.id;
+    const lease = await changeWork(row,'claim');
+    try {
+        const root = await storage.localFileSystem.getDataFolder();
+        const folder = await root.createFolder('issue-' + row.issue + '-page-' + row.page + '-' + Date.now());
+        const file = await folder.createFile(row.issue + '-' + row.page + '.indd');
+        await file.write(await readPageSource(row), { format: storage.formats.binary });
+        const doc = app.open(file);
+        const state = {doc,row,file,folder,owner,lease,queue:Promise.resolve()};
+        const id = doc.id;
+        documents.set(id,state);
+        doc.addEventListener('afterSave', () => enqueue(state));
+        doc.addEventListener('beforeClose', () => {
+            setTimeout(() => { if (!doc.isValid) releaseClosedDocument(id,state); }, 1000);
+        });
+        report(row.issue + '호 ' + row.page + '면을 열었습니다.');
+    } catch (error) {
+        await changeWork(row,'release',lease).catch(() => {});
+        throw error;
+    }
 }
+
+function releaseClosedDocument(id,state) {
+    if (documents.get(id) !== state || state.releasing) return;
+    state.releasing = true;
+    void state.queue.then(() => changeWork(state.row,'release',state.lease))
+        .catch(error => report(error.message))
+        .finally(() => {
+            documents.delete(id);
+            if (session) void loadPages(activeIssue()).catch(error => report(error.message));
+        });
+}
+
+setInterval(async () => {
+    if (!session) return;
+    for (const [id,state] of documents) {
+        if (!state.doc.isValid) {
+            releaseClosedDocument(id,state);
+            continue;
+        }
+        if (state.owner !== session.user.id) continue;
+        try { await changeWork(state.row,'renew',state.lease); }
+        catch (error) { report(error.message); }
+    }
+    try { await loadPages(activeIssue()); }
+    catch (error) { report(error.message); }
+}, 30000);
 
 function exportPreview(doc, file) {
     if (doc.pages.length !== 1) throw new Error('한 면에 대응하는 1페이지 INDD 문서를 사용해 주세요.');
@@ -157,17 +240,20 @@ async function upload(path, bytes, contentType) {
 
 async function sync(state, bytes, jpeg) {
     if (!session || state.owner !== session.user.id) throw new Error('문서를 연 뉴스룸 계정으로 로그인해 주세요.');
+    await changeWork(state.row,'renew',state.lease);
     const { issue, page, revision } = state.row;
     if (bytes.byteLength > 52428800) throw new Error('INDD 파일 크기가 50MiB를 넘습니다.');
     const prefix = session.user.id + '/' + issue + '/' + page + '/' + Date.now() + '-' + Math.random().toString(36).slice(2);
     await upload(prefix + '.indd', bytes, 'application/octet-stream');
     await upload(prefix + '.jpg', jpeg, 'image/jpeg');
+    await changeWork(state.row,'renew',state.lease);
     const saved = await (await request('/rest/v1/evere_press_pages?issue=eq.' + issue + '&page=eq.' + page + '&revision=eq.' + revision, {
         method: 'PATCH', headers: { 'Content-Type': 'application/json', Prefer: 'return=representation' },
         body: JSON.stringify({ source_path: prefix + '.indd', preview_path: prefix + '.jpg', revision: revision + 1, updated_at: new Date().toISOString() })
     })).json();
     if (!saved.length) throw new Error('다른 편집자가 먼저 저장했습니다. 로컬 문서를 보관한 뒤 최신 파일을 다시 열어 주세요.');
     state.row = saved[0];
+    await loadPages(activeIssue());
     report(issue + '호 ' + page + '면 웹 동기화 완료 · 버전 ' + state.row.revision);
 }
 
@@ -221,6 +307,7 @@ loginButton.addEventListener('click', async () => {
         if (!member || member.removed_at || !['owner','director','department_head','reporter'].includes(member.role)) {
             throw new Error('조판 기능은 유효한 뉴스룸 기자 계정부터 사용할 수 있습니다.');
         }
+        canFinalize = ['owner','director'].includes(member.role);
         stage = '발행 계획 불러오기';
         report(stage + ' 중…');
         await loadIssues();
@@ -244,7 +331,6 @@ for (const id of ['email', 'password']) {
 }
 get('issue').onchange = action(() => loadPages(selectedNumber(get('issue'), issues.map(row => row.issue))));
 get('reload').onclick = action(loadIssues);
-get('open').onclick = action(openPage);
 get('sync').onclick = action(() => {
     const state = app.documents.length ? documents.get(app.activeDocument.id) : null;
     if (!state) throw new Error('이브레 조판 패널에서 연 문서를 선택해 주세요.');
@@ -252,6 +338,7 @@ get('sync').onclick = action(() => {
     else enqueue(state);
 });
 get('logout').onclick = action(async () => {
+    if (documents.size) throw new Error('열린 조판 문서를 닫은 뒤 로그아웃해 주세요.');
     session = null;
     get('workspace').hidden = true;
     get('login').hidden = false;

@@ -3,6 +3,13 @@
 body { padding: 12px; } form, section { display: flex; flex-direction: column; gap: 8px; } [hidden] { display: none; }
 .press-brand { margin-bottom: 12px; }
 .press-brand img { display: block; width: 100%; max-width: 270px; height: auto; }
+.press-label { color: #fff; font-size: 17px; font-weight: 700; margin: 0; }
+.press-row { display: flex; align-items: center; min-height: 32px; border-bottom: 1px solid #666; }
+.press-row > span { width: 27%; padding: 3px; font-size: 12px; }
+.press-row > span:first-child { width: 12%; }
+.press-row > span:last-child { width: 34%; }
+.press-row button { margin-right: 3px; }
+.press-columns { font-weight: bold; }
 </style></head><body>
 <div class="press-brand"><img src="press-logo.svg" alt="조판관리시스템"></div>
 <section id="login">
@@ -11,10 +18,13 @@ body { padding: 12px; } form, section { display: flex; flex-direction: column; g
 <button id="login-submit" type="button">로그인</button>
 </section>
 <section id="workspace" hidden>
-<label for="issue">발행 계획</label><select id="issue"></select>
-<label for="page">편집할 면</label><select id="page"></select>
+<label class="press-label" for="issue">발행 계획</label><select id="issue"></select>
+<h3 class="press-label">편집할 면</h3>
+<div class="press-table" role="table" aria-label="편집할 면">
+<div class="press-row press-columns" role="row"><span role="columnheader">면</span><span role="columnheader">최근 편집</span><span role="columnheader">상태</span><span role="columnheader">열기</span></div>
+<div id="page-rows" role="rowgroup"></div>
+</div>
 <button id="reload">발행 계획 새로고침</button>
-<button id="open">선택한 면 열기</button>
 <button id="sync">현재 면 웹에 동기화</button>
 <button id="logout">로그아웃</button>
 </section>

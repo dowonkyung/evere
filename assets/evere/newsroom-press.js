@@ -8,10 +8,9 @@ const issueSelect = byId('issue');
 const pageFilter = byId('page-filter');
 const gallery = byId('gallery');
 const dialog = byId('detail');
-const upload = byId('upload');
-let selected;
 let generation = 0;
 let issueGeneration = 0;
+let issueDates = new Map();
 let poll;
 const panel = gallery.closest('[data-panel]');
 
@@ -29,6 +28,7 @@ async function listIssues(preferred = issueSelect.value) {
     const rows = result(await supabase.from('evere_press_issues')
         .select('issue,publication_date,page_count').order('publication_date', { ascending: false }).order('issue', { ascending: false }));
     if (request !== issueGeneration) return;
+    issueDates = new Map(rows.map(row => [String(row.issue), row.publication_date]));
     issueSelect.replaceChildren(...rows.map(row => new Option(
         row.issue + '호 · ' + row.publication_date + ' · ' + row.page_count + '면', row.issue
     )));
@@ -39,9 +39,11 @@ async function listIssues(preferred = issueSelect.value) {
 async function listPages() {
     const request = ++generation;
     const issue = issueSelect.value;
+    const date = issueDates.get(issue);
+    byId('heading').textContent = date ? '지면 모니터링 (' + Number(date.slice(5, 7)) + '월 ' + Number(date.slice(8, 10)) + '일자)' : '지면 모니터링';
     const pages = issue === '' ? [] : result(await supabase.from('evere_press_pages')
-        .select('issue,page,revision,source_path,preview_path,updated_at').eq('issue', issue).order('page'));
-    const paths = pages.flatMap(row => row.preview_path ? [row.preview_path] : []);
+        .select('issue,page,revision,source_path,preview_path,updated_at,evere_press_work(editor_name,expires_at,finalized_at)').eq('issue', issue).order('page'));
+    const paths = [...new Set(pages.map(previewPath).filter(Boolean))];
     const urls = paths.length ? result(await store.createSignedUrls(paths, 900)) : [];
     if (request !== generation) return;
     const previews = new Map(urls.map(row => [row.path, row.signedUrl]));
@@ -52,11 +54,13 @@ async function listPages() {
         const card = document.createElement('button');
         card.type = 'button';
         card.className = 'press-page';
+        const work = row.evere_press_work;
+        card.dataset.finalized = String(Boolean(work?.finalized_at));
         const title = document.createElement('strong');
-        title.textContent = row.page + '면';
+        title.textContent = row.issue + '호 ' + row.page + '면';
         const thumb = document.createElement('span');
         thumb.className = 'press-page-thumb';
-        const preview = previews.get(row.preview_path);
+        const preview = previews.get(previewPath(row));
         if (preview) {
             const image = new Image();
             image.loading = 'lazy';
@@ -66,33 +70,30 @@ async function listPages() {
         } else thumb.textContent = '미리보기 없음';
         const meta = document.createElement('span');
         meta.className = 'press-page-meta';
-        meta.textContent = row.revision ? '버전 ' + row.revision + ' · ' +
-            new Intl.DateTimeFormat('ko-KR', {dateStyle:'short', timeStyle:'short', timeZone:'Asia/Seoul'}).format(new Date(row.updated_at))
-            : row.source_path ? '기본 원고 등록됨' : '파일 미등록';
+        const state = work?.finalized_at ? '강판' : new Date(work?.expires_at).getTime() > Date.now()
+            ? '편집중 (' + work.editor_name + ')' : row.revision ? '편집본 저장' : '기본 원고';
+        const time = work?.finalized_at || row.updated_at;
+        meta.textContent = time ? state + ' · ' +
+            new Intl.DateTimeFormat('ko-KR', {dateStyle:'short', timeStyle:'short', timeZone:'Asia/Seoul'}).format(new Date(time)) : state;
         card.append(title, thumb, meta);
-        card.onclick = () => openPage(row, preview).catch(error => notify(error.message));
+        card.disabled = !preview;
+        card.onclick = () => openPreview(row, preview);
         return card;
     }));
     notify(pages.length ? pages.filter(row => row.revision > 0).length + ' / ' + pages.length + '면 편집본 저장' : '등록된 발행 계획이 없습니다.');
 }
 
-async function openPage(row, preview) {
-    selected = row;
-    upload.reset();
-    byId('upload-status').textContent = '';
+function previewPath(row) {
+    if (row.preview_path) return row.preview_path;
+    if (row.revision !== 0 || !/^default-templates\/(front|odd|even)\.indd$/.test(row.source_path || '')) return null;
+    return row.source_path.replace(/\.indd$/, '.jpg');
+}
+
+function openPreview(row, preview) {
     byId('detail-title').textContent = row.issue + '호 ' + row.page + '면';
     const image = byId('detail-image');
-    image.hidden = !preview;
-    if (preview) image.src = preview;
-    else image.removeAttribute('src');
-    const source = byId('source');
-    source.hidden = true;
-    if (row.source_path) {
-        const signed = result(await store.createSignedUrl(row.source_path, 900, {download: row.issue + '-' + row.page + '.indd'}));
-        if (selected !== row) return;
-        source.href = signed.signedUrl;
-        source.hidden = false;
-    }
+    image.hidden = false;
+    image.src = preview;
     if (!dialog.open) dialog.showModal();
 }
 
@@ -102,10 +103,7 @@ function handle(form, work) {
         const button = form.querySelector('button[type="submit"]');
         button.disabled = true;
         try { await work(); }
-        catch (error) {
-            if (dialog.open) byId('upload-status').textContent = error.message;
-            else notify(error.message);
-        }
+        catch (error) { notify(error.message); }
         finally { button.disabled = false; }
     });
 }
@@ -118,25 +116,6 @@ handle(plan, async () => {
     }));
     plan.reset();
     await listIssues(issue);
-});
-handle(upload, async () => {
-    const row = selected;
-    byId('upload-status').textContent = '파일 저장 중…';
-    const source = upload.elements.source.files[0];
-    const preview = upload.elements.preview.files[0];
-    if (!source || !/\.indd$/i.test(source.name)) throw new Error('INDD 파일을 선택해 주세요.');
-    if (preview && preview.type !== 'image/jpeg') throw new Error('미리보기는 JPEG 파일을 선택해 주세요.');
-    const user = result(await supabase.auth.getUser()).user;
-    const prefix = user.id + '/' + row.issue + '/' + row.page + '/' + crypto.randomUUID();
-    result(await store.upload(prefix + '.indd', source, {contentType:'application/octet-stream'}));
-    if (preview) result(await store.upload(prefix + '.jpg', preview, {contentType:'image/jpeg'}));
-    const rows = result(await supabase.from('evere_press_pages').update({
-        source_path: prefix + '.indd', preview_path: preview ? prefix + '.jpg' : null,
-        revision: row.revision + 1, updated_at: new Date().toISOString()
-    }).eq('issue',row.issue).eq('page',row.page).eq('revision',row.revision).select('revision'));
-    dialog.close();
-    await listPages();
-    if (!rows.length) throw new Error('다른 편집자가 이 면을 먼저 저장했습니다. 최신 파일을 확인해 주세요.');
 });
 const refresh = work => () => work().catch(error => notify(error.message));
 byId('refresh').onclick = refresh(listIssues);

@@ -10,8 +10,8 @@
   <link rel="stylesheet" href="/assets/evere/account.css?v=left-white-1">
   <link rel="stylesheet" href="/assets/evere/newsroom.css?v=queue-pagination-1">
   <script type="module" src="/assets/evere/account.js?v=wiki-culture-1"></script>
-  <link rel="stylesheet" href="/assets/evere/newsroom-press.css?v=1">
-  <script type="module" src="/assets/evere/newsroom.js?v=press-templates-1"></script>
+  <link rel="stylesheet" href="/assets/evere/newsroom-press.css?v=3">
+  <script type="module" src="/assets/evere/newsroom.js?v=press-monitor-3"></script>
 <script type="module" src="/assets/evere/route-init.js?v=wiki-culture-1"></script>
   <link rel="stylesheet" href="/assets/evere/newsroom-workspace.css?v=brand-title-size-1">
 </head>
@@ -277,7 +277,7 @@
           </dialog>
         </section>
         <section data-panel="press" hidden>
-          <h1>지면 모니터링</h1>
+          <h1 id="press-heading">지면 모니터링</h1>
           <form id="press-plan" class="press-controls" hidden>
             <label>호수 <input name="issue" type="number" min="0" max="2147483647" required></label>
             <label>발행일 <input name="date" type="date" required></label>
@@ -294,13 +294,7 @@
           <dialog id="press-detail" class="press-detail">
             <form method="dialog" class="press-detail-head"><h2 id="press-detail-title"></h2><button aria-label="닫기">닫기</button></form>
             <img id="press-detail-image" alt="지면 미리보기" hidden>
-            <a id="press-source" download hidden>INDD 다운로드</a>
-            <form id="press-upload" class="press-controls">
-              <label>INDD 파일 <input name="source" type="file" accept=".indd" required></label>
-              <label>미리보기 JPEG <input name="preview" type="file" accept="image/jpeg,.jpg,.jpeg"></label>
-              <button type="submit">파일 저장</button>
-            </form>
-            <p id="press-upload-status" role="status"></p>
+
           </dialog>
         </section>
         <section data-panel="profile" hidden>

@@ -16,3 +16,13 @@
 #press-detail-image { display: block; max-width: 100%; max-height: 55dvh; margin: 12px auto; }
 #press-detail-image[hidden] { display: none; }
 #press-source { color: #3452b6; text-decoration: underline; }
+
+[data-panel="press"] { padding: 20px; background: #fff; color: #202634; }
+[data-panel="press"] h1 { margin: 0 0 16px; font-size: 22px; }
+.press-gallery { grid-template-columns: repeat(auto-fill,minmax(min(100%,152px),1fr)); gap: 4px; }
+.press-page { gap: 8px; border: 2px solid white; outline: 1px solid #dfe3e8; border-radius: 0; background: #f0f0f0; padding: 8px; }
+.press-page[data-finalized="true"] { outline-color: #ded000; }
+.press-page strong { display: block; padding: 2px 5px; background: #087e80; color: #fff; font-size: 14px; }
+.press-page-thumb { box-sizing: border-box; border: 2px solid #c6c6c6; background: white; }
+.press-page-meta { min-height: 24px; color: #202634; }
+#press-detail-image { max-height: 72dvh; }
