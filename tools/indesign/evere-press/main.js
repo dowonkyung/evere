@@ -47,32 +47,58 @@ async function authenticate(grant, fields) {
     expiresAt = Date.now() + session.expires_in * 1000;
 }
 
-function options(select, rows) {
+let issues = [];
+let pagesRequest = 0;
+
+function selectedNumber(select, allowed) {
+    const value = select.value;
+    if (typeof value === 'number' || (typeof value === 'string' && /^\d+$/.test(value))) {
+        const number = Number(value);
+        if (allowed.includes(number)) return number;
+    }
+    return allowed[select.selectedIndex] ?? allowed[0];
+}
+
+function options(select, rows, selected) {
     select.innerHTML = '';
     for (const [value, label] of rows) {
         const item = document.createElement('option');
-        item.value = value;
+        item.setAttribute('value', String(value));
+        if (value === selected) item.setAttribute('selected', 'selected');
         item.textContent = label;
         select.appendChild(item);
     }
 }
 
 async function loadIssues() {
-    const issues = await (await request('/rest/v1/evere_press_issues?select=issue,publication_date,page_count&order=publication_date.desc,issue.desc')).json();
-    options(get('issue'), issues.map(row => [row.issue, row.issue + '호 · ' + row.publication_date]));
-    await loadPages();
+    const previous = selectedNumber(get('issue'), issues.map(row => row.issue));
+    issues = await (await request('/rest/v1/evere_press_issues?select=issue,publication_date,page_count&order=publication_date.desc,issue.desc')).json();
+    const selected = issues.some(row => row.issue === previous) ? previous : issues[0]?.issue;
+    options(get('issue'), issues.map(row => [row.issue, row.issue + '호 · ' + row.publication_date]), selected);
+    get('issue').disabled = !issues.length;
+    await loadPages(selected);
 }
 
-async function loadPages() {
-    const issue = get('issue').value;
-    pages = issue === '' ? [] : await (await request('/rest/v1/evere_press_pages?issue=eq.' + Number(issue) + '&order=page')).json();
-    options(get('page'), pages.map(row => [row.page, row.page + '면' + (row.source_path ? ' · 버전 ' + row.revision : ' · 미등록')]));
+async function loadPages(issue) {
+    const current = ++pagesRequest;
+    pages = [];
+    options(get('page'), []);
+    get('page').disabled = true;
+    get('open').disabled = true;
+    if (!Number.isInteger(issue) || !issues.some(row => row.issue === issue)) return;
+    const result = await (await request('/rest/v1/evere_press_pages?issue=eq.' + issue + '&order=page')).json();
+    if (current !== pagesRequest) return;
+    pages = result;
+    options(get('page'), pages.map(row => [row.page, row.page + '면' + (row.source_path ? ' · 버전 ' + row.revision : ' · 미등록')]), pages[0]?.page);
+    get('page').disabled = !pages.length;
+    get('open').disabled = !pages.length;
 }
 
 function encodePath(path) { return path.split('/').map(encodeURIComponent).join('/'); }
 
 async function openPage() {
-    const row = pages.find(item => item.page === Number(get('page').value));
+    const page = selectedNumber(get('page'), pages.map(item => item.page));
+    const row = pages.find(item => item.page === page);
     if (!row || !row.source_path) throw new Error('뉴스룸에서 이 면의 INDD 파일을 먼저 등록해 주세요.');
     const existing = [...documents.values()].find(state => state.doc.isValid && state.row.issue === row.issue && state.row.page === row.page);
     if (existing) throw new Error('이 면은 이미 열려 있습니다. 기존 문서를 닫은 뒤 다시 열어 주세요.');
@@ -185,7 +211,7 @@ loginButton.addEventListener('click', async () => {
         await loadIssues();
         get('login').hidden = true;
         get('workspace').hidden = false;
-        report('로그인했습니다.');
+        report(issues.length ? '로그인했습니다.' : '등록된 발행 계획이 없습니다. 뉴스룸에서 먼저 등록해 주세요.');
     } catch (error) {
         session = null;
         report(stage + ' 실패 · ' + error.message);
@@ -201,7 +227,7 @@ for (const id of ['email', 'password']) {
         loginButton.click();
     });
 }
-get('issue').onchange = action(loadPages);
+get('issue').onchange = action(() => loadPages(selectedNumber(get('issue'), issues.map(row => row.issue))));
 get('reload').onclick = action(loadIssues);
 get('open').onclick = action(openPage);
 get('sync').onclick = action(() => {
