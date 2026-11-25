@@ -90,6 +90,32 @@ async function changeWork(row, action, lease = null) {
     })).json();
 }
 
+function makeButton(label) {
+    const control = document.createElement('div');
+    control.className = 'press-button';
+    control.setAttribute('role','button');
+    control.setAttribute('tabindex','0');
+    control.textContent = label;
+    return control;
+}
+
+function setButtonDisabled(control, disabled) {
+    control.setAttribute('aria-disabled', String(disabled));
+    control.setAttribute('tabindex', disabled ? '-1' : '0');
+}
+
+function bindButton(control, activate) {
+    const run = event => {
+        if (control.getAttribute('aria-disabled') !== 'true') void activate(event);
+    };
+    control.addEventListener('click', run);
+    control.addEventListener('keydown', event => {
+        if ((event.key !== 'Enter' && event.key !== ' ') || event.repeat) return;
+        event.preventDefault();
+        run(event);
+    });
+}
+
 function openDocument(row) {
     return [...documents.values()].find(state => state.owner === session?.user.id && state.doc.isValid
         && state.row.issue === row.issue && state.row.page === row.page);
@@ -118,31 +144,28 @@ function renderRows() {
         }
         const actions = document.createElement('span');
         actions.setAttribute('role','cell');
-        const open = document.createElement('button');
-        open.textContent = '열기';
-        open.disabled = editing || finalized;
-        open.onclick = action(async () => {
-            open.disabled = true;
+        const open = makeButton('열기');
+        setButtonDisabled(open, editing || finalized);
+        bindButton(open, action(async () => {
+            setButtonDisabled(open, true);
             try { await openPage(row); }
             finally { await loadPages(activeIssue()); }
-        });
-        const push = document.createElement('button');
-        push.className = 'press-upload';
-        push.textContent = '업로드';
-        push.disabled = finalized || !openDocument(row);
-        push.onclick = action(async () => {
+        }));
+        const push = makeButton('업로드');
+        setButtonDisabled(push, finalized || !openDocument(row));
+        bindButton(push, action(async () => {
             const state = openDocument(row);
             if (!state) throw new Error('이 면을 먼저 열어 주세요.');
-            push.disabled = true;
+            setButtonDisabled(push,true);
             try {
                 report(row.page + '면 업로드 중…');
                 if (state.doc.modified) state.doc.save();
                 else enqueue(state);
                 await state.queue;
             } finally {
-                push.disabled = !openDocument(row);
+                setButtonDisabled(push,!openDocument(row));
             }
-        });
+        }));
         actions.appendChild(open);
         actions.appendChild(push);
         line.appendChild(actions);
@@ -301,8 +324,8 @@ function action(work) {
     };
 }
 const loginButton = get('login-submit');
-loginButton.addEventListener('click', async () => {
-    if (loginButton.disabled) return;
+async function submitLogin() {
+    if (loginButton.getAttribute('aria-disabled') === 'true') return;
     const email = String(get('email').value || '').trim();
     const password = String(get('password').value || '');
     if (!email || !password) {
@@ -310,7 +333,7 @@ loginButton.addEventListener('click', async () => {
         return;
     }
 
-    loginButton.disabled = true;
+    setButtonDisabled(loginButton,true);
     let stage = '계정 인증';
     report(stage + ' 중…');
     try {
@@ -333,22 +356,23 @@ loginButton.addEventListener('click', async () => {
         report(stage + ' 실패 · ' + error.message);
     } finally {
         get('password').value = '';
-        loginButton.disabled = false;
+        setButtonDisabled(loginButton,false);
     }
-});
+}
+bindButton(loginButton, submitLogin);
 for (const id of ['email', 'password']) {
     get(id).addEventListener('keydown', event => {
         if (event.key !== 'Enter') return;
         event.preventDefault();
-        loginButton.click();
+        void submitLogin();
     });
 }
 get('issue').onchange = action(() => loadPages(selectedNumber(get('issue'), issues.map(row => row.issue))));
-get('reload').onclick = action(loadIssues);
-get('logout').onclick = action(async () => {
+bindButton(get('reload'), action(loadIssues));
+bindButton(get('logout'), action(async () => {
     if (documents.size) throw new Error('열린 조판 문서를 닫은 뒤 로그아웃해 주세요.');
     session = null;
     get('workspace').hidden = true;
     get('login').hidden = false;
     report('로그아웃했습니다.');
-});
+}));
