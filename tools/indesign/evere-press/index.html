@@ -3,11 +3,11 @@
 body { padding: 12px; } form, section { display: flex; flex-direction: column; gap: 8px; } [hidden] { display: none; }
 </style></head><body>
 <h2>이브레 조판</h2>
-<form id="login">
-<label for="email">이메일</label><input id="email" type="email" required>
+<section id="login">
+<label for="email">이메일</label><input id="email" type="text">
 <label for="password">비밀번호</label><input id="password" type="password" required>
-<button type="submit">로그인</button>
-</form>
+<button id="login-submit" type="button">로그인</button>
+</section>
 <section id="workspace" hidden>
 <label for="issue">발행 계획</label><select id="issue"></select>
 <label for="page">편집할 면</label><select id="page"></select>

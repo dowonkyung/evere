@@ -21,9 +21,20 @@ async function request(path, options = {}, publicRequest = false) {
     }
     const headers = { apikey: apiKey, ...options.headers };
     if (!publicRequest && session) headers.Authorization = 'Bearer ' + session.access_token;
-    const response = await fetch(origin + path, { ...options, headers });
+    let response;
+    try {
+        response = await fetch(origin + path, { ...options, headers });
+    } catch {
+        throw new Error('뉴스룸 서버에 연결하지 못했습니다. 인터넷 연결과 플러그인의 네트워크 설정을 확인해 주세요.');
+    }
     if (!response.ok) {
         const error = await response.json().catch(() => ({}));
+        if (error.code === 'invalid_credentials' || error.error_code === 'invalid_credentials') {
+            throw new Error('이메일 또는 비밀번호가 맞지 않습니다.');
+        }
+        if (error.code === 'email_not_confirmed' || error.error_code === 'email_not_confirmed') {
+            throw new Error('뉴스룸 계정의 이메일 인증을 먼저 완료해 주세요.');
+        }
         throw new Error(error.message || error.msg || error.error_description || ('요청 실패 (' + response.status + ')'));
     }
     return response;
@@ -147,20 +158,49 @@ function action(work) {
         catch (error) { report(error.message); }
     };
 }
-get('login').onsubmit = action(async () => {
+const loginButton = get('login-submit');
+loginButton.addEventListener('click', async () => {
+    if (loginButton.disabled) return;
+    const email = String(get('email').value || '').trim();
+    const password = String(get('password').value || '');
+    if (!email || !password) {
+        report('뉴스룸 이메일과 비밀번호를 입력해 주세요.');
+        return;
+    }
+
+    loginButton.disabled = true;
+    let stage = '계정 인증';
+    report(stage + ' 중…');
     try {
-        await authenticate('password', { email: get('email').value.trim(), password: get('password').value });
-        const members = await (await request('/rest/v1/evere_members?select=role&id=eq.' + session.user.id)).json();
-        if (!members.some(member => ['owner','director','department_head','reporter'].includes(member.role))) {
-            session = null;
-            throw new Error('조판 기능은 뉴스룸 기자 계정부터 사용할 수 있습니다.');
+        await authenticate('password', { email, password });
+        stage = '뉴스룸 권한 확인';
+        report(stage + ' 중…');
+        const rows = await (await request('/rest/v1/evere_members?select=role,removed_at&id=eq.' + encodeURIComponent(session.user.id))).json();
+        const member = rows[0];
+        if (!member || member.removed_at || !['owner','director','department_head','reporter'].includes(member.role)) {
+            throw new Error('조판 기능은 유효한 뉴스룸 기자 계정부터 사용할 수 있습니다.');
         }
+        stage = '발행 계획 불러오기';
+        report(stage + ' 중…');
         await loadIssues();
         get('login').hidden = true;
         get('workspace').hidden = false;
-        report('');
-    } finally { get('password').value = ''; }
+        report('로그인했습니다.');
+    } catch (error) {
+        session = null;
+        report(stage + ' 실패 · ' + error.message);
+    } finally {
+        get('password').value = '';
+        loginButton.disabled = false;
+    }
 });
+for (const id of ['email', 'password']) {
+    get(id).addEventListener('keydown', event => {
+        if (event.key !== 'Enter') return;
+        event.preventDefault();
+        loginButton.click();
+    });
+}
 get('issue').onchange = action(loadPages);
 get('reload').onclick = action(loadIssues);
 get('open').onclick = action(openPage);
