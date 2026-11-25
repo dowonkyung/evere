@@ -10,10 +10,10 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="/assets/khan/common.css?v=evere-footer-1">
   <link rel="stylesheet" href="/assets/evere/home.css?v=punctuation-3">
-  <link rel="stylesheet" href="/assets/evere/article-page.css?v=paragraph-spacing-3">
+  <link rel="stylesheet" href="/assets/evere/article-page.css?v=publication-times-1">
   <script defer src="/assets/khan/swiper-bundle.min.js"></script>
   <script defer src="/assets/evere/home.js?v=account-icon-1"></script>
-  <script type="module" src="/assets/evere/article.js?v=wiki-culture-1"></script>
+  <script type="module" src="/assets/evere/article.js?v=publication-times-1"></script>
 <script type="module" src="/assets/evere/route-init.js?v=wiki-culture-1"></script>
 <link rel="preload" as="style" href="/assets/yna/default.css">
 <link rel="preload" as="style" href="/assets/yna/variables.css">
@@ -224,7 +224,13 @@
         <header class="reader-head">
           <div id="sector" class="reader-sector"></div>
           <h1 id="title"></h1>
-          <time id="published-time"></time>
+          <div id="published-time" class="reader-timestamps" hidden>
+            <time id="first-published-only" hidden></time>
+            <button id="article-time-toggle" type="button" aria-expanded="false" aria-controls="article-time-first-row" hidden>
+              <span id="article-time-first-row" class="reader-time-first" aria-hidden="true"><time id="first-published-time"></time></span>
+              <span class="reader-time-latest"><time id="modified-time"></time><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </button>
+          </div>
           <p id="byline" class="article-byline"></p>
         </header>
         <div class="editor-subtitle" id="editor-subtitle" hidden><p id="subtitle"></p></div>

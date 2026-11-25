@@ -14,6 +14,9 @@ let currentArticle = null;
 const form = ui('comment-form');
 const commentMore = ui('comments-more');
 const pageSize = 5;
+const articleTimestampFormat = new Intl.DateTimeFormat('sv-SE', {
+    dateStyle: 'short', timeStyle: 'short', timeZone: 'Asia/Seoul',
+});
 const dateFormat = new Intl.DateTimeFormat('ko-KR', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Asia/Seoul' });
 let shownComments = 0;
 
@@ -364,10 +367,29 @@ async function render() {
         paragraph.remove();
     }
     void renderPhotos(ui('article-photos'), data.photo_paths, body).catch(() => {});
-    if (data.published_at) {
-        const time = ui('published-time');
-        time.dateTime = data.published_at;
-        time.textContent = '입력 ' + dateFormat.format(new Date(data.published_at));
+    const firstPublished = data.first_published_at || data.published_at;
+    if (firstPublished) {
+        const writeTime = (time, label, value) => {
+            time.dateTime = value;
+            time.textContent = label + ' ' + articleTimestampFormat.format(new Date(value)).replaceAll('-', '.');
+        };
+        ui('published-time').hidden = false;
+        if (data.modified_at) {
+            writeTime(ui('first-published-time'), '입력', firstPublished);
+            writeTime(ui('modified-time'), '수정', data.modified_at);
+            const toggle = ui('article-time-toggle');
+            const firstRow = ui('article-time-first-row');
+            toggle.hidden = false;
+            toggle.onclick = () => {
+                const expanded = toggle.getAttribute('aria-expanded') === 'false';
+                toggle.setAttribute('aria-expanded', String(expanded));
+                firstRow.setAttribute('aria-hidden', String(!expanded));
+            };
+        } else {
+            const time = ui('first-published-only');
+            writeTime(time, '입력', firstPublished);
+            time.hidden = false;
+        }
     }
     const names = data.byline_names;
     const reporterCount = data.byline?.length || 0;
@@ -466,7 +488,7 @@ async function updateCommentSession() {
 async function readArticle() {
     for (let attempt = 0; attempt < 3; attempt++) {
         try {
-            let query = supabase.from('evere_articles').select('id,article_number,title,article_label,subtitle,body,body_html,photo_paths,sector,series_id,byline,byline_names,published_at')
+            let query = supabase.from('evere_articles').select('id,article_number,title,article_label,subtitle,body,body_html,photo_paths,sector,series_id,byline,byline_names,published_at,first_published_at,modified_at')
                 .eq('status', 'published');
             query = articleNumber ? query.eq('article_number', articleNumber) : query.eq('id', articleId);
             const response = await query.maybeSingle();
