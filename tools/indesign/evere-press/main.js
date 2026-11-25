@@ -89,31 +89,46 @@ async function loadPages(issue) {
     const result = await (await request('/rest/v1/evere_press_pages?issue=eq.' + issue + '&order=page')).json();
     if (current !== pagesRequest) return;
     pages = result;
-    options(get('page'), pages.map(row => [row.page, row.page + '면' + (row.source_path ? ' · 버전 ' + row.revision : ' · 미등록')]), pages[0]?.page);
+    options(get('page'), pages.map(row => [row.page, row.page + '면' + (row.source_path ? ' · 버전 ' + row.revision : ' · 기본 원고')]), pages[0]?.page);
     get('page').disabled = !pages.length;
     get('open').disabled = !pages.length;
 }
 
 function encodePath(path) { return path.split('/').map(encodeURIComponent).join('/'); }
 
+function templateName(page) {
+    if (page === 1) return 'front.indd';
+    return page % 2 === 0 ? 'even.indd' : 'odd.indd';
+}
+
+async function readPageSource(row) {
+    if (row.source_path) {
+        const data = await request('/storage/v1/object/authenticated/evere-press/' + encodePath(row.source_path));
+        return data.arrayBuffer();
+    }
+    const root = await storage.localFileSystem.getPluginFolder();
+    const folder = await root.getEntry('templates');
+    const file = await folder.getEntry(templateName(row.page));
+    return file.read({ format: storage.formats.binary });
+}
+
 async function openPage() {
     const page = selectedNumber(get('page'), pages.map(item => item.page));
     const row = pages.find(item => item.page === page);
-    if (!row || !row.source_path) throw new Error('뉴스룸에서 이 면의 INDD 파일을 먼저 등록해 주세요.');
+    if (!row) throw new Error('편집할 면을 선택해 주세요.');
     const existing = [...documents.values()].find(state => state.doc.isValid && state.row.issue === row.issue && state.row.page === row.page);
     if (existing) throw new Error('이 면은 이미 열려 있습니다. 기존 문서를 닫은 뒤 다시 열어 주세요.');
     const root = await storage.localFileSystem.getDataFolder();
     const folder = await root.createFolder('issue-' + row.issue + '-page-' + row.page + '-' + Date.now());
     const file = await folder.createFile(row.issue + '-' + row.page + '.indd');
-    const data = await request('/storage/v1/object/authenticated/evere-press/' + encodePath(row.source_path));
-    await file.write(await data.arrayBuffer(), { format: storage.formats.binary });
+    await file.write(await readPageSource(row), { format: storage.formats.binary });
     const doc = app.open(file);
     const state = { doc, row, file, folder, owner: session.user.id, queue: Promise.resolve() };
     const id = doc.id;
     documents.set(id, state);
     doc.addEventListener('afterSave', () => enqueue(state));
     doc.addEventListener('beforeClose', () => documents.delete(id));
-    report(row.issue + '호 ' + row.page + '면을 열었습니다.');
+    report(row.issue + '호 ' + row.page + '면 ' + (row.source_path ? '저장본' : '기본 원고') + '을 열었습니다.');
 }
 
 function exportPreview(doc, file) {
