@@ -11,8 +11,6 @@ const gallery = byId('gallery');
 let generation = 0;
 let issueGeneration = 0;
 let issueDates = new Map();
-let poll;
-const panel = gallery.closest('[data-panel]');
 
 function result(response) {
     if (response.error) throw response.error;
@@ -92,7 +90,7 @@ async function listPages() {
         }
         return card;
     }));
-    notify(pages.length ? pages.filter(row => row.revision > 0).length + ' / ' + pages.length + '면 편집본 저장' : '등록된 발행 계획이 없습니다.');
+    notify(pages.length ? '' : '등록된 발행 계획이 없습니다.');
 }
 
 function handle(form, work) {
@@ -123,7 +121,4 @@ pageFilter.onchange = refresh(listPages);
 export function showPress(member) {
     plan.hidden = !['owner','director'].includes(member.role);
     refresh(listIssues)();
-    poll ??= window.setInterval(() => {
-        if (!panel.hidden && !document.hidden) refresh(listIssues)();
-    }, 30000);
 }
