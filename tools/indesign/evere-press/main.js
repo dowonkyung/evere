@@ -159,9 +159,7 @@ function renderRows() {
             setButtonDisabled(push,true);
             try {
                 report(row.page + '면 업로드 중…');
-                if (state.doc.modified) state.doc.save();
-                else enqueue(state);
-                await state.queue;
+                await enqueue(state, true);
             } finally {
                 setButtonDisabled(push,!openDocument(row));
             }
@@ -295,25 +293,39 @@ async function sync(state, bytes, jpeg) {
     report(issue + '호 ' + page + '면 웹 동기화 완료 · 버전 ' + state.row.revision);
 }
 
-function enqueue(state) {
+let snapshotNumber = 0;
+
+async function captureSnapshot(state, useCopy) {
+    const number = ++snapshotNumber;
+    const temp = [];
+    try {
+        const preview = await state.folder.createFile('preview-' + number + '.jpg');
+        temp.push(preview);
+        let source = state.file;
+        if (useCopy) {
+            source = await state.folder.createFile('upload-' + number + '.indd');
+            temp.push(source);
+            state.doc.saveACopy(source);
+        }
+        exportPreview(state.doc, preview);
+        return await Promise.all([source, preview].map(file => file.read({format:storage.formats.binary})));
+    } finally {
+        await Promise.all(temp.map(file => file.delete().catch(() => {})));
+    }
+}
+
+function enqueue(state, useCopy = false) {
     if (!session || state.owner !== session.user.id) {
-        report('로컬에 저장했습니다. 웹 동기화에는 문서를 연 뉴스룸 계정이 필요합니다.');
+        report('웹 동기화에는 문서를 연 뉴스룸 계정이 필요합니다.');
         return;
     }
-    // Export during the save event, while this document still contains that save's changes.
-    const view = state.folder.createFile('preview-' + Date.now() + '.jpg');
-    const source = state.file.read({ format: storage.formats.binary });
-    const snapshot = Promise.all([view, source]).then(async ([file, bytes]) => {
-        try {
-            exportPreview(state.doc, file);
-            return [bytes, await file.read({ format: storage.formats.binary })];
-        } finally { await file.delete(); }
-    }).then(value => ({value}), error => ({error}));
+    const snapshot = captureSnapshot(state, useCopy).then(value => ({value}), error => ({error}));
     state.queue = state.queue.then(async () => {
-        const {value,error} = await snapshot;
+        const {value, error} = await snapshot;
         if (error) throw error;
         await sync(state, ...value);
     }).catch(error => report('웹 동기화 실패 · ' + error.message));
+    return state.queue;
 }
 
 function action(work) {
