@@ -1,3 +1,4 @@
+import { previewPath } from './press-preview-source.js?v=1';
 
 import { supabase } from './supabase.js';
 
@@ -7,7 +8,6 @@ const plan = byId('plan');
 const issueSelect = byId('issue');
 const pageFilter = byId('page-filter');
 const gallery = byId('gallery');
-const dialog = byId('detail');
 let generation = 0;
 let issueGeneration = 0;
 let issueDates = new Map();
@@ -51,8 +51,8 @@ async function listPages() {
     pageFilter.replaceChildren(new Option('전면',''), ...pages.map(row => new Option(row.page + '면', row.page)));
     pageFilter.value = pages.some(row => String(row.page) === filter) ? filter : '';
     gallery.replaceChildren(...pages.filter(row => !pageFilter.value || String(row.page) === pageFilter.value).map(row => {
-        const card = document.createElement('button');
-        card.type = 'button';
+        const preview = previews.get(previewPath(row));
+        const card = document.createElement(preview ? 'a' : 'article');
         card.className = 'press-page';
         const work = row.evere_press_work;
         card.dataset.finalized = String(Boolean(work?.finalized_at));
@@ -60,7 +60,6 @@ async function listPages() {
         title.textContent = row.issue + '호 ' + row.page + '면';
         const thumb = document.createElement('span');
         thumb.className = 'press-page-thumb';
-        const preview = previews.get(previewPath(row));
         if (preview) {
             const image = new Image();
             image.loading = 'lazy';
@@ -76,25 +75,24 @@ async function listPages() {
         meta.textContent = time ? state + ' · ' +
             new Intl.DateTimeFormat('ko-KR', {dateStyle:'short', timeStyle:'short', timeZone:'Asia/Seoul'}).format(new Date(time)) : state;
         card.append(title, thumb, meta);
-        card.disabled = !preview;
-        card.onclick = () => openPreview(row, preview);
+        if (preview) {
+            const params = new URLSearchParams({issue: row.issue, page: row.page});
+            card.href = '/newsroom/press-preview/?' + params;
+            card.target = '_blank';
+            card.rel = 'noopener';
+            card.setAttribute('aria-label', title.textContent + ' 미리보기 새 창');
+            card.addEventListener('click', event => {
+                if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+                const popup = window.open('', '_blank', 'popup,width=1060,height=860,resizable=yes,scrollbars=yes');
+                if (!popup) return;
+                event.preventDefault();
+                popup.opener = null;
+                popup.location.replace(card.href);
+            });
+        }
         return card;
     }));
     notify(pages.length ? pages.filter(row => row.revision > 0).length + ' / ' + pages.length + '면 편집본 저장' : '등록된 발행 계획이 없습니다.');
-}
-
-function previewPath(row) {
-    if (row.preview_path) return row.preview_path;
-    if (row.revision !== 0 || !/^default-templates\/(front|odd|even)\.indd$/.test(row.source_path || '')) return null;
-    return row.source_path.replace(/\.indd$/, '.jpg');
-}
-
-function openPreview(row, preview) {
-    byId('detail-title').textContent = row.issue + '호 ' + row.page + '면';
-    const image = byId('detail-image');
-    image.hidden = false;
-    image.src = preview;
-    if (!dialog.open) dialog.showModal();
 }
 
 function handle(form, work) {
@@ -126,6 +124,6 @@ export function showPress(member) {
     plan.hidden = !['owner','director'].includes(member.role);
     refresh(listIssues)();
     poll ??= window.setInterval(() => {
-        if (!panel.hidden && !document.hidden && !dialog.open) refresh(listIssues)();
+        if (!panel.hidden && !document.hidden) refresh(listIssues)();
     }, 30000);
 }

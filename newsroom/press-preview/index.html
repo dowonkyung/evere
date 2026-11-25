@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>지면 미리보기 | 이브레 뉴스룸</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
+  <link rel="stylesheet" href="/assets/evere/press-preview.css?v=1">
+  <script type="module" src="/assets/evere/press-preview.js?v=1"></script>
+</head>
+<body>
+  <header class="proof-header">
+    <h1 id="proof-title">지면 미리보기</h1>
+    <div class="proof-controls">
+      <label>원고 <select id="proof-version" disabled></select></label>
+      <label>보기 <select id="proof-size" disabled><option value="width">너비 맞춤</option><option value="actual">원본 크기</option></select></label>
+      <button id="proof-close" type="button">닫기</button>
+    </div>
+  </header>
+  <main class="proof-sheet" id="proof-sheet">
+    <p id="proof-status" role="status">지면을 불러오는 중입니다.</p>
+    <img id="proof-image" hidden alt="" draggable="false">
+  </main>
+</body>
+</html>

@@ -1,0 +1,14 @@
+
+:root { font-family: 'Pretendard Variable', sans-serif; color: #17243b; background: #edf0f5; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+[hidden] { display: none !important; }
+.proof-header { position: sticky; top: 0; z-index: 1; min-height: 78px; padding: 12px 20px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; background: #243554; color: #fff; border-bottom: 3px solid #4c70e8; }
+.proof-header h1 { margin: 0; font-size: clamp(16px, 2.2vw, 22px); }
+.proof-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.proof-controls label { display: flex; align-items: center; gap: 5px; font-size: 13px; }
+.proof-controls :is(select,button) { min-height: 34px; border: 1px solid #c9d4e5; border-radius: 5px; padding: 4px 8px; background: white; color: #17243b; font: inherit; }
+.proof-sheet { padding: 14px; overflow: auto; text-align: center; }
+.proof-sheet img { display: block; width: min(100%, 1100px); height: auto; margin-inline: auto; background: #fff; border: 1px solid #c4cfdf; }
+.proof-sheet.is-actual img { width: auto; max-width: none; }
+#proof-status { margin: 28px 0; }

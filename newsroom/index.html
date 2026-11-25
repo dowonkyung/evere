@@ -10,8 +10,8 @@
   <link rel="stylesheet" href="/assets/evere/account.css?v=left-white-1">
   <link rel="stylesheet" href="/assets/evere/newsroom.css?v=queue-pagination-1">
   <script type="module" src="/assets/evere/account.js?v=wiki-culture-1"></script>
-  <link rel="stylesheet" href="/assets/evere/newsroom-press.css?v=3">
-  <script type="module" src="/assets/evere/newsroom.js?v=press-monitor-3"></script>
+  <link rel="stylesheet" href="/assets/evere/newsroom-press.css?v=4">
+  <script type="module" src="/assets/evere/newsroom.js?v=press-window-1"></script>
 <script type="module" src="/assets/evere/route-init.js?v=wiki-culture-1"></script>
   <link rel="stylesheet" href="/assets/evere/newsroom-workspace.css?v=brand-title-size-1">
 </head>
@@ -284,18 +284,13 @@
             <label>면수 <input name="pages" type="number" min="1" max="200" required></label>
             <button type="submit">발행 계획 등록</button>
           </form>
-          <div class="press-controls">
+          <div class="press-controls press-toolbar">
             <label>발행 계획 <select id="press-issue"></select></label>
             <label>면 <select id="press-page-filter"><option value="">전면</option></select></label>
             <button type="button" id="press-refresh">새로고침</button>
           </div>
           <p id="press-status" role="status"></p>
           <div id="press-gallery" class="press-gallery"></div>
-          <dialog id="press-detail" class="press-detail">
-            <form method="dialog" class="press-detail-head"><h2 id="press-detail-title"></h2><button aria-label="닫기">닫기</button></form>
-            <img id="press-detail-image" alt="지면 미리보기" hidden>
-
-          </dialog>
         </section>
         <section data-panel="profile" hidden>
           <h1>내 프로필</h1>
