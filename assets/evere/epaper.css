@@ -179,6 +179,8 @@ button:not(:disabled) { cursor: pointer; }
 .viewer-article-font button svg { display: block; width: auto; height: 12px; }
 .viewer-article-font button + button { position: relative; margin-inline-start: 5px; }
 .viewer-article-font button + button::before { position: absolute; inset: 3px auto 3px -5px; width: 1px; background: #555; content: ""; pointer-events: none; }
+.viewer-article-panel [role="tabpanel"] { padding: 16px 20px; }
+.viewer-article-panel h2 { margin: 0 0 12px; font-size: 26px; line-height: 1.35; }
 #epaper-article-subtitle { margin: 0 0 24px; white-space: pre-wrap; }
 #epaper-article-copy { font-size: var(--article-text-size, 17px); line-height: 1.55; overflow-wrap: anywhere; white-space: pre-wrap; }
 #epaper-article-copy > :is(p,div) { margin: 0 0 24px; }
