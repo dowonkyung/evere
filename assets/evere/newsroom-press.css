@@ -20,3 +20,8 @@ a.press-page:hover, a.press-page:focus-visible { border-color: #4c70e8; box-shad
     .press-gallery { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
     .press-controls { padding: 10px; }
 }
+
+.press-page-actions { display: grid; grid-template-rows: 1fr auto; min-width: 0; gap: 5px; }
+.press-finalize { min-height: 30px; padding: 4px 8px; border: 1px solid #d5deea; border-radius: 6px; background: #fff; color: #284a9c; font: inherit; font-size: 12px; cursor: pointer; }
+.press-finalize:disabled { color: #59657a; cursor: default; }
+.press-finalize:hover:not(:disabled) { background: #eef3ff; }

@@ -11,6 +11,7 @@ const gallery = byId('gallery');
 let generation = 0;
 let issueGeneration = 0;
 let issueDates = new Map();
+let canFinalize = false;
 
 function result(response) {
     if (response.error) throw response.error;
@@ -53,6 +54,8 @@ async function listPages() {
         const card = document.createElement(preview ? 'a' : 'article');
         card.className = 'press-page';
         const work = row.evere_press_work;
+        const editing = Date.parse(work?.expires_at) > Date.now();
+        const finalized = Boolean(work?.finalized_at);
         card.dataset.finalized = String(Boolean(work?.finalized_at));
         const title = document.createElement('strong');
         title.textContent = row.issue + '호 ' + row.page + '면';
@@ -67,7 +70,7 @@ async function listPages() {
         } else thumb.textContent = '미리보기 없음';
         const meta = document.createElement('span');
         meta.className = 'press-page-meta';
-        const state = work?.finalized_at ? '강판' : new Date(work?.expires_at).getTime() > Date.now()
+        const state = finalized ? '강판' : editing
             ? '편집중 (' + work.editor_name + ')' : row.revision ? '편집본 저장' : '초안';
         const time = work?.finalized_at || row.updated_at;
         meta.textContent = time ? state + ' · ' +
@@ -88,7 +91,29 @@ async function listPages() {
                 popup.location.replace(card.href);
             });
         }
-        return card;
+        if (!canFinalize || (!finalized && (!row.revision || !row.preview_path))) return card;
+        const group = document.createElement('article');
+        group.className = 'press-page-actions';
+        const finish = document.createElement('button');
+        finish.type = 'button';
+        finish.className = 'press-finalize';
+        finish.textContent = finalized ? '강판 해제' : '강판';
+        finish.setAttribute('aria-label', title.textContent + ' ' + finish.textContent);
+        finish.disabled = editing;
+        finish.onclick = async () => {
+            finish.disabled = true;
+            try {
+                result(await supabase.rpc('evere_press_work_change', {
+                    p_issue: row.issue, p_page: row.page, p_action: finalized ? 'reopen' : 'finalize'
+                }));
+                await listPages();
+            } catch (error) {
+                notify(error.message);
+                finish.disabled = editing;
+            }
+        };
+        group.append(card, finish);
+        return group;
     }));
     notify(pages.length ? '' : '등록된 발행 계획이 없습니다.');
 }
@@ -119,6 +144,7 @@ issueSelect.onchange = refresh(async () => { pageFilter.value = ''; await listPa
 pageFilter.onchange = refresh(listPages);
 
 export function showPress(member) {
-    plan.hidden = !['owner','director'].includes(member.role);
+    canFinalize = ['owner','director'].includes(member.role);
+    plan.hidden = !canFinalize;
     refresh(listIssues)();
 }

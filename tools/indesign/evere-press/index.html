@@ -1,15 +1,30 @@
 <!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><style>
-body { padding: 12px; } form, section { display: flex; flex-direction: column; gap: 8px; } [hidden] { display: none; }
-.press-brand { margin-bottom: 12px; }
-.press-brand img { display: block; width: 100%; max-width: 270px; height: auto; }
-.press-label { color: #fff; font-size: 17px; font-weight: 700; margin: 0; }
-.press-row { display: flex; align-items: center; min-height: 32px; border-bottom: 1px solid #666; }
-.press-row > span { width: 27%; padding: 3px; font-size: 12px; }
-.press-row > span:first-child { width: 12%; }
-.press-row > span:last-child { width: 34%; }
-.press-row button { margin-right: 3px; }
-.press-columns { font-weight: bold; }
+body { background: #292b32; color: #f4f6fa; padding: 14px; font-size: 13px; }
+[hidden] { display: none; }
+.press-brand { margin: 0 0 16px; }
+.press-brand img { display: block; width: 100%; max-width: 246px; height: auto; }
+#login, #workspace { display: flex; flex-direction: column; }
+#login[hidden], #workspace[hidden] { display: none; }
+label, .press-label { color: #f4f6fa; }
+.press-label { font-size: 17px; font-weight: 700; margin: 0 0 7px; }
+#issue { margin-bottom: 15px; }
+input, select { color: #f4f6fa; background: #383c47; border: 1px solid #626a7a; border-radius: 5px; padding: 5px 7px; margin-bottom: 9px; min-height: 28px; }
+button { color: #f4f6fa; background: #424855; border: 1px solid #687386; border-radius: 5px; padding: 5px 8px; min-height: 26px; white-space: nowrap; }
+button:disabled { color: #adb3bf; background: #373a43; }
+#login-submit, .press-upload:not(:disabled) { color: #fff; background: #3454ae; border-color: #7492ed; }
+.press-scroll { max-height: 310px; overflow-x: auto; overflow-y: auto; border: 1px solid #616976; border-radius: 6px; background: #333641; }
+.press-table { min-width: 630px; }
+.press-row { display: flex; align-items: center; min-height: 38px; border-bottom: 1px solid #505565; }
+.press-row > span { display: block; flex: 1 0 auto; width: 140px; padding: 4px 8px; color: #f4f6fa; font-size: 12px; white-space: nowrap; }
+.press-row > span:first-child { flex: 0 0 52px; width: 52px; }
+.press-row > span:nth-child(3) { width: 220px; }
+.press-row > span:last-child { flex: 0 0 132px; width: 132px; padding-right: 4px; }
+.press-row button { margin-right: 4px; }
+.press-columns { background: #242a38; font-weight: 700; }
+.press-panel-actions { display: flex; flex-wrap: wrap; margin-top: 12px; }
+.press-panel-actions button { margin: 0 6px 4px 0; }
+#status { color: #e0e7f4; margin: 10px 0 0; }
 </style></head><body>
 <div class="press-brand"><img src="press-logo.svg" alt="조판관리시스템"></div>
 <section id="login">
@@ -20,13 +35,14 @@ body { padding: 12px; } form, section { display: flex; flex-direction: column; g
 <section id="workspace" hidden>
 <label class="press-label" for="issue">발행 계획</label><select id="issue"></select>
 <h3 class="press-label">편집할 면</h3>
-<div class="press-table" role="table" aria-label="편집할 면">
-<div class="press-row press-columns" role="row"><span role="columnheader">면</span><span role="columnheader">최근 편집</span><span role="columnheader">상태</span><span role="columnheader">열기</span></div>
+<div class="press-scroll"><div class="press-table" role="table" aria-label="편집할 면">
+<div class="press-row press-columns" role="row"><span role="columnheader">면</span><span role="columnheader">최근 편집</span><span role="columnheader">상태</span><span role="columnheader">작업</span></div>
 <div id="page-rows" role="rowgroup"></div>
+</div></div>
+<div class="press-panel-actions">
+<button id="reload" type="button">새로고침</button>
+<button id="logout" type="button">로그아웃</button>
 </div>
-<button id="reload">발행 계획 새로고침</button>
-<button id="sync">현재 면 웹에 동기화</button>
-<button id="logout">로그아웃</button>
 </section>
 <p id="status" role="status"></p>
 <script src="main.js"></script></body></html>

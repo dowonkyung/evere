@@ -10,7 +10,6 @@ let expiresAt = 0;
 let refreshPending;
 let pages = [];
 const documents = new Map();
-let canFinalize = false;
 
 function report(message) { get('status').textContent = message; }
 
@@ -91,6 +90,11 @@ async function changeWork(row, action, lease = null) {
     })).json();
 }
 
+function openDocument(row) {
+    return [...documents.values()].find(state => state.owner === session?.user.id && state.doc.isValid
+        && state.row.issue === row.issue && state.row.page === row.page);
+}
+
 function renderRows() {
     const container = get('page-rows');
     container.innerHTML = '';
@@ -120,16 +124,25 @@ function renderRows() {
             try { await openPage(row); }
             finally { await loadPages(activeIssue()); }
         });
-        if (canFinalize && !editing && (finalized || (row.revision > 0 && row.preview_path))) {
-            const button = document.createElement('button');
-            button.textContent = finalized ? '강판 해제' : '강판';
-            button.onclick = action(async () => {
-                await changeWork(row, finalized ? 'reopen' : 'finalize');
-                await loadPages(activeIssue());
-            });
-            actions.appendChild(button);
-        }
+        const push = document.createElement('button');
+        push.className = 'press-upload';
+        push.textContent = '업로드';
+        push.disabled = finalized || !openDocument(row);
+        push.onclick = action(async () => {
+            const state = openDocument(row);
+            if (!state) throw new Error('이 면을 먼저 열어 주세요.');
+            push.disabled = true;
+            try {
+                report(row.page + '면 업로드 중…');
+                if (state.doc.modified) state.doc.save();
+                else enqueue(state);
+                await state.queue;
+            } finally {
+                push.disabled = !openDocument(row);
+            }
+        });
         actions.appendChild(open);
+        actions.appendChild(push);
         line.appendChild(actions);
         container.appendChild(line);
     }
@@ -307,7 +320,6 @@ loginButton.addEventListener('click', async () => {
         if (!member || member.removed_at || !['owner','director','department_head','reporter'].includes(member.role)) {
             throw new Error('조판 기능은 유효한 뉴스룸 기자 계정부터 사용할 수 있습니다.');
         }
-        canFinalize = ['owner','director'].includes(member.role);
         stage = '발행 계획 불러오기';
         report(stage + ' 중…');
         await loadIssues();
@@ -331,12 +343,6 @@ for (const id of ['email', 'password']) {
 }
 get('issue').onchange = action(() => loadPages(selectedNumber(get('issue'), issues.map(row => row.issue))));
 get('reload').onclick = action(loadIssues);
-get('sync').onclick = action(() => {
-    const state = app.documents.length ? documents.get(app.activeDocument.id) : null;
-    if (!state) throw new Error('이브레 조판 패널에서 연 문서를 선택해 주세요.');
-    if (state.doc.modified) state.doc.save();
-    else enqueue(state);
-});
 get('logout').onclick = action(async () => {
     if (documents.size) throw new Error('열린 조판 문서를 닫은 뒤 로그아웃해 주세요.');
     session = null;
