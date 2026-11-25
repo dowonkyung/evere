@@ -1,7 +1,7 @@
 {
   "id": "kr.evere.press",
-  "name": "이브레 조판",
-  "version": "1.1.4",
+  "name": "이브레 디지털조판시스템",
+  "version": "1.0.0",
   "main": "index.html",
   "manifestVersion": 5,
   "host": {
@@ -13,7 +13,7 @@
       "type": "panel",
       "id": "everePress",
       "label": {
-        "default": "이브레 조판"
+        "default": "이브레 디지털조판시스템"
       },
       "minimumSize": {
         "width": 290,

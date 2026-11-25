@@ -1,6 +1,6 @@
-# 이브레 조판
+# 이브레 디지털조판시스템
 
-InDesign 18.5 이상과 UXP Developer Tool이 필요합니다. Developer Tool에서 이 폴더의 manifest.json을 추가한 뒤 Load를 누르면 InDesign의 플러그인 메뉴에서 이브레 조판을 열 수 있습니다.
+InDesign 18.5 이상과 UXP Developer Tool이 필요합니다. Developer Tool에서 이 폴더의 manifest.json을 추가한 뒤 Load를 누르면 InDesign의 플러그인 메뉴에서 이브레 디지털조판시스템을 열 수 있습니다.
 
 1. 뉴스룸에서 호수, 발행일, 전체 면수를 등록합니다.
 2. 발행 계획을 등록하면 기본 INDD와 미리보기가 각 면에 연결됩니다. 뉴스룸 모니터링 화면에서는 미리보기를 확인할 수 있습니다.
