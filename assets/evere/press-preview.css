@@ -9,6 +9,6 @@ body { margin: 0; }
 .proof-controls label { display: flex; align-items: center; gap: 5px; font-size: 13px; }
 .proof-controls :is(select,button) { min-height: 34px; border: 1px solid #c9d4e5; border-radius: 5px; padding: 4px 8px; background: white; color: #17243b; font: inherit; }
 .proof-sheet { padding: 14px; overflow: auto; text-align: center; }
-.proof-sheet img { display: block; width: min(100%, 1100px); height: auto; margin-inline: auto; background: #fff; border: 1px solid #c4cfdf; }
+.proof-sheet img { display: block; width: auto; max-width: min(100%, 1100px); height: auto; margin-inline: auto; background: #fff; border: 1px solid #c4cfdf; }
 .proof-sheet.is-actual img { width: auto; max-width: none; }
 #proof-status { margin: 28px 0; }

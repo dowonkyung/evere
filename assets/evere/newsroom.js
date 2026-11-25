@@ -1,4 +1,4 @@
-import { showPress } from './newsroom-press.js?v=5';
+import { showPress } from './newsroom-press.js?v=6';
 import { configureHomeVisualEditor } from './newsroom-home-layout.js?v=opinion-visual-1';
 import { categoryPath } from './routes.js?v=wiki-culture-1';
 import { supabase } from './supabase.js';

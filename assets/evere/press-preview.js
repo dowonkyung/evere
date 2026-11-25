@@ -6,10 +6,8 @@ const get = id => document.getElementById('proof-' + id);
 const params = new URLSearchParams(location.search);
 const store = supabase.storage.from('evere-press');
 const image = get('image');
-const versions = get('version');
 const size = get('size');
 const status = get('status');
-let pictures = new Map();
 
 function readNumber(key, low, high) {
     const raw = params.get(key);
@@ -20,17 +18,8 @@ function readNumber(key, low, high) {
     return value;
 }
 
-function showProof() {
-    const url = pictures.get(versions.value);
-    image.hidden = true;
-    status.hidden = false;
-    status.textContent = '지면을 불러오는 중입니다.';
-    image.src = url;
-}
-
 image.onload = () => { image.hidden = false; status.hidden = true; };
 image.onerror = () => { status.hidden = false; status.textContent = '미리보기를 불러오지 못했습니다. 지면 창을 다시 열어 주세요.'; };
-versions.onchange = showProof;
 size.onchange = () => get('sheet').classList.toggle('is-actual', size.value === 'actual');
 get('close').onclick = () => window.close();
 
@@ -52,20 +41,10 @@ async function load() {
     image.alt = title;
     const path = previewPath(proof.data);
     if (!path) throw new Error('등록된 미리보기가 없습니다.');
-    const revision = proof.data.revision;
-    const kind = page === 1 ? 'front' : page % 2 === 0 ? 'even' : 'odd';
-    const base = 'default-templates/' + kind + '.jpg';
-    const { data, error } = await store.createSignedUrls(revision ? [path,base] : [path],900);
-    const urls = new Map((data || []).map(item => [item.path,item.signedUrl]));
-    if (error || !urls.get(path)) throw new Error('미리보기를 불러올 권한을 확인해 주세요.');
-
-    const options = [[revision ? '버전 ' + revision : '기본 원고',path]];
-    if (revision && urls.get(base)) options.push(['기본 원고',base]);
-    pictures = urls;
-    versions.replaceChildren(...options.map(([label,key]) => new Option(label,key)));
-    versions.disabled = options.length < 2;
+    const { data, error } = await store.createSignedUrl(path,900);
+    if (error || !data?.signedUrl) throw new Error('미리보기를 불러올 권한을 확인해 주세요.');
     size.disabled = false;
-    showProof();
+    image.src = data.signedUrl;
 }
 
 load().catch(error => { status.hidden = false; status.textContent = error.message; });

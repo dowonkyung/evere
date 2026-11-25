@@ -68,7 +68,7 @@ async function listPages() {
         const meta = document.createElement('span');
         meta.className = 'press-page-meta';
         const state = work?.finalized_at ? '강판' : new Date(work?.expires_at).getTime() > Date.now()
-            ? '편집중 (' + work.editor_name + ')' : row.revision ? '편집본 저장' : '기본 원고';
+            ? '편집중 (' + work.editor_name + ')' : row.revision ? '편집본 저장' : '초안';
         const time = work?.finalized_at || row.updated_at;
         meta.textContent = time ? state + ' · ' +
             new Intl.DateTimeFormat('ko-KR', {dateStyle:'short', timeStyle:'short', timeZone:'Asia/Seoul'}).format(new Date(time)) : state;

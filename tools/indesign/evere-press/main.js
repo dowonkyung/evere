@@ -222,9 +222,9 @@ function exportPreview(doc, file) {
     try {
         preferences.exportingSpread = false;
         preferences.jpegExportRange = ExportRangeOrAllPages.EXPORT_ALL;
-        preferences.jpegQuality = JPEGOptionsQuality.HIGH;
+        preferences.jpegQuality = JPEGOptionsQuality.MAXIMUM;
         preferences.jpegColorSpace = JpegColorSpaceEnum.RGB;
-        preferences.exportResolution = 120;
+        preferences.exportResolution = 240;
         preferences.useDocumentBleeds = false;
         doc.exportFile(ExportFormat.JPG, file, false);
     } finally {
