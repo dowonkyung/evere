@@ -1,3 +1,4 @@
+import { showPress } from './newsroom-press.js?v=1';
 import { configureHomeVisualEditor } from './newsroom-home-layout.js?v=opinion-visual-1';
 import { categoryPath } from './routes.js?v=wiki-culture-1';
 import { supabase } from './supabase.js';
@@ -108,6 +109,7 @@ function selectView() {
         if (link.dataset.view === view) link.setAttribute('aria-current', 'page');
         else link.removeAttribute('aria-current');
     }
+    if (view === 'press') showPress(member);
     if (view === 'profile') ui('profile-settings').open = true;
 
     if (view === 'layout') loadLayout().catch(() => notify('화면 배치를 불러오지 못했습니다.', true));

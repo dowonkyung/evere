@@ -1,0 +1,32 @@
+{
+  "id": "kr.evere.press",
+  "name": "이브레 조판",
+  "version": "1.0.0",
+  "main": "index.html",
+  "manifestVersion": 5,
+  "host": {
+    "app": "ID",
+    "minVersion": "18.5.0"
+  },
+  "entrypoints": [
+    {
+      "type": "panel",
+      "id": "everePress",
+      "label": {
+        "default": "이브레 조판"
+      },
+      "minimumSize": {
+        "width": 290,
+        "height": 420
+      }
+    }
+  ],
+  "requiredPermissions": {
+    "network": {
+      "domains": [
+        "https://qikhxlwthbtrwbrhryex.supabase.co"
+      ]
+    },
+    "localFileSystem": "plugin"
+  }
+}
