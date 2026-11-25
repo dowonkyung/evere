@@ -320,7 +320,10 @@ function render(issueNumber, pageNumber, updateHistory = '') {
     ui('image-scroll').classList.toggle('is-spread', hasSpread);
     ui('print').disabled = !photo && !pdf;
     const totalPages = edition.pageCount || Math.max(...edition.pages);
-    ui('page-count').textContent = (nextPage ? page + '–' + nextPage : page) + '/' + totalPages + '면';
+    const pageTotal = document.createElement('span');
+    pageTotal.className = 'viewer-page-total';
+    pageTotal.textContent = '/' + totalPages + '면';
+    ui('page-count').replaceChildren(nextPage ? page + '–' + nextPage : String(page), pageTotal);
     const weekday = edition.date
         ? new Intl.DateTimeFormat('ko-KR', { weekday: 'short', timeZone: 'Asia/Seoul' })
             .format(new Date(edition.date + 'T00:00:00+09:00'))
