@@ -185,7 +185,38 @@ function setZoom(value, animate = false, targetPoint) {
     }
 }
 
-const mobileLayout = matchMedia('screen and (max-width: 760px)');
+const compactViewport = matchMedia('screen and (max-width: 834px)');
+const coarsePointer = matchMedia('(pointer: coarse)');
+const viewerLayout = document.querySelector('.viewer-layout');
+const mobileLayout = { get matches() { return viewerLayout.classList.contains('is-mobile-view'); } };
+function updateDeviceLayout() {
+    const touchDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+        || (/Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
+    const mobile = compactViewport.matches || coarsePointer.matches || touchDevice;
+    viewerLayout.classList.toggle('is-mobile-view', mobile);
+    ui('date-details').inert = !mobile && ui('date-details').hasAttribute('data-collapsed');
+}
+updateDeviceLayout();
+for (const query of [compactViewport, coarsePointer]) query.addEventListener('change', updateDeviceLayout);
+window.addEventListener('resize', updateDeviceLayout);
+
+function fitMobilePage(height) {
+    ui('image-scroll').classList.toggle('is-fit-height', height);
+    ui('fit-width').setAttribute('aria-pressed', String(!height));
+    ui('fit-height').setAttribute('aria-pressed', String(height));
+    setZoom(1);
+    articleViewer.track(0);
+    printSearch.track();
+}
+ui('fit-width').onclick = () => fitMobilePage(false);
+ui('fit-height').onclick = () => fitMobilePage(true);
+ui('mobile-page').onclick = () => showPanel('thumbnails');
+ui('mobile-more').addEventListener('click', event => {
+    const action = event.target.closest('[data-dock-action]');
+    if (!action) return;
+    ui('mobile-more').open = false;
+    ui(action.dataset.dockAction).click();
+});
 const mobileMenu = ui('mobile-menu');
 
 function setMobileMenu(open) {
@@ -267,6 +298,7 @@ function render(issueNumber, pageNumber, updateHistory = '') {
         current = null;
         ui('heading').textContent = '지면보기';
         ui('date').textContent = '';
+        ui('mobile-date').textContent = '';
         ui('status').textContent = issueNumber ? '해당 발행호를 찾을 수 없습니다.' : '등록된 지면이 없습니다.';
         for (const key of ['stage', 'pagination', 'download']) ui(key).hidden = true;
         for (const key of ['zoom', 'zoom-out', 'spread', 'print']) ui(key).disabled = true;
@@ -293,6 +325,7 @@ function render(issueNumber, pageNumber, updateHistory = '') {
     ui('heading').textContent = issueNumber + '호 ' + (nextPage ? page + '·' + nextPage : page) + '면';
     document.title = ui('heading').textContent + ' | 이브레 지면보기';
     ui('date').textContent = edition.date || '발행호 선택';
+    ui('mobile-date').textContent = edition.date || '';
     ui('paper-edition').textContent = ui('heading').textContent;
     ui('stage').hidden = false;
     ui('pagination').hidden = false;

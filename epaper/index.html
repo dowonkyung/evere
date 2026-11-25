@@ -8,8 +8,8 @@
   <link rel="icon" href="/assets/evere/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="/assets/evere/evere-ellipsis.css?v=punctuation-3">
-  <link rel="stylesheet" href="/assets/evere/epaper.css?v=mobile-layout-1">
-  <script type="module" src="/assets/evere/epaper.js?v=mobile-layout-1"></script>
+  <link rel="stylesheet" href="/assets/evere/epaper.css?v=mobile-layout-2">
+  <script type="module" src="/assets/evere/epaper.js?v=mobile-layout-2"></script>
 </head>
 <body>
   <div class="viewer-layout">
@@ -29,8 +29,9 @@
         <button type="button" id="epaper-date-toggle" class="pointer-events-auto" aria-expanded="true" aria-controls="epaper-date-details" aria-label="날짜와 로고 접기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0 motion-safe:transition-transform motion-safe:duration-200 motion-safe:ease-out rotate-180"><path d="M11 17L6 12L11 7" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M18 17L13 12L18 7" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
         <div id="epaper-date-details" class="viewer-date-details">
         <button type="button" id="epaper-calendar-toggle" aria-expanded="false" aria-controls="epaper-issue-popover" aria-label="발행일 선택"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0"><path d="M8.18066 3V6.6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M15.3809 3V6.6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M18.2222 4.8999H5.77778C4.79594 4.8999 4 5.69584 4 6.67768V19.1221C4 20.104 4.79594 20.8999 5.77778 20.8999H18.2222C19.2041 20.8999 20 20.104 20 19.1221V6.67768C20 5.69584 19.2041 4.8999 18.2222 4.8999Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M4 10.2H20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg><span id="epaper-date"></span></button>
-        <a href="/" aria-label="이브레 홈"><img src="/assets/evere/logo.svg" alt="이브레"></a>
+        <a href="/" aria-label="이브레 홈"><img src="/assets/evere/logo.svg" alt="이브레"><span id="epaper-mobile-date" class="viewer-mobile-masthead-date"></span></a>
         </div>
+      <details id="epaper-mobile-more" class="viewer-mobile-more"><summary aria-label="더보기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v.1M12 12v.1M12 20v.1"/></svg></summary><div><button type="button" data-dock-action="spread">단면·양면 전환</button><button type="button" data-dock-action="dark">화면 모드 전환</button><button type="button" data-dock-action="download">다운로드</button><button type="button" data-dock-action="print">인쇄</button><button type="button" data-dock-action="fullscreen">전체 화면</button></div></details>
       </div>
       
       <section id="epaper-issue-popover" class="viewer-issue-popover" aria-labelledby="epaper-issue-title" hidden>
@@ -82,7 +83,9 @@
         </fieldset>
         <footer><p id="epaper-region-status" role="status"></p><button type="submit" id="epaper-region-save" disabled>저장</button></footer>
       </form><nav class="viewer-dock" aria-label="지면 조작">
-          <span id="epaper-page-count" aria-live="polite">—</span>
+          <span><span id="epaper-page-count" aria-live="polite">—</span><button id="epaper-mobile-page" class="viewer-mobile-page" type="button" aria-label="면 선택"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 14 7-7 7 7"/></svg></button></span>
+          <button type="button" id="epaper-fit-width" class="viewer-mobile-fit" aria-label="너비 맞춤" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 7-5 5 5 5m8-10 5 5-5 5M10 12h4"/></svg></button>
+          <button type="button" id="epaper-fit-height" class="viewer-mobile-fit" aria-label="높이 맞춤" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 8 5-5 5 5m-10 8 5 5 5-5m-5-6v4"/></svg></button>
           <button type="button" id="epaper-zoom-out" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0"><path d="M5 12H19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>축소</span></button>
           <button type="button" id="epaper-zoom" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0"><path d="M5 12H19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 5V19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>확대</span></button>
           <button type="button" id="epaper-spread" aria-pressed="false" disabled><svg data-view-icon="single" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0"><path d="M17.4444 3H6.55556C5.69645 3 5 3.89543 5 5V19C5 20.1046 5.69645 21 6.55556 21H17.4444C18.3036 21 19 20.1046 19 19V5C19 3.89543 18.3036 3 17.4444 3Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg><svg data-view-icon="spread" hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0" style="width: var(--icon-size-20, 20px); height: var(--icon-size-20, 20px); stroke-width: var(--icon-stroke-24, 1.6px);"><path d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 3V21" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>단면 보기</span></button>
