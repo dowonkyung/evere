@@ -194,6 +194,7 @@ function updateDeviceLayout() {
         || (/Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
     const mobile = compactViewport.matches || coarsePointer.matches || touchDevice;
     viewerLayout.classList.toggle('is-mobile-view', mobile);
+    ui('hotspots').inert = mobile && viewerLayout.classList.contains('is-article-locked');
     ui('date-details').inert = !mobile && ui('date-details').hasAttribute('data-collapsed');
 }
 updateDeviceLayout();
@@ -211,11 +212,40 @@ function fitMobilePage(height) {
 ui('fit-width').onclick = () => fitMobilePage(false);
 ui('fit-height').onclick = () => fitMobilePage(true);
 ui('mobile-page').onclick = () => showPanel('thumbnails');
-ui('mobile-more').addEventListener('click', event => {
+const mobileMore = ui('mobile-more');
+function updateMobileMore() {
+    mobileMore.querySelector('[data-dock-action="dark"]').textContent =
+        document.body.classList.contains('is-dark') ? '라이트모드 변경' : '다크모드 변경';
+    const view = mobileMore.querySelector('[data-dock-action="spread"]');
+    view.textContent = spread ? '단면 보기 변경' : '양면 보기 변경';
+    view.disabled = ui('spread').disabled;
+    mobileMore.querySelector('[data-dock-action="download"]').disabled = ui('download').hidden;
+}
+mobileMore.addEventListener('toggle', () => { if (mobileMore.open) updateMobileMore(); });
+document.addEventListener('click', event => {
+    if (mobileMore.open && !mobileMore.contains(event.target)) mobileMore.open = false;
+});
+mobileMore.addEventListener('keydown', event => {
+    if (event.key !== 'Escape' || !mobileMore.open) return;
+    mobileMore.open = false;
+    mobileMore.querySelector('summary').focus();
+    event.stopPropagation();
+});
+ui('mobile-article-toggle').onclick = event => {
+    const button = event.currentTarget;
+    const locked = viewerLayout.classList.toggle('is-article-locked');
+    button.setAttribute('aria-pressed', String(locked));
+    button.setAttribute('aria-label', locked ? '개별 기사 보기 켜기' : '개별 기사 보기 끄기');
+    button.querySelector('[data-article-lock="on"]').toggleAttribute('hidden', !locked);
+    button.querySelector('[data-article-lock="off"]').toggleAttribute('hidden', locked);
+    ui('hotspots').inert = locked;
+};
+mobileMore.addEventListener('click', event => {
     const action = event.target.closest('[data-dock-action]');
     if (!action) return;
-    ui('mobile-more').open = false;
     ui(action.dataset.dockAction).click();
+    mobileMore.open = false;
+    mobileMore.querySelector('summary').focus();
 });
 const mobileMenu = ui('mobile-menu');
 
