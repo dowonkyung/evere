@@ -89,7 +89,7 @@ async function loadPages(issue) {
     const result = await (await request('/rest/v1/evere_press_pages?issue=eq.' + issue + '&order=page')).json();
     if (current !== pagesRequest) return;
     pages = result;
-    options(get('page'), pages.map(row => [row.page, row.page + '면' + (row.source_path ? ' · 버전 ' + row.revision : ' · 기본 원고')]), pages[0]?.page);
+    options(get('page'), pages.map(row => [row.page, row.page + '면' + (row.revision ? ' · 버전 ' + row.revision : ' · 기본 원고')]), pages[0]?.page);
     get('page').disabled = !pages.length;
     get('open').disabled = !pages.length;
 }
@@ -128,7 +128,7 @@ async function openPage() {
     documents.set(id, state);
     doc.addEventListener('afterSave', () => enqueue(state));
     doc.addEventListener('beforeClose', () => documents.delete(id));
-    report(row.issue + '호 ' + row.page + '면 ' + (row.source_path ? '저장본' : '기본 원고') + '을 열었습니다.');
+    report(row.issue + '호 ' + row.page + '면 ' + (row.revision ? '저장본' : '기본 원고') + '을 열었습니다.');
 }
 
 function exportPreview(doc, file) {

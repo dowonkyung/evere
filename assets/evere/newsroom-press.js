@@ -68,12 +68,12 @@ async function listPages() {
         meta.className = 'press-page-meta';
         meta.textContent = row.revision ? '버전 ' + row.revision + ' · ' +
             new Intl.DateTimeFormat('ko-KR', {dateStyle:'short', timeStyle:'short', timeZone:'Asia/Seoul'}).format(new Date(row.updated_at))
-            : '파일 미등록';
+            : row.source_path ? '기본 원고 등록됨' : '파일 미등록';
         card.append(title, thumb, meta);
         card.onclick = () => openPage(row, preview).catch(error => notify(error.message));
         return card;
     }));
-    notify(pages.length ? pages.filter(row => row.source_path).length + ' / ' + pages.length + '면 파일 등록' : '등록된 발행 계획이 없습니다.');
+    notify(pages.length ? pages.filter(row => row.revision > 0).length + ' / ' + pages.length + '면 편집본 저장' : '등록된 발행 계획이 없습니다.');
 }
 
 async function openPage(row, preview) {
