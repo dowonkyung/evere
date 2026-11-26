@@ -6,7 +6,7 @@ import { articlePath, articleNumberFromURL } from './routes.js?v=wiki-culture-1'
 import { renderBody, renderPhotos, photoBucket } from './article-content.js?v=paragraph-breaks-2';
 import { seriesFor, seriesLink } from './series.js?v=numbered-link-1';
 import { supabase } from './supabase.js';
-import { sectors } from './article-taxonomy.js?v=wiki-culture-1';
+import { articleCategories, sectors } from './article-taxonomy.js?v=wiki-culture-1';
 
 const ui = (id) => document.getElementById(id);
 let articleId = new URLSearchParams(location.search).get('id');
@@ -327,6 +327,47 @@ function splitPlainParagraphs(body) {
     }
 }
 
+function renderArticleCorner(data, visibleTitle) {
+    const isOpinion = data.sector === 'opinion';
+    const category = isOpinion && articleCategories.opinion.find(([id]) => id === data.category)?.[1];
+
+    function show(name, href) {
+        const link = document.createElement('a');
+        link.className = 'reader-series-link';
+        link.href = href;
+        link.textContent = name;
+        const svgNamespace = 'http://www.w3.org/2000/svg';
+        const arrow = document.createElementNS(svgNamespace, 'svg');
+        for (const [name, value] of Object.entries({
+            width: '16', height: '16', viewBox: '0 0 16 16', fill: 'none',
+            'aria-hidden': 'true', focusable: 'false',
+        })) arrow.setAttribute(name, value);
+        const path = document.createElementNS(svgNamespace, 'path');
+        for (const [name, value] of Object.entries({
+            d: 'M6.5 3.5L11.5 8L6.5 12.5', stroke: 'currentColor', 'stroke-width': '1.5',
+            'stroke-linecap': 'round', 'stroke-linejoin': 'round',
+        })) path.setAttribute(name, value);
+        arrow.append(path);
+        link.append(arrow);
+        ui('sector').append(link);
+        if (isOpinion) document.title = '[' + name + '] ' + visibleTitle;
+    }
+
+    function showCategory() {
+        if (category) show(category, '/opinion/' + data.category + '/');
+    }
+
+    if (!data.series_id) {
+        showCategory();
+        return;
+    }
+    void seriesFor(data.sector).then(rows => {
+        const selected = rows.find(({ id }) => id === data.series_id);
+        if (selected) show(selected.title, seriesLink(data.sector, selected.id, selected.series_number));
+        else showCategory();
+    }, showCategory);
+}
+
 async function render() {
     if (!articleNumber && (!articleId || !/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(articleId))) {
         ui('status').textContent = '기사를 찾을 수 없습니다.';
@@ -440,28 +481,7 @@ async function render() {
     // Optional reading controls must never turn a displayed article into a load failure.
     try { enableReadingHeader(title); } catch (error) { console.warn('Reading header unavailable', error); }
     void showTopArticles().catch(() => {});
-    if (data.series_id) void seriesFor(data.sector).then((rows) => {
-        const selected = rows.find(({ id }) => id === data.series_id);
-        if (!selected) return;
-        const link = document.createElement('a');
-        link.className = 'reader-series-link';
-        link.href = seriesLink(data.sector, selected.id, selected.series_number);
-        link.textContent = selected.title;
-        const svgNamespace = 'http://www.w3.org/2000/svg';
-        const arrow = document.createElementNS(svgNamespace, 'svg');
-        for (const [name, value] of Object.entries({
-            width: '16', height: '16', viewBox: '0 0 16 16', fill: 'none',
-            'aria-hidden': 'true', focusable: 'false',
-        })) arrow.setAttribute(name, value);
-        const path = document.createElementNS(svgNamespace, 'path');
-        for (const [name, value] of Object.entries({
-            d: 'M6.5 3.5L11.5 8L6.5 12.5', stroke: 'currentColor', 'stroke-width': '1.5',
-            'stroke-linecap': 'round', 'stroke-linejoin': 'round',
-        })) path.setAttribute(name, value);
-        arrow.append(path);
-        link.append(arrow);
-        ui('sector').append(link);
-    }).catch(() => {});
+    renderArticleCorner(data, title);
     ui('comments-section').hidden = false;
     void commentsAt(0).catch(() => {
         const message = document.createElement('li');
@@ -490,7 +510,7 @@ async function updateCommentSession() {
 async function readArticle() {
     for (let attempt = 0; attempt < 3; attempt++) {
         try {
-            let query = supabase.from('evere_articles').select('id,article_number,title,article_label,subtitle,body,body_html,photo_paths,audio_path,sector,series_id,byline,byline_names,published_at,first_published_at,modified_at')
+            let query = supabase.from('evere_articles').select('id,article_number,title,article_label,subtitle,body,body_html,photo_paths,audio_path,sector,category,series_id,byline,byline_names,published_at,first_published_at,modified_at')
                 .eq('status', 'published');
             query = articleNumber ? query.eq('article_number', articleNumber) : query.eq('id', articleId);
             const response = await query.maybeSingle();
