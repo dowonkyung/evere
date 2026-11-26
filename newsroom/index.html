@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="/assets/evere/account.css?v=left-white-1">
   <link rel="stylesheet" href="/assets/evere/newsroom.css?v=justify-selection-1">
   <link rel="stylesheet" href="/assets/evere/article-audio.css?v=1">
-  <script type="module" src="/assets/evere/account.js?v=justify-selection-1"></script>
+  <script type="module" src="/assets/evere/account.js?v=member-access-1"></script>
   <link rel="stylesheet" href="/assets/evere/newsroom-press.css?v=5">
   <script type="module" src="/assets/evere/newsroom.js?v=press-finalize-1"></script>
 <script type="module" src="/assets/evere/route-init.js?v=wiki-culture-1"></script>
@@ -39,6 +39,10 @@
         <button type="submit">등록</button>
       </form>
       <button class="text-action" type="button" onclick="document.getElementById('sign-out').click()">로그아웃</button>
+    </section>
+    <section id="newsroom-access-denied" hidden>
+      <p>뉴스룸은 평기자 이상 이용할 수 있습니다.</p>
+      <a href="/account/">마이페이지로 이동</a>
     </section>
     <section id="workspace" hidden>
       <nav class="newsroom-nav" aria-label="뉴스룸 메뉴">

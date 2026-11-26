@@ -5,7 +5,7 @@ import { sectors, articleCategories } from './article-taxonomy.js?v=wiki-culture
 import { articleComposer } from './article-composer.js?v=justify-selection-1';
 import { renderBody, renderPhotos } from './article-content.js?v=paragraph-breaks-1';
 const roleNames = {
-    owner: '총수', director: '국장급', department_head: '부장급', reporter: '평기자', citizen: '시민기자',
+    owner: '총수', director: '국장급', department_head: '부장급', reporter: '평기자', citizen: '회원',
 };
 const editorialStates = [
     ['draft', '작성중'], ['complete', '작성완료'], ['revising', '수정중'],
@@ -593,10 +593,15 @@ async function refresh() {
     if (removed) member = null;
     ui('profile-setup').hidden = !user || Boolean(member) || removed;
     if (removed) message('삭제된 이브레 계정입니다.', true);
-    ui('workspace').hidden = !member;
-    if (headerAvatar) ui('newsroom-identity').hidden = !member;
+    const canUseNewsroom = Boolean(member && member.role !== 'citizen');
+    const shortcut = ui('account-newsroom-link');
+    if (shortcut) shortcut.hidden = !canUseNewsroom;
+    const denied = ui('newsroom-access-denied');
+    if (denied) denied.hidden = !member || canUseNewsroom;
+    ui('workspace').hidden = denied ? !canUseNewsroom : !member;
+    if (headerAvatar) ui('newsroom-identity').hidden = !canUseNewsroom;
     if (user && !member) ui('profile-form').elements.displayName.value = user.user_metadata?.evere_display_name || '';
-    if (member) {
+    if (member && (!denied || canUseNewsroom)) {
         await refreshMembers();
         if (ui('profile-settings').tagName !== 'DETAILS') void loadProfile().catch((error) => message(getError(error), true));
         if (headerAvatar) void loadAvatar(member.id).catch(() => {});

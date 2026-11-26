@@ -495,3 +495,9 @@
 .article-body figure[data-photo-width] > img { width: 100%; height: auto; }
 .article-body figure[data-caption-align="center"] figcaption { text-align: center; }
 .article-body figure[data-caption-align="right"] figcaption { text-align: right; }
+
+.comment-row-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px; }
+.comment-row-actions[hidden], .comment-body[hidden] { display: none; }
+.comment-row-actions button { padding: 4px 9px; border: 1px solid #d9d9d9; border-radius: 4px; background: #fff; color: #444; font: inherit; font-size: 13px; cursor: pointer; }
+.comment-row-actions button:disabled { opacity: .6; cursor: default; }
+.comment-row-editor textarea { box-sizing: border-box; width: 100%; padding: 10px; border: 1px solid #d9d9d9; border-radius: 6px; font: inherit; resize: vertical; }

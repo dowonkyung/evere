@@ -195,11 +195,103 @@ function commentTime(date) {
     return dateFormat.format(date);
 }
 
+let commentMember = null;
+let commentSession = Promise.resolve();
+
+function commentAction(label) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.textContent = label;
+    return button;
+}
+
+function addCommentActions(item, body, row) {
+    const actions = document.createElement('div');
+    actions.className = 'comment-row-actions';
+    const edit = commentAction('수정');
+    const remove = commentAction('삭제');
+    actions.append(edit, remove);
+    item.append(actions);
+
+    const status = ui('comment-list-status');
+    edit.addEventListener('click', () => {
+        const editor = document.createElement('form');
+        editor.className = 'comment-row-editor';
+        const input = document.createElement('textarea');
+        input.setAttribute('aria-label', '댓글 수정');
+        input.maxLength = 500;
+        input.rows = 3;
+        input.required = true;
+        input.value = body.textContent;
+        const controls = document.createElement('div');
+        controls.className = 'comment-row-actions';
+        const save = commentAction('저장');
+        save.type = 'submit';
+        const cancel = commentAction('취소');
+        controls.append(save, cancel);
+        editor.append(input, controls);
+        body.hidden = true;
+        actions.hidden = true;
+        item.append(editor);
+        input.focus();
+
+        const close = () => {
+            editor.remove();
+            actions.hidden = false;
+            body.hidden = false;
+            edit.focus();
+        };
+        cancel.addEventListener('click', close);
+        editor.addEventListener('submit', async event => {
+            event.preventDefault();
+            const value = input.value.trim();
+            if (!value || save.disabled) return;
+            if (value === body.textContent) return close();
+            save.disabled = cancel.disabled = true;
+            input.readOnly = true;
+            try {
+                checked(await supabase.from('evere_comments').update({ body: value })
+                    .eq('id', row.id).eq('article_id', articleId).select('id').single());
+                body.textContent = value;
+                close();
+                status.textContent = '댓글을 수정했습니다.';
+            } catch {
+                status.textContent = '댓글을 수정하지 못했습니다.';
+            } finally {
+                save.disabled = cancel.disabled = false;
+                input.readOnly = false;
+            }
+        });
+    });
+
+    remove.addEventListener('click', async () => {
+        if (remove.disabled || !window.confirm('이 댓글을 삭제할까요?')) return;
+        remove.disabled = edit.disabled = true;
+        try {
+            checked(await supabase.from('evere_comments').delete()
+                .eq('id', row.id).eq('article_id', articleId).select('id').single());
+        } catch {
+            status.textContent = '댓글을 삭제하지 못했습니다.';
+            remove.disabled = edit.disabled = false;
+            return;
+        }
+        item.remove();
+        try {
+            await commentsAt(0);
+            status.textContent = '댓글을 삭제했습니다.';
+        } catch {
+            status.textContent = '댓글을 삭제했습니다. 목록을 새로고침해 주세요.';
+        }
+    });
+}
+
 async function commentsAt(newOffset) {
     const request = ++commentRequest;
     if (newOffset === 0) commentMore.hidden = true;
     const ascending = oldestFirst;
-    const response = await supabase.from('evere_comments').select('author_name,body,created_at', { count: 'exact' })
+    await commentSession;
+    const canManage = Boolean(commentMember);
+    const response = await supabase.from('evere_comments').select(canManage ? 'id,author_id,author_name,body,created_at' : 'author_name,body,created_at', { count: 'exact' })
         .eq('article_id', articleId).order('created_at', { ascending }).order('id', { ascending })
         .range(newOffset, newOffset + pageSize - 1);
     if (request !== commentRequest) return;
@@ -226,6 +318,9 @@ async function commentsAt(newOffset) {
         body.className = 'comment-body';
         body.textContent = row.body;
         item.append(meta, body);
+        if (commentMember && (commentMember.role === 'owner' || commentMember.id === row.author_id)) {
+            addCommentActions(item, body, row);
+        }
         return item;
     });
     const list = ui('comments');
@@ -483,6 +578,7 @@ async function render() {
     void showTopArticles().catch(() => {});
     renderArticleCorner(data, title);
     ui('comments-section').hidden = false;
+    commentSession = updateCommentSession().catch(() => {});
     void commentsAt(0).catch(() => {
         const message = document.createElement('li');
         message.textContent = '댓글을 불러오지 못했습니다.';
@@ -493,14 +589,14 @@ async function render() {
         message.append(retry);
         ui('comments').replaceChildren(message);
     });
-    void updateCommentSession().catch(() => {});
 }
 
 async function updateCommentSession() {
     const { data: sessionData } = await supabase.auth.getSession();
     if (sessionData?.session) {
-        const { data: profile } = await supabase.from('evere_members').select('id,display_name')
+        const { data: profile } = await supabase.from('evere_members').select('id,display_name,role').is('removed_at', null)
             .eq('id', sessionData.session.user.id).maybeSingle();
+        commentMember = profile || null;
         ui('comment-writer').textContent = profile?.display_name || '';
         form.hidden = !profile;
         ui('comment-sign-in').hidden = Boolean(profile);
