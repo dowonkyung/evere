@@ -1,3 +1,4 @@
+import { createArticleAudioField } from './article-audio-editor.js?v=1';
 import { formattedBody, photoBucket, photoFigure, photoImage, readPhotoCaption, renderBody, setPhotoCaption, setPhotoOptions } from './article-content.js?v=paragraph-breaks-1';
 import { openPhotoDialog } from './photo-dialog.js?v=photo-sidebar-1';
 import { connectPhotoLibrary } from './photo-library.js?v=unpublished-library-1';
@@ -74,6 +75,7 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
     const toolbar = find('.compose-toolbar');
     const photoList = find('[data-thumbs]');
     const feedback = find('[data-compose-feedback]');
+    const audio = createArticleAudioField(form, article?.audio_path);
     let member;
     let people = [];
     let byline = [...(article?.byline || [])];
@@ -590,6 +592,7 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
             activePhotoDialog?.close();
             activePhotoDialog = null;
             form.reset();
+            audio.reset();
             seedEditor();
             selection = null;
             lastEllipsis = null;
@@ -645,6 +648,7 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
             if (!contentOnly && !omitByline.checked && (guest.value.trim() || guestPosition.value.trim() || writer.value)) {
                 notify('입력하거나 선택한 이름은 추가 버튼을 눌러 등록해 주세요.'); return false;
             }
+            if (audio.error()) { notify(audio.error()); return false; }
             const uploaded = [];
             saving = true;
             form.inert = true;
@@ -660,10 +664,13 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
                     if (figure) figure.dataset.photo = path;
                 }
                 fields.body_html = safe.innerHTML;
+                fields.audio_path = await audio.stage(member.id);
                 await commit(fields);
+                audio.committed();
                 uploaded.length = 0;
                 return true;
             } finally {
+                await audio.discard();
                 if (uploaded.length) await photoBucket.remove(uploaded);
                 form.inert = false;
                 saving = false;

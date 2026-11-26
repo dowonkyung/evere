@@ -1,0 +1,12 @@
+
+.reader-credit-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; column-gap: 12px; }
+.article-listen { display: flex; align-items: center; gap: 8px; margin-inline-start: auto; color: #4c70e8; font-size: 14px; font-variant-numeric: tabular-nums; }
+.article-listen[hidden], .article-listen [hidden] { display: none !important; }
+.article-listen button { display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid currentColor; border-radius: 50%; color: inherit; background: transparent; cursor: pointer; }
+.article-listen button:hover { background: #4c70e814; }
+.article-listen button:disabled { opacity: .65; }
+.article-listen [data-listen-error] { font-size: 12px; }
+.compose-audio { display: grid; justify-items: start; gap: 7px; min-width: 0; margin: 14px 0; padding: 10px 12px; border: 1px solid #dce2eb; border-radius: 6px; }
+.compose-audio legend { font-weight: 650; }
+.compose-audio input { max-width: 100%; }
+.compose-audio p { margin: 0; color: #626d7d; font-size: 13px; overflow-wrap: anywhere; }

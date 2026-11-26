@@ -9,7 +9,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="/assets/evere/account.css?v=left-white-1">
   <link rel="stylesheet" href="/assets/evere/newsroom.css?v=queue-pagination-1">
-  <script type="module" src="/assets/evere/account.js?v=wiki-culture-1"></script>
+  <link rel="stylesheet" href="/assets/evere/article-audio.css?v=1">
+  <script type="module" src="/assets/evere/account.js?v=article-audio-1"></script>
   <link rel="stylesheet" href="/assets/evere/newsroom-press.css?v=5">
   <script type="module" src="/assets/evere/newsroom.js?v=press-finalize-1"></script>
 <script type="module" src="/assets/evere/route-init.js?v=wiki-culture-1"></script>
@@ -161,6 +162,12 @@
                 <div class="compose-editor" contenteditable="true" role="textbox" aria-label="본문" aria-multiline="true" data-placeholder="기사 본문을 입력하세요"></div>
               </section>
               <ul class="compose-thumbs compose-attached" data-thumbs aria-label="첨부 사진"></ul>
+              <fieldset class="compose-audio">
+                <legend>기사 읽어주기 음성</legend>
+                <label>음성 파일 <input type="file" name="articleAudio" accept=".mp3,.m4a,.aac,.wav,.ogg,.opus,.webm,.flac,audio/*"></label>
+                <p data-audio-note>MP3 권장 · 최대 48MB</p>
+                <button type="button" data-audio-remove hidden>음성 제거</button>
+              </fieldset>
               <p class="compose-feedback" data-compose-feedback role="status"></p>
               <div class="compose-actions"><button type="submit">승인 요청</button></div>
             </div>

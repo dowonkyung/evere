@@ -1,3 +1,4 @@
+import { mountArticleAudio } from './article-audio-player.js?v=1';
 import { showReporterCards } from './reporter-cards.js?v=reporter-links-1';
 import { collectionButton } from './reader-collections.js';
 import { articlePageTitle, setArticleTitle } from './article-label.js';
@@ -338,6 +339,7 @@ async function render() {
     }
     articleId = data.id;
     currentArticle = data;
+    mountArticleAudio(ui('article-listen'), data.audio_path);
     const canonicalURL = new URL(articlePath(data), location.origin);
     history.replaceState(null, '', canonicalURL.pathname + location.hash);
     const canonical = document.querySelector('link[rel="canonical"]') || document.createElement('link');
@@ -488,7 +490,7 @@ async function updateCommentSession() {
 async function readArticle() {
     for (let attempt = 0; attempt < 3; attempt++) {
         try {
-            let query = supabase.from('evere_articles').select('id,article_number,title,article_label,subtitle,body,body_html,photo_paths,sector,series_id,byline,byline_names,published_at,first_published_at,modified_at')
+            let query = supabase.from('evere_articles').select('id,article_number,title,article_label,subtitle,body,body_html,photo_paths,audio_path,sector,series_id,byline,byline_names,published_at,first_published_at,modified_at')
                 .eq('status', 'published');
             query = articleNumber ? query.eq('article_number', articleNumber) : query.eq('id', articleId);
             const response = await query.maybeSingle();
