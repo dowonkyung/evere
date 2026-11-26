@@ -92,13 +92,24 @@ function seriesCard(entry) {
         photo.append(articleListPicture({ photoPath }));
         item.append(photo);
     }
-    if (entry.byline_names?.length) {
+    if (entry.authors?.length) {
         const info = document.createElement('div');
-        info.className = 'info';
-        const name = document.createElement('span');
-        name.className = 'name';
-        name.textContent = entry.byline_names.join(', ');
-        info.append(name);
+        info.className = 'info opinion-series-byline';
+        for (const author of entry.authors) {
+            const person = document.createElement('span');
+            person.className = 'opinion-series-author';
+            const name = document.createElement('span');
+            name.className = 'name';
+            name.textContent = author.name;
+            person.append(name);
+            if (author.position?.trim()) {
+                const position = document.createElement('span');
+                position.className = 'opinion-series-position';
+                position.textContent = author.position.trim();
+                person.append(position);
+            }
+            info.append(person);
+        }
         item.append(info);
     }
     details.append(item);
@@ -111,7 +122,7 @@ async function renderLatestSeries() {
     const container = section.querySelector('.outside-editor-list');
     const list = container.querySelector('.swiper-wrapper');
     const status = section.querySelector('[data-opinion-series-status]');
-    const { data, error } = await supabase.rpc('evere_latest_opinion_series_articles');
+    const { data, error } = await supabase.rpc('evere_latest_opinion_series_with_authors');
     if (error) throw error;
     const slides = [];
     for (let index = 0; index < data.length; index += 3) {
