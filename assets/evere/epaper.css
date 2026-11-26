@@ -242,6 +242,14 @@ button:not(:disabled) { cursor: pointer; }
 @media (max-width:650px) { #epaper-region-toggle { top:56px;left:8px; } #epaper-region-form { top:96px;left:8px; } }
 @media print { #epaper-region-toggle, #epaper-region-form { display:none!important; } }
 
+.viewer-linked-badge {
+    position: absolute; z-index: 2; display: inline-flex; align-items: center; gap: 4px;
+    width: max-content; padding: 3px 6px; border: 1px solid #ffffff50; border-radius: 3px;
+    color: #fff; background: #244a3e; font-size: 11px; font-weight: 600; line-height: 1.2;
+    white-space: nowrap; pointer-events: auto;
+}
+.viewer-linked-badge img { display: block; flex: none; width: 12px; height: 12px; }
+.viewer-linked-badge:hover, .viewer-linked-badge:focus-visible { background: #17382e; }
 @media print { .viewer-linked-badge,.viewer-article-navigation { display:none!important; } }
 
 #epaper-repin { position:absolute; right:24px; bottom:24px; z-index:3; display:grid; place-items:center; width:44px; height:44px; border:1px solid #d9e7e2; border-radius:50%; color:#438c73; background:#fffc; box-shadow:0 4px 16px #0002; }
