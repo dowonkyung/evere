@@ -96,15 +96,15 @@ function seriesCard(entry) {
         const info = document.createElement('div');
         info.className = 'info opinion-series-byline';
         for (const author of entry.authors) {
-            const person = document.createElement('span');
+            const person = document.createElement('div');
             person.className = 'opinion-series-author';
             const name = document.createElement('span');
             name.className = 'name';
             name.textContent = author.name;
             person.append(name);
             if (author.position?.trim()) {
-                const position = document.createElement('span');
-                position.className = 'opinion-series-position';
+                const position = document.createElement('p');
+                position.className = 'dapartment';
                 position.textContent = author.position.trim();
                 person.append(position);
             }
