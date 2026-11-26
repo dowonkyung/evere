@@ -85,10 +85,13 @@ function seriesCard(entry) {
 
     const details = document.createElement('dl');
     const item = document.createElement('dt');
-    const photo = document.createElement('div');
-    photo.className = 'photo';
-    photo.append(articleListPicture({ photoPath: firstPhoto(entry) }));
-    item.append(photo);
+    const photoPath = firstPhoto(entry);
+    if (photoPath) {
+        const photo = document.createElement('div');
+        photo.className = 'photo';
+        photo.append(articleListPicture({ photoPath }));
+        item.append(photo);
+    }
     if (entry.byline_names?.length) {
         const info = document.createElement('div');
         info.className = 'info';

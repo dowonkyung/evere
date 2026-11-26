@@ -1,15 +1,19 @@
 import { setArticleTitle } from './article-label.js';
 import { photoBucket } from './article-content.js?v=caption-1';
 
-const placeholder = new URL('./media-placeholder.svg', import.meta.url).href;
-
 export function articleListPicture(entry) {
+    if (!entry.image && !entry.photoPath) return document.createDocumentFragment();
     const picture = document.createElement('picture');
     const image = document.createElement('img');
     image.alt = '';
     image.loading = 'lazy';
-    image.src = entry.image || placeholder;
-    if (!entry.image) image.className = 'evere-media-placeholder';
+    image.addEventListener('error', () => {
+        const frame = picture.parentElement;
+        if (frame?.matches('div.photo') && frame.childElementCount === 1) frame.remove();
+        else picture.remove();
+    }, { once: true });
+    if (entry.image) image.src = entry.image;
+    else picture.style.display = 'none';
     if (entry.photoPath) image.dataset.listPhoto = entry.photoPath;
     picture.append(image);
     return picture;
@@ -28,12 +32,9 @@ export async function loadArticleListPhotos(contents, { visibleOnly = false } = 
         const url = urls.get(image.dataset.listPhoto);
         if (!url) continue;
         image.dataset.photoSigned = 'true';
-        image.addEventListener('error', () => {
-            image.classList.add('evere-media-placeholder');
-            image.src = placeholder;
-        }, { once: true });
-        image.classList.remove('evere-media-placeholder');
+        const picture = image.parentElement;
         image.src = url;
+        picture?.style.removeProperty('display');
     }
 }
 
