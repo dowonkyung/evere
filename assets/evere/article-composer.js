@@ -6,6 +6,11 @@ import { seriesFor } from './series.js';
 
 const photoTypes = new Map([['image/jpeg', 'jpg'], ['image/png', 'png'], ['image/webp', 'webp']]);
 const editors = new Set(['owner', 'director', 'department_head']);
+const alignCommands = new Map([
+    ['justifyLeft', 'left'], ['justifyCenter', 'center'], ['justifyRight', 'right'], ['justifyFull', 'justify'],
+]);
+const paragraphBlocks = 'p, div, h2, h3, li, blockquote';
+const rootBlocks = paragraphBlocks + ', figure, ul, ol';
 
 function smartQuote(mark, before) {
     const opens = !before || /[\s([{<«‹“‘「『【〈《〔〖–—]/u.test(before);
@@ -259,21 +264,85 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
         void refreshSeries('');
     });
 
-    function rememberSelection() {
+    function selectedEditorRange() {
         const current = window.getSelection();
-        if (current.rangeCount && editor.contains(current.anchorNode) && editor.contains(current.focusNode)) {
-            selection = current.getRangeAt(0).cloneRange();
-        }
+        if (!current?.rangeCount) return null;
+        if (!editor.contains(current.anchorNode) && !editor.contains(current.focusNode)) return null;
+
+        const range = current.getRangeAt(0).cloneRange();
+        if (!range.intersectsNode(editor)) return null;
+        if (!editor.contains(range.startContainer)) range.setStart(editor, 0);
+        if (!editor.contains(range.endContainer)) range.setEnd(editor, editor.childNodes.length);
+        return range;
     }
+
+    function rememberSelection() {
+        const range = selectedEditorRange();
+        if (range) selection = range;
+    }
+
     for (const event of ['keyup', 'pointerup', 'input', 'blur']) editor.addEventListener(event, rememberSelection);
+
+    function alignParagraphs(range, alignment) {
+        const locked = node => node.closest('figure, [contenteditable="false"]');
+        if (range.collapsed) {
+            const container = range.startContainer.nodeType === Node.ELEMENT_NODE
+                ? range.startContainer : range.startContainer.parentElement;
+            const current = container.closest(paragraphBlocks);
+            if (current !== editor && editor.contains(current) && !locked(current)) {
+                current.style.textAlign = alignment;
+                return;
+            }
+            if (container === editor && editor.children.length === 1 && editor.firstElementChild.matches(paragraphBlocks)) {
+                editor.firstElementChild.style.textAlign = alignment;
+                return;
+            }
+        }
+
+        for (const block of editor.querySelectorAll(paragraphBlocks)) {
+            if (!locked(block) && range.intersectsNode(block)) block.style.textAlign = alignment;
+        }
+        // Legacy paragraphs or pasted text can include text directly under the editor.
+        let run = [];
+        let selected = false;
+        function wrapRun() {
+            if (selected && run.length) {
+                const paragraph = document.createElement('p');
+                paragraph.style.textAlign = alignment;
+                run[0].before(paragraph);
+                paragraph.append(...run);
+            }
+            run = [];
+            selected = false;
+        }
+        const inline = [...editor.childNodes].map(node => [
+            node, node.nodeType === Node.ELEMENT_NODE && node.matches(rootBlocks), range.intersectsNode(node),
+        ]);
+        for (const [node, isBlock, included] of inline) {
+            if (isBlock) wrapRun();
+            else {
+                run.push(node);
+                selected ||= included;
+            }
+        }
+        wrapRun();
+    }
+
     function applyFormat(command, value) {
+        const range = selectedEditorRange() || selection;
         editor.focus();
-        if (selection && editor.contains(selection.startContainer) && editor.contains(selection.endContainer)) {
+        if (range && editor.contains(range.startContainer) && editor.contains(range.endContainer)) {
             const current = window.getSelection();
             current.removeAllRanges();
-            current.addRange(selection);
+            current.addRange(range);
         }
-        document.execCommand(command, false, value);
+        const alignment = alignCommands.get(command);
+        if (alignment) {
+            const active = selectedEditorRange();
+            if (active) alignParagraphs(active, alignment);
+        } else {
+            document.execCommand(command, false, value);
+        }
         rememberSelection();
         updateEditorCount();
     }
@@ -614,6 +683,9 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
             const body = editor.innerText.trim();
             const safe = document.createElement('div');
             safe.append(formattedBody(editor.innerHTML));
+            for (const block of safe.children) {
+                if (block.matches(rootBlocks) && !block.matches('figure') && !block.style.textAlign) block.style.textAlign = 'justify';
+            }
             for (const [input, name] of [[printIssue, '호수'], [printPage, '면수']]) {
                 const number = input.value.trim();
                 if (number && (!/^[0-9]+$/.test(number) || Number(number) < 1 || Number(number) > 2147483647)) {

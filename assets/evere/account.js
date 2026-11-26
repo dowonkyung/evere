@@ -2,7 +2,7 @@ import { setArticleTitle } from './article-label.js';
 import { articlePath } from './routes.js?v=wiki-culture-1';
 import { supabase } from './supabase.js';
 import { sectors, articleCategories } from './article-taxonomy.js?v=wiki-culture-1';
-import { articleComposer } from './article-composer.js?v=article-audio-1';
+import { articleComposer } from './article-composer.js?v=justify-selection-1';
 import { renderBody, renderPhotos } from './article-content.js?v=paragraph-breaks-1';
 const roleNames = {
     owner: '총수', director: '국장급', department_head: '부장급', reporter: '평기자', citizen: '시민기자',
