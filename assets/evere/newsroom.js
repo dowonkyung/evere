@@ -1,5 +1,5 @@
 import { loadMemorialCounts } from './home-memorial.js?v=2';
-import { showPress } from './newsroom-press.js?v=press-plan-edit-1';
+import { showPress } from './newsroom-press.js?v=press-plan-manage-2';
 import { configureHomeVisualEditor } from './newsroom-home-layout.js?v=memorial-1';
 import { categoryPath } from './routes.js?v=wiki-culture-1';
 import { supabase } from './supabase.js';

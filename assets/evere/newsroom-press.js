@@ -193,6 +193,9 @@ byId('edit-plan').onclick = () => {
     editingPlan = issuePlans.get(issueSelect.value);
     if (!canFinalize || !editingPlan) return;
     byId('edit-title').textContent = editionLabel(editingPlan) + ' 발행 계획 수정';
+    editForm.elements.issue.value = editingPlan.issue;
+    editForm.elements.issue.disabled = editingPlan.is_extra;
+    editForm.querySelector('[data-edit-issue-number]').hidden = editingPlan.is_extra;
     editForm.elements.date.value = editingPlan.publication_date;
     editForm.elements.pages.value = editingPlan.page_count;
     editStatus.textContent = '';
@@ -211,9 +214,10 @@ byId('edit-plan').onclick = () => {
 editForm.elements.pages.addEventListener('input', syncRemovalFields);
 removalOptions.addEventListener('change', syncRemovalFields);
 const editSave = editForm.querySelector('[type="submit"]');
-editDialog.addEventListener('cancel', event => { if (editSave.disabled) event.preventDefault(); });
+const deletePlan = byId('delete-plan');
+editDialog.addEventListener('cancel', event => { if (editSave.disabled || deletePlan.disabled) event.preventDefault(); });
 editDialog.querySelector('form[method="dialog"]').addEventListener('submit', event => {
-    if (editSave.disabled) event.preventDefault();
+    if (editSave.disabled || deletePlan.disabled) event.preventDefault();
 });
 
 handle(editForm, async () => {
@@ -226,12 +230,34 @@ handle(editForm, async () => {
     if (removed.length && !window.confirm(removed.map(page => page + '면').join(', ') +
         '을 발행 계획에서 삭제할까요? 남은 면은 순서대로 다시 번호가 매겨집니다.')) return;
     const issue = editingPlan.issue;
+    const nextIssue = editingPlan.is_extra ? issue : editForm.elements.issue.valueAsNumber;
     editStatus.textContent = '저장 중입니다.';
-    result(await supabase.rpc('evere_update_press_issue', {
-        p_issue: issue, p_expected_date: editingPlan.publication_date, p_expected_count: editingPlan.page_count,
+    result(await supabase.rpc('evere_save_press_plan', {
+        p_issue: issue, p_new_issue: nextIssue, p_expected_date: editingPlan.publication_date, p_expected_count: editingPlan.page_count,
         p_date: editForm.elements.date.value, p_pages: editForm.elements.pages.valueAsNumber, p_remove: removed,
     }));
     editDialog.close();
     pageFilter.value = '';
-    await listIssues(issue).catch(() => notify('계획을 저장했습니다. 목록을 새로고침해 주세요.'));
+    await listIssues(nextIssue).catch(() => notify('계획을 저장했습니다. 목록을 새로고침해 주세요.'));
 }, message => { editStatus.textContent = message; });
+
+deletePlan.addEventListener('click', async () => {
+    if (!canFinalize || !editingPlan || editSave.disabled || deletePlan.disabled) return;
+    const plan = editingPlan;
+    if (!window.confirm(editionLabel(plan) + ' (' + plan.publication_date +
+        ')의 발행 계획과 전체 ' + plan.page_count + '면을 지면 모니터링에서 삭제할까요?')) return;
+    deletePlan.disabled = editSave.disabled = true;
+    editStatus.textContent = '삭제 중입니다.';
+    try {
+        result(await supabase.rpc('evere_delete_press_plan', {
+            p_issue: plan.issue, p_expected_date: plan.publication_date, p_expected_count: plan.page_count,
+        }));
+        editDialog.close();
+        pageFilter.value = '';
+        await listIssues().catch(() => notify('계획을 삭제했습니다. 목록을 새로고침해 주세요.'));
+    } catch (error) {
+        editStatus.textContent = error.message;
+    } finally {
+        deletePlan.disabled = editSave.disabled = false;
+    }
+});

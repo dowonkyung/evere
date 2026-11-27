@@ -12,8 +12,8 @@
   <link rel="stylesheet" href="/assets/evere/newsroom.css?v=compose-topic-fields-1">
   <link rel="stylesheet" href="/assets/evere/article-audio.css?v=1">
   <script type="module" src="/assets/evere/account.js?v=compose-topic-fields-1"></script>
-  <link rel="stylesheet" href="/assets/evere/newsroom-press.css?v=press-plan-edit-1">
-  <script type="module" src="/assets/evere/newsroom.js?v=press-plan-edit-1"></script>
+  <link rel="stylesheet" href="/assets/evere/newsroom-press.css?v=press-plan-manage-2">
+  <script type="module" src="/assets/evere/newsroom.js?v=press-plan-manage-2"></script>
 <script type="module" src="/assets/evere/route-init.js?v=wiki-culture-1"></script>
   <link rel="stylesheet" href="/assets/evere/newsroom-workspace.css?v=brand-title-size-1">
 </head>
@@ -355,6 +355,7 @@
               <form method="dialog"><button>닫기</button></form>
             </header>
             <form id="press-edit-form">
+              <label data-edit-issue-number>호수 <input name="issue" type="number" min="0" max="2147483647" step="1" required></label>
               <label>발행일 <input name="date" type="date" required></label>
               <label>면수 <input name="pages" type="number" min="1" max="200" step="1" required></label>
               <fieldset id="press-remove-pages" hidden>
@@ -362,7 +363,7 @@
                 <p id="press-remove-counter"></p>
                 <div id="press-remove-options"></div>
               </fieldset>
-              <button type="submit">변경 저장</button>
+              <div class="press-edit-actions"><button type="button" id="press-delete-plan">발행 계획 삭제</button><button type="submit">변경 저장</button></div>
               <p id="press-edit-status" role="status"></p>
             </form>
           </dialog>
