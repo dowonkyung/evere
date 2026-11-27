@@ -177,7 +177,9 @@ main .evere-memorial {
     overflow: hidden;
     background: #0c0c0c;
     color: #fff;
+    text-decoration: none;
 }
+.evere-memorial:focus-visible { outline: 2px solid #fff; outline-offset: -4px; }
 .evere-memorial-copy { padding: 16px 0 16px 28px; position: relative; z-index: 1; }
 .evere-memorial h2 { margin: 0; color: #fff; font-size: clamp(16px, 2.1vw, 22px); font-weight: 650; line-height: 1.4; }
 .evere-memorial p { margin: 4px 0 0; color: #fff; font-size: clamp(20px, 3vw, 30px); font-weight: 750; line-height: 1.25; font-variant-numeric: tabular-nums; }
