@@ -1,3 +1,4 @@
+import { articleExcerpt } from './article-excerpt.js?v=1';
 import { loadBottomLinks } from './home-bottom-links.js';
 import { setArticleTitle } from './article-label.js';
 import { articlePath } from './routes.js?v=routes-1';
@@ -12,21 +13,6 @@ const placeholder = new URL('./media-placeholder.svg', import.meta.url).href;
 const latestLimit = 6;
 const lowerList = document.querySelector('[data-home-list]');
 const opinionList = document.querySelector('[data-home-opinion]');
-
-function articleDescription(data) {
-    let text = data.body || '';
-    if (data.body_html?.trim()) {
-        const template = document.createElement('template');
-        template.innerHTML = data.body_html;
-        const content = template.content;
-        for (const extra of content.querySelectorAll('figure, figcaption, script, style, template')) extra.remove();
-        for (const block of content.querySelectorAll('br, p, div, li, blockquote, h1, h2, h3, h4, h5, h6')) {
-            block.after(' ');
-        }
-        text = content.textContent;
-    }
-    return Array.from(text.replace(/\s+/g, ' ').trim()).slice(0, 120).join('');
-}
 
 function makeArticle(data, summary = false, thumbnailRatio = '700 / 467') {
     const article = document.createElement('article');
@@ -44,7 +30,7 @@ function makeArticle(data, summary = false, thumbnailRatio = '700 / 467') {
     title.href = articlePath(data);
     setArticleTitle(title, data.title, data.article_label);
     text.append(title);
-    const excerpt = summary ? articleDescription(data) : '';
+    const excerpt = summary ? articleExcerpt(data, 120) : '';
     if (excerpt) {
         const description = document.createElement('p');
         description.className = 'desc';

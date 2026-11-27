@@ -1,3 +1,4 @@
+import { articleExcerpt } from './article-excerpt.js?v=1';
 import { supabase } from './supabase.js';
 import { articlePath } from './routes.js?v=routes-1';
 import { articleListPicture, loadArticleListPhotos } from './article-list-media.js';
@@ -33,7 +34,7 @@ function card(article, category) {
     setArticleTitle(title, article.title, article.article_label);
     const desc = document.createElement('p');
     desc.className = 'desc';
-    desc.textContent = article.subtitle || (article.body || '').slice(0, 180);
+    desc.textContent = articleExcerpt(article, 180);
     info.append(title, desc);
     content.append(articleListPicture({ photoPath: category === 'column' ? firstPhoto(article) : article.photo_paths?.[0] }), info);
     row.append(content);
@@ -47,7 +48,7 @@ async function applyLayout() {
     const articles = new Map();
     if (ids.length) {
         const { data: rows, error: articleError } = await supabase.from('evere_articles')
-            .select('id,article_number,title,article_label,subtitle,body,body_html,photo_paths,category,evere_series(title)')
+            .select('id,article_number,title,article_label,body,body_html,photo_paths,category,evere_series(title)')
             .in('id', ids).eq('status', 'published').eq('sector', 'opinion').not('article_number', 'is', null);
         if (articleError) throw articleError;
         for (const row of rows) articles.set(row.id, row);

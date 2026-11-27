@@ -1,7 +1,10 @@
+import { parseHTML } from 'linkedom';
+import { articleExcerpt } from '../assets/evere/article-excerpt.js';
 import { createHash } from 'node:crypto';
 import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { dirname, join, relative, resolve } from 'node:path';
 
+const { document } = parseHTML('<!doctype html><html><body></body></html>');
 const root = resolve(process.argv[2] || '_site');
 const origin = 'https://evere.saevit.online';
 const logo = '/assets/evere/share-default.png';
@@ -101,11 +104,6 @@ function articleTitle(article) {
     return title;
 }
 
-function excerpt(body) {
-    const characters = Array.from(normalize(body));
-    return characters.length > 150 ? characters.slice(0, 150).join('').trimEnd() + '…' : characters.join('');
-}
-
 async function inBatches(items, size, process) {
     for (let offset = 0; offset < items.length; offset += size) {
         await Promise.all(items.slice(offset, offset + size).map(process));
@@ -138,7 +136,7 @@ async function storeThumbnails(articles) {
 }
 
 const [articles, series] = await Promise.all([
-    rows('evere_articles', { select: 'id,article_number,title,article_label,sector,category,body,photo_paths,print_issue,print_page,byline,evere_series(title)',
+    rows('evere_articles', { select: 'id,article_number,title,article_label,sector,category,body,body_html,photo_paths,print_issue,print_page,byline,evere_series(title)',
         status: 'eq.published', article_number: 'not.is.null', order: 'article_number' }),
     rows('evere_series', { select: 'series_number,title', series_number: 'not.is.null', order: 'series_number' }),
 ]);
@@ -148,7 +146,7 @@ const thumbnails = await storeThumbnails(articles);
 await inBatches(articles, 12, async article => {
     if (!Number.isSafeInteger(article.article_number) || article.article_number < 1) return;
     await writePage('/article/' + article.article_number, articleTemplate, { title: articleTitle(article),
-        description: excerpt(article.body) || siteDescription, image: thumbnails.get(article.photo_paths?.[0]) || logo,
+        description: articleExcerpt(article, 150, { ellipsis: true, document }) || siteDescription, image: thumbnails.get(article.photo_paths?.[0]) || logo,
         type: 'article' });
 });
 const seriesTemplate = await readFile(join(root, 'series/articles/index.html'), 'utf8');

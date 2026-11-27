@@ -13,7 +13,7 @@ const categoryNames = new Map(articleCategories.opinion);
 const dateFormat = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' });
 
 try {
-    const { publishedFeed } = await import('./published-feed.js?v=opinion-series-name-1');
+    const { publishedFeed } = await import('./published-feed.js?v=body-excerpt-1');
     rows = await publishedFeed('opinion', category, series, { all: true });
     if (series) {
         const name = (await seriesFor('opinion')).find(({ id }) => id === series)?.title || '기획·연재';

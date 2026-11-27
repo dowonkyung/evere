@@ -1,3 +1,4 @@
+import { articleExcerpt } from './article-excerpt.js?v=1';
 import { setArticleTitle } from './article-label.js';
 import { articlePath, categoryFromURL } from './routes.js?v=wiki-culture-1';
 import { supabase } from './supabase.js';
@@ -27,7 +28,7 @@ function headlineCard(article, primary) {
     if (primary) {
         const summary = document.createElement('p');
         summary.className = 'desc';
-        summary.textContent = article.subtitle || article.body.slice(0, 180);
+        summary.textContent = articleExcerpt(article, 180);
         copy.append(summary);
     }
     card.append(picture, copy);
@@ -70,7 +71,7 @@ async function showSectionHead(rows) {
 async function showPlacements() {
     if (!main || category.length > 64 || (sectionHead && requestedSeries())) return;
     const { data, error } = await supabase.from('evere_page_slots')
-        .select('slot,evere_articles(id,article_number,title,article_label,subtitle,body,photo_paths,status,sector,category)')
+        .select('slot,evere_articles(id,article_number,title,article_label,body,body_html,photo_paths,status,sector,category)')
         .eq('page', page).eq('category', category).order('slot');
     if (error || !data.length) return;
     const rows = data.filter(({ evere_articles: article }) =>
@@ -92,7 +93,7 @@ async function showPlacements() {
         link.href = articlePath(article);
         setArticleTitle(link, article.title, article.article_label);
         const summary = document.createElement('p');
-        summary.textContent = article.body.slice(0, 120);
+        summary.textContent = articleExcerpt(article, 120);
         item.append(link, summary);
         list.append(item);
     }

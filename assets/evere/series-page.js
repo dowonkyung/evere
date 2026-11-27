@@ -1,3 +1,4 @@
+import { articleExcerpt } from './article-excerpt.js?v=1';
 import { collectionButton } from './reader-collections.js';
 import { supabase } from './supabase.js';
 import { setArticleTitle } from './article-label.js';
@@ -16,7 +17,7 @@ const start = (page - 1) * pageSize;
 const timestamp = new Intl.DateTimeFormat('sv-SE', {
     timeZone: 'Asia/Seoul', dateStyle: 'short', timeStyle: 'short',
 });
-const columns = 'id,article_number,title,article_label,subtitle,body,photo_paths,published_at';
+const columns = 'id,article_number,title,article_label,body,body_html,photo_paths,published_at';
 const seriesPath = number => '/series/articles/' + number;
 
 function node(tag, text, className) {
@@ -73,7 +74,7 @@ function storyCard(entry, includeSummary = false) {
     setArticleTitle(title, entry.title, entry.article_label);
     copy.append(title);
     if (includeSummary) {
-        const description = entry.subtitle || Array.from(entry.body || '').slice(0, 220).join('');
+        const description = articleExcerpt(entry, 220);
         copy.append(node('p', description, 'desc'), node('p', timestamp.format(new Date(entry.published_at)).replaceAll('-', '.'), 'date'));
     }
     article.append(articleListPicture({ photoPath: entry.photo_paths?.[0] }), copy);

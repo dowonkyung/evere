@@ -1,3 +1,4 @@
+import { articleExcerpt } from './article-excerpt.js?v=1';
 import { supabase } from './supabase.js';
 import { articlePath } from './routes.js?v=routes-1';
 import { articleListPicture, loadArticleListPhotos } from './article-list-media.js?v=category-pages-1';
@@ -23,7 +24,7 @@ function articleRow(entry) {
     setArticleTitle(link, entry.title, entry.article_label);
     const summary = document.createElement('p');
     summary.className = 'desc';
-    summary.textContent = (entry.body || '').slice(0, 220);
+    summary.textContent = articleExcerpt(entry, 220);
     const date = document.createElement('p');
     date.className = 'date';
     if (entry.published_at) date.textContent = dateFormat.format(new Date(entry.published_at)).replaceAll('-', '.');
@@ -41,7 +42,7 @@ async function loadArticles(reporter) {
     status.textContent = '기사를 불러오는 중입니다.';
     try {
         const { data, error } = await supabase.from('evere_articles')
-            .select('article_number,title,article_label,body,photo_paths,published_at')
+            .select('article_number,title,article_label,body,body_html,photo_paths,published_at')
             .eq('status', 'published').contains('byline', [reporter]).not('article_number', 'is', null)
             .order('published_at', { ascending: false, nullsFirst: false }).order('id')
             .range(offset, offset + pageSize);

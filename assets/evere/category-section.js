@@ -76,7 +76,7 @@ if (series.length) {
 const dateFormat = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' });
 let live = [];
 try {
-    const { publishedFeed } = await import('./published-feed.js?v=category-pages-1');
+    const { publishedFeed } = await import('./published-feed.js?v=body-excerpt-1');
     live = await publishedFeed(section, selected, seriesFilter, { all: true });
     if (seriesFilter) {
         const name = (await seriesFor(section)).find(({ id }) => id === seriesFilter)?.title || '기획·연재';

@@ -1,3 +1,4 @@
+import { articleExcerpt } from './article-excerpt.js?v=1';
 import { supabase } from './supabase.js';
 import { articlePath } from './routes.js?v=wiki-culture-1';
 import { articleCategories, sectors } from './article-taxonomy.js?v=wiki-culture-1';
@@ -146,7 +147,7 @@ function renderResult(target, kind, article, photoUrls) {
             copy.append(category);
         }
         copy.append(title);
-        const description = article.subtitle || article.body?.trim().replace(/\s+/g, ' ').slice(0, 200);
+        const description = articleExcerpt(article, 200);
         if (description) {
             const subtitle = document.createElement('p');
             subtitle.className = 'search-result-description';
