@@ -10,7 +10,7 @@
 }
 
 body, main :where(button, input, select, textarea), footer :where(button, input) {
-    font-family: "Evere Ellipsis", "Pretendard JP Variable", sans-serif;
+    font-family: "Evere Ellipsis", "Pretendard JP", sans-serif;
     font-feature-settings: "ss18", "ss05";
 }
 

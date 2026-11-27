@@ -1,6 +1,6 @@
 :host { display: block; }
 .yna-shell, .yna-shell :where(a, button, input) {
-    font-family: "Evere Ellipsis", "Pretendard JP Variable", sans-serif;
+    font-family: "Evere Ellipsis", "Pretendard JP", sans-serif;
     font-feature-settings: "case", "ss05";
 }
 .header02, .nav-type01, .nav-type11 {

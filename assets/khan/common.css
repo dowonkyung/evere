@@ -557,7 +557,7 @@ body { font-family: "Pretendard Variable", sans-serif; color: var(--text-primary
 @font-face { font-family: 'SUIT'; font-weight: 400; font-display: swap; src: url('https://img.khan.co.kr/spko/fonts/sm/SUIT-Medium.woff2') format('woff2'); }
 @font-face { font-family: 'EllipsisFont'; src: local('Segoe UI'), local('Apple SD Gothic Neo'), local('Malgun Gothic'); unicode-range: U+00B7; }
 
-body { font-family: "Evere Ellipsis", "Pretendard JP Variable", "EllipsisFont", "SUIT", Noto Sans KR, Helvetica-light, AppleSDGothicNeo-Light, Roboto-Light, Malgun Gothic, Dotum, Helvetica, AppleGothic, Sans-serif; font-feature-settings: "ss18" on, "ss05" on; font-synthesis: none; letter-spacing: -.01em; color: var(--text-primary); background-color: var(--background-default); }
+body { font-family: "Evere Ellipsis", "Pretendard JP", "EllipsisFont", "SUIT", Noto Sans KR, Helvetica-light, AppleSDGothicNeo-Light, Roboto-Light, Malgun Gothic, Dotum, Helvetica, AppleGothic, Sans-serif; font-feature-settings: "ss18" on, "ss05" on; font-synthesis: none; letter-spacing: -.01em; color: var(--text-primary); background-color: var(--background-default); }
 i { font-synthesis: style; }
 
 em.red { display: inline-block; vertical-align: text-bottom; padding: 0 4px; margin-right: 8px; border-radius: 2px; font-size: 12px; font-weight: 600; line-height: 18px; color: #FFF; background-color: #F25050; } /* 속보 */

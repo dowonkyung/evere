@@ -1,7 +1,7 @@
 @import url("/assets/evere/evere-ellipsis.css");
 
 :root {
-  font-family: "Evere Ellipsis", "Pretendard JP Variable", sans-serif;
+  font-family: "Evere Ellipsis", "Pretendard JP", sans-serif;
   font-feature-settings: "ss05";
   color: #151515;
   background: #fff;
