@@ -2,7 +2,7 @@ import { setArticleTitle } from './article-label.js';
 import { articlePath } from './routes.js?v=wiki-culture-1';
 import { supabase } from './supabase.js';
 import { sectors, articleCategories } from './article-taxonomy.js?v=wiki-culture-1';
-import { articleComposer } from './article-composer.js?v=justify-selection-1';
+import { articleComposer } from './article-composer.js?v=reuse-library-photo-1';
 import { renderBody, renderPhotos } from './article-content.js?v=paragraph-breaks-1';
 const roleNames = {
     owner: '총수', director: '국장급', department_head: '부장급', reporter: '평기자', citizen: '회원',
@@ -354,7 +354,7 @@ function articleEditor(article, contentOnly) {
     editor.setMember(member, members);
     form.elements.sector.addEventListener('change', () => setCategories(form));
     const state = stateButtons(article.editorial_state, contentOnly ? authorStates : allStates);
-    form.querySelector('.compose-heading').after(state.field);
+    form.querySelector('.compose-metadata').prepend(state.field);
     form.id = 'article-edit-form';
     const save = form.querySelector('button[type="submit"]');
     save.id = 'article-dialog-save';
@@ -798,7 +798,7 @@ if (articleForm && memberForm) {
     const writeState = stateButtons('complete', authorStates, value => {
         writeSubmit.textContent = value === 'draft' ? '작성중 저장' : '승인 요청';
     });
-    articleForm.querySelector('.compose-heading').after(writeState.field);
+    articleForm.querySelector('.compose-metadata').prepend(writeState.field);
     const isSaving = () => Boolean(articleDialog.querySelector('form[inert]'));
     ui('article-dialog-close').addEventListener('click', () => {
         if (isSaving()) return;

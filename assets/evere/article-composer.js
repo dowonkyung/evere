@@ -1,6 +1,6 @@
 import { createArticleAudioField } from './article-audio-editor.js?v=1';
 import { formattedBody, photoBucket, photoFigure, photoImage, readPhotoCaption, renderBody, setPhotoCaption, setPhotoOptions } from './article-content.js?v=paragraph-breaks-1';
-import { openPhotoDialog } from './photo-dialog.js?v=photo-sidebar-1';
+import { openPhotoDialog } from './photo-dialog.js?v=reuse-library-photo-1';
 import { connectPhotoLibrary } from './photo-library.js?v=unpublished-library-1';
 import { seriesFor } from './series.js';
 
@@ -584,6 +584,10 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
     let photoBatch = 0;
     async function configurePhoto({ file, photo, libraryPhoto } = {}) {
         if (saving || activePhotoDialog) return false;
+        if (libraryPhoto && photos.some(({ path }) => path === libraryPhoto.path)) {
+            notify('이미 첨부한 사진입니다. 첨부 목록에서 위치나 캡션을 바꿀 수 있습니다.');
+            return false;
+        }
         if (!photo && photos.length >= 8) { notify('사진은 최대 8장까지 첨부할 수 있습니다.'); return false; }
         const dialog = openPhotoDialog({ file, photo, libraryPhoto });
         activePhotoDialog = dialog;
@@ -602,7 +606,9 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
                 if (image) image.alt = photo.captionTitle || photo.caption || '기사 첨부 사진';
             }
         } else {
-            const next = { ...options, key: 'local-' + crypto.randomUUID(), url: URL.createObjectURL(options.file) };
+            const next = options.path
+                ? { ...options, key: options.path }
+                : { ...options, key: 'local-' + crypto.randomUUID(), url: URL.createObjectURL(options.file) };
             photos.push(next);
             locate(next, true);
         }
