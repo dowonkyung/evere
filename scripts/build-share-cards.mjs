@@ -135,11 +135,27 @@ async function storeThumbnails(articles) {
     return images;
 }
 
-const [articles, series] = await Promise.all([
-    rows('evere_articles', { select: 'id,article_number,title,article_label,sector,category,body,body_html,photo_paths,print_issue,print_page,byline,evere_series(title)',
-        status: 'eq.published', article_number: 'not.is.null', order: 'article_number' }),
+const fingerprintPath = '/assets/evere/share-card-revision.txt';
+const [articleRevisions, series] = await Promise.all([
+    rows('evere_articles', {
+        select: 'article_number,published_at,modified_at',
+        status: 'eq.published', article_number: 'not.is.null', order: 'article_number',
+    }),
     rows('evere_series', { select: 'series_number,title', series_number: 'not.is.null', order: 'series_number' }),
 ]);
+const fingerprint = createHash('sha256').update(JSON.stringify([articleRevisions, series])).digest('hex');
+
+if (process.argv.includes('--check')) {
+    const deployed = await request(origin + fingerprintPath + '?check=' + Date.now()).catch(() => null);
+    const unchanged = deployed?.ok && (await deployed.text()).trim() === fingerprint;
+    console.log(unchanged ? 'false' : 'true');
+    process.exit(0);
+}
+
+const articles = await rows('evere_articles', {
+    select: 'id,article_number,title,article_label,sector,category,body,body_html,photo_paths,print_issue,print_page,byline,evere_series(title)',
+    status: 'eq.published', article_number: 'not.is.null', order: 'article_number',
+});
 await inject(root);
 const articleTemplate = await readFile(join(root, 'article/index.html'), 'utf8');
 const thumbnails = await storeThumbnails(articles);
@@ -213,4 +229,5 @@ for (const [issue, pages] of printPages) {
     await inBatches([...pages], 12, page =>
         writePage(path + '/' + page, epaperTemplate, { title: title + ' · ' + page + '면' }));
 }
+await writeFile(join(root, fingerprintPath), fingerprint + '\n');
 console.log('Generated ' + articles.length + ' article cards, ' + series.length + ' series cards, and ' + thumbnails.size + ' article thumbnails.');
