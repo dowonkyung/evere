@@ -714,6 +714,7 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
             void refreshSeries();
         },
         refreshSeries,
+        refreshIssues,
         reset() {
             if (article) disconnectPhotoLibrary();
             photoBatch++;

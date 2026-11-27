@@ -169,6 +169,7 @@ function selectView() {
     if (view === 'profile') ui('profile-settings').open = true;
 
     if (view === 'layout') loadLayout().catch(() => notify('화면 배치를 불러오지 못했습니다.', true));
+    if (view === 'issues') loadManagedIssues().catch(() => notify('이슈 목록을 불러오지 못했습니다.', true));
     if (view === 'series') loadSeries().catch(() => notify('기획·연재 분류를 불러오지 못했습니다.', true));
 }
 
@@ -176,6 +177,7 @@ document.addEventListener('evere:member', (event) => {
     member = event.detail;
     const allowed = editablePages();
     for (const link of document.querySelectorAll('a[data-editor]')) link.hidden = allowed.length === 0;
+    for (const link of document.querySelectorAll('a[data-issue-editor]')) link.hidden = !canManageIssues();
     for (const link of document.querySelectorAll('a[data-owner]')) link.hidden = member?.role !== 'owner';
     optionList(layout.elements.page, allowed, layout.elements.page.value);
     optionList(seriesForm.elements.sector, allowed.filter(([key]) => key !== 'home'), seriesForm.elements.sector.value);
@@ -184,6 +186,52 @@ document.addEventListener('evere:member', (event) => {
     if (member) selectView();
 });
 window.addEventListener('hashchange', selectView);
+
+const issueManagementForm = ui('issue-management-form');
+const issueManagementRows = ui('issue-management-rows');
+const canManageIssues = () => ['owner', 'director'].includes(member?.role);
+let managedIssueRequest = 0;
+
+async function loadManagedIssues() {
+    const request = ++managedIssueRequest;
+    if (!canManageIssues()) return;
+    const entries = value(await supabase.from('evere_issues')
+        .select('issue_number,title,evere_articles(count)').order('issue_number'));
+    if (request !== managedIssueRequest || !canManageIssues()) return;
+    const rows = entries.map(issue => {
+        const row = document.createElement('tr');
+        row.insertCell().textContent = issue.issue_number;
+        const title = row.insertCell();
+        title.className = 'queue-title';
+        title.textContent = issue.title;
+        const count = issue.evere_articles?.[0]?.count ?? 0;
+        row.insertCell().textContent = count.toLocaleString('ko-KR') + '건';
+        return row;
+    });
+    if (!rows.length) {
+        const row = document.createElement('tr');
+        const empty = row.insertCell();
+        empty.colSpan = 3;
+        empty.className = 'queue-empty';
+        empty.textContent = '등록된 이슈가 없습니다.';
+        rows.push(row);
+    }
+    issueManagementRows.replaceChildren(...rows);
+}
+
+issueManagementForm.addEventListener('submit', task(async () => {
+    if (!canManageIssues()) return;
+    const input = issueManagementForm.elements.title;
+    const title = input.value.trim();
+    if (!title) { notify('이슈 이름을 입력해 주세요.', true); input.focus(); return; }
+    const { error } = await supabase.from('evere_issues').insert({ title });
+    if (error?.code === '23505') { notify('같은 이름의 이슈가 있습니다.', true); return; }
+    if (error) throw error;
+    issueManagementForm.reset();
+    document.dispatchEvent(new CustomEvent('evere:issues-change'));
+    notify('새 이슈를 등록했습니다.');
+    await loadManagedIssues().catch(() => notify('이슈를 등록했습니다. 목록을 다시 불러오려면 화면을 다시 열어 주세요.', true));
+}));
 
 let seriesRequest = 0;
 const editableSeriesSectors = () => editablePages().filter(([key]) => key !== 'home');
