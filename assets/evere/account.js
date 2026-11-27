@@ -23,6 +23,11 @@ const articleForm = ui('article-form');
 const articleDialog = ui('article-dialog');
 const statusFilter = ui('newsroom-status-filter');
 let listState = '';
+let listSearch = '';
+const editorId = articleDialog && new URLSearchParams(location.search).get('edit');
+const editorWindow = Boolean(editorId && /^[\da-f]{8}-(?:[\da-f]{4}-){3}[\da-f]{12}$/i.test(editorId));
+const articleChanges = articleDialog && typeof BroadcastChannel !== 'undefined'
+    ? new BroadcastChannel('evere-newsroom-articles') : null;
 let articleListRequest = 0;
 let dialogRequest = 0;
 let dialogEditor;
@@ -350,7 +355,12 @@ function articleEditor(article, contentOnly) {
     form.elements.sector.addEventListener('change', () => setCategories(form));
     const state = stateButtons(article.editorial_state, contentOnly ? authorStates : allStates);
     form.querySelector('.compose-heading').after(state.field);
-    form.querySelector('button[type="submit"]').textContent = '수정 저장';
+    form.id = 'article-edit-form';
+    const save = form.querySelector('button[type="submit"]');
+    save.id = 'article-dialog-save';
+    save.textContent = '수정 저장';
+    save.setAttribute('form', form.id);
+    ui('article-dialog-public').after(save);
     form.addEventListener('submit', handle(async () => {
         const nextState = state.value;
         if (!await editor.save(async (fields) => {
@@ -367,9 +377,7 @@ function articleEditor(article, contentOnly) {
             result(await supabase.from('evere_articles').update({ ...fields, editorial_state: nextState })
                 .eq('id', article.id).select('id').single());
         })) return;
-        articleDialog.close();
-        await loadArticles();
-        message('기사를 수정했습니다.');
+        await finishArticleChange('기사를 수정했습니다.');
     }));
     return form;
 }
@@ -427,13 +435,28 @@ function commentPanel(article) {
     return details;
 }
 
+async function finishArticleChange(text) {
+    articleChanges?.postMessage('changed');
+    if (editorWindow) {
+        message(text);
+        window.close();
+        articleDialog.close();
+        return;
+    }
+    articleDialog.close();
+    await loadArticles();
+    message(text);
+}
+
 async function openArticle(id) {
     const request = ++dialogRequest;
     const content = ui('article-dialog-content');
     const publicLink = ui('article-dialog-public');
+    ui('article-dialog-save')?.remove();
     publicLink.hidden = true;
     publicLink.removeAttribute('href');
     content.replaceChildren();
+    if (editorWindow) document.body.classList.add('newsroom-editor-window');
     articleDialog.showModal();
     message('기사를 불러오는 중입니다.');
     try {
@@ -463,9 +486,7 @@ async function openArticle(id) {
             actions.append(actionButton('기사 삭제', async () => {
                 if (!window.confirm('이 기사와 댓글을 삭제할까요?')) return;
                 result(await supabase.from('evere_articles').delete().eq('id', id).select('id').single());
-                articleDialog.close();
-                await loadArticles();
-                message('기사를 삭제했습니다.');
+                await finishArticleChange('기사를 삭제했습니다.');
             }));
         }
         if (actions.childElementCount) content.append(actions);
@@ -489,16 +510,22 @@ function articleRow(article) {
     const time = element('time', queueDate.format(new Date(article.created_at)));
     time.dateTime = article.created_at;
     date.append(time);
-    const action = element('td');
-    const view = element('button', '보기');
-    view.type = 'button';
-    view.setAttribute('aria-label', article.title + ' 보기');
-    view.addEventListener('click', () => void openArticle(article.id));
-    action.append(view);
     const title = element('td', '', 'queue-title');
-    setArticleTitle(title, article.title, article.article_label);
+    const link = element('a');
+    link.href = '/newsroom/?edit=' + encodeURIComponent(article.id);
+    link.target = '_blank';
+    link.rel = 'noopener';
+    setArticleTitle(link, article.title, article.article_label);
+    link.addEventListener('click', event => {
+        if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        const popup = window.open(link.href, '_blank', 'popup,width=1120,height=860');
+        if (popup) popup.opener = null;
+        else void openArticle(article.id);
+    });
+    title.append(link);
     row.append(status, element('td', sectors[article.sector]), title,
-        element('td', displayName(article.created_by)), manuscript, date, action);
+        element('td', displayName(article.created_by)), manuscript, date);
     return row;
 }
 
@@ -562,11 +589,23 @@ async function loadArticles(offset = articleOffset) {
     let query = supabase.from('evere_articles').select('id,title,article_label,body,sector,editorial_state,created_by,created_at', { count: 'exact' });
     const request = ++articleListRequest;
     if (listState) query = query.eq('editorial_state', listState);
+    if (listSearch) {
+        const term = listSearch.toLocaleLowerCase('ko-KR');
+        const authors = members.filter(entry => entry.display_name.toLocaleLowerCase('ko-KR').includes(term))
+            .map(entry => entry.id);
+        const pattern = '%' + listSearch.replace(/[\\%_]/g, '\\$&') + '%';
+        if (authors.length) {
+            const quoted = '"' + pattern.replace(/["\\]/g, '\\$&') + '"';
+            query = query.or('title.ilike.' + quoted + ',created_by.in.(' + authors.join(',') + ')');
+        } else {
+            query = query.ilike('title', pattern);
+        }
+    }
     const response = await query.order('created_at', { ascending: false }).order('id').range(offset, offset + limit - 1);
     if (request !== articleListRequest) return false;
     const articles = result(response);
     const pages = Math.ceil(response.count / limit);
-    if (!offset && !listState) renderWorkspaceSummary(articles, response.count ?? 0);
+    if (!offset && !listState && !listSearch) renderWorkspaceSummary(articles, response.count ?? 0);
     const lastOffset = Math.max(0, pages - 1) * limit;
     if (offset > lastOffset) return loadArticles(lastOffset);
     articleOffset = offset;
@@ -574,8 +613,8 @@ async function loadArticles(offset = articleOffset) {
     table.replaceChildren(...articles.slice(0, limit).map(articleRow));
     if (!articles.length) {
         const row = element('tr');
-        const empty = element('td', '표시할 기사가 없습니다.', 'queue-empty');
-        empty.colSpan = 7;
+        const empty = element('td', listSearch ? '검색 결과가 없습니다.' : '표시할 기사가 없습니다.', 'queue-empty');
+        empty.colSpan = 6;
         row.append(empty);
         table.append(row);
     }
@@ -605,7 +644,8 @@ async function refresh() {
         await refreshMembers();
         if (ui('profile-settings').tagName !== 'DETAILS') void loadProfile().catch((error) => message(getError(error), true));
         if (headerAvatar) void loadAvatar(member.id).catch(() => {});
-        if (articleForm) await loadArticles();
+        if (editorWindow) await openArticle(editorId);
+        else if (articleForm) await loadArticles();
     } else {
         if (memberForm) {
             memberTableRequest++;
@@ -736,6 +776,24 @@ if (articleForm && memberForm) {
         loadArticles().catch((error) => message(getError(error), true));
     }
     clearStatus.addEventListener('click', () => changeFilter(''));
+    const search = ui('article-queue-search');
+    search.addEventListener('submit', handle(async () => {
+        listSearch = search.elements.keyword.value.trim();
+        articleOffset = 0;
+        await loadArticles(0);
+    }));
+    ui('article-queue-clear').addEventListener('click', handle(async () => {
+        search.reset();
+        listSearch = '';
+        articleOffset = 0;
+        await loadArticles(0);
+        search.elements.keyword.focus();
+    }));
+    articleChanges?.addEventListener('message', ({ data }) => {
+        if (data === 'changed' && !editorWindow && member && member.role !== 'citizen') {
+            loadArticles().catch(error => message(getError(error), true));
+        }
+    });
     const writeSubmit = articleForm.querySelector('button[type="submit"]');
     const writeState = stateButtons('complete', authorStates, value => {
         writeSubmit.textContent = value === 'draft' ? '작성중 저장' : '승인 요청';
@@ -743,13 +801,18 @@ if (articleForm && memberForm) {
     articleForm.querySelector('.compose-heading').after(writeState.field);
     const isSaving = () => Boolean(articleDialog.querySelector('form[inert]'));
     ui('article-dialog-close').addEventListener('click', () => {
-        if (!isSaving()) articleDialog.close();
+        if (isSaving()) return;
+        if (editorWindow) window.close();
+        articleDialog.close();
     });
     articleDialog.addEventListener('cancel', (event) => {
         if (isSaving()) event.preventDefault();
+        else if (editorWindow) window.close();
     });
     articleDialog.addEventListener('close', () => {
         dialogRequest++;
+        if (editorWindow) document.body.classList.remove('newsroom-editor-window');
+        ui('article-dialog-save')?.remove();
         dialogEditor?.reset();
         dialogEditor = null;
         ui('article-dialog-content').replaceChildren();

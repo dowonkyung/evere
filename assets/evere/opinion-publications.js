@@ -1,5 +1,6 @@
 import { articleListPicture, loadArticleListPhotos, renderMajorArticles } from './article-list-media.js';
 import { setArticleTitle } from './article-label.js';
+import { articleCategories } from './article-taxonomy.js?v=wiki-culture-1';
 import { requestedSeries, seriesFor } from './series.js';
 
 const main = document.querySelector('main');
@@ -8,10 +9,11 @@ const list = main.querySelector('#recentList');
 const contents = list.closest('section.contents');
 let rows = [];
 const series = requestedSeries();
+const categoryNames = new Map(articleCategories.opinion);
 const dateFormat = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' });
 
 try {
-    const { publishedFeed } = await import('./published-feed.js?v=article-thumbs-1');
+    const { publishedFeed } = await import('./published-feed.js?v=opinion-series-name-1');
     rows = await publishedFeed('opinion', category, series, { all: true });
     if (series) {
         const name = (await seriesFor('opinion')).find(({ id }) => id === series)?.title || '기획·연재';
@@ -32,6 +34,9 @@ try {
         const link = document.createElement('a');
         link.href = entry.href;
         setArticleTitle(link, entry.title, entry.article_label);
+        const label = entry.seriesTitle?.trim() || categoryNames.get(entry.category);
+        const prefix = label && '[' + label + ']';
+        if (prefix && !entry.title.startsWith(prefix)) link.prepend(prefix + ' ');
         const description = document.createElement('p');
         description.className = 'desc';
         description.textContent = entry.summary;
