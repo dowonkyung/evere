@@ -9,9 +9,9 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="/assets/evere/pretendard-hanja.css?v=1">
   <link rel="stylesheet" href="/assets/evere/account.css?v=pretendard-hanja-1">
-  <link rel="stylesheet" href="/assets/evere/newsroom.css?v=issue-management-1">
+  <link rel="stylesheet" href="/assets/evere/newsroom.css?v=compose-topic-fields-1">
   <link rel="stylesheet" href="/assets/evere/article-audio.css?v=1">
-  <script type="module" src="/assets/evere/account.js?v=issue-management-1"></script>
+  <script type="module" src="/assets/evere/account.js?v=compose-topic-fields-1"></script>
   <link rel="stylesheet" href="/assets/evere/newsroom-press.css?v=5">
   <script type="module" src="/assets/evere/newsroom.js?v=issue-management-1"></script>
 <script type="module" src="/assets/evere/route-init.js?v=wiki-culture-1"></script>
@@ -114,14 +114,10 @@
                 <div class="compose-section-fields">
                   <label>1차 섹션<select name="sector" required></select></label>
                   <label>2차 섹션<select name="category"></select></label>
-                  <label>기획·연재<select name="series"><option value="">선택 안 함</option></select></label>
                 </div>
-                <div class="compose-section-fields">
+                <div class="compose-section-fields compose-topic-fields">
+                  <label>기획·연재<select name="series"><option value="">선택 안 함</option></select></label>
                   <label>이슈<select name="issue"><option value="">선택 안 함</option></select></label>
-                  <div class="compose-issue-create" data-issue-create hidden>
-                    <label>새 이슈 이름<input name="issueTitle" maxlength="100"></label>
-                    <button type="button" data-add-issue>이슈 추가</button>
-                  </div>
                 </div>
                 <div class="compose-section-fields" role="group" aria-label="지면 정보">
                   <label>호수<input name="printIssue" inputmode="numeric" maxlength="10" placeholder="예: 12"></label>

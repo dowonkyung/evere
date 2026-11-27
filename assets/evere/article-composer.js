@@ -94,10 +94,8 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
     let seriesRequest = 0;
     let selectedSeries = article?.series_id || '';
     const issue = form.elements.issue;
-    const issueTitle = form.elements.issueTitle;
     let selectedIssue = article?.issue_id || '';
     let issueRequest = 0;
-    let issueSaving = false;
     let allowsOmission = false;
 
     const label = form.elements.articleLabel;
@@ -157,7 +155,7 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
         } catch {
             if (request === seriesRequest) notify('기획·연재 분류를 불러오지 못했습니다. 다시 시도해 주세요.');
         } finally {
-            if (request === seriesRequest) series.disabled = false;
+            if (request === seriesRequest) series.disabled = contentOnly;
         }
     }
     series.addEventListener('change', () => { selectedSeries = series.value; });
@@ -177,37 +175,6 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
     }
 
     issue.addEventListener('change', () => { selectedIssue = issue.value; });
-    const addIssue = find('[data-add-issue]');
-    addIssue.addEventListener('click', async () => {
-        if (issue.disabled || issueSaving) return;
-        const title = issueTitle.value.trim();
-        if (!title) { notify('이슈 이름을 입력해 주세요.'); issueTitle.focus(); return; }
-        const request = issueRequest;
-        issueSaving = addIssue.disabled = true;
-        try {
-            const { data, error } = await supabase.from('evere_issues').insert({ title }).select('id,title').single();
-            if (request !== issueRequest) return;
-            if (error) {
-                notify(error.code === '23505' ? '같은 이름의 이슈가 있습니다.' : '이슈를 추가하지 못했습니다.');
-                return;
-            }
-            selectedIssue = data.id;
-            issue.prepend(new Option(data.title, data.id));
-            issue.value = selectedIssue;
-            issueTitle.value = '';
-            notify();
-        } catch {
-            if (request === issueRequest) notify('이슈를 추가하지 못했습니다.');
-        } finally {
-            issueSaving = addIssue.disabled = false;
-        }
-    });
-    issueTitle.addEventListener('keydown', event => {
-        if (event.key === 'Enter' && !event.isComposing) {
-            event.preventDefault();
-            addIssue.click();
-        }
-    });
 
     function displayName(id) {
         return people.find((person) => person.id === id)?.display_name || '이브레 기자';
@@ -708,7 +675,6 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
             }
             member = current;
             people = members;
-            find('[data-issue-create]').hidden = !['owner', 'director'].includes(member.role);
             void refreshIssues();
             refreshOmission(!article || (!byline.length && !guests.length));
             void refreshSeries();
@@ -742,8 +708,7 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
             notify();
         },
         async save(commit) {
-            if (saving || issueSaving || (!contentOnly && series.disabled)) return false;
-            if (issueTitle.value.trim()) { notify('새 이슈 이름 옆의 추가 버튼을 눌러 주세요.'); return false; }
+            if (saving || (!contentOnly && series.disabled)) return false;
             notify();
             const body = editor.innerText.trim();
             const safe = document.createElement('div');

@@ -503,7 +503,8 @@
 #home-memorial-status:empty { display: none; }
 #home-memorial-status[data-error="true"] { color: #b42318; }
 
-.compose-issue-create { display: flex; flex-wrap: wrap; align-items: end; gap: 8px; }
+.compose-topic-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.compose-topic-fields select { min-width: 0; }
 
 #issue-management-form { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 12px; }
 #issue-management-form > * { margin: 0; }
