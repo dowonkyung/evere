@@ -61,7 +61,7 @@ function result(response) {
 
 function getError(error) {
     if (['user_already_exists', 'email_exists'].includes(error.code)) return '이미 등록된 이메일입니다. 로그인해 주세요.';
-    if (error.code === 'EV002') return '기사가 더 이상 작성중 상태가 아닙니다. 목록을 새로고침해 주세요.';
+    if (error.code === 'EV002') return '작성자가 수정할 수 있는 상태가 아닙니다. 목록을 새로고침해 주세요.';
     if (error.code === 'EV001') return '삭제된 이브레 계정입니다.';
     if (error.code === 'weak_password') return '비밀번호가 보안 요건을 충족하지 않습니다.';
     if (error.code === 'email_not_confirmed') return '이메일 인증을 마친 뒤 로그인해 주세요.';
@@ -466,8 +466,8 @@ async function openArticle(id) {
         if (!articleDialog.open || request !== dialogRequest) return;
         ui('article-dialog-title').textContent = article.title;
         const editorialAccess = canEdit(article.sector);
-        const ownDraft = article.created_by === member.id && article.editorial_state === 'draft' && article.status === 'pending';
-        if (editorialAccess || ownDraft) {
+        const ownEditableArticle = article.created_by === member.id && authorStates.has(article.editorial_state) && article.status === 'pending';
+        if (editorialAccess || ownEditableArticle) {
             content.append(articleEditor(article, !editorialAccess));
         } else {
             const copy = element('div', '', 'article-body');
@@ -795,9 +795,11 @@ if (articleForm && memberForm) {
         }
     });
     const writeSubmit = articleForm.querySelector('button[type="submit"]');
-    const writeState = stateButtons('complete', authorStates, value => {
-        writeSubmit.textContent = value === 'draft' ? '작성중 저장' : '승인 요청';
-    });
+    function updateWriteSubmit(state) {
+        writeSubmit.textContent = state === 'draft' ? '작성중 저장' : '승인 요청';
+    }
+    const writeState = stateButtons('draft', authorStates, updateWriteSubmit);
+    updateWriteSubmit(writeState.value);
     articleForm.querySelector('.compose-metadata').prepend(writeState.field);
     const isSaving = () => Boolean(articleDialog.querySelector('form[inert]'));
     ui('article-dialog-close').addEventListener('click', () => {
@@ -937,8 +939,8 @@ if (articleForm && memberForm) {
             result(await supabase.from('evere_articles').insert({ ...fields, editorial_state: state }));
         })) return;
         compose.reset();
-        writeState.select('complete');
-        writeSubmit.textContent = '승인 요청';
+        writeState.select('draft');
+        updateWriteSubmit(writeState.value);
         setCategories(articleForm);
         articleOffset = 0;
         await loadArticles();
