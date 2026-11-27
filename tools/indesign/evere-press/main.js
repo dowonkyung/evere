@@ -72,9 +72,9 @@ function options(select, rows, selected) {
 
 async function loadIssues() {
     const previous = selectedNumber(get('issue'), issues.map(row => row.issue));
-    issues = await (await request('/rest/v1/evere_press_issues?select=issue,publication_date,page_count&order=publication_date.desc,issue.desc')).json();
+    issues = await (await request('/rest/v1/evere_press_issues?select=issue,publication_date,page_count,is_extra&order=publication_date.desc,issue.desc')).json();
     const selected = issues.some(row => row.issue === previous) ? previous : issues[0]?.issue;
-    options(get('issue'), issues.map(row => [row.issue, row.issue + '호 · ' + row.publication_date]), selected);
+    options(get('issue'), issues.map(row => [row.issue, (row.is_extra ? '호외' : row.issue + '호') + ' · ' + row.publication_date]), selected);
     get('issue').disabled = !issues.length;
     await loadPages(selected);
 }
@@ -217,7 +217,7 @@ async function openPage(row) {
         doc.addEventListener('beforeClose', () => {
             setTimeout(() => { if (!doc.isValid) releaseClosedDocument(id,state); }, 1000);
         });
-        report(row.issue + '호 ' + row.page + '면을 열었습니다.');
+        report((issues.find(edition => edition.issue === row.issue)?.is_extra ? '호외' : row.issue + '호') + ' ' + row.page + '면을 열었습니다.');
     } catch (error) {
         await changeWork(row,'release',lease).catch(() => {});
         throw error;
@@ -290,7 +290,7 @@ async function sync(state, bytes, jpeg) {
     if (!saved.length) throw new Error('다른 편집자가 먼저 저장했습니다. 로컬 문서를 보관한 뒤 최신 파일을 다시 열어 주세요.');
     state.row = saved[0];
     await loadPages(activeIssue());
-    report(issue + '호 ' + page + '면 웹 동기화 완료 · 버전 ' + state.row.revision);
+    report((issues.find(edition => edition.issue === issue)?.is_extra ? '호외' : issue + '호') + ' ' + page + '면 웹 동기화 완료 · 버전 ' + state.row.revision);
 }
 
 let snapshotNumber = 0;

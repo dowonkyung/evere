@@ -10,7 +10,8 @@ const pageFilter = byId('page-filter');
 const gallery = byId('gallery');
 let generation = 0;
 let issueGeneration = 0;
-let issueDates = new Map();
+let issuePlans = new Map();
+const editionLabel = row => row.is_extra ? '호외' : row.issue + '호';
 let canFinalize = false;
 
 function result(response) {
@@ -25,11 +26,12 @@ function notify(message = '') {
 async function listIssues(preferred = issueSelect.value) {
     const request = ++issueGeneration;
     const rows = result(await supabase.from('evere_press_issues')
-        .select('issue,publication_date,page_count').order('publication_date', { ascending: false }).order('issue', { ascending: false }));
+        .select('issue,publication_date,page_count,is_extra').order('publication_date', { ascending: false }).order('issue', { ascending: false }));
     if (request !== issueGeneration) return;
-    issueDates = new Map(rows.map(row => [String(row.issue), row.publication_date]));
+    issuePlans = new Map(rows.map(row => [String(row.issue), row]));
+    byId('edit-plan').disabled = !rows.length;
     issueSelect.replaceChildren(...rows.map(row => new Option(
-        row.issue + '호 · ' + row.publication_date + ' · ' + row.page_count + '면', row.issue
+        editionLabel(row) + ' · ' + row.publication_date + ' · ' + row.page_count + '면', row.issue
     )));
     if (rows.some(row => String(row.issue) === String(preferred))) issueSelect.value = preferred;
     await listPages();
@@ -38,7 +40,8 @@ async function listIssues(preferred = issueSelect.value) {
 async function listPages() {
     const request = ++generation;
     const issue = issueSelect.value;
-    const date = issueDates.get(issue);
+    const edition = issuePlans.get(issue);
+    const date = edition?.publication_date;
     byId('heading').textContent = date ? '지면 모니터링 (' + Number(date.slice(5, 7)) + '월 ' + Number(date.slice(8, 10)) + '일자)' : '지면 모니터링';
     const pages = issue === '' ? [] : result(await supabase.from('evere_press_pages')
         .select('issue,page,revision,source_path,preview_path,updated_at,evere_press_work(editor_name,expires_at,finalized_at)').eq('issue', issue).order('page'));
@@ -58,7 +61,7 @@ async function listPages() {
         const finalized = Boolean(work?.finalized_at);
         card.dataset.finalized = String(Boolean(work?.finalized_at));
         const title = document.createElement('strong');
-        title.textContent = row.issue + '호 ' + row.page + '면';
+        title.textContent = editionLabel(edition || row) + ' ' + row.page + '면';
         const thumb = document.createElement('span');
         thumb.className = 'press-page-thumb';
         if (preview) {
@@ -118,24 +121,28 @@ async function listPages() {
     notify(pages.length ? '' : '등록된 발행 계획이 없습니다.');
 }
 
-function handle(form, work) {
+function handle(form, work, errorStatus = notify) {
     form.addEventListener('submit', async event => {
         event.preventDefault();
         const button = form.querySelector('button[type="submit"]');
         button.disabled = true;
         try { await work(); }
-        catch (error) { notify(error.message); }
+        catch (error) { errorStatus(error.message); }
         finally { button.disabled = false; }
     });
 }
 
 handle(plan, async () => {
     const fields = new FormData(plan);
-    const issue = Number(fields.get('issue'));
-    result(await supabase.rpc('evere_create_press_issue', {
-        p_issue: issue, p_date: fields.get('date'), p_pages: Number(fields.get('pages'))
-    }));
+    const values = { p_date: fields.get('date'), p_pages: Number(fields.get('pages')) };
+    let issue = Number(fields.get('issue'));
+    if (fields.get('kind') === 'extra') {
+        issue = result(await supabase.rpc('evere_create_extra_press_issue', values));
+    } else {
+        result(await supabase.rpc('evere_create_press_issue', { ...values, p_issue: issue }));
+    }
     plan.reset();
+    syncPlanKind();
     await listIssues(issue);
 });
 const refresh = work => () => work().catch(error => notify(error.message));
@@ -146,5 +153,85 @@ pageFilter.onchange = refresh(listPages);
 export function showPress(member) {
     canFinalize = ['owner','director'].includes(member.role);
     plan.hidden = !canFinalize;
+    byId('edit-plan').hidden = !canFinalize;
     refresh(listIssues)();
 }
+
+function syncPlanKind() {
+    const extra = plan.elements.kind.value === 'extra';
+    plan.querySelector('[data-press-issue-number]').hidden = extra;
+    plan.elements.issue.disabled = extra;
+}
+plan.elements.kind.addEventListener('change', syncPlanKind);
+syncPlanKind();
+
+const editDialog = byId('edit-dialog');
+const editForm = byId('edit-form');
+const removalFields = byId('remove-pages');
+const removalOptions = byId('remove-options');
+const editStatus = byId('edit-status');
+let editingPlan = null;
+
+function requiredRemovals() {
+    const count = editForm.elements.pages.valueAsNumber;
+    return Number.isInteger(count) && count >= 1 && count <= 200
+        ? Math.max(0, editingPlan.page_count - count) : 0;
+}
+
+function selectedRemovals() {
+    return [...removalOptions.querySelectorAll('input:checked')].map(input => Number(input.value));
+}
+
+function syncRemovalFields() {
+    const required = requiredRemovals();
+    removalFields.hidden = !required;
+    if (!required) for (const input of removalOptions.querySelectorAll('input:checked')) input.checked = false;
+    byId('remove-counter').textContent = '삭제할 면 ' + required + '개 중 ' + selectedRemovals().length + '개 선택';
+}
+
+byId('edit-plan').onclick = () => {
+    editingPlan = issuePlans.get(issueSelect.value);
+    if (!canFinalize || !editingPlan) return;
+    byId('edit-title').textContent = editionLabel(editingPlan) + ' 발행 계획 수정';
+    editForm.elements.date.value = editingPlan.publication_date;
+    editForm.elements.pages.value = editingPlan.page_count;
+    editStatus.textContent = '';
+    const checks = Array.from({ length: editingPlan.page_count }, (_, index) => {
+        const label = document.createElement('label');
+        const check = document.createElement('input');
+        check.type = 'checkbox';
+        check.value = index + 1;
+        label.append(check, (index + 1) + '면');
+        return label;
+    });
+    removalOptions.replaceChildren(...checks);
+    syncRemovalFields();
+    editDialog.showModal();
+};
+editForm.elements.pages.addEventListener('input', syncRemovalFields);
+removalOptions.addEventListener('change', syncRemovalFields);
+const editSave = editForm.querySelector('[type="submit"]');
+editDialog.addEventListener('cancel', event => { if (editSave.disabled) event.preventDefault(); });
+editDialog.querySelector('form[method="dialog"]').addEventListener('submit', event => {
+    if (editSave.disabled) event.preventDefault();
+});
+
+handle(editForm, async () => {
+    if (!editingPlan || !canFinalize) return;
+    const removed = selectedRemovals();
+    if (removed.length !== requiredRemovals()) {
+        editStatus.textContent = '줄어드는 면수만큼 삭제할 면을 선택해 주세요.';
+        return;
+    }
+    if (removed.length && !window.confirm(removed.map(page => page + '면').join(', ') +
+        '을 발행 계획에서 삭제할까요? 남은 면은 순서대로 다시 번호가 매겨집니다.')) return;
+    const issue = editingPlan.issue;
+    editStatus.textContent = '저장 중입니다.';
+    result(await supabase.rpc('evere_update_press_issue', {
+        p_issue: issue, p_expected_date: editingPlan.publication_date, p_expected_count: editingPlan.page_count,
+        p_date: editForm.elements.date.value, p_pages: editForm.elements.pages.valueAsNumber, p_remove: removed,
+    }));
+    editDialog.close();
+    pageFilter.value = '';
+    await listIssues(issue).catch(() => notify('계획을 저장했습니다. 목록을 새로고침해 주세요.'));
+}, message => { editStatus.textContent = message; });

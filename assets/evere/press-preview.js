@@ -29,13 +29,13 @@ async function load() {
     const { data: auth, error: authError } = await supabase.auth.getSession();
     if (authError || !auth.session) throw new Error('뉴스룸에 로그인한 뒤 지면 창을 열어 주세요.');
     const [edition, proof] = await Promise.all([
-        supabase.from('evere_press_issues').select('publication_date').eq('issue',issue).maybeSingle(),
+        supabase.from('evere_press_issues').select('publication_date,is_extra').eq('issue',issue).maybeSingle(),
         supabase.from('evere_press_pages').select('revision,source_path,preview_path').eq('issue',issue).eq('page',page).maybeSingle()
     ]);
     if (edition.error || proof.error) throw new Error('지면 정보를 불러오지 못했습니다.');
     if (!edition.data || !proof.data) throw new Error('이 지면을 볼 권한이 없거나 등록된 지면이 없습니다.');
     const date = edition.data.publication_date;
-    const title = Number(date.slice(5,7)) + '월 ' + Number(date.slice(8,10)) + '일자 · 이브레 ' + issue + '호 ' + page + '면';
+    const title = Number(date.slice(5,7)) + '월 ' + Number(date.slice(8,10)) + '일자 · 이브레 ' + (edition.data.is_extra ? '호외' : issue + '호') + ' ' + page + '면';
     get('title').textContent = title;
     document.title = title + ' | 지면 미리보기';
     image.alt = title;

@@ -25,3 +25,9 @@ a.press-page:hover, a.press-page:focus-visible { border-color: #4c70e8; box-shad
 .press-finalize { min-height: 30px; padding: 4px 8px; border: 1px solid #d5deea; border-radius: 6px; background: #fff; color: #284a9c; font: inherit; font-size: 12px; cursor: pointer; }
 .press-finalize:disabled { color: #59657a; cursor: default; }
 .press-finalize:hover:not(:disabled) { background: #eef3ff; }
+
+#press-edit-dialog { width: min(550px, calc(100% - 24px)); }
+#press-edit-form { padding: 18px; }
+#press-edit-status:empty { display: none; }
+#press-remove-options { display: grid; grid-template-columns: repeat(auto-fill, minmax(66px, 1fr)); gap: 8px; max-height: 220px; overflow-y: auto; }
+#press-remove-options label { display: flex; align-items: center; gap: 6px; }

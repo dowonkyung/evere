@@ -12,8 +12,8 @@
   <link rel="stylesheet" href="/assets/evere/newsroom.css?v=compose-topic-fields-1">
   <link rel="stylesheet" href="/assets/evere/article-audio.css?v=1">
   <script type="module" src="/assets/evere/account.js?v=compose-topic-fields-1"></script>
-  <link rel="stylesheet" href="/assets/evere/newsroom-press.css?v=5">
-  <script type="module" src="/assets/evere/newsroom.js?v=memorial-counts-1"></script>
+  <link rel="stylesheet" href="/assets/evere/newsroom-press.css?v=press-plan-edit-1">
+  <script type="module" src="/assets/evere/newsroom.js?v=press-plan-edit-1"></script>
 <script type="module" src="/assets/evere/route-init.js?v=wiki-culture-1"></script>
   <link rel="stylesheet" href="/assets/evere/newsroom-workspace.css?v=brand-title-size-1">
 </head>
@@ -335,7 +335,8 @@
         <section data-panel="press" hidden>
           <h1 id="press-heading">지면 모니터링</h1>
           <form id="press-plan" class="press-controls" hidden>
-            <label>호수 <input name="issue" type="number" min="0" max="2147483647" required></label>
+            <label>구분 <select name="kind"><option value="regular">정규호</option><option value="extra">호외</option></select></label>
+            <label data-press-issue-number>호수 <input name="issue" type="number" min="0" max="2147483647" required></label>
             <label>발행일 <input name="date" type="date" required></label>
             <label>면수 <input name="pages" type="number" min="1" max="200" required></label>
             <button type="submit">발행 계획 등록</button>
@@ -343,10 +344,28 @@
           <div class="press-controls press-toolbar">
             <label>발행 계획 <select id="press-issue"></select></label>
             <label>면 <select id="press-page-filter"><option value="">전면</option></select></label>
+            <button type="button" id="press-edit-plan" hidden>발행 계획 수정</button>
             <button type="button" id="press-refresh">새로고침</button>
           </div>
           <p id="press-status" role="status"></p>
           <div id="press-gallery" class="press-gallery"></div>
+          <dialog id="press-edit-dialog" class="article-dialog" aria-labelledby="press-edit-title">
+            <header>
+              <h2 id="press-edit-title">발행 계획 수정</h2>
+              <form method="dialog"><button>닫기</button></form>
+            </header>
+            <form id="press-edit-form">
+              <label>발행일 <input name="date" type="date" required></label>
+              <label>면수 <input name="pages" type="number" min="1" max="200" step="1" required></label>
+              <fieldset id="press-remove-pages" hidden>
+                <legend>삭제할 면</legend>
+                <p id="press-remove-counter"></p>
+                <div id="press-remove-options"></div>
+              </fieldset>
+              <button type="submit">변경 저장</button>
+              <p id="press-edit-status" role="status"></p>
+            </form>
+          </dialog>
         </section>
         <section data-panel="profile" hidden>
           <h1>내 프로필</h1>
