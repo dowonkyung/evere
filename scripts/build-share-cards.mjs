@@ -59,6 +59,8 @@ function card(html, path, { title = pageTitle(html), description = siteDescripti
     const fields = {
         'og:type': type, 'og:locale': 'ko_KR', 'og:site_name': '이브레',
         'og:url': url, 'og:title': title, 'og:description': description, 'og:image': thumbnail,
+        'og:image:secure_url': thumbnail,
+        'og:image:type': image.endsWith('.webp') ? 'image/webp' : image.endsWith('.png') ? 'image/png' : 'image/jpeg',
         'og:image:alt': image === logo ? '이브레 로고' : title,
     };
     if (image === logo) Object.assign(fields, { 'og:image:width': '1600', 'og:image:height': '837' });

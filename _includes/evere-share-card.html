@@ -1,0 +1,19 @@
+{% assign card_title = include.title | strip | split: ' | 이브레' | first %}
+{% assign card_path = page.url | default: '/' | replace: 'index.html', '' %}
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="이브레">
+<meta property="og:url" content="https://evere.saevit.online{{ card_path | escape }}">
+<meta property="og:title" content="{{ card_title | escape_once }}">
+<meta property="og:description" content="양심 있는 세상을 만드는 언론, 세계 최초 창업(주) 언론 이브레입니다.">
+<meta property="og:image" content="https://evere.saevit.online/assets/evere/share-default.png">
+<meta property="og:image:secure_url" content="https://evere.saevit.online/assets/evere/share-default.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1600">
+<meta property="og:image:height" content="837">
+<meta property="og:image:alt" content="이브레 로고">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ card_title | escape_once }}">
+<meta name="twitter:description" content="양심 있는 세상을 만드는 언론, 세계 최초 창업(주) 언론 이브레입니다.">
+<meta name="twitter:image" content="https://evere.saevit.online/assets/evere/share-default.png">
+<meta name="twitter:image:alt" content="이브레 로고">
