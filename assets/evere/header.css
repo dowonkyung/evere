@@ -407,3 +407,10 @@
     .evere-category-popup .etc li { flex-basis: 50%; }
     .evere-category-popup .etc .category-services li { padding-bottom: 12px; }
 }
+
+@media (min-width: 1024px) {
+    .header02 .evere-memorial-logo {
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
