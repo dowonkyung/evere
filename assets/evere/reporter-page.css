@@ -44,7 +44,7 @@
 }
 
 .evere-reporter .section_header_custom_wrap {
-    --reporter-sticky-top: 72px;
+    --reporter-sticky-top: 62px;
     position: relative; z-index: 4; box-sizing: border-box;
     min-height: 70px; padding: 20px 0 16px;
     border-bottom: 4px solid var(--evere-accent, #00B8B4);
