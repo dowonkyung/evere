@@ -9,11 +9,11 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="/assets/evere/pretendard-hanja.css?v=1">
   <link rel="stylesheet" href="/assets/evere/account.css?v=pretendard-hanja-1">
-  <link rel="stylesheet" href="/assets/evere/newsroom.css?v=series-table-number-1">
+  <link rel="stylesheet" href="/assets/evere/newsroom.css?v=memorial-1">
   <link rel="stylesheet" href="/assets/evere/article-audio.css?v=1">
   <script type="module" src="/assets/evere/account.js?v=author-byline-label-1"></script>
   <link rel="stylesheet" href="/assets/evere/newsroom-press.css?v=5">
-  <script type="module" src="/assets/evere/newsroom.js?v=series-table-number-1"></script>
+  <script type="module" src="/assets/evere/newsroom.js?v=memorial-1"></script>
 <script type="module" src="/assets/evere/route-init.js?v=wiki-culture-1"></script>
   <link rel="stylesheet" href="/assets/evere/newsroom-workspace.css?v=brand-title-size-1">
 </head>
@@ -258,7 +258,7 @@
             </div>
           </form>
           <section id="home-visual-editor" hidden aria-label="페이지 비주얼 편집">
-            <p>미리보기의 편집 버튼을 눌러 기사와 링크를 배치하세요.</p>
+            <p>미리보기에서 편집할 영역의 버튼을 누르세요.</p>
             <div class="home-preview-scroll"><iframe id="home-preview" title="페이지 편집 미리보기"></iframe></div>
           </section>
           <dialog id="home-placement-dialog" class="article-dialog" aria-labelledby="home-placement-title">
@@ -278,6 +278,17 @@
               <div class="dialog-actions"><button id="home-placement-save" type="button">배치 저장</button></div>
               <p id="home-placement-save-status" role="status"></p>
             </div>
+          </dialog>
+          <dialog id="home-memorial-dialog" class="article-dialog" aria-labelledby="memorial-editor-title">
+            <header>
+              <h2 id="memorial-editor-title">11.27 참사 희생자 집계</h2>
+              <form method="dialog"><button>닫기</button></form>
+            </header>
+            <form id="home-memorial-form">
+              <label>희생자 수<input name="count" type="number" min="0" max="2147483647" step="1" inputmode="numeric" required></label>
+              <div class="dialog-actions"><button type="submit">저장</button></div>
+              <p id="home-memorial-status" role="status" aria-live="polite"></p>
+            </form>
           </dialog>
           <dialog id="home-issues-dialog" class="article-dialog" aria-labelledby="home-issues-title">
             <header>

@@ -1,5 +1,6 @@
+import { loadMemorialCount } from './home-memorial.js?v=1';
 import { showPress } from './newsroom-press.js?v=7';
-import { configureHomeVisualEditor } from './newsroom-home-layout.js?v=opinion-visual-1';
+import { configureHomeVisualEditor } from './newsroom-home-layout.js?v=memorial-1';
 import { categoryPath } from './routes.js?v=wiki-culture-1';
 import { supabase } from './supabase.js';
 import { sectors, articleCategories } from './article-taxonomy.js?v=wiki-culture-1';
@@ -32,7 +33,7 @@ const slots = [...ui('layout-slots').querySelectorAll('select')];
 const showHomeVisualEditor = configureHomeVisualEditor(() => {
     const { page, category } = layout.elements;
     return page.value === 'home' || (page.value === 'opinion' && !category.value) ? page.value : '';
-}, openHomeIssues);
+}, openHomeIssues, openMemorialEditor);
 
 function sectionHeadLayout(page, category) {
     return page !== 'home' && page !== 'opinion' && category === '';
@@ -53,6 +54,62 @@ function configureLayoutSlots(page, category) {
     });
     return slots.slice(0, labels.length);
 }
+const memorialDialog = ui('home-memorial-dialog');
+const memorialForm = ui('home-memorial-form');
+const memorialInput = memorialForm.elements.count;
+const memorialSave = memorialForm.querySelector('[type="submit"]');
+let memorialRequest = 0;
+let memorialSaving = false;
+
+function memorialStatus(text, failed = false) {
+    const status = ui('home-memorial-status');
+    status.textContent = text;
+    status.dataset.error = String(failed);
+}
+
+async function openMemorialEditor() {
+    if (!['owner', 'director'].includes(member?.role) || memorialDialog.open) return;
+    const request = ++memorialRequest;
+    memorialForm.reset();
+    memorialInput.disabled = memorialSave.disabled = true;
+    memorialDialog.showModal();
+    memorialStatus('집계를 불러오는 중입니다.');
+    try {
+        const count = await loadMemorialCount();
+        if (request !== memorialRequest) return;
+        memorialInput.value = count ?? '';
+        memorialInput.disabled = memorialSave.disabled = false;
+        memorialStatus('');
+        memorialInput.focus();
+    } catch {
+        if (request === memorialRequest) memorialStatus('집계를 불러오지 못했습니다. 다시 열어 주세요.', true);
+    }
+}
+
+memorialDialog.addEventListener('close', () => { memorialRequest++; });
+memorialDialog.addEventListener('cancel', event => { if (memorialSaving) event.preventDefault(); });
+memorialDialog.querySelector('form[method="dialog"]').addEventListener('submit', event => {
+    if (memorialSaving) event.preventDefault();
+});
+memorialForm.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (memorialSave.disabled || !memorialForm.reportValidity() || !['owner', 'director'].includes(member?.role)) return;
+    const count = memorialInput.valueAsNumber;
+    memorialSaving = memorialSave.disabled = memorialInput.disabled = true;
+    memorialStatus('저장 중입니다.');
+    try {
+        value(await supabase.from('evere_home_memorial').update({ victim_count: count })
+            .eq('id', true).select('victim_count').single());
+        memorialDialog.close();
+        ui('home-preview').contentWindow.location.reload();
+        notify('희생자 수를 저장했습니다.');
+    } catch {
+        memorialStatus('저장하지 못했습니다. 다시 시도해 주세요.', true);
+    } finally {
+        memorialSaving = memorialSave.disabled = memorialInput.disabled = false;
+    }
+});
+
 const seriesForm = ui('series-form');
 const issuesForm = ui('home-issues-form');
 const issuesDialog = ui('home-issues-dialog');

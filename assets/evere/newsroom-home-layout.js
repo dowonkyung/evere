@@ -14,7 +14,7 @@ const opinionGroups = [
     { name: '칼럼', area: 'columns', category: 'column', slots: [1, 2, 3, 4, 5, 6], targets: ['#columns'] },
 ];
 
-export function configureHomeVisualEditor(selectedPage, openIssues) {
+export function configureHomeVisualEditor(selectedPage, openIssues, openMemorialEditor) {
     const ui = id => document.getElementById(id);
     const editor = ui('home-visual-editor');
     const frame = ui('home-preview');
@@ -233,7 +233,8 @@ export function configureHomeVisualEditor(selectedPage, openIssues) {
         `;
         doc.head.append(style);
         const regions = opinion ? opinionGroups.map(group => ({ ...group, open: () => openGroup(group) }))
-            : [{ name: '메인 이슈 링크', targets: ['.evere-home-issues'], open: () => openIssues() },
+            : [{ name: '11.27 참사 희생자 집계', targets: ['[data-home-memorial]'], open: openMemorialEditor },
+            { name: '메인 이슈 링크', targets: ['.evere-home-issues'], open: () => openIssues() },
             { name: '이벤트 링크', targets: ['[data-home-event-links-region]'], open: () => openIssues('event_links') },
             { name: '하단 바로가기', targets: ['[data-home-service-cards]'], open: () => openIssues('service_cards') },
             ...groups.map(group => ({ ...group, open: () => openGroup(group) }))];

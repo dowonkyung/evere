@@ -497,3 +497,8 @@
         outline-offset: -1px;
     }
 }
+
+#home-memorial-dialog { width: min(460px, calc(100% - 24px)); }
+#home-memorial-form { padding: 18px; }
+#home-memorial-status:empty { display: none; }
+#home-memorial-status[data-error="true"] { color: #b42318; }
