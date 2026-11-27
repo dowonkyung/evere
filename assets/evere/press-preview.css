@@ -1,5 +1,5 @@
 
-:root { font-family: 'Pretendard JP', sans-serif; font-feature-settings: "ss05"; color: #17243b; background: #edf0f5; }
+:root { font-family: 'Pretendard JP Hanja', 'Pretendard Variable', sans-serif; color: #17243b; background: #edf0f5; }
 * { box-sizing: border-box; }
 body { margin: 0; }
 [hidden] { display: none !important; }

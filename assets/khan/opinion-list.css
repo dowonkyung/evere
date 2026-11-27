@@ -80,7 +80,7 @@ section.contents div.date #datepicker-container { position: absolute; top: 53px;
 section.contents > div > .info { position: relative; border-top: 1px solid var(--stroke-separator); padding: 13px 0 14px; }
 /* section.contents > div > .info .selectbox {position: relative; width: 150px;}
 section.contents > div > .info .selectbox:after { content: ''; display: block; position: absolute; top: 8px; right: 8px; width: 16px; height: 16px; background: var(--svg-ic-arrow-down-16) no-repeat center; pointer-events: none; transform: rotate(0deg); transition: all 0.3s; }
-section.contents > div > .info .selectbox select { display: block; position: relative; width: 150px; padding: 7px 28px 7px 10px; color: var(--text-primary); font-size: 15px; font-weight: 600; line-height: 20px; border: 1px solid var(--stroke-framing); background: #fff; border-radius: 4px; appearance: none; outline: none; font-family: "Pretendard JP", sans-serif;}  */
+section.contents > div > .info .selectbox select { display: block; position: relative; width: 150px; padding: 7px 28px 7px 10px; color: var(--text-primary); font-size: 15px; font-weight: 600; line-height: 20px; border: 1px solid var(--stroke-framing); background: #fff; border-radius: 4px; appearance: none; outline: none; font-family: "Pretendard JP Hanja", "Pretendard Variable", sans-serif;}  */
 /* stamp select ui */
 section.contents > div > .info a.btn-select { display: block; position: relative; width: 150px; padding: 7px 28px 7px 10px; margin-right: 16px; color: var(--text-primary); font-size: 15px; font-weight: 600; line-height: 20px; border: 1px solid var(--stroke-framing); border-radius: 4px; cursor: pointer; }
 section.contents > div > .info a.btn-select::after { content: ''; display: block; position: absolute; top: 8px; right: 8px; width: 16px; height: 16px; background: var(--svg-ic-arrow-down-16) no-repeat center; transform: rotate(0deg); transition: all 0.3s; }
@@ -112,7 +112,7 @@ div.none p span { display: block; margin: 0 auto 16px; width: 60px; height: 60px
 div.none p em { color: var(--text-impact);}
 div.none ul { padding: 24px 0 16px; border-top: 1px solid var(--stroke-separator); }
 div.none li { padding-bottom: 8px; color: var(--text-description); font-size: 14px; font-weight: 600; line-height: 22px; }
-div.none button { border: 0; cursor: pointer; margin: 10px auto 0; display: block; height: 24px; font-size: 14px; font-weight: 600; line-height: 24px; color: var(--text-primary); font-family: 'Pretendard JP';}
+div.none button { border: 0; cursor: pointer; margin: 10px auto 0; display: block; height: 24px; font-size: 14px; font-weight: 600; line-height: 24px; color: var(--text-primary); font-family: 'Pretendard JP Hanja', 'Pretendard Variable';}
 div.none button.btn-reset { padding: 0 24px 0 0; background: var(--svg-ic-refresh) no-repeat right; }
 /* contents - left - pagination */
 section.contents div.page { padding: 20px 0 84px; }

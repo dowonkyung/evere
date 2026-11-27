@@ -1,4 +1,4 @@
-:root { color-scheme: light; font-family: 'Evere Ellipsis', 'Pretendard JP', sans-serif; font-feature-settings: "ss05"; --accent: #00b8b4; --rail: #123c3c; --canvas: #e7e7e7; --panel: #fff; --ink: #161616; --separator: #e5e5e5; --rail-width: 73px; }
+:root { color-scheme: light; font-family: 'Evere Ellipsis', 'Pretendard JP Hanja', 'Pretendard Variable', Pretendard, sans-serif; --accent: #00b8b4; --rail: #123c3c; --canvas: #e7e7e7; --panel: #fff; --ink: #161616; --separator: #e5e5e5; --rail-width: 73px; }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 body { margin: 0; line-height: 1.5; color: var(--ink); background: var(--canvas); }
