@@ -154,14 +154,15 @@ async function storeThumbnails(articles) {
 }
 
 const fingerprintPath = '/assets/evere/share-card-revision.txt';
-const [articleRevisions, series] = await Promise.all([
+const [articleRevisions, series, issues] = await Promise.all([
     rows('evere_articles', {
         select: 'article_number,published_at,modified_at',
         status: 'eq.published', article_number: 'not.is.null', order: 'article_number',
     }),
     rows('evere_series', { select: 'series_number,title', series_number: 'not.is.null', order: 'series_number' }),
+    rows('evere_issues', { select: 'issue_number,title', order: 'issue_number' }),
 ]);
-const fingerprint = createHash('sha256').update(JSON.stringify([articleRevisions, series])).digest('hex');
+const fingerprint = createHash('sha256').update(JSON.stringify([articleRevisions, series, issues])).digest('hex');
 
 if (process.argv.includes('--check')) {
     const deployed = await request(origin + fingerprintPath + '?check=' + Date.now()).catch(() => null);
@@ -193,6 +194,10 @@ await inBatches(series, 12, async entry => {
     });
     await writePage(path, template, { title: entry.title });
 });
+const issueTemplate = await readFile(join(root, 'issue/articles/index.html'), 'utf8');
+await inBatches(issues, 12, entry =>
+    writePage('/issue/articles/' + entry.issue_number, issueTemplate, { title: entry.title }));
+
 for (const [sector, categories] of Object.entries(articleCategories)) {
     const base = await readFile(join(root, sector, 'index.html'), 'utf8').catch(error => {
         if (error.code !== 'ENOENT') throw error;

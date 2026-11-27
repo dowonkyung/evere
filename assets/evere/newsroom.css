@@ -502,3 +502,5 @@
 #home-memorial-form { padding: 18px; }
 #home-memorial-status:empty { display: none; }
 #home-memorial-status[data-error="true"] { color: #b42318; }
+
+.compose-issue-create { display: flex; flex-wrap: wrap; align-items: end; gap: 8px; }

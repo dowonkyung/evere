@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#00B8B4">
-<title>{% if include.initial_title %}{{ include.initial_title | escape }} | {% endif %}기획·연재 | 이브레</title>
+<title>{% if include.initial_title %}{{ include.initial_title | escape }} | {% endif %}{% if include.issue %}이슈{% else %}기획·연재{% endif %} | 이브레</title>
 <link rel="icon" type="image/svg+xml" href="/assets/evere/favicon.svg">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
 <link rel="stylesheet" href="/assets/evere/pretendard-hanja.css?v=1">
@@ -25,7 +25,7 @@
 <link rel="stylesheet" href="/assets/evere/header-first-paint.css">
 <script defer src="/assets/evere/header-first-paint.js"></script>
 <link rel="stylesheet" href="/assets/evere/series-page.css">
-<script type="module" src="/assets/evere/series-page.js?v=body-excerpt-1"></script>
+<script type="module" src="/assets/evere/series-page.js?v=issue-detail-1"></script>
 </head>
 <body class="evere-opinion-list evere-section">
 <div id="evere-header" data-css-pending data-compact-only>
@@ -207,10 +207,10 @@
 </div>
 </template>
 </div>
-<main class="evere-series-page" data-series-detail>
+<main class="evere-series-page" {% if include.issue %}data-issue-detail{% else %}data-series-detail{% endif %}>
   <div class="wrap">
-    <h2 class="opinion-title"><a href="/series/">기획·연재</a></h2>
-    <h1 class="series-title" id="series-title">{% if include.initial_title %}{{ include.initial_title | escape }}{% else %}연재 정보를 확인하는 중입니다{% endif %}</h1>
+    <h2 class="opinion-title">{% if include.issue %}이슈{% else %}<a href="/series/">기획·연재</a>{% endif %}</h2>
+    <h1 class="series-title" id="series-title">{% if include.initial_title %}{{ include.initial_title | escape }}{% elsif include.issue %}이슈 정보를 확인하는 중입니다{% else %}연재 정보를 확인하는 중입니다{% endif %}</h1>
     <section class="contents sub">
       <div>
         <div class="info"><ul>
@@ -219,7 +219,7 @@
         </ul></div>
         <p id="series-status" class="series-status" role="status"></p>
         <div class="list"><ul id="series-articles"></ul></div>
-        <nav class="page series-pages" aria-label="연재 기사 페이지" hidden><ul id="series-pages"></ul></nav>
+        <nav class="page series-pages" aria-label="{% if include.issue %}이슈{% else %}연재{% endif %} 기사 페이지" hidden><ul id="series-pages"></ul></nav>
       </div>
       <aside id="series-recommendations" hidden><ul class="aside-wrap"><li>
         <h3>추천 연재</h3><ul class="series" id="series-recommended"></ul>

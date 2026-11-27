@@ -8,8 +8,11 @@ import { articleListPicture, loadArticleListPhotos } from './article-list-media.
 const main = document.querySelector('.evere-series-page');
 const ui = id => document.getElementById(id);
 const params = new URLSearchParams(location.search);
-const detail = main.hasAttribute('data-series-detail');
-const number = Number(/^\/series\/articles\/([1-9]\d*)\/?$/.exec(location.pathname)?.[1] ?? params.get('number'));
+const isIssue = main.hasAttribute('data-issue-detail');
+const detail = isIssue || main.hasAttribute('data-series-detail');
+const detailLabel = isIssue ? '이슈' : '기획·연재';
+const detailPath = n => (isIssue ? '/issue/articles/' : '/series/articles/') + n;
+const number = Number(/^\/(?:series|issue)\/articles\/([1-9]\d*)\/?$/.exec(location.pathname)?.[1] ?? params.get('number'));
 const requestedPage = Number(params.get('page'));
 const page = Number.isSafeInteger(requestedPage) && requestedPage > 0 && requestedPage <= 100000 ? requestedPage : 1;
 const pageSize = 10;
@@ -41,7 +44,7 @@ function seriesQuery(options) {
 
 function articlesQuery(id, options) {
     return supabase.from('evere_articles').select(columns, options)
-        .eq('status', 'published').eq('series_id', id)
+        .eq('status', 'published').eq(isIssue ? 'issue_id' : 'series_id', id)
         .order('published_at', { ascending: false }).order('id');
 }
 
@@ -107,22 +110,27 @@ async function recommend(current) {
 
 async function loadDetail() {
     if (!Number.isSafeInteger(number) || number < 1 || number > 2147483647) {
-        ui('series-title').textContent = '등록된 연재를 찾을 수 없습니다.';
+        ui('series-title').textContent = isIssue ? '등록된 이슈를 찾을 수 없습니다.' : '등록된 연재를 찾을 수 없습니다.';
         return;
     }
-    const path = seriesPath(number);
+    const path = detailPath(number);
     history.replaceState(null, '', path + (page > 1 ? '?page=' + page : '') + location.hash);
     document.head.append(Object.assign(node('link'), { rel: 'canonical', href: new URL(path, location.origin).href }));
-    const { data: series, error } = await supabase.rpc('evere_series_by_number', { requested_number: number }).maybeSingle();
+    const detailQuery = isIssue
+        ? supabase.from('evere_issues').select('id,title').eq('issue_number', number)
+        : supabase.rpc('evere_series_by_number', { requested_number: number });
+    const { data: series, error } = await detailQuery.maybeSingle();
     if (error) throw error;
     if (!series) {
-        ui('series-title').textContent = '등록된 연재를 찾을 수 없습니다.';
+        ui('series-title').textContent = isIssue ? '등록된 이슈를 찾을 수 없습니다.' : '등록된 연재를 찾을 수 없습니다.';
         return;
     }
     ui('series-title').textContent = series.title;
-    document.title = series.title + ' | 기획·연재 | 이브레';
-    configureFollow(series);
-    void recommend(series).catch(() => {});
+    document.title = series.title + ' | ' + detailLabel + ' | 이브레';
+    if (!isIssue) {
+        configureFollow(series);
+        void recommend(series).catch(() => {});
+    }
 
     const { data, count, error: articleError } = await articlesQuery(series.id, { count: 'exact' }).range(start, start + pageSize - 1);
     if (articleError) throw articleError;
@@ -156,5 +164,5 @@ async function loadDirectory() {
 }
 
 (detail ? loadDetail() : loadDirectory()).catch(() => {
-    ui('series-status').textContent = '기획·연재를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.';
+    ui('series-status').textContent = detailLabel + ' 목록을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.';
 });

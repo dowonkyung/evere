@@ -2,7 +2,7 @@ import { setArticleTitle } from './article-label.js';
 import { articlePath } from './routes.js?v=wiki-culture-1';
 import { supabase } from './supabase.js';
 import { sectors, articleCategories } from './article-taxonomy.js?v=wiki-culture-1';
-import { articleComposer } from './article-composer.js?v=author-byline-label-1';
+import { articleComposer } from './article-composer.js?v=article-issues-1';
 import { renderBody, renderPhotos } from './article-content.js?v=paragraph-breaks-1';
 const roleNames = {
     owner: '총수', director: '국장급', department_head: '부장급', reporter: '평기자', citizen: '회원',
@@ -365,13 +365,13 @@ function articleEditor(article, contentOnly) {
         const nextState = state.value;
         if (!await editor.save(async (fields) => {
             if (contentOnly) {
-                result(await supabase.rpc('evere_save_author_article', {
+                result(await supabase.rpc('evere_save_author_article_issue', {
                     target: article.id, next_state: nextState, new_title: fields.title,
                     new_subtitle: fields.subtitle, new_body: fields.body,
                     new_body_html: fields.body_html, new_photo_paths: fields.photo_paths,
                     new_print_issue: fields.print_issue, new_print_page: fields.print_page,
                     new_audio_path: fields.audio_path, new_byline: fields.byline,
-                    new_article_label: fields.article_label,
+                    new_article_label: fields.article_label, new_issue_id: fields.issue_id,
                 }));
                 return;
             }
@@ -462,7 +462,7 @@ async function openArticle(id) {
     message('기사를 불러오는 중입니다.');
     try {
         const article = result(await supabase.from('evere_articles')
-            .select('id,article_number,title,article_label,subtitle,body,body_html,sector,category,series_id,byline,guest_byline,guest_byline_positions,photo_paths,audio_path,print_issue,print_page,status,editorial_state,created_by')
+            .select('id,article_number,title,article_label,subtitle,body,body_html,sector,category,series_id,issue_id,byline,guest_byline,guest_byline_positions,photo_paths,audio_path,print_issue,print_page,status,editorial_state,created_by')
             .eq('id', id).single());
         if (!articleDialog.open || request !== dialogRequest) return;
         ui('article-dialog-title').textContent = article.title;

@@ -11,11 +11,11 @@
   <link rel="stylesheet" href="/assets/evere/pretendard-hanja.css?v=1">
   <link rel="stylesheet" href="/assets/khan/common.css?v=pretendard-hanja-1">
   <link rel="stylesheet" href="/assets/evere/home.css?v=pretendard-hanja-1">
-  <link rel="stylesheet" href="/assets/evere/article-page.css?v=comment-actions-1">
+  <link rel="stylesheet" href="/assets/evere/article-page.css?v=article-issues-1">
   <script defer src="/assets/khan/swiper-bundle.min.js"></script>
   <script defer src="/assets/evere/home.js?v=account-icon-1"></script>
   <link rel="stylesheet" href="/assets/evere/article-audio.css?v=1">
-  <script type="module" src="/assets/evere/article.js?v=comment-actions-1"></script>
+  <script type="module" src="/assets/evere/article.js?v=article-issues-1"></script>
 <script type="module" src="/assets/evere/route-init.js?v=wiki-culture-1"></script>
 <link rel="preload" as="style" href="/assets/yna/default.css">
 <link rel="preload" as="style" href="/assets/yna/variables.css">
@@ -224,7 +224,10 @@
       </aside>
       <article id="published-article" class="reader-article" hidden>
         <header class="reader-head">
-          <div id="sector" class="reader-sector"></div>
+          <div class="reader-topics">
+            <div id="sector" class="reader-sector"></div>
+            <a id="reader-issue" class="issue reader-issue" hidden></a>
+          </div>
           <h1 id="title"></h1>
           <div id="published-time" class="reader-timestamps" hidden>
             <time id="first-published-only" hidden></time>

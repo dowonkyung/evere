@@ -492,6 +492,13 @@ async function render() {
     sectionLink.href = '/' + data.sector + '/';
     sectionLink.textContent = sectors[data.sector];
     ui('sector').replaceChildren(sectionLink);
+    const issue = data.evere_issues;
+    if (issue?.issue_number) {
+        const issueLink = ui('reader-issue');
+        issueLink.href = '/issue/articles/' + issue.issue_number;
+        issueLink.textContent = issue.title;
+        issueLink.hidden = false;
+    }
     ui('title').textContent = title;
     const subtitle = data.subtitle?.trim() || '';
     ui('subtitle').textContent = subtitle;
@@ -606,7 +613,7 @@ async function updateCommentSession() {
 async function readArticle() {
     for (let attempt = 0; attempt < 3; attempt++) {
         try {
-            let query = supabase.from('evere_articles').select('id,article_number,title,article_label,subtitle,body,body_html,photo_paths,audio_path,sector,category,series_id,byline,byline_names,published_at,first_published_at,modified_at')
+            let query = supabase.from('evere_articles').select('id,article_number,title,article_label,subtitle,body,body_html,photo_paths,audio_path,sector,category,series_id,byline,byline_names,published_at,first_published_at,modified_at,evere_issues(issue_number,title)')
                 .eq('status', 'published');
             query = articleNumber ? query.eq('article_number', articleNumber) : query.eq('id', articleId);
             const response = await query.maybeSingle();

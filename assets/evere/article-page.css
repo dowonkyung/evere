@@ -501,3 +501,12 @@
 .comment-row-actions button { padding: 4px 9px; border: 1px solid #d9d9d9; border-radius: 4px; background: #fff; color: #444; font: inherit; font-size: 13px; cursor: pointer; }
 .comment-row-actions button:disabled { opacity: .6; cursor: default; }
 .comment-row-editor textarea { box-sizing: border-box; width: 100%; padding: 10px; border: 1px solid #d9d9d9; border-radius: 6px; font: inherit; resize: vertical; }
+
+.reader-topics { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px 12px; margin-bottom: 8px; }
+.reader-topics .reader-sector { margin-bottom: 0; }
+.reader-topics .reader-issue {
+    max-width: 100%; padding: 4px 10px; border: 1px solid var(--stroke-framing, #d9d9d9);
+    border-radius: 4px; color: var(--text-primary, #151515); font-size: 13px; font-weight: 600;
+    line-height: 18px; overflow-wrap: anywhere; text-decoration: none;
+}
+.reader-topics .reader-issue:hover, .reader-topics .reader-issue:focus-visible { border-color: #007a79; }
