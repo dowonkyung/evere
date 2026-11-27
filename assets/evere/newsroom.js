@@ -135,6 +135,8 @@ function seriesRow(entry, allowed) {
     const { id, sector, title, series_number } = entry;
     const count = entry.evere_articles?.[0]?.count ?? 0;
     const row = document.createElement('tr');
+    const numberCell = row.insertCell();
+    numberCell.textContent = String(series_number);
     const sectionCell = row.insertCell();
     const nameCell = row.insertCell();
     const countCell = row.insertCell();
@@ -142,7 +144,7 @@ function seriesRow(entry, allowed) {
     const sectionLabel = document.createElement('span');
     sectionLabel.textContent = sectors[sector] || sector;
     const nameLabel = document.createElement('span');
-    nameLabel.textContent = title + ' · ' + series_number + '번';
+    nameLabel.textContent = title;
     sectionCell.append(sectionLabel);
     nameCell.append(nameLabel);
     countCell.textContent = count.toLocaleString('ko-KR') + '건';
@@ -228,7 +230,7 @@ async function loadSeries() {
     if (!rows.length) {
         const row = document.createElement('tr');
         const cell = row.insertCell();
-        cell.colSpan = 4;
+        cell.colSpan = 5;
         cell.className = 'queue-empty';
         cell.textContent = '등록된 기획·연재가 없습니다.';
         rows.push(row);

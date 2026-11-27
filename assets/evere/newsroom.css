@@ -185,7 +185,7 @@
 .series-management { display: grid; gap: 16px; }
 #series-form { display: grid; grid-template-columns: minmax(120px, 1fr) minmax(160px, 3fr) auto; align-items: end; gap: 12px; }
 #series-form > * { margin: 0; }
-.series-table td:nth-child(2) { width: 100%; min-width: 160px; white-space: normal; overflow-wrap: anywhere; }
+.series-table td:nth-child(3) { width: 100%; min-width: 160px; white-space: normal; overflow-wrap: anywhere; }
 .series-table input { width: 100%; min-width: 140px; }
 .series-table form:not([hidden]) { display: flex; gap: 6px; margin: 0; }
 @media (max-width: 600px) { #series-form { grid-template-columns: 1fr; } }
