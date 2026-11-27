@@ -42,8 +42,17 @@ jobs:
         with:
           source: ./
           destination: ./_site
+      - name: Restore published thumbnails
+        if: github.event_name != 'schedule' || steps.cards.outputs.changed == 'true'
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/evere-share-thumbnails
+          key: evere-share-thumbnails-v1-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: evere-share-thumbnails-v1-
       - name: Generate share metadata
         if: github.event_name != 'schedule' || steps.cards.outputs.changed == 'true'
+        env:
+          EVERE_THUMBNAIL_CACHE: ${{ runner.temp }}/evere-share-thumbnails
         run: |
           sudo chown -R "$(id -u):$(id -g)" _site
           node scripts/build-share-cards.mjs _site
@@ -56,3 +65,9 @@ jobs:
         if: github.event_name != 'schedule' || steps.cards.outputs.changed == 'true'
         id: deployment
         uses: actions/deploy-pages@v4
+      - name: Save published thumbnails
+        if: github.event_name != 'schedule' || steps.cards.outputs.changed == 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ runner.temp }}/evere-share-thumbnails
+          key: evere-share-thumbnails-v1-${{ github.run_id }}-${{ github.run_attempt }}

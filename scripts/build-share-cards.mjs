@@ -1,7 +1,7 @@
 import { parseHTML } from 'linkedom';
 import { articleExcerpt } from '../assets/evere/article-excerpt.js';
 import { createHash } from 'node:crypto';
-import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
+import { copyFile, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { dirname, join, relative, resolve } from 'node:path';
 
 const { document } = parseHTML('<!doctype html><html><body></body></html>');
@@ -113,25 +113,43 @@ async function inBatches(items, size, process) {
 async function storeThumbnails(articles) {
     const paths = [...new Set(articles.map(article => article.photo_paths?.[0]).filter(path =>
         /^[a-f\d-]{36}\/[a-f\d-]{36}\.(?:jpg|png|webp)$/i.test(path ?? '')))];
+    const outputPath = '/assets/evere/share/';
+    const destination = join(root, outputPath);
+    const cache = process.env.EVERE_THUMBNAIL_CACHE;
+    await mkdir(destination, { recursive: true });
+    if (cache) await mkdir(cache, { recursive: true });
+    const cachedNames = new Set(cache ? await readdir(cache) : []);
     const images = new Map();
+    const names = new Map(paths.map(path => [
+        path, createHash('sha256').update(path).digest('hex').slice(0, 24) + '.' + path.split('.').at(-1),
+    ]));
+    await inBatches(paths, 32, async path => {
+        const name = names.get(path);
+        if (!cachedNames.has(name)) return;
+        await copyFile(join(cache, name), join(destination, name));
+        images.set(path, outputPath + name);
+    });
+
+    const missing = paths.filter(path => !images.has(path));
     const bucket = '/storage/v1/object/sign/evere-article-photos';
-    for (let offset = 0; offset < paths.length; offset += 50) {
+    for (let offset = 0; offset < missing.length; offset += 50) {
         const response = await request(api + bucket, { method: 'POST', headers: { ...headers,
-            'content-type': 'application/json' }, body: JSON.stringify({ paths: paths.slice(offset, offset + 50), expiresIn: 600 }) });
+            'content-type': 'application/json' }, body: JSON.stringify({ paths: missing.slice(offset, offset + 50), expiresIn: 600 }) });
         if (!response.ok) throw new Error('Photo signing failed: ' + response.status + ': ' + await response.text());
         const signed = await response.json();
-        await inBatches(signed, 8, async ({ path, signedURL }) => {
-            if (!signedURL?.startsWith('/object/sign/evere-article-photos/')) return;
+        await inBatches(signed, 12, async ({ path, signedURL }) => {
+            if (!names.has(path) || !signedURL?.startsWith('/object/sign/evere-article-photos/')) return;
             const media = await request(api + '/storage/v1' + signedURL);
             if (!media.ok || !/^image\/(?:jpeg|png|webp)\b/i.test(media.headers.get('content-type') || '')) return;
-            const name = createHash('sha256').update(path).digest('hex').slice(0, 24) + '.' + path.split('.').at(-1);
-            const output = '/assets/evere/share/' + name;
-            const file = join(root, output);
-            await mkdir(dirname(file), { recursive: true });
-            await writeFile(file, Buffer.from(await media.arrayBuffer()));
-            images.set(path, output);
+            const name = names.get(path);
+            const bytes = Buffer.from(await media.arrayBuffer());
+            await writeFile(join(destination, name), bytes);
+            if (cache) await writeFile(join(cache, name), bytes);
+            images.set(path, outputPath + name);
         });
     }
+    console.log('Reused ' + (paths.length - missing.length) + ' thumbnails and fetched ' +
+        (images.size - paths.length + missing.length) + ' new ones.');
     return images;
 }
 
