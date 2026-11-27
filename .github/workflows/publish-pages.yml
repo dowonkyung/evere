@@ -21,10 +21,11 @@ jobs:
     permissions:
       contents: read
       pages: write
+      actions: read
       id-token: write
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url || steps.deploy_retry.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -61,9 +62,28 @@ jobs:
         with:
           path: _site
 
+      - name: Wait for the Pages artifact
+        if: github.event_name != 'schedule' || steps.cards.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for attempt in {1..8}; do
+            if [ "$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/artifacts?name=github-pages" --jq '.artifacts | any(.name == "github-pages" and .expired == false)' || true)" = true ]; then
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "::error::The Pages artifact is not visible yet."
+          exit 1
+
       - name: Deploy Pages
         if: github.event_name != 'schedule' || steps.cards.outputs.changed == 'true'
         id: deployment
+        continue-on-error: true
+        uses: actions/deploy-pages@v4
+      - name: Retry Pages deployment
+        if: steps.deployment.outcome == 'failure'
+        id: deploy_retry
         uses: actions/deploy-pages@v4
       - name: Save published thumbnails
         if: github.event_name != 'schedule' || steps.cards.outputs.changed == 'true'
