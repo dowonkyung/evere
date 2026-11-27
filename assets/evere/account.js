@@ -2,7 +2,7 @@ import { setArticleTitle } from './article-label.js';
 import { articlePath } from './routes.js?v=wiki-culture-1';
 import { supabase } from './supabase.js';
 import { sectors, articleCategories } from './article-taxonomy.js?v=wiki-culture-1';
-import { articleComposer } from './article-composer.js?v=reuse-library-photo-1';
+import { articleComposer } from './article-composer.js?v=author-byline-label-1';
 import { renderBody, renderPhotos } from './article-content.js?v=paragraph-breaks-1';
 const roleNames = {
     owner: '총수', director: '국장급', department_head: '부장급', reporter: '평기자', citizen: '회원',
@@ -365,12 +365,13 @@ function articleEditor(article, contentOnly) {
         const nextState = state.value;
         if (!await editor.save(async (fields) => {
             if (contentOnly) {
-                result(await supabase.rpc('evere_save_author_draft_audio', {
+                result(await supabase.rpc('evere_save_author_article', {
                     target: article.id, next_state: nextState, new_title: fields.title,
                     new_subtitle: fields.subtitle, new_body: fields.body,
                     new_body_html: fields.body_html, new_photo_paths: fields.photo_paths,
                     new_print_issue: fields.print_issue, new_print_page: fields.print_page,
-                    new_audio_path: fields.audio_path,
+                    new_audio_path: fields.audio_path, new_byline: fields.byline,
+                    new_article_label: fields.article_label,
                 }));
                 return;
             }

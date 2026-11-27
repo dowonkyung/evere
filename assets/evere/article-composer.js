@@ -95,9 +95,7 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
     let allowsOmission = false;
 
     const label = form.elements.articleLabel;
-    if (contentOnly) {
-        for (const field of [label, find('.compose-section-fields'), find('.compose-byline')]) field.hidden = true;
-    }
+    if (contentOnly) find('.compose-section-fields').hidden = true;
     label.value = article?.article_label || '';
     title.value = article?.title || '';
     subtitle.value = article?.subtitle || '';
@@ -172,7 +170,7 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
     }
 
     function canAddGuest() {
-        return editors.has(member?.role) &&
+        return !contentOnly && editors.has(member?.role) &&
             (member.role !== 'department_head' || member.sectors.includes(sector.value));
     }
 
@@ -200,11 +198,11 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
         }
         for (const id of byline) {
             append(displayName(id), () => { byline = byline.filter((value) => value !== id); },
-                !article && id === member.id && ['citizen', 'reporter'].includes(member.role));
+                (!article || contentOnly) && id === member.id && ['citizen', 'reporter'].includes(member.role));
         }
         for (const entry of guests) {
             const label = [entry.name, entry.position].filter(Boolean).join(' ');
-            append(label + ' · 외부 기고', () => { guests = guests.filter(value => value !== entry); });
+            append(label + ' · 외부 기고', () => { guests = guests.filter(value => value !== entry); }, contentOnly);
         }
         find('[data-byline-list]').replaceChildren(chips);
     }
@@ -248,7 +246,7 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
             (sector.value === 'health' && category.value === 'obituaries');
         if (!eligible || !allowsOmission) omitByline.checked = eligible && defaultOmit;
         allowsOmission = eligible;
-        find('[data-omit-byline]').hidden = !eligible;
+        find('[data-omit-byline]').hidden = !eligible || (contentOnly && guests.length > 0);
         refreshWriters();
     }
 
@@ -715,7 +713,7 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
                 notify('제목과 본문을 입력해 주세요. 본문은 5만 자까지 입력할 수 있습니다.');
                 return false;
             }
-            if (!contentOnly && !allowsOmission && !byline.length && !guests.length) {
+            if (!allowsOmission && !byline.length && !guests.length) {
                 notify('기자 또는 외부 기고자를 한 명 이상 추가해 주세요.'); return false;
             }
             if (photos.some((photo) => (photo.file || photo.caption || photo.captionTitle) && !marker(photo))) {
@@ -723,7 +721,7 @@ export function articleComposer(form, article = null, { contentOnly = false } = 
                 return false;
             }
             if (!contentOnly && fields.guest_byline.length && !canAddGuest()) { notify('이 섹터의 외부 기고자를 등록할 권한이 없습니다.'); return false; }
-            if (!contentOnly && !omitByline.checked && (guest.value.trim() || guestPosition.value.trim() || writer.value)) {
+            if (!omitByline.checked && (guest.value.trim() || guestPosition.value.trim() || writer.value)) {
                 notify('입력하거나 선택한 이름은 추가 버튼을 눌러 등록해 주세요.'); return false;
             }
             if (audio.error()) { notify(audio.error()); return false; }
