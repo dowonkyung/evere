@@ -8,11 +8,11 @@
   <link rel="icon" href="/assets/evere/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="/assets/evere/account.css?v=left-white-1">
-  <link rel="stylesheet" href="/assets/evere/newsroom.css?v=thin-focus-1">
+  <link rel="stylesheet" href="/assets/evere/newsroom.css?v=series-table-1">
   <link rel="stylesheet" href="/assets/evere/article-audio.css?v=1">
   <script type="module" src="/assets/evere/account.js?v=author-byline-label-1"></script>
   <link rel="stylesheet" href="/assets/evere/newsroom-press.css?v=5">
-  <script type="module" src="/assets/evere/newsroom.js?v=press-finalize-1"></script>
+  <script type="module" src="/assets/evere/newsroom.js?v=series-table-1"></script>
 <script type="module" src="/assets/evere/route-init.js?v=wiki-culture-1"></script>
   <link rel="stylesheet" href="/assets/evere/newsroom-workspace.css?v=brand-title-size-1">
 </head>
@@ -194,13 +194,18 @@
           <h1>기획·연재 관리</h1>
           <div class="series-management">
             <form id="series-form">
-              <label>1차 섹션<select name="sector" required></select></label>
-              <label>분류명<input name="title" maxlength="100" required placeholder="칼럼 코너명 또는 기획연재 제목"></label>
-              <button type="submit">분류 만들기</button>
+              <label>섹션<select name="sector" required></select></label>
+              <label>이름<input name="title" maxlength="100" required placeholder="칼럼 코너명 또는 기획·연재 제목"></label>
+              <button type="submit">추가</button>
             </form>
             <section aria-label="기획·연재 분류">
-              <h2>등록된 분류</h2>
-              <ul id="series-list"></ul>
+              <h2>등록된 기획·연재</h2>
+              <div class="article-table-scroll" tabindex="0" role="region" aria-label="기획·연재 목록 표">
+                <table class="article-table series-table">
+                  <thead><tr><th scope="col">섹션</th><th scope="col">이름</th><th scope="col">작성 글 수</th><th scope="col">관리</th></tr></thead>
+                  <tbody id="series-list"></tbody>
+                </table>
+              </div>
             </section>
           </div>
         </section>

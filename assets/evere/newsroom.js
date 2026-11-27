@@ -3,7 +3,6 @@ import { configureHomeVisualEditor } from './newsroom-home-layout.js?v=opinion-v
 import { categoryPath } from './routes.js?v=wiki-culture-1';
 import { supabase } from './supabase.js';
 import { sectors, articleCategories } from './article-taxonomy.js?v=wiki-culture-1';
-import { seriesFor } from './series.js?v=numbered-link-1';
 import { loadBottomLinks } from './home-bottom-links.js';
 import { issueUrl, loadHomeIssues } from './home-issues.js?v=issues-1';
 
@@ -130,59 +129,113 @@ document.addEventListener('evere:member', (event) => {
 window.addEventListener('hashchange', selectView);
 
 let seriesRequest = 0;
-async function loadSeries() {
-    const request = ++seriesRequest;
-    const sector = seriesForm.elements.sector.value;
-    const rows = await seriesFor(sector);
-    if (request !== seriesRequest) return;
-    const items = rows.map(({ id, title, series_number }) => {
-        const item = document.createElement('li');
-        const label = document.createElement('span');
-        label.textContent = `${series_number}번 · ${title}`;
-        const form = document.createElement('form');
-        form.hidden = true;
-        const name = document.createElement('input');
-        name.required = true;
-        name.maxLength = 100;
-        name.setAttribute('aria-label', '새 기획·연재 분류명');
-        const save = document.createElement('button');
-        save.textContent = '저장';
-        const rename = button('이름 수정', () => {
-            name.value = title;
-            form.hidden = false;
-            rename.hidden = true;
-            name.focus();
-        });
-        form.append(name, save, button('취소', () => {
-            form.hidden = true;
-            rename.hidden = false;
-            rename.focus();
-        }));
-        form.addEventListener('submit', task(async () => {
-            const next = name.value.trim();
-            if (!next) { notify('기획·연재 분류명을 입력해 주세요.', true); return; }
-            const { error } = await supabase.from('evere_series').update({ title: next }).eq('id', id).select('id').single();
-            if (error?.code === '23505') { notify('이 섹터에 같은 이름의 분류가 있습니다.', true); return; }
-            if (error) throw error;
-            label.textContent = `${series_number}번 · ${next}`;
-            document.dispatchEvent(new CustomEvent('evere:series-change', { detail: sector }));
-            notify(`기획·연재 ${series_number}번의 이름을 저장했습니다.`);
-            await loadSeries();
-        }));
-        item.append(label, ' ', rename, form);
-        return item;
-    });
-    if (!items.length) {
-        const empty = document.createElement('li');
-        empty.textContent = '등록된 분류가 없습니다.';
-        items.push(empty);
+const editableSeriesSectors = () => editablePages().filter(([key]) => key !== 'home');
+
+function seriesRow(entry, allowed) {
+    const { id, sector, title, series_number } = entry;
+    const count = entry.evere_articles?.[0]?.count ?? 0;
+    const row = document.createElement('tr');
+    const sectionCell = row.insertCell();
+    const nameCell = row.insertCell();
+    const countCell = row.insertCell();
+    const actions = row.insertCell();
+    const sectionLabel = document.createElement('span');
+    sectionLabel.textContent = sectors[sector] || sector;
+    const nameLabel = document.createElement('span');
+    nameLabel.textContent = title + ' · ' + series_number + '번';
+    sectionCell.append(sectionLabel);
+    nameCell.append(nameLabel);
+    countCell.textContent = count.toLocaleString('ko-KR') + '건';
+
+    const form = document.createElement('form');
+    form.id = 'series-edit-' + id;
+    form.hidden = true;
+    const section = document.createElement('select');
+    section.setAttribute('aria-label', '섹션');
+    const name = document.createElement('input');
+    name.setAttribute('aria-label', '기획·연재 이름');
+    name.required = true;
+    name.maxLength = 100;
+    for (const field of [section, name]) {
+        field.setAttribute('form', form.id);
+        field.hidden = true;
     }
-    ui('series-list').replaceChildren(...items);
+    sectionCell.append(section);
+    nameCell.append(name);
+    const save = document.createElement('button');
+    save.type = 'submit';
+    save.textContent = '저장';
+    const edit = button('수정', () => {
+        optionList(section, allowed, sector);
+        name.value = title;
+        setEditing(true);
+        name.focus();
+    });
+    edit.setAttribute('aria-label', title + ' 수정');
+    const cancel = button('취소', () => {
+        setEditing(false);
+        edit.focus();
+    });
+    function setEditing(editing) {
+        sectionLabel.hidden = nameLabel.hidden = edit.hidden = editing;
+        section.hidden = name.hidden = form.hidden = !editing;
+    }
+    form.append(save, cancel);
+    actions.append(edit, form);
+    form.addEventListener('submit', task(async () => {
+        const nextTitle = name.value.trim();
+        const nextSector = section.value;
+        if (!nextTitle) { notify('기획·연재 이름을 입력해 주세요.', true); return; }
+        const changingSector = nextSector !== sector;
+        const warning = '연결된 기사도 새 섹션으로 이동하며 기존 2차 섹션은 해제됩니다. 계속할까요?';
+        const confirmed = changingSector && count > 0;
+        if (confirmed && !window.confirm(count + '건의 ' + warning)) return;
+        const update = moveArticles => supabase.rpc('evere_update_series', {
+            target: id, next_sector: nextSector, next_title: nextTitle, move_articles: moveArticles,
+        });
+        section.disabled = name.disabled = cancel.disabled = true;
+        try {
+            let { error } = await update(confirmed);
+            if (error?.code === 'EV004') {
+                if (!window.confirm(warning)) return;
+                ({ error } = await update(true));
+            }
+            if (error?.code === '23505') { notify('이 섹션에 같은 이름의 기획·연재가 있습니다.', true); return; }
+            if (error?.code === 'EV005') { notify('작성자가 없는 기사에 기자를 추가한 뒤 섹션을 옮겨 주세요.', true); return; }
+            if (error) throw error;
+            for (const affected of new Set([sector, nextSector])) {
+                document.dispatchEvent(new CustomEvent('evere:series-change', { detail: affected }));
+            }
+            const saved = '기획·연재 ' + series_number + '번을 저장했습니다.';
+            notify(saved);
+            await loadSeries().catch(() => notify(saved + ' 목록을 갱신하지 못했습니다.', true));
+        } finally {
+            section.disabled = name.disabled = cancel.disabled = false;
+        }
+    }));
+    return row;
 }
 
-seriesForm.elements.sector.addEventListener('change', () => {
-    loadSeries().catch(() => notify('기획·연재 분류를 불러오지 못했습니다.', true));
-});
+async function loadSeries() {
+    const request = ++seriesRequest;
+    const allowed = editableSeriesSectors();
+    if (!allowed.length) return;
+    const entries = value(await supabase.from('evere_series')
+        .select('id,sector,title,series_number,evere_articles(count)')
+        .in('sector', allowed.map(([key]) => key)).order('series_number'));
+    if (request !== seriesRequest) return;
+    const rows = entries.map(entry => seriesRow(entry, allowed));
+    if (!rows.length) {
+        const row = document.createElement('tr');
+        const cell = row.insertCell();
+        cell.colSpan = 4;
+        cell.className = 'queue-empty';
+        cell.textContent = '등록된 기획·연재가 없습니다.';
+        rows.push(row);
+    }
+    ui('series-list').replaceChildren(...rows);
+}
+
 seriesForm.addEventListener('submit', task(async () => {
     const sector = seriesForm.elements.sector.value;
     const title = seriesForm.elements.title.value.trim();
