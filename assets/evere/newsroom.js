@@ -1,4 +1,4 @@
-import { loadMemorialCount } from './home-memorial.js?v=1';
+import { loadMemorialCounts } from './home-memorial.js?v=2';
 import { showPress } from './newsroom-press.js?v=7';
 import { configureHomeVisualEditor } from './newsroom-home-layout.js?v=memorial-1';
 import { categoryPath } from './routes.js?v=wiki-culture-1';
@@ -56,7 +56,7 @@ function configureLayoutSlots(page, category) {
 }
 const memorialDialog = ui('home-memorial-dialog');
 const memorialForm = ui('home-memorial-form');
-const memorialInput = memorialForm.elements.count;
+const memorialInputs = ['victim_count', 'revived_count'].map(name => memorialForm.elements[name]);
 const memorialSave = memorialForm.querySelector('[type="submit"]');
 let memorialRequest = 0;
 let memorialSaving = false;
@@ -71,16 +71,20 @@ async function openMemorialEditor() {
     if (!['owner', 'director'].includes(member?.role) || memorialDialog.open) return;
     const request = ++memorialRequest;
     memorialForm.reset();
-    memorialInput.disabled = memorialSave.disabled = true;
+    memorialSave.disabled = true;
+    for (const input of memorialInputs) input.disabled = true;
     memorialDialog.showModal();
     memorialStatus('집계를 불러오는 중입니다.');
     try {
-        const count = await loadMemorialCount();
+        const counts = await loadMemorialCounts();
         if (request !== memorialRequest) return;
-        memorialInput.value = count ?? '';
-        memorialInput.disabled = memorialSave.disabled = false;
+        for (const input of memorialInputs) {
+            input.value = counts[input.name] ?? '';
+            input.disabled = false;
+        }
+        memorialSave.disabled = false;
         memorialStatus('');
-        memorialInput.focus();
+        memorialInputs[0].focus();
     } catch {
         if (request === memorialRequest) memorialStatus('집계를 불러오지 못했습니다. 다시 열어 주세요.', true);
     }
@@ -94,19 +98,21 @@ memorialDialog.querySelector('form[method="dialog"]').addEventListener('submit',
 memorialForm.addEventListener('submit', async event => {
     event.preventDefault();
     if (memorialSave.disabled || !memorialForm.reportValidity() || !['owner', 'director'].includes(member?.role)) return;
-    const count = memorialInput.valueAsNumber;
-    memorialSaving = memorialSave.disabled = memorialInput.disabled = true;
+    const counts = Object.fromEntries(memorialInputs.map(input => [input.name, input.value ? input.valueAsNumber : null]));
+    memorialSaving = memorialSave.disabled = true;
+    for (const input of memorialInputs) input.disabled = true;
     memorialStatus('저장 중입니다.');
     try {
-        value(await supabase.from('evere_home_memorial').update({ victim_count: count })
-            .eq('id', true).select('victim_count').single());
+        value(await supabase.from('evere_home_memorial').update(counts)
+            .eq('id', true).select('victim_count,revived_count').single());
         memorialDialog.close();
         ui('home-preview').contentWindow.location.reload();
         notify('희생자 수를 저장했습니다.');
     } catch {
         memorialStatus('저장하지 못했습니다. 다시 시도해 주세요.', true);
     } finally {
-        memorialSaving = memorialSave.disabled = memorialInput.disabled = false;
+        memorialSaving = memorialSave.disabled = false;
+        for (const input of memorialInputs) input.disabled = false;
     }
 });
 

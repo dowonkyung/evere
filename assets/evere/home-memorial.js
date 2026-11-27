@@ -1,17 +1,20 @@
 import { supabase } from './supabase.js';
 
-export async function loadMemorialCount() {
+export async function loadMemorialCounts() {
     const { data, error } = await supabase.from('evere_home_memorial')
-        .select('victim_count').eq('id', true).single();
+        .select('victim_count,revived_count').eq('id', true).single();
     if (error) throw error;
-    return data.victim_count;
+    return data;
 }
 
-const display = document.querySelector('[data-home-memorial-count]');
-if (display) {
-    loadMemorialCount().then(count => {
-        if (Number.isInteger(count) && count >= 0) display.textContent = count.toLocaleString('ko-KR') + '명';
+const displays = [...document.querySelectorAll('[data-home-memorial-count]')];
+if (displays.length) {
+    loadMemorialCounts().then(counts => {
+        for (const display of displays) {
+            const count = counts[display.dataset.homeMemorialCount];
+            if (Number.isInteger(count) && count >= 0) display.textContent = count.toLocaleString('ko-KR') + '명';
+        }
     }).catch(() => {
-        display.textContent = '집계 확인 중';
+        for (const display of displays) display.textContent = '확인 중';
     });
 }
