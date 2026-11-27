@@ -69,7 +69,7 @@ async function renderArticles() {
             .select('slot,evere_articles!inner(id,article_number,title,article_label,body,body_html,status,photo_paths)')
             .eq('page', 'home').eq('category', '').eq('evere_articles.status', 'published').order('slot'),
         supabase.from('evere_articles').select('id,article_number,title,article_label,photo_paths')
-            .eq('status', 'published').neq('sector', 'opinion')
+            .eq('status', 'published').not('sector', 'in', '(opinion,corrections,notice)')
             .order('published_at', { ascending: false, nullsFirst: false }).order('id').limit(latestLimit + 8),
     ]);
     const placements = saved.status === 'fulfilled' ? saved.value.data || [] : [];
